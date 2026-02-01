@@ -642,6 +642,16 @@ body[data-mode="m3"]{ --modeGlow1: rgba(20,184,166,.24); --modeGlow2: rgba(124,5
 /* Bottom island active button accent */
 .bIsBtn.active{ border-color: color-mix(in oklab, var(--accent) 35%, transparent) !important; background: color-mix(in oklab, var(--accent) 10%, transparent) !important; }
 
+
+
+/* ===================== Hero simplification ===================== */
+.heroCompact p#heroSub{display:none;}
+.heroCompact #eduNotice{display:none;}
+.heroTools{display:flex; gap:8px; flex-wrap:wrap; align-items:center; justify-content:flex-end;}
+@media (max-width:640px){
+  .heroTools{width:100%; justify-content:space-between;}
+}
+
 </style>
 </head>
 
@@ -684,6 +694,7 @@ body[data-mode="m3"]{ --modeGlow1: rgba(20,184,166,.24); --modeGlow2: rgba(124,5
     <button class="btn small" id="menuCloseBtn" aria-label="Close menu">Close</button>
   </div>
   <button class="menuItem" id="uniSettingsBtn" role="menuitem">🎓 University settings</button>
+  <button class="menuItem" id="howItWorksBtn" role="menuitem">ℹ️ How it works</button>
   <button class="menuItem" id="faqBtn" role="menuitem">❓ FAQ</button>
   <div class="menuSep"></div>
   <button class="menuItem" id="termsBtn" role="menuitem">📄 Terms & Conditions</button>
@@ -697,7 +708,7 @@ body[data-mode="m3"]{ --modeGlow1: rgba(20,184,166,.24); --modeGlow2: rgba(124,5
 
 
 <main class="container">
-  <section class="hero">
+  <section class="hero heroCompact">
     <div>
       <h1 id="heroTitle">Target CGPA → Minimum SEE Needed</h1>
       <p id="heroSub">Step 1: Enter current CGPA & credits • Step 2: Add subjects • Step 3: Enter CIE • We show minimum SEE.</p>
@@ -707,7 +718,8 @@ body[data-mode="m3"]{ --modeGlow1: rgba(20,184,166,.24); --modeGlow2: rgba(124,5
 </div>
 
     </div>
-    <div class="pills">
+    <div class="pills heroTools">
+  <button class="btn small" id="heroInfoBtn">ℹ️ Info</button>
       <span class="pill" id="statusPill">Guest</span>
       <span class="pill good" id="savePill" style="display:none;">Saved</span>
     </div>
@@ -2282,6 +2294,33 @@ async function deleteAllUserPlans(uid){
 
   
 
+
+
+function showHeroInfo(){
+  const title = document.getElementById('heroTitle')?.textContent || 'Info';
+  const steps = document.getElementById('heroSub')?.textContent || '';
+  const notice = document.getElementById('eduNotice')?.innerHTML || '';
+
+  const body = `
+    <div class="subCard">
+      <div style="font-weight:990; margin-bottom:6px;">${esc(title)}</div>
+      <div class="hint">${esc(steps)}</div>
+    </div>
+    <div class="subCard">
+      <div style="font-weight:990; margin-bottom:6px;">Important</div>
+      <div class="hint">${notice}</div>
+    </div>
+  `;
+
+  openModal({
+    title: 'How it works',
+    desc: 'Steps & disclaimer',
+    bodyHTML: body,
+    footHTML: `<button class="btn" id="infoClose">Close</button>`
+  });
+  document.getElementById('infoClose').onclick = closeModal;
+}
+
 /* ========= University / FAQ / Contact ========= */
 function showUniversitySettings(){
   openModal({
@@ -2415,6 +2454,8 @@ function showContact(){
     $("#pdfBtn").onclick = ()=>window.print();
     $("#gradeScaleBtn").onclick = showGradeScale;
     $("#helpBtn").onclick = showHelp;
+  const heroInfoBtn = document.getElementById('heroInfoBtn');
+  if(heroInfoBtn) heroInfoBtn.onclick = showHeroInfo;
 
 // Back-to-top
 const topBtn = document.getElementById('backToTop');
@@ -2659,6 +2700,8 @@ if (changelogBtn){
   const uniSettingsBtn = document.getElementById('uniSettingsBtn');
   if(uniSettingsBtn) uniSettingsBtn.addEventListener('click', ()=>{ closeMenu(); showUniversitySettings(); });
   const faqBtn = document.getElementById('faqBtn');
+  const howItWorksBtn = document.getElementById('howItWorksBtn');
+  if(howItWorksBtn) howItWorksBtn.addEventListener('click', ()=>{ closeMenu(); showHeroInfo(); });
   if(faqBtn) faqBtn.addEventListener('click', ()=>{ closeMenu(); showFAQ(); });
   const contactBtn = document.getElementById('contactBtn');
   if(contactBtn) contactBtn.addEventListener('click', ()=>{ closeMenu(); showContact(); });
