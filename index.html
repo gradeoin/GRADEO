@@ -464,81 +464,81 @@ body::before{
   border-bottom: 1px solid var(--stroke);
 }
 
-/* ===== GRADEO: Light-only + App-like Menu + Islands (added) ===== */
+/* ===== Phone Bottom Dynamic Island + Light Mode Gradients (added) ===== */
 html, body{color-scheme: light;}
-body[data-theme="light"]{background:#ffffff; color:#111827;}
 
-:root{--navH:60px;}
+:root{--bottomIslandH: 84px;}
 
-/* mode accents */
-body[data-mode="m1"]{--brand:#0B57D0; --brand2:#7C3AED;}
-body[data-mode="m2"]{--brand:#FF6A00; --brand2:#FF9F1C;}
-body[data-mode="m3"]{--brand:#7C3AED; --brand2:#0B57D0;}
-
-/* only add subtle orange wash in Marks mode */
-body[data-mode="m2"]{
+/* Subtle light gradients per mode */
+body[data-mode="m1"]::before,
+body[data-mode="m2"]::before,
+body[data-mode="m3"]::before{
+  content:"";
+  position:fixed;
+  inset:0;
+  z-index:-1;
+  pointer-events:none;
+}
+body[data-mode="m1"]::before{
   background:
-    radial-gradient(900px 600px at 12% -10%, rgba(255,106,0,.18), transparent 62%),
-    radial-gradient(900px 600px at 90% 0%, rgba(255,159,28,.16), transparent 60%),
+    radial-gradient(900px 600px at 10% -10%, rgba(11,87,208,.12), transparent 62%),
+    radial-gradient(900px 600px at 90% 0%, rgba(124,58,237,.10), transparent 60%),
+    #ffffff;
+}
+body[data-mode="m2"]::before{
+  background:
+    radial-gradient(900px 600px at 10% -10%, rgba(255,106,0,.14), transparent 62%),
+    radial-gradient(900px 600px at 90% 0%, rgba(255,159,28,.12), transparent 60%),
+    #ffffff;
+}
+body[data-mode="m3"]::before{
+  background:
+    radial-gradient(900px 600px at 10% -10%, rgba(20,184,166,.10), transparent 62%),
+    radial-gradient(900px 600px at 90% 0%, rgba(124,58,237,.10), transparent 60%),
     #ffffff;
 }
 
-/* Hamburger icon */
-.menuBtn{padding:10px 12px; border-radius:12px;}
-.hamb{display:inline-block; width:18px; height:12px; position:relative;}
-.hamb::before{content:""; position:absolute; left:0; right:0; top:0; height:2px; border-radius:999px; background:currentColor;
-  box-shadow:0 5px 0 currentColor, 0 10px 0 currentColor;}
-
-/* Menu panel bounded */
-.infoMenu{position:fixed; top:calc(env(safe-area-inset-top,0px) + var(--navH) + 8px); right:12px;
-  width:min(320px, calc(100vw - 24px)); max-height:calc(100vh - (env(safe-area-inset-top,0px) + var(--navH) + 24px));
-  overflow:auto; display:none; flex-direction:column; gap:6px; padding:10px;
-  border-radius:16px; border:1px solid var(--stroke);
-  background:rgba(255,255,255,.94);
-  backdrop-filter:saturate(1.2) blur(10px);
-  box-shadow:0 20px 60px rgba(17,24,39,.18); z-index:260;}
-.infoMenu.show{display:flex; animation:popInFast 120ms cubic-bezier(.16,1,.3,1);} 
-@keyframes popInFast{from{transform:translateY(-6px) scale(.985); opacity:0}to{transform:none; opacity:1}}
-.menuGroup{font-weight:990; font-size:11px; color:#6B7280; letter-spacing:.08em; text-transform:uppercase; padding:2px 8px;}
-.menuItem{width:100%; text-align:left; border:1px solid var(--stroke); background:rgba(11,87,208,.06); color:inherit;
-  padding:10px 12px; border-radius:12px; font-weight:950; cursor:pointer;}
-.menuItem:active{transform:scale(.99)}
-
-@media (max-width:520px){
-  .infoMenu{top:auto; left:10px; right:10px; bottom:calc(env(safe-area-inset-bottom,0px) + 12px); width:auto; max-height:60vh; border-radius:18px;}
+/* Phone bottom island */
+.bottomIsland{
+  display:none;
+  position:fixed;
+  left:50%;
+  transform:translateX(-50%);
+  bottom:calc(env(safe-area-inset-bottom, 0px) + 10px);
+  width:min(380px, calc(100vw - 20px));
+  height:56px;
+  padding:6px;
+  gap:8px;
+  border-radius:22px;
+  border:1px solid var(--stroke);
+  background:rgba(255,255,255,.92);
+  backdrop-filter:saturate(1.2) blur(12px);
+  box-shadow:0 18px 50px rgba(17,24,39,.18);
+  z-index:999;
+  align-items:center;
+  justify-content:space-between;
 }
-
-/* Top Dynamic island */
-.island{position:fixed; left:50%; top:calc(env(safe-area-inset-top,0px) + var(--navH) + 8px); transform:translateX(-50%);
-  z-index:250; width:min(520px, calc(100vw - 24px)); pointer-events:none; opacity:0;}
-.island.show{opacity:1; pointer-events:auto;}
-.islandInner{display:flex; align-items:center; gap:10px; padding:10px 12px; border-radius:999px; border:1px solid var(--stroke);
-  background:rgba(255,255,255,.90); backdrop-filter:saturate(1.2) blur(10px); box-shadow:0 18px 50px rgba(17,24,39,.18);} 
-.islandIcon{width:28px;height:28px;border-radius:999px;display:grid;place-items:center;background:linear-gradient(135deg,var(--brand),var(--brand2));color:#fff;font-weight:1000;}
-.islandText{min-width:0;display:flex;flex-direction:column;gap:2px;}
-.islandTitle{font-weight:1000;font-size:13px;line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-.islandSub{font-weight:850;font-size:12px;color:#374151;line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-.islandClose{margin-left:auto;border:none;background:rgba(17,24,39,.06);color:inherit;width:30px;height:30px;border-radius:999px;cursor:pointer;font-weight:1000;}
-
-/* Bottom mode island on phone */
-.modeIsland{display:none; position:fixed; left:50%; transform:translateX(-50%);
-  bottom:calc(env(safe-area-inset-bottom,0px) + 10px);
-  width:min(560px, calc(100vw - 20px)); padding:8px; gap:8px; border-radius:20px; border:1px solid var(--stroke);
-  background:rgba(255,255,255,.94); backdrop-filter:saturate(1.2) blur(10px); box-shadow:0 18px 50px rgba(17,24,39,.18); z-index:230;}
-.mIsBtn{flex:1; border:1px solid transparent; background:transparent; color:#374151; border-radius:14px; padding:10px 8px; display:flex; flex-direction:column; align-items:center; gap:4px; font-weight:1000; cursor:pointer;}
-.mIsBtn:active{transform:scale(.98)}
-.mIsBtn .mi{font-size:16px; line-height:1;}
-.mIsBtn .mt{font-size:12px;}
-.mIsBtn.active{color:#111827; background:rgba(255,106,0,.14); border-color:rgba(255,106,0,.25);} 
+.bIsBtn{
+  flex:1;
+  height:44px;
+  border-radius:16px;
+  border:1px solid transparent;
+  background:transparent;
+  font-size:18px;
+  cursor:pointer;
+}
+.bIsBtn.active{
+  border-color:color-mix(in oklab, var(--stroke) 40%, var(--brand));
+  background:rgba(11,87,208,.08);
+}
 
 @media (max-width:640px){
-  .modeIsland{display:flex;}
-  .modeSwitch{display:none;}
-  .container{padding-bottom:200px;}
-  #backToTop{bottom:calc(env(safe-area-inset-bottom,0px) + 90px);} 
-}
-@media (min-width:641px){
-  .modeSwitch{display:flex;}
+  .bottomIsland{display:flex;}
+  /* Keep FAB and top button ABOVE the island */
+  .fab{bottom:calc(env(safe-area-inset-bottom, 0px) + var(--bottomIslandH));}
+  #backToTop{bottom:calc(env(safe-area-inset-bottom, 0px) + var(--bottomIslandH));}
+  /* Add scroll padding so content doesn't hide behind island */
+  .container{padding-bottom:calc(180px + var(--bottomIslandH));}
 }
 </style>
 </head>
@@ -546,16 +546,6 @@ body[data-mode="m2"]{
 <body data-theme="light" data-mode="m1">
 <canvas id="bg3d" aria-hidden="true"></canvas>
 <div class="cursorGlow" id="cursorGlow" aria-hidden="true"></div>
-<div id="dynamicIsland" class="island" role="status" aria-live="polite" aria-atomic="true">
-  <div class="islandInner">
-    <div class="islandIcon" aria-hidden="true">✨</div>
-    <div class="islandText">
-      <div class="islandTitle" id="islandTitle">GRADEO</div>
-      <div class="islandSub" id="islandSub">Ready.</div>
-    </div>
-    <button class="islandClose" id="islandClose" type="button" aria-label="Close">✕</button>
-  </div>
-</div>
 <header class="nav noPrint" id="nav">
   <div class="navInner">
     <div class="brand">
@@ -576,26 +566,7 @@ body[data-mode="m2"]{
       </div>
 <button class="btn ghost" id="shareSiteBtn">Share</button>
       <button class="btn" id="pdfBtn">PDF</button>
-      <div class="menuWrap" id="menuWrap">
-  <button class="btn ghost menuBtn" id="infoMenuBtn" type="button" aria-haspopup="true" aria-expanded="false" aria-controls="infoMenu" aria-label="Menu">
-    <span class="hamb" aria-hidden="true"></span>
-  </button>
-  <div class="infoMenu" id="infoMenu" role="menu" aria-label="Menu">
-    <div class="menuGroup">Actions</div>
-    <button class="menuItem" id="miProfile" type="button" role="menuitem">Profile</button>
-    <button class="menuItem" id="miShare" type="button" role="menuitem">Share</button>
-    <button class="menuItem" id="miPdf" type="button" role="menuitem">Export PDF</button>
-    <button class="menuItem" id="miTop" type="button" role="menuitem">Go to top</button>
-    <div class="menuGroup" style="margin-top:6px;">Info & Legal</div>
-    <button class="menuItem" id="miWhat" type="button" role="menuitem">What is GRADEO?</button>
-    <button class="menuItem" id="miFaq" type="button" role="menuitem">FAQs</button>
-    <button class="menuItem" id="miPrivacy" type="button" role="menuitem">Privacy</button>
-    <button class="menuItem" id="miTerms" type="button" role="menuitem">Terms</button>
-    <button class="menuItem" id="miDisclaimer" type="button" role="menuitem">Disclaimer</button>
-    <button class="menuItem" id="miChangelog" type="button" role="menuitem">Changelog</button>
-  </div>
-</div>
-<button class="btn primary" id="profileBtn">Sign in</button>
+      <button class="btn primary" id="profileBtn">Sign in</button>
     </div>
   </div>
 </header>
@@ -794,22 +765,6 @@ body[data-mode="m2"]{
   </div>
 </main>
 
-<footer class="noPrint" style="max-width:1200px; margin:0 auto; padding:0 14px 24px;">
-  <div class="panel" style="padding:12px; display:flex; justify-content:space-between; gap:10px; flex-wrap:wrap; align-items:center;">
-    <div>
-      <div style="font-weight:990;">GRADEO</div>
-      <div class="hint"></div>
-    </div>
-    <div style="display:flex; gap:10px; flex-wrap:wrap; align-items:center;">
-      <button class="btn small" id="disclaimerBtn" type="button">Disclaimer</button>
-      <button class="btn small" id="privacyBtn" type="button">Privacy</button>
-      <button class="btn small" id="termsBtn" type="button">Terms</button>
-      <button class="btn small" id="changelogBtn" type="button">Changelog</button>
-    </div>
-  </div>
-</footer>
-
-
 <button class="btn" id="backToTop" aria-label="Back to top" style="display:none; position:fixed; left:16px; bottom:16px; z-index:60; border-radius:999px; padding:12px 14px;">⬆︎ Top</button>
 <div class="fab noPrint">
   <button class="btn primary" id="fabAdd">+ Subject</button>
@@ -832,11 +787,11 @@ body[data-mode="m2"]{
 </div>
 
 <!-- Three.js (for premium background motion) -->
-<script defer src="https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.min.js"></script>
 
 
 <!-- EmailJS -->
-<script defer src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 <script>
   emailjs.init({ publicKey: "xwlbvek6Ba47Eyg21" }); // ✅ Your Public Key
 </script>
@@ -1779,7 +1734,8 @@ body[data-mode="m2"]{
 
   /* ========= Mode switching ========= */
   function setMode(mode){
-    state.mode = mode;
+  state.mode = mode;
+  document.body.setAttribute('data-mode', mode);
     renderAllStatic();
     scheduleRecalc(0);
   }
@@ -1915,6 +1871,7 @@ if (topBtn){
   onScroll();
   topBtn.onclick = () => window.scrollTo({ top:0, behavior:'smooth' });
 }
+window.setMode = setMode;
 
 // Legal modals (launch-ready)
 const openLegal = (title, bodyHTML) => openModal({
@@ -2591,139 +2548,42 @@ const prefersReduce = window.matchMedia && window.matchMedia('(prefers-reduced-m
 </script>
 <script defer src="https://static.cloudflareinsights.com/beacon.min.js/vcd15cbe7772f49c399c6a5babf22c1241717689176015" integrity="sha512-ZpsOmlRQV6y907TI0dKBHq9Md29nnaEIPlkf84rnaERnq6zvWvPUqr2ft8M1aS28oN72PdrCzSjY4U6VaAw1EQ==" data-cf-beacon='{"version":"2024.11.0","token":"32f0b0530bdb47d89109f78f09c965e1","r":1,"server_timing":{"name":{"cfCacheStatus":true,"cfEdge":true,"cfExtPri":true,"cfL4":true,"cfOrigin":true,"cfSpeedBrain":true},"location_startswith":null}}' crossorigin="anonymous"></script>
 <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9c711f0dcc345f7c',t:'MTc2OTk0NTQ3NA=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script><script defer src="https://static.cloudflareinsights.com/beacon.min.js/vcd15cbe7772f49c399c6a5babf22c1241717689176015" integrity="sha512-ZpsOmlRQV6y907TI0dKBHq9Md29nnaEIPlkf84rnaERnq6zvWvPUqr2ft8M1aS28oN72PdrCzSjY4U6VaAw1EQ==" data-cf-beacon='{"version":"2024.11.0","token":"32f0b0530bdb47d89109f78f09c965e1","r":1,"server_timing":{"name":{"cfCacheStatus":true,"cfEdge":true,"cfExtPri":true,"cfL4":true,"cfOrigin":true,"cfSpeedBrain":true},"location_startswith":null}}' crossorigin="anonymous"></script>
-<div class="modeIsland noPrint" id="modeIsland" aria-label="Mode switch">
-  <button class="mIsBtn" type="button" data-mis="m1" aria-label="Target to SEE"><span class="mi">🎯</span><span class="mt">Target</span></button>
-  <button class="mIsBtn" type="button" data-mis="m2" aria-label="Marks to SGPA"><span class="mi">🧮</span><span class="mt">Marks</span></button>
-  <button class="mIsBtn" type="button" data-mis="m3" aria-label="SGPA to CGPA"><span class="mi">📈</span><span class="mt">Convert</span></button>
+<div class="bottomIsland noPrint" id="bottomIsland" aria-label="Quick mode switch">
+  <button class="bIsBtn" type="button" data-mode="m1" aria-label="Target to SEE">🎯</button>
+  <button class="bIsBtn" type="button" data-mode="m2" aria-label="Marks to SGPA">🧮</button>
+  <button class="bIsBtn" type="button" data-mode="m3" aria-label="SGPA to CGPA">📈</button>
 </div>
 <script>
 (()=>{
   'use strict';
-  // GRADEO_MENU_MODE_LIGHT_FIX_V2
 
-  const $ = (sel)=>document.querySelector(sel);
-
-  // measure nav height
-  const nav = document.getElementById('nav');
-  const setNavH = ()=>{
-    const h = nav ? Math.max(52, nav.getBoundingClientRect().height) : 60;
-    document.documentElement.style.setProperty('--navH', h + 'px');
-  };
-
-  // dynamic island
-  const island = document.getElementById('dynamicIsland');
-  const iTitle = document.getElementById('islandTitle');
-  const iSub = document.getElementById('islandSub');
-  const iClose = document.getElementById('islandClose');
-  let islandTimer=null;
-  const islandShow = (title='GRADEO', sub='', tone='info', duration=1400)=>{
-    if (!island || !iTitle || !iSub) return;
-    iTitle.textContent = title;
-    iSub.textContent = sub;
-    const icon = island.querySelector('.islandIcon');
-    if (icon) icon.textContent = tone==='success'?'✅':tone==='warn'?'⚠️':tone==='bad'?'❌':'✨';
-    island.classList.add('show');
-    clearTimeout(islandTimer);
-    islandTimer=setTimeout(()=>island.classList.remove('show'), duration);
-  };
-  if (iClose) iClose.addEventListener('click', ()=>island.classList.remove('show'));
-
-  // Menu open/close
-  const btn = document.getElementById('infoMenuBtn');
-  const menu = document.getElementById('infoMenu');
-  const closeMenu = ()=>{ if(menu){menu.classList.remove('show'); btn?.setAttribute('aria-expanded','false');} };
-  const toggleMenu = (e)=>{ e?.stopPropagation(); if(!menu) return; menu.classList.toggle('show'); btn?.setAttribute('aria-expanded', menu.classList.contains('show')?'true':'false'); };
-
-  if (btn && menu){
-    btn.addEventListener('click', toggleMenu);
-    document.addEventListener('click', closeMenu, {passive:true});
-    document.addEventListener('keydown', (e)=>{ if (e.key==='Escape') closeMenu(); });
-  }
-
-  // Ensure light theme always
+  // Force light theme attribute
   document.body.setAttribute('data-theme','light');
 
-  // Mode handling
-  const applyMode = (mode)=>{
-    document.body.setAttribute('data-mode', mode);
-    // bottom island active
-    const mis = document.getElementById('modeIsland');
-    if (mis) mis.querySelectorAll('.mIsBtn').forEach(b=>b.classList.toggle('active', b.getAttribute('data-mis')===mode));
+  const island = document.getElementById('bottomIsland');
+  if (!island) return;
+
+  const setActive = (mode)=>{
+    island.querySelectorAll('.bIsBtn').forEach(b=>b.classList.toggle('active', b.getAttribute('data-mode')===mode));
   };
 
-  const callSetMode = (mode)=>{
-    // Prefer app's setMode if exists
-    if (typeof window.setMode === 'function'){
-      window.setMode(mode);
-      applyMode(mode);
-      islandShow('Mode', mode==='m2'?'Marks → SGPA':mode==='m3'?'SGPA → CGPA':'Target → SEE', 'success');
-      return;
-    }
-    // Fallback: click buttons if setMode not global
-    document.getElementById(mode+'Btn')?.click();
-    applyMode(mode);
-  };
-
-  // Wire bottom mode island
-  const mis = document.getElementById('modeIsland');
-  if (mis){
-    mis.querySelectorAll('.mIsBtn').forEach(b=>{
-      b.addEventListener('click', ()=>callSetMode(b.getAttribute('data-mis')));
+  island.querySelectorAll('.bIsBtn').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      const mode = btn.getAttribute('data-mode');
+      if (typeof window.setMode === 'function') window.setMode(mode);
+      document.body.setAttribute('data-mode', mode);
+      setActive(mode);
     });
-  }
-
-  // Wire top mode buttons (desktop)
-  ['m1','m2','m3'].forEach(m=>{
-    const el = document.getElementById(m+'Btn');
-    if (el) el.addEventListener('click', (e)=>{ e.preventDefault(); callSetMode(m); });
   });
 
-  // Back to top
-  const topBtn = document.getElementById('backToTop');
-  if (topBtn){
-    const onScroll=()=>{
-      const show = window.scrollY>500;
-      topBtn.style.display = show ? 'inline-flex' : 'none';
-      topBtn.classList.toggle('show', show);
-    };
-    window.addEventListener('scroll', onScroll, {passive:true});
-    onScroll();
-    topBtn.addEventListener('click', ()=>window.scrollTo({top:0, behavior:'smooth'}));
-  }
-
-  // Menu actions
-  const openInfo = (title, body)=>{
-    closeMenu();
-    if (window.openModal){
-      window.openModal({title, desc:'', bodyHTML: body, footHTML:'<button class="btn" id="closeInfo" type="button">Close</button>'});
-      document.getElementById('closeInfo')?.addEventListener('click', window.closeModal);
-    }
-    islandShow(title,'','success');
+  // Sync with current mode
+  const sync = ()=>{
+    const mode = (window.state && window.state.mode) ? window.state.mode : document.body.getAttribute('data-mode') || 'm1';
+    document.body.setAttribute('data-mode', mode);
+    setActive(mode);
   };
-
-  const bodyWhat = `<div class="subCard"><div style="font-weight:990;">GRADEO — SGPA & CGPA Calculator</div><div class="hint" style="margin-top:8px;line-height:1.7;">• Target CGPA → Minimum SEE required per subject<br>• Marks → SGPA (CIE + SEE) with pass checks<br>• SGPA → CGPA converter</div></div>`;
-  const bodyFaq = `<div class="subCard"><div style="font-weight:990;">FAQs</div><div class="hint" style="margin-top:8px;line-height:1.75;"><b>How is SGPA calculated?</b><br>SGPA = Σ(credits×GP) ÷ Σ(credits).<br><br><b>Total/100?</b><br>Total = CIE(out of 50) + SEE/2 (if SEE out of 100).</div></div>`;
-  const bodyPrivacy = `<div class="subCard"><div style="font-weight:990;">Privacy</div><div class="hint" style="margin-top:8px;line-height:1.75;">Guest mode stores locally. Signed-in mode saves plans in Firebase. No passwords stored.</div></div>`;
-  const bodyTerms = `<div class="subCard"><div style="font-weight:990;">Terms</div><div class="hint" style="margin-top:8px;line-height:1.75;">Educational estimation tool. Verify from official sources.</div></div>`;
-  const bodyDisclaimer = `<div class="subCard"><div style="font-weight:990;">Disclaimer</div><div class="hint" style="margin-top:8px;line-height:1.75;">Not affiliated with any university. Results may vary.</div></div>`;
-  const bodyChangelog = `<div class="subCard"><div style="font-weight:990;">Changelog</div><div class="hint" style="margin-top:8px;line-height:1.75;">App-like UI menu + phone mode island + mode accent colors.</div></div>`;
-
-  document.getElementById('miProfile')?.addEventListener('click', ()=>{ closeMenu(); document.getElementById('profileBtn')?.click(); });
-  document.getElementById('miShare')?.addEventListener('click', ()=>{ closeMenu(); if (typeof window.shareSite==='function') window.shareSite(); else islandShow('Share','Not available','warn'); });
-  document.getElementById('miPdf')?.addEventListener('click', ()=>{ closeMenu(); window.print(); islandShow('PDF','Print / Save as PDF','success'); });
-  document.getElementById('miTop')?.addEventListener('click', ()=>{ closeMenu(); window.scrollTo({top:0, behavior:'smooth'}); });
-
-  document.getElementById('miWhat')?.addEventListener('click', ()=>openInfo('What is GRADEO?', bodyWhat));
-  document.getElementById('miFaq')?.addEventListener('click', ()=>openInfo('FAQs', bodyFaq));
-  document.getElementById('miPrivacy')?.addEventListener('click', ()=>openInfo('Privacy', bodyPrivacy));
-  document.getElementById('miTerms')?.addEventListener('click', ()=>openInfo('Terms', bodyTerms));
-  document.getElementById('miDisclaimer')?.addEventListener('click', ()=>openInfo('Disclaimer', bodyDisclaimer));
-  document.getElementById('miChangelog')?.addEventListener('click', ()=>openInfo('Changelog', bodyChangelog));
-
-  // init
-  setNavH();
-  applyMode('m1');
-  islandShow('GRADEO','Ready.');
+  sync();
+  setInterval(sync, 600);
 })();
 </script>
 </body>
