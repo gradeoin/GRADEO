@@ -125,11 +125,10 @@
 *{box-sizing:border-box}
     body{
       margin:0; font-family:var(--ui); color:var(--text);
-      background:
-  radial-gradient(900px 600px at 12% -10%, rgba(255,106,0,.14), transparent 62%),
-  radial-gradient(900px 600px at 90% 0%, rgba(255,159,28,.12), transparent 60%),
-  linear-gradient(180deg, var(--bg), var(--bg));
-      overflow-x:hidden;
+      background: radial-gradient(900px 600px at 12% -10%, var(--modeGlow1), transparent 62%),
+ radial-gradient(900px 600px at 90% 0%, var(--modeGlow2), transparent 60%),
+ linear-gradient(180deg, #ffffff, var(--modeBase));
+ overflow-x:hidden;
     }
 
     .nav{position:sticky; top:0; z-index:50; background:var(--panel); border-bottom:1px solid var(--stroke); transition:transform var(--t);}
@@ -350,7 +349,7 @@ html{scroll-behavior:smooth; overflow-x:hidden;}
 body.has-pointer .cursorGlow{opacity:.9;}
 
 /* Subtle grain overlay */
-body::before{
+body::after{
   content:""; position:fixed; inset:0; pointer-events:none; z-index:-1;
   background-image:url('data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%2260%22 height=%2260%22%3E%3Cfilter id=%22n%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.9%22 numOctaves=%222%22 stitchTiles=%22stitch%22/%3E%3C/filter%3E%3Crect width=%2260%22 height=%2260%22 filter=%22url(%23n)%22 opacity=%220.12%22/%3E%3C/svg%3E');
   opacity:.22;
@@ -473,20 +472,6 @@ html, body{color-scheme: light;}
 .cursorGlow{pointer-events:none !important;}
 
 /* Light gradient wash per mode (subtle) */
-body[data-mode]::before{content:""; position:fixed; inset:0; z-index:-1; pointer-events:none;}
-body[data-mode="m1"]::before{background:
-  radial-gradient(900px 600px at 10% -10%, rgba(11,87,208,.10), transparent 62%),
-  radial-gradient(900px 600px at 90% 0%, rgba(124,58,237,.08), transparent 60%),
-  #ffffff;}
-body[data-mode="m2"]::before{background:
-  radial-gradient(900px 600px at 10% -10%, rgba(255,106,0,.12), transparent 62%),
-  radial-gradient(900px 600px at 90% 0%, rgba(255,159,28,.10), transparent 60%),
-  #ffffff;}
-body[data-mode="m3"]::before{background:
-  radial-gradient(900px 600px at 10% -10%, rgba(20,184,166,.09), transparent 62%),
-  radial-gradient(900px 600px at 90% 0%, rgba(124,58,237,.08), transparent 60%),
-  #ffffff;}
-
 /* Phone bottom island */
 .bottomIsland{display:none; position:fixed; left:50%; transform:translateX(-50%);
   bottom:calc(env(safe-area-inset-bottom,0px) + 10px);
@@ -564,6 +549,38 @@ body[data-mode="m3"]::before{background:
 
 
 body.modalOpen .bottomIsland{display:none !important;}
+
+body[data-mode]::before{content:""; position:fixed; inset:0; z-index:-1; pointer-events:none;}
+/* Mode 1: Warm orange */
+body[data-mode="m1"]::before{background:
+  radial-gradient(900px 600px at 10% -10%, rgba(255,106,0,.16), transparent 62%),
+  radial-gradient(900px 600px at 90% 0%, rgba(255,159,28,.14), transparent 60%),
+  linear-gradient(180deg, #ffffff, #fff7f0);
+}
+/* Mode 2: Sky blue */
+body[data-mode="m2"]::before{background:
+  radial-gradient(900px 600px at 10% -10%, rgba(56,189,248,.18), transparent 62%),
+  radial-gradient(900px 600px at 90% 0%, rgba(59,130,246,.12), transparent 60%),
+  linear-gradient(180deg, #ffffff, #eef7ff);
+}
+/* Mode 3: Mint / violet */
+body[data-mode="m3"]::before{background:
+  radial-gradient(900px 600px at 10% -10%, rgba(20,184,166,.16), transparent 62%),
+  radial-gradient(900px 600px at 90% 0%, rgba(124,58,237,.10), transparent 60%),
+  linear-gradient(180deg, #ffffff, #f3fffb);
+}
+
+
+/* ===================== Mode-based light theme (variables) ===================== */
+:root{
+  --modeGlow1: rgba(255,106,0,.16);
+  --modeGlow2: rgba(255,159,28,.14);
+  --modeBase: #fff7f0;
+}
+body[data-mode="m1"]{ --modeGlow1: rgba(255,106,0,.16); --modeGlow2: rgba(255,159,28,.14); --modeBase:#fff7f0; }
+body[data-mode="m2"]{ --modeGlow1: rgba(56,189,248,.18); --modeGlow2: rgba(59,130,246,.12); --modeBase:#eef7ff; }
+body[data-mode="m3"]{ --modeGlow1: rgba(20,184,166,.16); --modeGlow2: rgba(124,58,237,.10); --modeBase:#f3fffb; }
+
 </style>
 </head>
 
@@ -1019,6 +1036,7 @@ body.modalOpen .bottomIsland{display:none !important;}
 
   /* ========= Local (guest) storage ========= */
   const LS_KEY = "cgpa_planner_local_v2";
+ const LS_MODE_KEY = "gradeo_last_mode";
   let localSaveTimer = null;
 
   function defaultGuestPlan(){
@@ -1788,43 +1806,84 @@ body.modalOpen .bottomIsland{display:none !important;}
   }
 
   /* ========= Mode switching ========= */
-  function setMode(mode, opts={push:true}){
+  function isPhoneNav(){
+  try{ return window.matchMedia && window.matchMedia('(max-width: 640px)').matches; }catch(_e){ return false; }
+}
+
+function setMode(mode, opts={push:true}){
   state.mode = mode;
+  try{ document.body.setAttribute('data-mode', mode); }catch(_e){}
   renderAllStatic();
   scheduleRecalc(0);
-  // update URL so browser back goes to previous mode instead of leaving the site
+
+  // Phone-only history behaviour (desktop: do NOT change URL)
   try{
-    if(opts.push){
+    if(isPhoneNav() && opts.push){
       const h = '#' + mode;
-      if(location.hash !== h){
-        history.pushState({mode}, '', h);
-      }
+      if(location.hash !== h) history.pushState({mode}, '', h);
     }
   }catch(_e){}
 }
 
 // Handle browser Back/Forward
-window.addEventListener('popstate', (e) => {
-  try{
-    // If a modal is open, close it first (common app behaviour)
-    const ov = document.getElementById('overlay');
-    if(ov && ov.classList.contains('show')){
-      closeModal();
-      return;
-    }
-  }catch(_e){}
-  const mode = (e && e.state && e.state.mode) ? e.state.mode : (location.hash || '').replace('#','');
-  if(mode === 'm1' || mode === 'm2' || mode === 'm3'){
-    setMode(mode, {push:false});
-  }
-});
 
 // Respect hash on first load
 (function(){
-  const mode = (location.hash || '').replace('#','');
+  let mode = (location.hash || '').replace('#','');
+  if(!(mode === 'm1' || mode === 'm2' || mode === 'm3')){
+    try{ mode = localStorage.getItem(LS_MODE_KEY) || ''; }catch(_e){}
+  }
   if(mode === 'm1' || mode === 'm2' || mode === 'm3'){
     state.mode = mode;
   }
+})();
+
+// Phone-only Back/Forward (modes)
+(function(){
+  const isPhoneNav = window.matchMedia && window.matchMedia('(max-width: 640px)').matches;
+  if(!isPhoneNav) return;
+
+  window.addEventListener('popstate', (e) => {
+    try{
+      const ov = document.getElementById('overlay');
+      if(ov && ov.classList.contains('show')){ closeModal(); return; }
+    }catch(_e){}
+    const mode = (e && e.state && e.state.mode) ? e.state.mode : (location.hash || '').replace('#','');
+    if(mode === 'm1' || mode === 'm2' || mode === 'm3') setMode(mode, {push:false});
+  });
+})();
+
+
+// Desktop: disable in-app history/hash so Back behaves normally
+(function(){
+  try{
+    const isPhoneNav = window.matchMedia && window.matchMedia('(max-width: 640px)').matches;
+    if(isPhoneNav) return;
+    // Remove mode hash if present
+    if(location.hash && (location.hash==='#m1' || location.hash==='#m2' || location.hash==='#m3')){
+      history.replaceState(null, '', location.pathname + location.search);
+    }
+  }catch(_e){}
+})();
+
+
+// Desktop UX guard: keep URL clean (famous website behaviour)
+(function(){
+  try{
+    if(isPhoneNav()) return;
+    // Strip mode hash if present
+    if(location.hash==='#m1' || location.hash==='#m2' || location.hash==='#m3'){
+      history.replaceState(null, '', location.pathname + location.search);
+    }
+    // Prevent accidental hash set for modes (from any code)
+    const _push = history.pushState;
+    history.pushState = function(state, title, url){
+      try{
+        if(typeof url==='string' && (url.endsWith('#m1') || url.endsWith('#m2') || url.endsWith('#m3'))) return;
+      }catch(_e){}
+      return _push.apply(this, arguments);
+    };
+  }catch(_e){}
 })();
 
 /* ========= Profile + Sign-in ========= */
@@ -2281,9 +2340,9 @@ function showContact(){
 
     $("#m1Btn").onclick = ()=>setMode(state.mode || "m1", {push:false});
   // create initial history entry for in-app navigation
-  try{ history.replaceState({mode: state.mode || "m1"}, "", "#" + (state.mode || "m1")); }catch(_e){}
-    $("#m2Btn").onclick = ()=>setMode("m2");
-    $("#m3Btn").onclick = ()=>setMode("m3");
+  try{ const isPhoneNav = window.matchMedia && window.matchMedia('(max-width: 640px)').matches; if(isPhoneNav) if(isPhoneNav()) history.replaceState({mode: state.mode || 'm1'}, '', '#' + (state.mode || 'm1')); }catch(_e){}
+    $("#m2Btn").onclick = ()=>setMode("m2", {push:isPhoneNav()});
+    $("#m3Btn").onclick = ()=>setMode("m3", {push:isPhoneNav()});
 
     const __themeSel = document.getElementById("themeSelect");
  if(__themeSel){
@@ -2311,6 +2370,15 @@ if (topBtn){
   topBtn.onclick = () => window.scrollTo({ top:0, behavior:'smooth' });
 }
 window.setMode = setMode;
+
+// Keyboard shortcuts: 1/2/3 switch modes (desktop)
+window.addEventListener('keydown', (e)=>{
+  if(e.target && (e.target.tagName==='INPUT' || e.target.tagName==='TEXTAREA' || e.target.isContentEditable)) return;
+  if(e.key==='1') setMode('m1', {push:isPhoneNav()});
+  if(e.key==='2') setMode('m2', {push:isPhoneNav()});
+  if(e.key==='3') setMode('m3', {push:isPhoneNav()});
+});
+
 
 // Legal modals (launch-ready)
 const openLegal = (title, bodyHTML) => openModal({
@@ -2657,7 +2725,7 @@ if (changelogBtn){
     // default mode
     setMode(state.mode || "m1", {push:false});
   // create initial history entry for in-app navigation
-  try{ history.replaceState({mode: state.mode || "m1"}, "", "#" + (state.mode || "m1")); }catch(_e){}
+  try{ const isPhoneNav = window.matchMedia && window.matchMedia('(max-width: 640px)').matches; if(isPhoneNav) if(isPhoneNav()) history.replaceState({mode: state.mode || 'm1'}, '', '#' + (state.mode || 'm1')); }catch(_e){}
     renderAllStatic();
     scheduleRecalc(0);
   });
