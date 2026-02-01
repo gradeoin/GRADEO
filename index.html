@@ -803,6 +803,23 @@ input[type=number][step="0.01"], input[type=number][step="0.1"]{inputmode:decima
 input[type=number]{-moz-appearance:textfield;}
 input[type=number]::-webkit-outer-spin-button,
 input[type=number]::-webkit-inner-spin-button{ -webkit-appearance:none; margin:0; }
+
+
+/* === Viral tooltip (fix hover name) === */
+.viralBtn{position:relative;}
+.viralBtn .vTip{display:none; position:absolute; right:calc(100% + 10px); top:50%; transform:translateY(-50%);
+  background:color-mix(in oklab, var(--panel) 92%, black);
+  border:1px solid var(--stroke); color:var(--text);
+  padding:6px 8px; border-radius:10px; white-space:nowrap;
+  font-size:12px; font-weight:900; box-shadow:var(--shadow2);
+  z-index:9999;
+}
+@media (hover:hover) and (pointer:fine){
+  .viralBtn:hover .vTip{display:block;}
+  .viralBtn:hover .vTip::after{content:""; position:absolute; left:100%; top:50%; transform:translateY(-50%);
+    border:6px solid transparent; border-left-color:color-mix(in oklab, var(--panel) 92%, black);
+  }
+}
 </style>
 </head>
 
@@ -907,7 +924,7 @@ input[type=number]::-webkit-inner-spin-button{ -webkit-appearance:none; margin:0
           <div class="row">
             <div>
               <label class="label">Current CGPA</label>
-              <input class="input" id="currentCgpa" type="number" inputmode="decimal" step="0.01" min="0" max="10" placeholder="e.g., 7.80">
+              <input class="input" id="currentCgpa" type="text" inputmode="decimal" pattern="[0-9]*[\.,]?[0-9]*" inputmode="decimal" min="0" max="10" placeholder="e.g., 7.80">
             </div>
             <div>
               <label class="label">Completed credits</label>
@@ -915,7 +932,7 @@ input[type=number]::-webkit-inner-spin-button{ -webkit-appearance:none; margin:0
             </div>
             <div>
               <label class="label">Target CGPA</label>
-              <input class="input" id="targetCgpa" type="number" inputmode="decimal" step="0.01" min="0" max="10" placeholder="e.g., 8.20">
+              <input class="input" id="targetCgpa" type="text" inputmode="decimal" pattern="[0-9]*[\.,]?[0-9]*" inputmode="decimal" min="0" max="10" placeholder="e.g., 8.20">
             </div>
             <div>
               <label class="label">Rounding</label>
@@ -961,7 +978,7 @@ input[type=number]::-webkit-inner-spin-button{ -webkit-appearance:none; margin:0
             </div>
             <div>
               <label class="label">Current CGPA (optional)</label>
-              <input class="input" id="curCgpa2" type="number" inputmode="decimal" step="0.01" min="0" max="10" placeholder="e.g., 7.80">
+              <input class="input" id="curCgpa2" type="text" inputmode="decimal" pattern="[0-9]*[\.,]?[0-9]*" inputmode="decimal" min="0" max="10" placeholder="e.g., 7.80">
             </div>
             <div>
               <label class="label">Completed credits (optional)</label>
@@ -1089,13 +1106,13 @@ input[type=number]::-webkit-inner-spin-button{ -webkit-appearance:none; margin:0
       </div>
       <div class="panelBody">
         <div class="viralGrid">
-          <button class="viralBtn hot" type="button" data-v="share" data-title="Share plan"><span class="vi">🔗</span><span class="vl">Share plan</span></button>
-          <button class="viralBtn" type="button" data-v="pdf" data-title="Export grade card PDF"><span class="vi">🖨️</span><span class="vl">Export PDF</span></button>
-          <button class="viralBtn trend" type="button" data-v="roast" data-title="Roast my SGPA"><span class="vi">🔥</span><span class="vl">Roast</span></button>
-          <button class="viralBtn" type="button" data-v="study" data-title="Study Mode (Pomodoro)"><span class="vi">🎧</span><span class="vl">Study</span></button>
-          <button class="viralBtn" type="button" data-v="badges" data-title="Achievements"><span class="vi">🏅</span><span class="vl">Badges</span></button>
-          <button class="viralBtn" type="button" data-v="leader" data-title="Leaderboard"><span class="vi">🏆</span><span class="vl">Leaderboard</span></button>
-          <button class="viralBtn" type="button" data-v="neon" data-title="Toggle Neon Mode"><span class="vi">🌗</span><span class="vl">Neon</span></button>
+          <button class="viralBtn hot" type="button" data-v="share" data-title="Share plan"><span class="vi">🔗</span><span class="vl">Share plan</span><span class="vTip" aria-hidden="true">Share plan</span></button>
+          <button class="viralBtn" type="button" data-v="pdf" data-title="Export grade card PDF"><span class="vi">🖨️</span><span class="vl">Export PDF</span><span class="vTip" aria-hidden="true">Export grade card PDF</span></button>
+          <button class="viralBtn trend" type="button" data-v="roast" data-title="Roast my SGPA"><span class="vi">🔥</span><span class="vl">Roast</span><span class="vTip" aria-hidden="true">Roast my SGPA</span></button>
+          <button class="viralBtn" type="button" data-v="study" data-title="Study Mode (Pomodoro)"><span class="vi">🎧</span><span class="vl">Study</span><span class="vTip" aria-hidden="true">Study Mode (Pomodoro)</span></button>
+          <button class="viralBtn" type="button" data-v="badges" data-title="Achievements"><span class="vi">🏅</span><span class="vl">Badges</span><span class="vTip" aria-hidden="true">Achievements</span></button>
+          <button class="viralBtn" type="button" data-v="leader" data-title="Leaderboard"><span class="vi">🏆</span><span class="vl">Leaderboard</span><span class="vTip" aria-hidden="true">Leaderboard</span></button>
+          <button class="viralBtn" type="button" data-v="neon" data-title="Toggle Neon Mode"><span class="vi">🌗</span><span class="vl">Neon</span><span class="vTip" aria-hidden="true">Toggle Neon Mode</span></button>
         </div>
         <div class="hint" style="margin-top:10px;">Hover an icon to see the name.</div>
       </div>
@@ -1989,7 +2006,7 @@ input[type=number]::-webkit-inner-spin-button{ -webkit-appearance:none; margin:0
     if (state.mode==="m2"){
       const sem = computeSGPA();
       const proj = (() => {
-        const cur = parseFloat($("#curCgpa2").value);
+        const cur = parseFloat(String($("#curCgpa2").value||"").replace(",","."));
         const done = parseFloat($("#doneCredits2").value);
         if (!Number.isFinite(cur) || !Number.isFinite(done) || sem.credits<=0) return null;
         return round2((cur*done + sem.sgpa*sem.credits)/(done+sem.credits));
@@ -3506,9 +3523,9 @@ if (changelogBtn){
         if (id==="planName") state.plan.name = el.value;
         if (id==="notes") state.plan.notes = el.value;
 
-        if (id==="currentCgpa") state.plan.mode1.currentCgpa = el.value;
+        if (id==="currentCgpa") state.plan.mode1.currentCgpa = String(el.value||"").replace(",",".");
         if (id==="completedCredits") state.plan.mode1.completedCredits = el.value;
-        if (id==="targetCgpa") state.plan.mode1.targetCgpa = el.value;
+        if (id==="targetCgpa") state.plan.mode1.targetCgpa = String(el.value||"").replace(",",".");
 
         markDirty();
         scheduleRecalc();
