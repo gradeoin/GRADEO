@@ -464,6 +464,58 @@ body::before{
   border-bottom: 1px solid var(--stroke);
 }
 
+/* ===== UX: Quick Bars (top) ===== */
+.quickBars{display:flex; flex-direction:column; gap:10px; margin-top:10px; position:relative; z-index:1; width:min(560px,100%);} 
+.qBar{display:grid; grid-template-columns:1fr auto; gap:8px; align-items:center; text-align:left; border:1px solid var(--stroke); background:color-mix(in oklab, var(--panel) 86%, transparent); border-radius:14px; padding:10px 12px; box-shadow:var(--shadow2); cursor:pointer;}
+.qTitle{font-weight:990; font-size:13px; line-height:1.2;}
+.qSub{grid-column:1; font-weight:850; font-size:12px; color:var(--muted); line-height:1.25;}
+.qGo{grid-column:2; grid-row:1 / span 2; font-size:18px; color:var(--muted2);}
+.qBar:active{transform:scale(.99)}
+
+/* ===== Modal: app-like, no overflow, no overlap ===== */
+html.modalOpen, body.modalOpen{overflow:hidden; overscroll-behavior:contain;}
+.modal{max-height:calc(100vh - 28px); overflow:hidden;}
+.modalHead{position:sticky; top:0; z-index:3; background:color-mix(in oklab, var(--panel) 92%, transparent); backdrop-filter:saturate(1.2) blur(10px);} 
+.modalBody{max-height:calc(100vh - 220px); overflow:auto; -webkit-overflow-scrolling:touch;}
+.modalFoot{position:sticky; bottom:0; z-index:3; background:color-mix(in oklab, var(--panel) 92%, transparent); backdrop-filter:saturate(1.2) blur(10px); flex-wrap:wrap;}
+.modalFoot .btn{max-width:100%;}
+
+/* ===== Dynamic Island ===== */
+:root{--navH:60px; --bottomSpace:0px;}
+.island{position:fixed; left:50%; top:calc(env(safe-area-inset-top, 0px) + var(--navH) + 8px); transform:translateX(-50%); z-index:210; width:min(520px, calc(100vw - 24px)); pointer-events:none; opacity:0;}
+.island.show{opacity:1; pointer-events:auto;}
+.islandInner{display:flex; align-items:center; gap:10px; padding:10px 12px; border-radius:999px; border:1px solid color-mix(in oklab, var(--stroke) 70%, transparent); background:color-mix(in oklab, var(--panel) 86%, transparent); backdrop-filter:saturate(1.3) blur(12px); box-shadow:0 18px 50px rgba(0,0,0,.28); transform:translateY(-8px) scale(.98); transition:transform 220ms cubic-bezier(.16,1,.3,1), opacity 220ms cubic-bezier(.16,1,.3,1);} 
+.island.show .islandInner{transform:none;}
+.islandIcon{width:28px;height:28px;border-radius:999px;display:grid;place-items:center;background:linear-gradient(135deg,var(--brand),var(--brand2));color:#fff;font-weight:1000;}
+.islandText{min-width:0;display:flex;flex-direction:column;gap:2px;}
+.islandTitle{font-weight:1000;font-size:13px;line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.islandSub{font-weight:850;font-size:12px;color:var(--muted);line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.islandClose{margin-left:auto;border:none;background:rgba(255,255,255,.10);color:var(--text);width:30px;height:30px;border-radius:999px;cursor:pointer;font-weight:1000;}
+
+/* ===== Bottom Navigation (mobile) + overlap spacing ===== */
+.bottomNav{position:fixed; left:50%; bottom:calc(env(safe-area-inset-bottom, 0px) + 10px); transform:translateX(-50%); width:min(560px, calc(100vw - 20px)); display:none; gap:8px; padding:8px; border-radius:18px; border:1px solid color-mix(in oklab, var(--stroke) 70%, transparent); background:color-mix(in oklab, var(--panel) 86%, transparent); backdrop-filter:saturate(1.2) blur(12px); box-shadow:0 18px 50px rgba(0,0,0,.28); z-index:180;}
+.bottomBtn{flex:1;border:1px solid transparent;background:transparent;color:var(--muted);border-radius:14px;padding:10px 8px;display:flex;flex-direction:column;align-items:center;gap:4px;font-weight:1000;cursor:pointer;}
+.bottomBtn:active{transform:scale(.98)}
+.bottomBtn .bI{font-size:16px;line-height:1;}
+.bottomBtn .bT{font-size:12px;}
+.bottomBtn.active{color:var(--text);background:rgba(11,87,208,.20);border-color:rgba(11,87,208,.30);} 
+
+@media (max-width:640px){
+  .bottomNav{display:flex;}
+  .modeSwitch{display:none;}
+  :root{--bottomSpace:96px;}
+  .container{padding-bottom:calc(110px + var(--bottomSpace));}
+  .fab{bottom:calc(env(safe-area-inset-bottom, 0px) + 86px);} 
+  #backToTop{bottom:calc(env(safe-area-inset-bottom, 0px) + 86px);} 
+}
+
+/* Avoid overlaps for fixed elements */
+.fab{right:12px;}
+#backToTop{left:12px;}
+
+@media (prefers-reduced-motion: reduce){
+  .islandInner{transition:none;}
+}
 </style>
 
 
@@ -576,6 +628,16 @@ body::before{
 <body data-theme="light">
 <canvas id="bg3d" aria-hidden="true"></canvas>
 <div class="cursorGlow" id="cursorGlow" aria-hidden="true"></div>
+<div id="dynamicIsland" class="island" role="status" aria-live="polite" aria-atomic="true">
+  <div class="islandInner">
+    <div class="islandIcon" aria-hidden="true">✨</div>
+    <div class="islandText">
+      <div class="islandTitle" id="islandTitle">GRADEO</div>
+      <div class="islandSub" id="islandSub">Ready.</div>
+    </div>
+    <button class="islandClose" id="islandClose" aria-label="Close">✕</button>
+  </div>
+</div>
 <header class="nav noPrint" id="nav">
   <div class="navInner">
     <div class="brand">
@@ -795,33 +857,6 @@ body::before{
   </div>
 </main>
 
-<section class="panel" id="about-gradeo" style="margin-top:12px;">
-  <div class="panelHead">
-    <div>
-      <h2>About GRADEO</h2>
-      <p>SGPA & CGPA calculator built for VTU and engineering students.</p>
-    </div>
-  </div>
-  <div class="panelBody">
-    <div class="subCard">
-      <div style="font-weight:990;">What GRADEO does</div>
-      <div class="hint" style="margin-top:6px;">
-        • <b>Target CGPA → Minimum SEE</b>: estimate required SEE marks per subject<br>
-        • <b>Marks → SGPA</b>: calculate SGPA from CIE & SEE with pass checks<br>
-        • <b>SGPA → CGPA</b>: convert semester SGPA to overall CGPA<br>
-        • <b>Cloud autosave</b> after Google sign-in • <b>PDF export</b> • Shareable plans
-      </div>
-    </div>
-    <div class="subCard" style="margin-top:10px;">
-      <div style="font-weight:990;">Who it’s for</div>
-      <div class="hint" style="margin-top:6px;">Engineering students (VTU-friendly) who want fast GPA calculations, planning and result estimates.</div>
-    </div>
-    <div class="subCard" style="margin-top:10px;">
-      <div style="font-weight:990;">Disclaimer</div>
-      <div class="hint" style="margin-top:6px;">Educational estimate only. Actual results may differ due to official university rules, moderation, rounding or policy changes.</div>
-    </div>
-  </div>
-</section>
 
 <footer class="noPrint" style="max-width:1200px; margin:0 auto; padding:0 14px 24px;">
   <div class="panel" style="padding:12px; display:flex; justify-content:space-between; gap:10px; flex-wrap:wrap; align-items:center;">
@@ -974,21 +1009,35 @@ body::before{
     setTimeout(()=>{ t.style.opacity="0"; t.style.transition="opacity 200ms"; }, 1400);
     setTimeout(()=>t.remove(), 1700);
   }
+window.toast = toast;
 
-  function openModal({title, desc, bodyHTML, footHTML}){
-    $("#modalTitle").textContent = title || "";
-    $("#modalDesc").textContent = desc || "";
-    $("#modalBody").innerHTML = bodyHTML || "";
-    $("#modalFoot").innerHTML = footHTML || "";
-    $("#overlay").classList.add("show");
-  }
-  function closeModal(){
-    $("#overlay").classList.remove("show");
-    $("#modalBody").innerHTML = "";
-    $("#modalFoot").innerHTML = "";
-  }
-
-  function gradeFromMarks(total){
+  
+let __lastFocus = null;
+function openModal({title, desc, bodyHTML, footHTML}){
+  __lastFocus = document.activeElement;
+  $("#modalTitle").textContent = title || "";
+  $("#modalDesc").textContent = desc || "";
+  $("#modalBody").innerHTML = bodyHTML || "";
+  $("#modalFoot").innerHTML = footHTML || "";
+  $("#overlay").classList.add("show");
+  document.documentElement.classList.add('modalOpen');
+  document.body.classList.add('modalOpen');
+  // focus first focusable
+  setTimeout(()=>{
+    const root = document.getElementById('overlay');
+    const el = root && root.querySelector('button,[href],input,select,textarea,[tabindex]:not([tabindex="-1"])');
+    el && el.focus && el.focus();
+  },0);
+}
+function closeModal(){
+  $("#overlay").classList.remove("show");
+  document.documentElement.classList.remove('modalOpen');
+  document.body.classList.remove('modalOpen');
+  $("#modalBody").innerHTML = "";
+  $("#modalFoot").innerHTML = "";
+  try{ __lastFocus && __lastFocus.focus && __lastFocus.focus(); }catch(e){}
+}
+function gradeFromMarks(total){
     const t = clamp(total, 0, 100);
     for (const s of GRADE_SCALE) if (t >= s.min) return s;
     return { min:0, grade:"F", gp:0 };
@@ -1041,6 +1090,9 @@ body::before{
       rows:Array.from({length:8},(_,i)=>({sem:i+1, sgpa:"", credits:""}))
     }
   };
+
+// Expose for integrations
+window.state = state;
 
   /* ========= Local (guest) storage ========= */
   const LS_KEY = "cgpa_planner_local_v2";
@@ -1812,6 +1864,7 @@ body::before{
     renderAllStatic();
     scheduleRecalc(0);
   }
+window.setMode = setMode;
 
   /* ========= Profile + Sign-in ========= */
   function openSignInModal(){
@@ -2620,6 +2673,178 @@ const prefersReduce = window.matchMedia && window.matchMedia('(prefers-reduced-m
 </script>
 <script defer src="https://static.cloudflareinsights.com/beacon.min.js/vcd15cbe7772f49c399c6a5babf22c1241717689176015" integrity="sha512-ZpsOmlRQV6y907TI0dKBHq9Md29nnaEIPlkf84rnaERnq6zvWvPUqr2ft8M1aS28oN72PdrCzSjY4U6VaAw1EQ==" data-cf-beacon='{"version":"2024.11.0","token":"32f0b0530bdb47d89109f78f09c965e1","r":1,"server_timing":{"name":{"cfCacheStatus":true,"cfEdge":true,"cfExtPri":true,"cfL4":true,"cfOrigin":true,"cfSpeedBrain":true},"location_startswith":null}}' crossorigin="anonymous"></script>
 <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9c711f0dcc345f7c',t:'MTc2OTk0NTQ3NA=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script><script defer src="https://static.cloudflareinsights.com/beacon.min.js/vcd15cbe7772f49c399c6a5babf22c1241717689176015" integrity="sha512-ZpsOmlRQV6y907TI0dKBHq9Md29nnaEIPlkf84rnaERnq6zvWvPUqr2ft8M1aS28oN72PdrCzSjY4U6VaAw1EQ==" data-cf-beacon='{"version":"2024.11.0","token":"32f0b0530bdb47d89109f78f09c965e1","r":1,"server_timing":{"name":{"cfCacheStatus":true,"cfEdge":true,"cfExtPri":true,"cfL4":true,"cfOrigin":true,"cfSpeedBrain":true},"location_startswith":null}}' crossorigin="anonymous"></script>
+<nav class="bottomNav noPrint" aria-label="Bottom navigation">
+  <button class="bottomBtn" data-bnav="m1" aria-label="Target to SEE"><span class="bI">🎯</span><span class="bT">Target</span></button>
+  <button class="bottomBtn" data-bnav="m2" aria-label="Marks to SGPA"><span class="bI">🧮</span><span class="bT">Marks</span></button>
+  <button class="bottomBtn" data-bnav="m3" aria-label="SGPA to CGPA"><span class="bI">📈</span><span class="bT">Convert</span></button>
+</nav>
+<script>
+(()=>{
+  'use strict';
+
+  // ===== Measure nav height to avoid overlap with dynamic island =====
+  const nav = document.getElementById('nav');
+  const setNavH = ()=>{
+    const h = nav ? Math.max(50, nav.getBoundingClientRect().height) : 60;
+    document.documentElement.style.setProperty('--navH', h + 'px');
+  };
+  setNavH();
+  window.addEventListener('resize', setNavH, {passive:true});
+
+  // ===== Dynamic Island =====
+  const island = document.getElementById('dynamicIsland');
+  const iTitle = document.getElementById('islandTitle');
+  const iSub = document.getElementById('islandSub');
+  const iClose = document.getElementById('islandClose');
+  let islandTimer = null;
+
+  function islandShow(title='GRADEO', sub='', tone='info', duration=2200){
+    if (!island || !iTitle || !iSub) return;
+    iTitle.textContent = title;
+    iSub.textContent = sub;
+    const icon = island.querySelector('.islandIcon');
+    if (icon){
+      icon.textContent = tone==='success' ? '✅' : tone==='warn' ? '⚠️' : tone==='bad' ? '❌' : '✨';
+    }
+    island.classList.add('show');
+    clearTimeout(islandTimer);
+    islandTimer = setTimeout(()=> island.classList.remove('show'), duration);
+  }
+  if (iClose) iClose.onclick = ()=> island.classList.remove('show');
+
+  // ===== Haptics (Android-friendly, safe no-op on iOS) =====
+  let userGesture = false;
+  const markGesture = ()=>{ userGesture = true; };
+  window.addEventListener('pointerdown', markGesture, {passive:true, once:true});
+  window.addEventListener('touchstart', markGesture, {passive:true, once:true});
+
+  function canVibrate(){
+    return !!(navigator.vibrate && userGesture && !window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+  }
+  function haptic(ms=8){ try{ if (canVibrate()) navigator.vibrate(ms); }catch(e){} }
+  function hapticTap(){ haptic(10); }
+  function hapticSoft(){ haptic(6); }
+
+  // Light scroll vibration (throttled)
+  let lastVibeAt = 0;
+  let lastStep = 0;
+  window.addEventListener('scroll', ()=>{
+    const now = performance.now();
+    if (now - lastVibeAt < 700) return;
+    const step = Math.floor((window.scrollY||0) / 180);
+    if (step !== lastStep){
+      lastStep = step;
+      haptic(5);
+      lastVibeAt = now;
+    }
+  }, {passive:true});
+
+  // Button tap feedback
+  document.addEventListener('click', (e)=>{
+    const b = e.target.closest('button, a');
+    if (!b || b.disabled) return;
+    hapticTap();
+  }, {passive:true});
+
+  // ===== Quick bars content (opens modal, not long page) =====
+  const whatHTML = `
+    <div class="subCard">
+      <div style="font-weight:990;">GRADEO — SGPA & CGPA Calculator</div>
+      <div class="hint" style="margin-top:8px;line-height:1.6;">
+        • Target CGPA → Minimum SEE required per subject<br>
+        • Marks → SGPA (CIE + SEE) with pass checks<br>
+        • SGPA → CGPA converter (3–8 semesters)<br>
+        • Cloud autosave after sign‑in, PDF export and sharing
+      </div>
+    </div>
+    <div class="hint" style="margin-top:10px;">Built for engineering students (VTU-friendly). Educational estimates only.</div>
+  `;
+
+  const faqHTML = `
+    <div class="subCard"><div style="font-weight:990;">FAQs</div>
+      <div class="hint" style="margin-top:8px;line-height:1.7;">
+        <b>1) How is SGPA calculated?</b><br>
+        SGPA = Σ(credits × grade points) ÷ Σ(credits). Grade points come from Total/100.<br><br>
+        <b>2) How is Total/100 calculated?</b><br>
+        Typically Total = CIE(out of 50) + SEE/2 (if SEE is out of 100). For SEE/50, Total = CIE + SEE.<br><br>
+        <b>3) How to convert SGPA to CGPA?</b><br>
+        Enter semester SGPA values in SGPA → CGPA mode (optionally credit-weighted).<br><br>
+        <b>4) Target CGPA → Minimum SEE?</b><br>
+        Enter current CGPA + credits, add subjects and CIE. GRADEO estimates minimum SEE needed.
+      </div>
+    </div>
+  `;
+
+  const privacyHTML = `
+    <div class="subCard"><div style="font-weight:990;">Privacy</div>
+      <div class="hint" style="margin-top:8px;line-height:1.7;">
+        • Guest mode: data stays in your browser (localStorage).<br>
+        • Signed-in mode: plans are stored in your Firebase account database.<br>
+        • No passwords stored by GRADEO (Google sign-in only).
+      </div>
+    </div>
+    <div class="subCard" style="margin-top:10px;"><div style="font-weight:990;">Disclaimer</div>
+      <div class="hint" style="margin-top:8px;line-height:1.7;">Results are educational estimates and may differ due to official rules, moderation, rounding or policy changes. Always verify with your marks card.</div>
+    </div>
+  `;
+
+  const bindBar = (id, title, desc, htmlBody)=>{
+    const el = document.getElementById(id);
+    if (!el) return;
+    el.addEventListener('click', ()=>{
+      if (typeof window.openModal === 'function'){
+        window.openModal({
+          title,
+          desc,
+          bodyHTML: htmlBody,
+          footHTML: '<button class="btn" id="closeQ">Close</button>'
+        });
+        const c = document.getElementById('closeQ');
+        if (c) c.onclick = window.closeModal;
+      }
+      islandShow(title, desc, 'success', 1700);
+      hapticSoft();
+    });
+  };
+
+  bindBar('qbarWhat','What is GRADEO?','SGPA & CGPA calculator + planner', whatHTML);
+  bindBar('qbarFaq','FAQs','Fast answers', faqHTML);
+  bindBar('qbarPrivacy','Privacy & Disclaimer','Data and estimate notice', privacyHTML);
+
+  // ===== Bottom nav wiring (mobile) =====
+  const navEl = document.querySelector('.bottomNav');
+  const updateNav = ()=>{
+    if (!navEl || !window.state) return;
+    navEl.querySelectorAll('.bottomBtn').forEach(b=> b.classList.toggle('active', b.getAttribute('data-bnav')===window.state.mode));
+  };
+  if (navEl){
+    navEl.querySelectorAll('.bottomBtn').forEach(b=>{
+      b.addEventListener('click', ()=>{
+        const m = b.getAttribute('data-bnav');
+        if (typeof window.setMode === 'function') window.setMode(m);
+        updateNav();
+        islandShow('Mode changed', m==='m1' ? 'Target → SEE' : m==='m2' ? 'Marks → SGPA' : 'SGPA → CGPA', 'success', 1500);
+        haptic(8);
+      });
+    });
+    setInterval(updateNav, 500);
+  }
+
+  // Enhance toast into island (if toast exists)
+  if (typeof window.toast === 'function'){
+    const _toast = window.toast;
+    window.toast = (msg)=>{
+      try{ _toast(msg); }catch(e){}
+      islandShow('GRADEO', String(msg||''));
+      hapticSoft();
+    };
+  }
+
+  // Initial island
+  islandShow('GRADEO', 'Ready.');
+
+})();
+</script>
 </body>
 </html>
 
