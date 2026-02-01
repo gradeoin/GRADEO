@@ -473,38 +473,42 @@ body::before{
 
 .profileCard{display:flex; gap:12px; align-items:center; border:1px solid var(--stroke); background:var(--card); border-radius:14px; padding:12px; box-shadow:var(--shadow2);}
 .profileAvatar{width:54px;height:54px;border-radius:16px; object-fit:cover; border:1px solid color-mix(in oklab, var(--stroke) 70%, transparent); background:rgba(255,255,255,.08);}
-.profileMeta{display:flex;flex-direction:column;gap:4px;}
-.profileMeta .name{font-weight:990; font-size:15px;}
-.profileMeta .email{font-weight:850; font-size:12px; color:var(--muted);}
+.profileMeta{display:flex;flex-direction:column;gap:4px; min-width:0;}
+.profileMeta .name{font-weight:990; font-size:15px; overflow-wrap:anywhere; word-break:break-word;}
+.profileMeta .email{font-weight:850; font-size:12px; color:var(--muted); overflow-wrap:anywhere; word-break:break-word;}
 .profileGrid{display:grid; grid-template-columns:1fr 1fr; gap:10px;}
 @media (max-width:520px){.profileGrid{grid-template-columns:1fr;}}
 .chipRow{display:flex; gap:8px; flex-wrap:wrap; margin-top:8px;}
-.chip{display:inline-flex;align-items:center;gap:6px; padding:6px 10px; border-radius:999px; border:1px solid var(--stroke); background:rgba(255,255,255,.06); font-weight:950; font-size:12px;}
-/* ===== Modal overflow & responsive fixes (added) ===== */
+.chip{display:inline-flex;align-items:center;gap:6px; padding:6px 10px; border-radius:999px; border:1px solid var(--stroke); background:rgba(255,255,255,.06); font-weight:950; font-size:12px; max-width:100%;}
+.chip .mono{word-break:break-all; overflow-wrap:anywhere;}
+
+/* ===== Modal overflow & app-like behavior (added) ===== */
+html.modalOpen, body.modalOpen{overflow:hidden; overscroll-behavior:contain; touch-action:none;}
 .overlay{padding:14px;}
-.modal{max-height:calc(100vh - 28px); overflow:hidden;}
-.modalBody{max-height:calc(100vh - 180px); overflow:auto; -webkit-overflow-scrolling:touch;}
-.modalFoot{flex-wrap:wrap;}
+.overlay.show{animation:fadeIn 160ms cubic-bezier(.16,1,.3,1);} 
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+
+.modal{max-height:calc(100vh - 28px); overflow:hidden; width:min(740px,100%);}
+.modalHead{position:sticky; top:0; background:color-mix(in oklab, var(--panel) 92%, transparent); backdrop-filter:saturate(1.2) blur(10px); z-index:2;}
+.modalBody{max-height:calc(100vh - 220px); overflow:auto; -webkit-overflow-scrolling:touch; padding-bottom:10px;}
+.modalFoot{position:sticky; bottom:0; z-index:2; background:color-mix(in oklab, var(--panel) 92%, transparent); backdrop-filter:saturate(1.2) blur(10px); border-top:1px solid var(--stroke); flex-wrap:wrap;}
 .modalFoot .btn{max-width:100%;}
 
-/* Ensure wide chips/UID wrap instead of overflowing */
-.chip{max-width:100%;}
-.chip .mono{word-break:break-all; overflow-wrap:anywhere;}
-.profileMeta{min-width:0;}
-.profileMeta .name, .profileMeta .email{overflow-wrap:anywhere; word-break:break-word;}
-.profileCard{flex-wrap:wrap;}
-.profileAvatar{flex:0 0 auto;}
-
-/* Make long inputs not push outside */
-.input{min-width:0;}
-.profileGrid .span2{min-width:0;}
-
+/* Swipe indicator (mobile) */
+.swipePill{display:none; width:52px; height:5px; border-radius:999px; background:color-mix(in oklab, var(--muted2) 35%, transparent); margin:0 auto 8px;}
 @media (max-width:520px){
   .overlay{padding:10px;}
-  .modal{width:100%;}
-  .profileCard{gap:10px;}
+  .swipePill{display:block;}
+  .profileCard{flex-wrap:wrap; gap:10px;}
   .profileAvatar{width:50px;height:50px;}
 }
+
+/* Faster, smoother modal pop */
+.overlay.show .modal{animation:modalInFast 200ms cubic-bezier(.16,1,.3,1); transform-origin:50% 10%;}
+@keyframes modalInFast{from{transform:translateY(14px) scale(.985); opacity:0}to{transform:none; opacity:1}}
+
+/* Focus ring inside modal */
+.modal :focus-visible{outline:2px solid color-mix(in oklab, var(--brand) 70%, white); outline-offset:2px;}
 </style>
 
 <!-- Brand/SEO structured data (added) -->
@@ -954,18 +958,91 @@ body::before{
     setTimeout(()=>t.remove(), 1700);
   }
 
-  function openModal({title, desc, bodyHTML, footHTML}){
-    $("#modalTitle").textContent = title || "";
-    $("#modalDesc").textContent = desc || "";
-    $("#modalBody").innerHTML = bodyHTML || "";
-    $("#modalFoot").innerHTML = footHTML || "";
-    $("#overlay").classList.add("show");
-  }
-  function closeModal(){
-    $("#overlay").classList.remove("show");
-    $("#modalBody").innerHTML = "";
-    $("#modalFoot").innerHTML = "";
-  }
+  
+let __lastFocus = null;
+let __swipe = {active:false, y0:0, dy:0};
+
+function openModal({title, desc, bodyHTML, footHTML}){
+  __lastFocus = document.activeElement;
+  $("#modalTitle").textContent = title || "";
+  $("#modalDesc").textContent = desc || "";
+  // Add swipe pill to body for mobile
+  const pill = '<div class="swipePill" aria-hidden="true"></div>';
+  $("#modalBody").innerHTML = (pill + (bodyHTML || ""));
+  $("#modalFoot").innerHTML = footHTML || "";
+  $("#overlay").classList.add("show");
+  document.documentElement.classList.add('modalOpen');
+  document.body.classList.add('modalOpen');
+
+  // Focus first focusable element for app-like feel
+  setTimeout(()=>{
+    const root = $("#overlay");
+    const focusable = root.querySelector('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])');
+    focusable && focusable.focus && focusable.focus();
+  }, 0);
+
+  // Swipe-to-close (mobile): drag down from header or top of body
+  const modal = document.querySelector('.modal');
+  const head = document.querySelector('.modalHead');
+  const body = document.querySelector('.modalBody');
+  if (!modal || !head || !body) return;
+
+  const start = (e)=>{
+    // Only if body is at top
+    if (body.scrollTop > 2) return;
+    const y = (e.touches && e.touches[0]) ? e.touches[0].clientY : e.clientY;
+    __swipe.active = true; __swipe.y0 = y; __swipe.dy = 0;
+    modal.style.transition = 'none';
+  };
+  const move = (e)=>{
+    if (!__swipe.active) return;
+    const y = (e.touches && e.touches[0]) ? e.touches[0].clientY : e.clientY;
+    __swipe.dy = Math.max(0, y - __swipe.y0);
+    // Follow finger slightly
+    const translate = Math.min(__swipe.dy, 160);
+    modal.style.transform = `translateY(${translate}px)`;
+    modal.style.opacity = String(1 - Math.min(translate/260, 0.35));
+  };
+  const end = ()=>{
+    if (!__swipe.active) return;
+    __swipe.active = false;
+    const shouldClose = __swipe.dy > 90;
+    modal.style.transition = 'transform 180ms cubic-bezier(.16,1,.3,1), opacity 180ms cubic-bezier(.16,1,.3,1)';
+    if (shouldClose){
+      modal.style.transform = 'translateY(180px)';
+      modal.style.opacity = '0';
+      setTimeout(()=>closeModal(), 140);
+    } else {
+      modal.style.transform = '';
+      modal.style.opacity = '';
+    }
+  };
+
+  // Remove previous listeners if any (idempotent)
+  head.onpointerdown = null; head.onpointermove = null; head.onpointerup = null; head.onpointercancel = null;
+  head.ontouchstart = null; head.ontouchmove = null; head.ontouchend = null;
+
+  // Pointer events (best)
+  head.addEventListener('pointerdown', start, {passive:true});
+  window.addEventListener('pointermove', move, {passive:true});
+  window.addEventListener('pointerup', end, {passive:true});
+  window.addEventListener('pointercancel', end, {passive:true});
+
+  // Also allow starting from top area of body
+  body.addEventListener('touchstart', (e)=>{ if (body.scrollTop<=2) start(e); }, {passive:true});
+  body.addEventListener('touchmove', move, {passive:true});
+  body.addEventListener('touchend', end, {passive:true});
+}
+
+function closeModal(){
+  $("#overlay").classList.remove("show");
+  document.documentElement.classList.remove('modalOpen');
+  document.body.classList.remove('modalOpen');
+  $("#modalBody").innerHTML = "";
+  $("#modalFoot").innerHTML = "";
+  // Restore focus
+  try{ __lastFocus && __lastFocus.focus && __lastFocus.focus(); }catch(e){}
+}
 
   function gradeFromMarks(total){
     const t = clamp(total, 0, 100);
@@ -1795,253 +1872,252 @@ body::before{
   /* ========= Profile + Sign-in ========= */
   
 function openSignInModal(){
- openModal({
-   title:"Sign in to unlock results & autosave",
-   desc:"Fast Google sign-in • Sync across devices • Export PDF • Share plans",
-   bodyHTML:`
-     <div class="subCard">
-       <div style="font-weight:990; margin-bottom:6px;">Why sign in?</div>
-       <div class="hint">• Unlock calculations & required marks<br>• Cloud autosave every ~15s<br>• Multiple plans & view-only sharing<br>• PDF export</div>
-     </div>
-     <div class="hint">We use Google sign-in via Firebase. No passwords stored.</div>
-   `,
-   footHTML:`
-     <button class="btn primary authBtn" id="doSignin">
-       <span class="spinner" aria-hidden="true"></span>
-       <span class="btnText">Continue with Google</span>
-     </button>
-     <button class="btn" id="cancel">Cancel</button>
-   `
- });
+  openModal({
+    title:"Sign in to unlock results & autosave",
+    desc:"Fast Google sign-in • Sync across devices • Export PDF • Share plans",
+    bodyHTML:`
+      <div class="subCard">
+        <div style="font-weight:990; margin-bottom:6px;">Why sign in?</div>
+        <div class="hint">• Unlock calculations & required marks<br>• Cloud autosave every ~15s<br>• Multiple plans & view-only sharing<br>• PDF export</div>
+      </div>
+      <div class="hint">We use Google sign-in via Firebase. No passwords stored.</div>
+    `,
+    footHTML:`
+      <button class="btn primary authBtn" id="doSignin">
+        <span class="spinner" aria-hidden="true"></span>
+        <span class="btnText">Continue with Google</span>
+      </button>
+      <button class="btn" id="cancel">Cancel</button>
+    `
+  });
 
- const btn = document.getElementById('doSignin');
- const cancel = document.getElementById('cancel');
- if (cancel) cancel.onclick = closeModal;
+  const btn = document.getElementById('doSignin');
+  const cancel = document.getElementById('cancel');
+  if (cancel) cancel.onclick = closeModal;
 
- if (btn) btn.onclick = async()=>{
-   try{
-     btn.classList.add('loading');
-     const t = btn.querySelector('.btnText');
-     if (t) t.textContent = 'Signing in…';
-     const result = await auth.signInWithPopup(provider);
-     await sendWelcomeEmailOnce(result.user);
-     closeModal();
-     toast('Signed in');
-   }catch(e){
-     console.error(e);
-     toast('Sign-in cancelled');
-     btn.classList.remove('loading');
-     const t = btn.querySelector('.btnText');
-     if (t) t.textContent = 'Continue with Google';
-   }
- };
+  if (btn) btn.onclick = async()=>{
+    try{
+      btn.classList.add('loading');
+      const t = btn.querySelector('.btnText');
+      if (t) t.textContent = 'Signing in…';
+      const result = await auth.signInWithPopup(provider);
+      await sendWelcomeEmailOnce(result.user);
+      closeModal();
+      toast('Signed in');
+    }catch(e){
+      console.error(e);
+      toast('Sign-in cancelled');
+      btn.classList.remove('loading');
+      const t = btn.querySelector('.btnText');
+      if (t) t.textContent = 'Continue with Google';
+    }
+  };
 }
 
 
 function openProfile(){
- if (!auth.currentUser){ openSignInModal(); return; }
- const u = auth.currentUser;
- const displayName = (u.displayName || '').trim() || 'Student';
- const email = (u.email || '').trim() || '—';
- const photo = (u.photoURL || '').trim();
- const createdAt = (u.metadata && u.metadata.creationTime) ? u.metadata.creationTime : '—';
- const lastLogin = (u.metadata && u.metadata.lastSignInTime) ? u.metadata.lastSignInTime : '—';
+  if (!auth.currentUser){ openSignInModal(); return; }
+  const u = auth.currentUser;
+  const displayName = (u.displayName || '').trim() || 'Student';
+  const email = (u.email || '').trim() || '—';
+  const photo = (u.photoURL || '').trim();
+  const createdAt = (u.metadata && u.metadata.creationTime) ? u.metadata.creationTime : '—';
+  const lastLogin = (u.metadata && u.metadata.lastSignInTime) ? u.metadata.lastSignInTime : '—';
 
- openModal({
-  title:"Profile & Account",
-  desc:"Update your name, photo, and account settings.",
-  bodyHTML:`
-    <div class="profileCard">
-      <img class="profileAvatar" id="avatarPreview" src="${photo || 'https://res.cloudinary.com/djy3mjtsz/image/upload/v1769939761/Untitled_1_vtehdh.png'}" alt="Profile picture"/>
-      <div class="profileMeta">
-        <div class="name" id="profileNameText">${esc(displayName)}</div>
-        <div class="email">${esc(email)}</div>
-        <div class="chipRow">
-          <span class="chip">UID: <span class="mono" id="uidChip">${esc(u.uid)}</span></span>
-          <span class="chip">Created: ${esc(createdAt)}</span>
-          <span class="chip">Last login: ${esc(lastLogin)}</span>
-        </div>
-      </div>
-    </div>
-
-    <div class="subCard" style="margin-top:10px;">
-      <div style="font-weight:990; margin-bottom:8px;">Edit profile</div>
-      <div class="profileGrid">
-        <div>
-          <label class="label">Display name</label>
-          <input class="input" id="displayNameInput" value="${esc(displayName)}" placeholder="Your name" />
-          <div class="hint">Shown in your Google account and GRADEO.</div>
-        </div>
-        <div>
-          <label class="label">Nickname (inside app)</label>
-          <input class="input" id="nickInput" value="${esc(state.profile.nickname || displayName)}" placeholder="e.g., Student" />
-          <div class="hint">Used in the header “Made for you”.</div>
-        </div>
-        <div class="span2">
-          <label class="label">Profile photo URL</label>
-          <input class="input" id="photoUrlInput" value="${esc(photo)}" placeholder="Paste an image URL (https://…)" />
-          <div class="hint">Tip: Use your Google photo or any public image URL.</div>
-        </div>
-      </div>
-    </div>
-
-    <div class="subCard" style="margin-top:10px;">
-      <div style="font-weight:990; margin-bottom:8px;">Security & Data</div>
-      <div class="profileGrid">
-        <div>
-          <label class="label">Email</label>
-          <input class="input" id="emailInput" value="${esc(email)}" placeholder="name@example.com" />
-          <div class="hint">Updating email may require re‑login for security.</div>
-        </div>
-        <div>
-          <label class="label">Account actions</label>
-          <div style="display:flex; gap:10px; flex-wrap:wrap; align-items:center;">
-            <button class="btn small" id="copyUidBtn">Copy UID</button>
-            <button class="btn small" id="downloadDataBtn">Download data</button>
+  openModal({
+    title:"Profile & Account",
+    desc:"Update your name, photo, and account settings.",
+    bodyHTML: `
+      <div class="profileCard">
+        <img class="profileAvatar" id="avatarPreview" src="${photo || 'https://res.cloudinary.com/djy3mjtsz/image/upload/v1769939761/Untitled_1_vtehdh.png'}" alt="Profile picture"/>
+        <div class="profileMeta">
+          <div class="name" id="profileNameText">${esc(displayName)}</div>
+          <div class="email">${esc(email)}</div>
+          <div class="chipRow">
+            <span class="chip">UID: <span class="mono" id="uidChip">${esc(u.uid)}</span></span>
+            <span class="chip">Created: ${esc(createdAt)}</span>
+            <span class="chip">Last login: ${esc(lastLogin)}</span>
           </div>
-          <div class="hint">Download includes your profile + plans as JSON.</div>
         </div>
       </div>
-    </div>
 
-    <div class="hint" style="margin-top:8px;">Privacy: GRADEO stores your plans in Firebase under your account. You can sign out anytime.</div>
-  `,
-  footHTML:`
-    <button class="btn primary" id="saveProfileBtn">Save changes</button>
-    <button class="btn" id="reauthBtn">Re‑login</button>
-    <button class="btn danger" id="deleteAccountBtn">Delete account</button>
-    <button class="btn" id="logoutBtn">Sign out</button>
-    <button class="btn" id="closeBtn">Close</button>
-  `
- });
+      <div class="subCard" style="margin-top:10px;">
+        <div style="font-weight:990; margin-bottom:8px;">Edit profile</div>
+        <div class="profileGrid">
+          <div>
+            <label class="label">Display name</label>
+            <input class="input" id="displayNameInput" value="${esc(displayName)}" placeholder="Your name" />
+            <div class="hint">Shown in your Google account and GRADEO.</div>
+          </div>
+          <div>
+            <label class="label">Nickname (inside app)</label>
+            <input class="input" id="nickInput" value="${esc(state.profile.nickname || displayName)}" placeholder="e.g., Student" />
+            <div class="hint">Used in the header “Made for you”.</div>
+          </div>
+          <div class="span2">
+            <label class="label">Profile photo URL</label>
+            <input class="input" id="photoUrlInput" value="${esc(photo)}" placeholder="Paste an image URL (https://…)" />
+            <div class="hint">Tip: Use your Google photo or any public image URL.</div>
+          </div>
+        </div>
+      </div>
 
- // Live preview avatar
- const photoInp = document.getElementById('photoUrlInput');
- const avatar = document.getElementById('avatarPreview');
- if (photoInp && avatar){
-   photoInp.addEventListener('input', ()=>{
-     const v = (photoInp.value||'').trim();
-     if (v) avatar.src = v;
-   }, {passive:true});
- }
+      <div class="subCard" style="margin-top:10px;">
+        <div style="font-weight:990; margin-bottom:8px;">Security & Data</div>
+        <div class="profileGrid">
+          <div>
+            <label class="label">Email</label>
+            <input class="input" id="emailInput" value="${esc(email)}" placeholder="name@example.com" />
+            <div class="hint">Updating email may require re‑login for security.</div>
+          </div>
+          <div>
+            <label class="label">Account actions</label>
+            <div style="display:flex; gap:10px; flex-wrap:wrap; align-items:center;">
+              <button class="btn small" id="copyUidBtn">Copy UID</button>
+              <button class="btn small" id="downloadDataBtn">Download data</button>
+            </div>
+            <div class="hint">Download includes your profile + plans as JSON.</div>
+          </div>
+        </div>
+      </div>
 
- async function reauthGoogle(){
-   try{ await auth.currentUser.reauthenticateWithPopup(provider); toast('Re‑login successful'); return true; }
-   catch(e){ console.error(e); toast('Re‑login cancelled'); return false; }
- }
+      <div class="hint" style="margin-top:8px;">Privacy: GRADEO stores your plans in Firebase under your account. You can sign out anytime.</div>
+    `,
+    footHTML: `
+      <button class="btn primary" id="saveProfileBtn">Save changes</button>
+      <button class="btn" id="reauthBtn">Re‑login</button>
+      <button class="btn danger" id="deleteAccountBtn">Delete account</button>
+      <button class="btn" id="logoutBtn">Sign out</button>
+      <button class="btn" id="closeBtn">Close</button>
+    `
+  });
 
- async function saveProfile(){
-   const nameEl = document.getElementById('displayNameInput');
-   const nickEl = document.getElementById('nickInput');
-   const photoEl = document.getElementById('photoUrlInput');
-   const emailEl = document.getElementById('emailInput');
+  const photoInp = document.getElementById('photoUrlInput');
+  const avatar = document.getElementById('avatarPreview');
+  if (photoInp && avatar){
+    photoInp.addEventListener('input', ()=>{
+      const v = (photoInp.value||'').trim();
+      if (v) avatar.src = v;
+    }, {passive:true});
+  }
 
-   const newName = (nameEl?.value || '').trim() || 'Student';
-   const newNick = (nickEl?.value || '').trim() || 'Student';
-   const newPhoto = (photoEl?.value || '').trim();
-   const newEmail = (emailEl?.value || '').trim();
+  async function reauthGoogle(){
+    try{ await auth.currentUser.reauthenticateWithPopup(provider); toast('Re‑login successful'); return true; }
+    catch(e){ console.error(e); toast('Re‑login cancelled'); return false; }
+  }
 
-   const btn = document.getElementById('saveProfileBtn');
-   if (btn){ btn.disabled = true; btn.textContent = 'Saving…'; }
+  async function saveProfile(){
+    const nameEl = document.getElementById('displayNameInput');
+    const nickEl = document.getElementById('nickInput');
+    const photoEl = document.getElementById('photoUrlInput');
+    const emailEl = document.getElementById('emailInput');
 
-   try{
-     await auth.currentUser.updateProfile({ displayName: newName, photoURL: newPhoto || null });
+    const newName = (nameEl?.value || '').trim() || 'Student';
+    const newNick = (nickEl?.value || '').trim() || 'Student';
+    const newPhoto = (photoEl?.value || '').trim();
+    const newEmail = (emailEl?.value || '').trim();
 
-     // force light theme always (your preference)
-     state.profile.nickname = newNick;
-     state.theme = 'light';
-     document.body.setAttribute('data-theme','light');
+    const btn = document.getElementById('saveProfileBtn');
+    if (btn){ btn.disabled = true; btn.textContent = 'Saving…'; }
 
-     await profileRef(auth.currentUser.uid).set({
-       nickname: newNick,
-       theme: 'light',
-       displayName: newName,
-       photoURL: newPhoto || null,
-       updatedAt: firebase.firestore.FieldValue.serverTimestamp()
-     }, { merge:true });
+    try{
+      await auth.currentUser.updateProfile({ displayName: newName, photoURL: newPhoto || null });
 
-     if (newEmail && newEmail !== email){
-       try{ await auth.currentUser.updateEmail(newEmail); toast('Email updated'); }
-       catch(e){
-         if (String(e.code||'').includes('requires-recent-login')){
-           toast('Please re‑login to update email');
-           const ok = await reauthGoogle();
-           if (ok) await auth.currentUser.updateEmail(newEmail);
-         } else { throw e; }
-       }
-     }
+      // force light theme always (your preference)
+      state.profile.nickname = newNick;
+      state.theme = 'light';
+      document.body.setAttribute('data-theme','light');
 
-     renderAllStatic();
-     scheduleRecalc(0);
-     const nameText = document.getElementById('profileNameText');
-     if (nameText) nameText.textContent = newName;
-     toast('Profile saved');
-   }catch(e){
-     console.error(e);
-     toast('Save failed');
-   }finally{
-     if (btn){ btn.disabled = false; btn.textContent = 'Save changes'; }
-   }
- }
+      await profileRef(auth.currentUser.uid).set({
+        nickname: newNick,
+        theme: 'light',
+        displayName: newName,
+        photoURL: newPhoto || null,
+        updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+      }, { merge:true });
 
- async function downloadMyData(){
-   try{
-     const uid = auth.currentUser.uid;
-     const profSnap = await profileRef(uid).get();
-     const profData = profSnap.exists ? profSnap.data() : {};
-     const plansSnap = await plansCol(uid).orderBy('updatedAt','desc').get();
-     const plans = plansSnap.docs.map(d=>({ id:d.id, ...d.data() }));
-     const payload = { exportedAt: new Date().toISOString(), uid, email: auth.currentUser.email, profile: profData, plans };
-     const blob = new Blob([JSON.stringify(payload, null, 2)], {type:'application/json'});
-     const a = document.createElement('a');
-     a.href = URL.createObjectURL(blob);
-     a.download = `gradeo-data-${uid.slice(0,6)}.json`;
-     document.body.appendChild(a); a.click(); a.remove();
-     toast('Download started');
-   }catch(e){ console.error(e); toast('Download failed'); }
- }
+      if (newEmail && newEmail !== email){
+        try{ await auth.currentUser.updateEmail(newEmail); toast('Email updated'); }
+        catch(e){
+          if (String(e.code||'').includes('requires-recent-login')){
+            toast('Please re‑login to update email');
+            const ok = await reauthGoogle();
+            if (ok) await auth.currentUser.updateEmail(newEmail);
+          } else { throw e; }
+        }
+      }
 
- async function deleteAccount(){
-   if (!confirm('Delete your account permanently? This will remove access to your cloud plans.')) return;
-   try{
-     const ok = await reauthGoogle();
-     if (!ok) return;
-     const uid = auth.currentUser.uid;
-     const snap = await plansCol(uid).get();
-     const batch = db.batch();
-     snap.docs.forEach(d=>batch.delete(d.ref));
-     batch.delete(profileRef(uid));
-     await batch.commit();
-     await auth.currentUser.delete();
-     closeModal();
-     toast('Account deleted');
-   }catch(e){
-     console.error(e);
-     if (String(e.code||'').includes('requires-recent-login')) toast('Please re‑login to delete');
-     else toast('Delete failed');
-   }
- }
+      renderAllStatic();
+      scheduleRecalc(0);
+      const nameText = document.getElementById('profileNameText');
+      if (nameText) nameText.textContent = newName;
+      toast('Profile saved');
+    }catch(e){
+      console.error(e);
+      toast('Save failed');
+    }finally{
+      if (btn){ btn.disabled = false; btn.textContent = 'Save changes'; }
+    }
+  }
 
- const closeBtn = document.getElementById('closeBtn');
- if (closeBtn) closeBtn.onclick = closeModal;
+  async function downloadMyData(){
+    try{
+      const uid = auth.currentUser.uid;
+      const profSnap = await profileRef(uid).get();
+      const profData = profSnap.exists ? profSnap.data() : {};
+      const plansSnap = await plansCol(uid).orderBy('updatedAt','desc').get();
+      const plans = plansSnap.docs.map(d=>({ id:d.id, ...d.data() }));
+      const payload = { exportedAt: new Date().toISOString(), uid, email: auth.currentUser.email, profile: profData, plans };
+      const blob = new Blob([JSON.stringify(payload, null, 2)], {type:'application/json'});
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = `gradeo-data-${uid.slice(0,6)}.json`;
+      document.body.appendChild(a); a.click(); a.remove();
+      toast('Download started');
+    }catch(e){ console.error(e); toast('Download failed'); }
+  }
 
- const logoutBtn = document.getElementById('logoutBtn');
- if (logoutBtn) logoutBtn.onclick = async()=>{ await auth.signOut(); closeModal(); toast('Signed out'); };
+  async function deleteAccount(){
+    if (!confirm('Delete your account permanently? This will remove access to your cloud plans.')) return;
+    try{
+      const ok = await reauthGoogle();
+      if (!ok) return;
+      const uid = auth.currentUser.uid;
+      const snap = await plansCol(uid).get();
+      const batch = db.batch();
+      snap.docs.forEach(d=>batch.delete(d.ref));
+      batch.delete(profileRef(uid));
+      await batch.commit();
+      await auth.currentUser.delete();
+      closeModal();
+      toast('Account deleted');
+    }catch(e){
+      console.error(e);
+      if (String(e.code||'').includes('requires-recent-login')) toast('Please re‑login to delete');
+      else toast('Delete failed');
+    }
+  }
 
- const saveBtn = document.getElementById('saveProfileBtn');
- if (saveBtn) saveBtn.onclick = saveProfile;
+  const closeBtn = document.getElementById('closeBtn');
+  if (closeBtn) closeBtn.onclick = closeModal;
 
- const reauthBtn = document.getElementById('reauthBtn');
- if (reauthBtn) reauthBtn.onclick = reauthGoogle;
+  const logoutBtn = document.getElementById('logoutBtn');
+  if (logoutBtn) logoutBtn.onclick = async()=>{ await auth.signOut(); closeModal(); toast('Signed out'); };
 
- const copyUidBtn = document.getElementById('copyUidBtn');
- if (copyUidBtn) copyUidBtn.onclick = async()=>{ try{ await navigator.clipboard.writeText(u.uid); toast('UID copied'); }catch(e){ toast('Copy failed'); } };
+  const saveBtn = document.getElementById('saveProfileBtn');
+  if (saveBtn) saveBtn.onclick = saveProfile;
 
- const dlBtn = document.getElementById('downloadDataBtn');
- if (dlBtn) dlBtn.onclick = downloadMyData;
+  const reauthBtn = document.getElementById('reauthBtn');
+  if (reauthBtn) reauthBtn.onclick = reauthGoogle;
 
- const delBtn = document.getElementById('deleteAccountBtn');
- if (delBtn) delBtn.onclick = deleteAccount;
+  const copyUidBtn = document.getElementById('copyUidBtn');
+  if (copyUidBtn) copyUidBtn.onclick = async()=>{ try{ await navigator.clipboard.writeText(u.uid); toast('UID copied'); }catch(e){ toast('Copy failed'); } };
+
+  const dlBtn = document.getElementById('downloadDataBtn');
+  if (dlBtn) dlBtn.onclick = downloadMyData;
+
+  const delBtn = document.getElementById('deleteAccountBtn');
+  if (delBtn) delBtn.onclick = deleteAccount;
 }
 
 /* ========= Simple share / pdf ========= */
@@ -2101,6 +2177,8 @@ function openProfile(){
   function wireEvents(){
     $("#modalClose").onclick = closeModal;
     $("#overlay").addEventListener("click", (e)=>{ if (e.target.id==="overlay") closeModal(); });
+ // ESC to close modal
+ document.addEventListener("keydown", (e)=>{ if (e.key==="Escape" && $("#overlay").classList.contains("show")) closeModal(); });
 
     $("#m1Btn").onclick = ()=>setMode("m1");
     $("#m2Btn").onclick = ()=>setMode("m2");
