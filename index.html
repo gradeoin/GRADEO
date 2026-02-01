@@ -753,78 +753,62 @@ body[data-theme-variant="neon"] .panel, body[data-theme-variant="neon"] .subCard
 
 
 
-/* ================= Charts + Viral column (Desktop) ================= */
-.chartGrid{display:grid;grid-template-columns:1fr;gap:10px;margin-top:10px;}
+/* ================= Sticky Summary (desktop) ================= */
+@media (min-width: 981px){
+  #summaryPanel{position:sticky; top:calc(var(--navH,56px) + 12px); align-self:start;
+    max-height:calc(100vh - var(--navH,56px) - 24px); overflow:auto;}
+  #summaryPanel::-webkit-scrollbar{width:10px;}
+  #summaryPanel::-webkit-scrollbar-thumb{background:color-mix(in oklab, var(--stroke) 70%, transparent);border-radius:999px;}
+}
+
+/* ================= Charts ================= */
+.chartGrid{display:grid;grid-template-columns:1fr;gap:10px;}
 .chartCard{border:1px solid var(--stroke);background:var(--panel);border-radius:14px;padding:10px;}
 .chartCard .k{font-weight:950;font-size:12px;color:var(--muted);margin-bottom:6px;}
-.chartCard canvas{width:100% !important;max-width:100%;height:180px !important;}
+.chartWrap{height:190px;}
+.chartWrap canvas{width:100% !important;height:100% !important;}
+@media (max-width:1099px){ .chartGrid{grid-template-columns:1fr 1fr;} }
+@media (max-width:520px){ .chartGrid{grid-template-columns:1fr;} }
 
+/* ================= Viral icon rail ================= */
 @media (min-width:1100px){
-  .grid{grid-template-columns:1.15fr .58fr .20fr;}
+  .grid{grid-template-columns:1.15fr .58fr .14fr;}
   #viralPanel{display:block;}
 }
-@media (max-width:1099px){
-  #viralPanel{display:none !important;}
-  .chartGrid{grid-template-columns:1fr 1fr;}
-}
-@media (max-width:520px){
-  .chartGrid{grid-template-columns:1fr;}
-}
+@media (max-width:1099px){ #viralPanel{display:none !important;} }
 
-/* ================= Viral panel (icon-only + tooltip) ================= */
 .viralGrid{display:grid;grid-template-columns:1fr;gap:8px;}
 .viralBtn{width:100%;border:1px solid var(--stroke);background:var(--card);color:var(--text);
-  border-radius:12px;padding:8px 8px;font-weight:950;font-size:12px;cursor:pointer;
-  display:flex;align-items:center;justify-content:center;gap:8px;box-shadow:none;position:relative;
-  transition:transform var(--t), border-color var(--t), filter var(--t), background var(--t);
-}
-.viralBtn .vi{font-size:16px;line-height:1;}
-.viralBtn .vl{display:none;}
+  border-radius:14px;padding:10px 0;cursor:pointer;display:grid;place-items:center;
+  box-shadow:none;position:relative;overflow:visible;
+  transition:transform var(--t), border-color var(--t), filter var(--t), background var(--t);}
+.viralBtn .vi{font-size:18px;line-height:1;}
 .viralBtn:hover{transform:translateY(-1px);border-color:color-mix(in oklab, var(--accent) 45%, var(--stroke));}
 .viralBtn:active{transform:translateY(0);filter:brightness(.98);}
-.viralBtn.hot{border-color:transparent;color:#fff;background:linear-gradient(135deg, var(--accent), var(--accent2));overflow:hidden;}
-.viralBtn.hot::after{content:"";position:absolute;inset:-60% -40%;background:conic-gradient(from 180deg, transparent, rgba(255,255,255,.45), transparent 35%);
-  opacity:.35;filter:blur(7px);animation:viralGlow 2.8s ease-in-out infinite;pointer-events:none;}
+.viralBtn.hot{border-color:transparent;color:#fff;background:linear-gradient(135deg, var(--accent), var(--accent2));}
+.viralBtn.hot::after{content:"";position:absolute;inset:-70% -50%;background:conic-gradient(from 180deg, transparent, rgba(255,255,255,.45), transparent 35%);
+  opacity:.30;filter:blur(8px);animation:viralGlow 2.8s ease-in-out infinite;pointer-events:none;}
 .viralBtn.trend{border-color:rgba(245,158,11,.35);background:linear-gradient(135deg, rgba(245,158,11,.18), rgba(239,68,68,.10));}
-@keyframes viralGlow{0%,100%{transform:rotate(-10deg) scale(1);opacity:.18;}50%{transform:rotate(10deg) scale(1.02);opacity:.40;}}
 
-@media (hover:hover) and (pointer:fine){
-  .viralBtn:hover::before{content: attr(data-title);position:absolute; right:calc(100% + 10px); top:50%; transform:translateY(-50%);
-    background:color-mix(in oklab, var(--panel) 92%, black);border:1px solid var(--stroke); color:var(--text);
-    padding:6px 8px; border-radius:10px; white-space:nowrap;font-size:12px; font-weight:900; box-shadow:var(--shadow2);}
-  .viralBtn:hover::after{content:"";position:absolute; right:100%; top:50%; transform:translateY(-50%);
-    border:6px solid transparent; border-left-color:color-mix(in oklab, var(--panel) 92%, black);
-    filter:drop-shadow(0 4px 10px rgba(0,0,0,.12));}
-}
+#viralTip{position:fixed;left:0;top:0;transform:translate(-9999px,-9999px);
+  background:color-mix(in oklab, var(--panel) 92%, black);
+  border:1px solid var(--stroke); color:var(--text);
+  padding:7px 9px; border-radius:12px; white-space:nowrap;
+  font-size:12px; font-weight:950; box-shadow:var(--shadow2);
+  z-index:99999; pointer-events:none;}
+#viralTip::after{content:"";position:absolute;left:100%;top:50%;transform:translateY(-50%);
+  border:6px solid transparent;border-left-color:color-mix(in oklab, var(--panel) 92%, black);} 
 
 /* ================= Decimal input UX improvements ================= */
-input[type=number][step*="."]{inputmode:decimal;}
-input[type=number][step="0.01"], input[type=number][step="0.1"]{inputmode:decimal;}
 input[type=number]{-moz-appearance:textfield;}
 input[type=number]::-webkit-outer-spin-button,
 input[type=number]::-webkit-inner-spin-button{ -webkit-appearance:none; margin:0; }
-
-
-/* === Viral tooltip (fix hover name) === */
-.viralBtn{position:relative;}
-.viralBtn .vTip{display:none; position:absolute; right:calc(100% + 10px); top:50%; transform:translateY(-50%);
-  background:color-mix(in oklab, var(--panel) 92%, black);
-  border:1px solid var(--stroke); color:var(--text);
-  padding:6px 8px; border-radius:10px; white-space:nowrap;
-  font-size:12px; font-weight:900; box-shadow:var(--shadow2);
-  z-index:9999;
-}
-@media (hover:hover) and (pointer:fine){
-  .viralBtn:hover .vTip{display:block;}
-  .viralBtn:hover .vTip::after{content:""; position:absolute; left:100%; top:50%; transform:translateY(-50%);
-    border:6px solid transparent; border-left-color:color-mix(in oklab, var(--panel) 92%, black);
-  }
-}
 </style>
 </head>
 
 <body data-theme="light" data-mode="m1">
 <canvas id="bg3d" aria-hidden="true"></canvas>
+<div id="viralTip" role="tooltip" aria-hidden="true"></div>
 <div class="cursorGlow" id="cursorGlow" aria-hidden="true"></div>
 <header class="nav noPrint" id="nav">
   <div class="navInner">
@@ -924,7 +908,7 @@ input[type=number]::-webkit-inner-spin-button{ -webkit-appearance:none; margin:0
           <div class="row">
             <div>
               <label class="label">Current CGPA</label>
-              <input class="input" id="currentCgpa" type="text" inputmode="decimal" pattern="[0-9]*[\.,]?[0-9]*" inputmode="decimal" min="0" max="10" placeholder="e.g., 7.80">
+              <input class="input" id="currentCgpa" type="text" inputmode="decimal" pattern="[0-9]*[\.,]?[0-9]*" min="0" max="10" placeholder="e.g., 7.80">
             </div>
             <div>
               <label class="label">Completed credits</label>
@@ -932,7 +916,7 @@ input[type=number]::-webkit-inner-spin-button{ -webkit-appearance:none; margin:0
             </div>
             <div>
               <label class="label">Target CGPA</label>
-              <input class="input" id="targetCgpa" type="text" inputmode="decimal" pattern="[0-9]*[\.,]?[0-9]*" inputmode="decimal" min="0" max="10" placeholder="e.g., 8.20">
+              <input class="input" id="targetCgpa" type="text" inputmode="decimal" pattern="[0-9]*[\.,]?[0-9]*" min="0" max="10" placeholder="e.g., 8.20">
             </div>
             <div>
               <label class="label">Rounding</label>
@@ -978,7 +962,7 @@ input[type=number]::-webkit-inner-spin-button{ -webkit-appearance:none; margin:0
             </div>
             <div>
               <label class="label">Current CGPA (optional)</label>
-              <input class="input" id="curCgpa2" type="text" inputmode="decimal" pattern="[0-9]*[\.,]?[0-9]*" inputmode="decimal" min="0" max="10" placeholder="e.g., 7.80">
+              <input class="input" id="curCgpa2" type="text" inputmode="decimal" pattern="[0-9]*[\.,]?[0-9]*" min="0" max="10" placeholder="e.g., 7.80">
             </div>
             <div>
               <label class="label">Completed credits (optional)</label>
@@ -1037,7 +1021,7 @@ input[type=number]::-webkit-inner-spin-button{ -webkit-appearance:none; margin:0
     </section>
 
     <!-- Summary -->
-    <aside class="panel">
+    <aside class="panel" id="summaryPanel">
       <div class="panelHead">
         <div>
           <h2>Summary</h2>
@@ -1049,18 +1033,18 @@ input[type=number]::-webkit-inner-spin-button{ -webkit-appearance:none; margin:0
 
         <div class="subCard" style="margin-top:16px;">
           <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;">
-            <div style="font-weight:990;">📊 Visual Summary</div>
-            <div class="pill" style="opacity:.9;">Live • Animated</div>
+            <div style="font-weight:990;">📊 Interactive Charts</div>
+            <div class="pill" style="opacity:.9;">Click a color → jump</div>
           </div>
           <div class="hint" id="chartLockedMsg" style="margin-top:8px; display:none;">Sign in to unlock charts.</div>
           <div class="chartGrid" style="margin-top:10px;">
             <div class="chartCard">
-              <div class="k">Progress Graph</div>
-              <canvas id="progressChart" height="140" aria-label="Progress graph" role="img"></canvas>
+              <div class="k">Graph</div>
+              <div class="chartWrap"><canvas id="progressChart" aria-label="Progress chart" role="img"></canvas></div>
             </div>
             <div class="chartCard">
-              <div class="k">Pie Chart</div>
-              <canvas id="pieChart" height="140" aria-label="Pie chart" role="img"></canvas>
+              <div class="k">Cool Doughnut</div>
+              <div class="chartWrap"><canvas id="pieChart" aria-label="Doughnut chart" role="img"></canvas></div>
             </div>
           </div>
         </div>
@@ -1097,24 +1081,32 @@ input[type=number]::-webkit-inner-spin-button{ -webkit-appearance:none; margin:0
       </div>
     </aside>
 
-    <aside class="panel viralPanel" id="viralPanel" aria-label="Viral features">
+    <aside class="panel viralPanel" id="viralPanel" aria-label="Features">
       <div class="panelHead">
         <div>
-          <h2>🔥 Viral</h2>
-          <p>Quick actions</p>
+          <h2>✨ Features</h2>
+          <p>Hover icons to see names</p>
         </div>
       </div>
       <div class="panelBody">
-        <div class="viralGrid">
-          <button class="viralBtn hot" type="button" data-v="share" data-title="Share plan"><span class="vi">🔗</span><span class="vl">Share plan</span><span class="vTip" aria-hidden="true">Share plan</span></button>
-          <button class="viralBtn" type="button" data-v="pdf" data-title="Export grade card PDF"><span class="vi">🖨️</span><span class="vl">Export PDF</span><span class="vTip" aria-hidden="true">Export grade card PDF</span></button>
-          <button class="viralBtn trend" type="button" data-v="roast" data-title="Roast my SGPA"><span class="vi">🔥</span><span class="vl">Roast</span><span class="vTip" aria-hidden="true">Roast my SGPA</span></button>
-          <button class="viralBtn" type="button" data-v="study" data-title="Study Mode (Pomodoro)"><span class="vi">🎧</span><span class="vl">Study</span><span class="vTip" aria-hidden="true">Study Mode (Pomodoro)</span></button>
-          <button class="viralBtn" type="button" data-v="badges" data-title="Achievements"><span class="vi">🏅</span><span class="vl">Badges</span><span class="vTip" aria-hidden="true">Achievements</span></button>
-          <button class="viralBtn" type="button" data-v="leader" data-title="Leaderboard"><span class="vi">🏆</span><span class="vl">Leaderboard</span><span class="vTip" aria-hidden="true">Leaderboard</span></button>
-          <button class="viralBtn" type="button" data-v="neon" data-title="Toggle Neon Mode"><span class="vi">🌗</span><span class="vl">Neon</span><span class="vTip" aria-hidden="true">Toggle Neon Mode</span></button>
+        <div class="viralGrid" id="viralGrid">
+          <button class="viralBtn hot" type="button" data-v="sharePlan" data-title="Share plan" title="Share plan"><span class="vi">🔗</span></button>
+          <button class="viralBtn" type="button" data-v="shareGrade" data-title="Share grade card" title="Share grade card"><span class="vi">📄</span></button>
+          <button class="viralBtn" type="button" data-v="exportPdf" data-title="Export grade card PDF" title="Export grade card PDF"><span class="vi">🖨️</span></button>
+          <button class="viralBtn" type="button" data-v="study" data-title="Study Mode (Pomodoro)" title="Study Mode (Pomodoro)"><span class="vi">🎧</span></button>
+          <button class="viralBtn trend" type="button" data-v="roast" data-title="Roast my SGPA" title="Roast my SGPA"><span class="vi">🔥</span></button>
+          <button class="viralBtn" type="button" data-v="badges" data-title="Achievements" title="Achievements"><span class="vi">🏅</span></button>
+          <button class="viralBtn" type="button" data-v="leader" data-title="Leaderboard" title="Leaderboard"><span class="vi">🏆</span></button>
+          <button class="viralBtn" type="button" data-v="neon" data-title="Toggle Neon Mode" title="Toggle Neon Mode"><span class="vi">🌗</span></button>
+          <button class="viralBtn" type="button" data-v="uni" data-title="University settings" title="University settings"><span class="vi">🎓</span></button>
+          <button class="viralBtn" type="button" data-v="how" data-title="How it works" title="How it works"><span class="vi">ℹ️</span></button>
+          <button class="viralBtn" type="button" data-v="faq" data-title="FAQ" title="FAQ"><span class="vi">❓</span></button>
+          <button class="viralBtn" type="button" data-v="contact" data-title="Contact / Feedback" title="Contact / Feedback"><span class="vi">✉️</span></button>
+          <button class="viralBtn" type="button" data-v="terms" data-title="Terms" title="Terms"><span class="vi">📄</span></button>
+          <button class="viralBtn" type="button" data-v="privacy" data-title="Privacy" title="Privacy"><span class="vi">🔒</span></button>
+          <button class="viralBtn" type="button" data-v="disclaimer" data-title="Disclaimer" title="Disclaimer"><span class="vi">⚠️</span></button>
         </div>
-        <div class="hint" style="margin-top:10px;">Hover an icon to see the name.</div>
+        <div class="hint" style="margin-top:10px;">Tip: Click any icon. Charts are clickable too.</div>
       </div>
     </aside>
   </div>
@@ -1824,6 +1816,7 @@ input[type=number]::-webkit-inner-spin-button{ -webkit-appearance:none; margin:0
 
       const card = document.createElement("div");
       card.className = "subCard";
+      card.id = `subjectCard-${s.id}`;
       card.innerHTML = `
         <div class="subTop">
           <div>
@@ -2032,120 +2025,200 @@ input[type=number]::-webkit-inner-spin-button{ -webkit-appearance:none; margin:0
   let progressChartObj = null;
   let pieChartObj = null;
   const prefersReduceMotionCharts = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
   function destroyCharts(){
     try{ if(progressChartObj){ progressChartObj.destroy(); progressChartObj=null; } }catch(e){}
     try{ if(pieChartObj){ pieChartObj.destroy(); pieChartObj=null; } }catch(e){}
   }
+
   function updateCharts(){
     if(!window.Chart) return;
     const c1 = document.getElementById('progressChart');
     const c2 = document.getElementById('pieChart');
     const lockEl = document.getElementById('chartLockedMsg');
     if(!c1 || !c2) return;
+
     const locked = (!auth.currentUser && !state.sharedView);
     if(locked){ destroyCharts(); if(lockEl) lockEl.style.display='block'; return; }
     if(lockEl) lockEl.style.display='none';
 
-    const subjects = Array.isArray(state.plan.subjects) ? state.plan.subjects : [];
-    const palette = ['#ff6a00','#0ea5e9','#7c3aed','#22c55e','#f59e0b','#ef4444','#2563eb','#14b8a6','#f43f5e','#a855f7'];
+    const prefersReduce = prefersReduceMotionCharts;
 
-    let labels=[], values=[], chartType='bar', yMax=100, dsLabel='Progress';
+    // Build lists (per subject) so pie + graph both map to subjects
+    let labels = [];
+    let values = [];
+    let ids = [];
+    let yMax = 100;
+    let barLabel = 'Progress';
+
     if(state.mode==='m3'){
-      chartType='line'; yMax=10; dsLabel='Semester SGPA';
+      yMax = 10;
+      barLabel = 'Semester SGPA';
       const n = clamp(parseInt(state.history.semCount,10), 1, 8);
       for(let i=0;i<n;i++){
         const row = state.history.rows[i] || { sgpa:'' };
         const sg = parseFloat(row.sgpa);
         labels.push('Sem '+(i+1));
         values.push(Number.isFinite(sg) ? sg : null);
-      }
-    } else if(state.mode==='m1'){
-      chartType='bar'; yMax=100; dsLabel='Required SEE (%)';
-      const req = requiredSemesterSGPA();
-      const gp = Number.isFinite(req) ? gpFromSgpa(req) : null;
-      const minTotal = (gp==null) ? null : minMarksForGP(gp);
-      for(const s of subjects){
-        labels.push(String(s.name||'Subject').slice(0,14));
-        if(gp==null || s.kind==='activity'){ values.push(0); continue; }
-        const cie = clamp(parseFloat(s.cie||0),0,50);
-        const cr = clamp(parseInt(s.credits||3,10),1,4);
-        const seeMax = (cr===1) ? ((parseInt(s.seeOutOf||'50',10)===100)?100:50) : 100;
-        let reqSee = (seeMax===50) ? (minTotal - cie) : (minTotal - cie)*2;
-        if(reqSee < 0) reqSee = 0;
-        const seePass = (seeMax===50) ? 18 : 35;
-        const totalPassNeed = (seeMax===50) ? Math.max(0, 40 - cie) : Math.max(0, (40 - cie) * 2);
-        const showReq = Math.max(reqSee, seePass, totalPassNeed);
-        values.push(clamp((showReq/seeMax)*100,0,100));
+        ids.push('historyInputs');
       }
     } else {
-      chartType='bar'; yMax=100; dsLabel='Total Marks (/100)';
+      const subjects = Array.isArray(state.plan.subjects) ? state.plan.subjects : [];
       for(const s of subjects){
-        const r = calcSubjectMode2(s);
-        labels.push(String(s.name||'Subject').slice(0,14));
-        values.push(clamp(r.pct||0,0,100));
+        labels.push(String(s.name||'Subject'));
+        ids.push(`subjectCard-${s.id}`);
+        if(state.mode==='m1'){
+          const req = requiredSemesterSGPA();
+          const gp = Number.isFinite(req) ? gpFromSgpa(req) : null;
+          const minTotal = (gp==null) ? null : minMarksForGP(gp);
+          if(gp==null || s.kind==='activity'){ values.push(0); continue; }
+          const cie = clamp(parseFloat(s.cie||0),0,50);
+          const cr = clamp(parseInt(s.credits||3,10),1,4);
+          const seeMax = (cr===1) ? ((parseInt(s.seeOutOf||'50',10)===100)?100:50) : 100;
+          let reqSee = (seeMax===50) ? (minTotal - cie) : (minTotal - cie)*2;
+          if(reqSee < 0) reqSee = 0;
+          const seePass = (seeMax===50) ? 18 : 35;
+          const totalPassNeed = (seeMax===50) ? Math.max(0, 40 - cie) : Math.max(0, (40 - cie) * 2);
+          const showReq = Math.max(reqSee, seePass, totalPassNeed);
+          values.push(clamp((showReq/seeMax)*100,0,100));
+          barLabel = 'Required SEE (%)';
+          yMax = 100;
+        } else {
+          const r = calcSubjectMode2(s);
+          values.push(clamp(r.pct||0,0,100));
+          barLabel = 'Total Marks (/100)';
+          yMax = 100;
+        }
       }
     }
+
+    const scrollToId = (id)=>{
+      if(!id) return;
+      const el = document.getElementById(id);
+      if(!el) return;
+      document.querySelectorAll('.subCard.is-active').forEach(x=>x.classList.remove('is-active'));
+      el.classList.add('is-active');
+      const navH = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--navH')) || 56;
+      const y = el.getBoundingClientRect().top + window.scrollY - navH - 12;
+      window.scrollTo({ top: y, behavior: prefersReduce ? 'auto' : 'smooth' });
+    };
+
+    // Progress chart (bar / line)
     try{ if(progressChartObj) progressChartObj.destroy(); }catch(e){}
-    progressChartObj = new Chart(c1.getContext('2d'), {
-      type: chartType,
-      data: { labels, datasets: [{
-        label: dsLabel,
-        data: values,
-        backgroundColor: labels.map((_,i)=>palette[i%palette.length]),
-        borderColor: chartType==='line' ? '#0ea5e9' : 'transparent',
-        borderWidth: chartType==='line' ? 3 : 0,
-        pointRadius: chartType==='line' ? 4 : 0,
-        tension: 0.35,
-        borderRadius: chartType==='bar' ? 10 : 0
-      }]},
-      options:{ responsive:true, maintainAspectRatio:false,
-        animation:{ duration: prefersReduceMotionCharts?0:900, easing:'easeOutQuart' },
-        scales:{ y:{ min:0, max:yMax, ticks:{ stepSize:(yMax==10?1:20) } }, x:{ ticks:{ maxRotation:0, autoSkip:true } } },
-        plugins:{ legend:{ display:false } }
+    const ctx1 = c1.getContext('2d');
+    const grad = (i)=>{
+      const g = ctx1.createLinearGradient(0, 0, 0, c1.height || 180);
+      const palettes = [
+        ['#ff6a00','#ff9f1c'],
+        ['#0ea5e9','#2563eb'],
+        ['#7c3aed','#a855f7'],
+        ['#14b8a6','#22c55e'],
+        ['#f43f5e','#fb7185'],
+        ['#06b6d4','#3b82f6'],
+        ['#84cc16','#22c55e'],
+        ['#f59e0b','#ef4444'],
+      ];
+      const p = palettes[i % palettes.length];
+      g.addColorStop(0, p[0]);
+      g.addColorStop(1, p[1]);
+      return g;
+    };
+    const isLine = (state.mode==='m3');
+    progressChartObj = new Chart(ctx1, {
+      type: isLine ? 'line' : 'bar',
+      data: {
+        labels: labels.map(x=>String(x).length>14? String(x).slice(0,14)+'…':String(x)),
+        datasets: [{
+          label: barLabel,
+          data: values,
+          backgroundColor: (ctx)=>grad(ctx.dataIndex||0),
+          borderColor: isLine ? '#0ea5e9' : 'transparent',
+          borderWidth: isLine ? 3 : 0,
+          pointRadius: isLine ? 4 : 0,
+          pointHoverRadius: isLine ? 6 : 0,
+          tension: 0.35,
+          borderRadius: isLine ? 0 : 12,
+        }]
+      },
+      options:{
+        responsive:true,
+        maintainAspectRatio:false,
+        animation:{ duration: prefersReduce ? 0 : 1200, easing:'easeOutQuart' },
+        onClick:(evt, elements)=>{ if(elements && elements.length){ scrollToId(ids[elements[0].index]); } },
+        plugins:{ legend:{display:false} },
+        scales:{ y:{ min:0, max:yMax, ticks:{ stepSize:(yMax===10?1:20) } } }
       }
     });
 
-    let pieLabels=[], pieData=[], pieColors=[];
-    if(state.mode==='m2'){
-      const order=[10,9,8,7,6,5,4,0];
-      const nameBy={10:'S (10)',9:'A (9)',8:'B (8)',7:'C (7)',6:'D (6)',5:'E (5)',4:'P (4)',0:'F (0)'};
-      const counts={10:0,9:0,8:0,7:0,6:0,5:0,4:0,0:0};
-      for(const s of subjects){
-        const r = calcSubjectMode2(s);
-        const gp = (typeof r.gp==='number') ? r.gp : 0;
-        const key = (gp===10||gp===9||gp===8||gp===7||gp===6||gp===5||gp===4)?gp:0;
-        counts[key]=(counts[key]||0)+1;
-      }
-      pieLabels=order.map(g=>nameBy[g]);
-      pieData=order.map(g=>counts[g]||0);
-      pieColors=['#22c55e','#0ea5e9','#7c3aed','#ff9f1c','#f59e0b','#ef4444','#94a7d6','#374151'];
-    } else if(state.mode==='m1'){
-      let normal=0, activity=0;
-      for(const s of subjects){ if(s.kind==='activity') activity+=1; else normal+=clamp(parseInt(s.credits||3,10),1,4); }
-      pieLabels=['Normal credits','Activity credits'];
-      pieData=[normal, activity];
-      pieColors=['#0ea5e9','#22c55e'];
-    } else {
-      const n = clamp(parseInt(state.history.semCount,10),1,8);
-      let b1=0,b2=0,b3=0,b4=0;
-      for(let i=0;i<n;i++){
-        const sg=parseFloat((state.history.rows[i]||{}).sgpa);
-        if(!Number.isFinite(sg)) continue;
-        if(sg>=9) b1++; else if(sg>=8) b2++; else if(sg>=7) b3++; else b4++;
-      }
-      pieLabels=['≥ 9.0','8.0–8.99','7.0–7.99','< 7.0'];
-      pieData=[b1,b2,b3,b4];
-      pieColors=['#22c55e','#0ea5e9','#f59e0b','#ef4444'];
-    }
+    // Cool modern doughnut (per subject)
     try{ if(pieChartObj) pieChartObj.destroy(); }catch(e){}
-    pieChartObj = new Chart(c2.getContext('2d'), {
-      type:'pie',
-      data:{ labels: pieLabels, datasets:[{ data: pieData, backgroundColor: pieColors, borderWidth:0 }]},
-      options:{ responsive:true, maintainAspectRatio:false,
-        animation:{ duration: prefersReduceMotionCharts?0:900, easing:'easeOutQuart' },
-        plugins:{ legend:{ position:'bottom' } }
+    const ctx2 = c2.getContext('2d');
+    const doughGrad = (i)=>{
+      const g = ctx2.createLinearGradient(0, 0, c2.width || 240, c2.height || 240);
+      const palettes = [
+        ['#22c55e','#14b8a6'],
+        ['#0ea5e9','#2563eb'],
+        ['#7c3aed','#a855f7'],
+        ['#ff6a00','#ff9f1c'],
+        ['#f43f5e','#fb7185'],
+        ['#06b6d4','#3b82f6'],
+        ['#84cc16','#22c55e'],
+        ['#f59e0b','#ef4444'],
+      ];
+      const p = palettes[i % palettes.length];
+      g.addColorStop(0, p[0]);
+      g.addColorStop(1, p[1]);
+      return g;
+    };
+    const doughData = values.map(v => (Number.isFinite(v) ? Math.max(0.001, v) : 0.001));
+
+    const centerTextPlugin = {
+      id:'centerText',
+      afterDraw(chart){
+        const {ctx, chartArea} = chart;
+        if(!chartArea) return;
+        const cx=(chartArea.left+chartArea.right)/2;
+        const cy=(chartArea.top+chartArea.bottom)/2;
+        ctx.save();
+        ctx.textAlign='center';
+        ctx.textBaseline='middle';
+        ctx.fillStyle = getComputedStyle(document.body).getPropertyValue('--text') || '#111';
+        ctx.font='900 13px system-ui, Segoe UI, Arial';
+        ctx.fillText(state.mode==='m1'?'Required':(state.mode==='m2'?'Marks':'SGPA'), cx, cy-8);
+        ctx.font='900 18px system-ui, Segoe UI, Arial';
+        const vv = values.filter(v=>Number.isFinite(v));
+        const avg = vv.length ? (vv.reduce((a,b)=>a+b,0)/vv.length) : null;
+        ctx.fillText(avg==null?'—':(state.mode==='m3'?avg.toFixed(2):Math.round(avg)+'%'), cx, cy+14);
+        ctx.restore();
       }
+    };
+
+    pieChartObj = new Chart(ctx2, {
+      type:'doughnut',
+      data:{
+        labels: labels,
+        datasets:[{
+          data: doughData,
+          backgroundColor:(ctx)=>doughGrad(ctx.dataIndex||0),
+          borderWidth:0,
+          hoverOffset:10,
+          borderRadius:10,
+          spacing:2,
+        }]
+      },
+      options:{
+        responsive:true,
+        maintainAspectRatio:false,
+        cutout:'62%',
+        animation:{ duration: prefersReduce ? 0 : 1400, easing:'easeOutQuart' },
+        onClick:(evt, elements)=>{ if(elements && elements.length){ scrollToId(ids[elements[0].index]); } },
+        plugins:{ legend:{display:false} }
+      },
+      plugins:[centerTextPlugin]
     });
+
+    c1.style.cursor='pointer';
+    c2.style.cursor='pointer';
   }
 function recalcAll(){
     // Summary
@@ -3722,26 +3795,48 @@ if (changelogBtn){
   }catch(_e){}
 
 
-    // Viral panel quick actions
+    
+// viralTipWiring
     try{
-      const vp = document.getElementById('viralPanel');
-      if(vp){
-        vp.querySelectorAll('button[data-v]').forEach(btn=>{
-          btn.addEventListener('click', ()=>{
-            const k = btn.getAttribute('data-v');
-            if(k==='share') return createShareDoc('plan');
-            if(k==='pdf') { const b=document.getElementById('exportGradePdfBtn'); if(b) return b.click(); return exportGradeCardPDF(); }
-            if(k==='roast') { const b=document.getElementById('roastBtn'); if(b) return b.click(); return roastNow(); }
-            if(k==='study') { const b=document.getElementById('studyModeBtn'); if(b) return b.click(); return openStudy(); }
-            if(k==='badges') { const b=document.getElementById('badgesBtn'); if(b) return b.click(); return openBadgesModal(); }
-            if(k==='leader') { const b=document.getElementById('leaderBtn'); if(b) return b.click(); return openLeaderboard(); }
-            if(k==='neon') { const b=document.getElementById('themeNeonBtn'); if(b) return b.click(); return toggleNeon(); }
-          });
-        });
+      const tip = document.getElementById('viralTip');
+      const grid = document.getElementById('viralGrid');
+      const hideTip = ()=>{ if(tip) tip.style.transform='translate(-9999px,-9999px)'; };
+      if(grid && window.matchMedia && window.matchMedia('(pointer:fine)').matches){
+        grid.addEventListener('mousemove', (e)=>{
+          const b = e.target.closest('button[data-title]');
+          if(!b){ hideTip(); return; }
+          const t = b.getAttribute('data-title') || b.title || '';
+          if(!tip) return;
+          tip.textContent = t;
+          tip.style.transform = `translate(${e.clientX - 12}px, ${e.clientY - 22}px)`;
+        }, {passive:true});
+        grid.addEventListener('mouseleave', hideTip, {passive:true});
       }
+
+      // Click actions (reuse existing handlers)
+      document.querySelectorAll('#viralPanel button[data-v]').forEach(btn=>{
+        btn.addEventListener('click', ()=>{
+          const k = btn.getAttribute('data-v');
+          if(k==='sharePlan') return createShareDoc('plan');
+          if(k==='shareGrade') return createShareDoc('grade');
+          if(k==='exportPdf') return exportGradeCardPDF();
+          if(k==='study') return openStudy();
+          if(k==='roast') return roastNow();
+          if(k==='badges') return openBadgesModal();
+          if(k==='leader') return openLeaderboard();
+          if(k==='neon') return toggleNeon();
+          if(k==='uni') return showUniversitySettings();
+          if(k==='how') return showHeroInfo();
+          if(k==='faq') return showFAQ();
+          if(k==='contact') return showContact();
+          if(k==='terms') return document.getElementById('termsBtn')?.click();
+          if(k==='privacy') return document.getElementById('privacyBtn')?.click();
+          if(k==='disclaimer') return document.getElementById('disclaimerBtn')?.click();
+        });
+      });
     }catch(_e){}
 
-    // default mode
+// default mode
     setMode(state.mode || "m1", {push:false});
     renderAllStatic();
     scheduleRecalc(0);
