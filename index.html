@@ -515,12 +515,10 @@ body[data-mode="m3"]::before{background:
 }
 
 
-/* ===================== Top Hamburger Menu (Fixed) ===================== */
-.nav{z-index:220;} /* keep nav above any menu backdrop */
-.menuBackdrop{position:fixed; inset:0; background:rgba(0,0,0,.10); display:none; z-index:200;}
+/* ===================== Top Hamburger Menu (Portal) ===================== */
+.nav{z-index:220;} /* keep nav above backdrop */
+.menuBackdrop{position:fixed; inset:0; background:rgba(0,0,0,.08); display:none; z-index:200;}
 .menuBackdrop.show{display:block;}
-
-/* Menu panel is FIXED (not inside nav stacking context) */
 .menuPanel{
   position:fixed;
   right:12px;
@@ -548,9 +546,21 @@ body[data-mode="m3"]::before{background:
 .menuDanger{color:color-mix(in oklab, var(--bad) 70%, var(--text));}
 
 @media (max-width: 640px){
-  /* Full-width safe menu on phones */
   .menuPanel{left:12px; right:12px; width:auto; border-radius:18px;}
 }
+
+/* ===================== Profile / Settings UI ===================== */
+.tabBar{display:flex; gap:8px; flex-wrap:wrap; margin-bottom:10px;}
+.tabBtn{border:1px solid var(--stroke); background:var(--card); color:var(--text);
+  padding:9px 11px; border-radius:999px; font-weight:950; cursor:pointer;}
+.tabBtn.active{background:rgba(11,87,208,.18); border-color:rgba(11,87,208,.35);} 
+.tabPane{display:none;}
+.tabPane.show{display:block;}
+.kv{display:grid; grid-template-columns: 1fr 1fr; gap:10px;}
+@media (max-width:520px){.kv{grid-template-columns:1fr;}}
+.badgeMini{display:inline-flex; align-items:center; gap:6px; padding:4px 8px; border-radius:999px;
+  border:1px solid var(--stroke); background:rgba(255,255,255,.06); font-weight:900; font-size:12px;}
+.linkBtn{display:inline-flex; align-items:center; gap:8px;}
 
 </style>
 </head>
@@ -577,7 +587,7 @@ body[data-mode="m3"]::before{background:
         <button class="modeBtn" id="m3Btn">📈 SGPA → CGPA</button>
       </div>
 
-<button class="btn ghost" id="menuBtn" aria-label="Menu" aria-expanded="false" aria-controls="menuPanel"><svg class="hamb" viewBox="0 0 24 24" aria-hidden="true" style="width:18px;height:18px;display:block;"><path fill="currentColor" d="M4 6.5h16a1 1 0 0 0 0-2H4a1 1 0 0 0 0 2Zm16 5H4a1 1 0 0 0 0 2h16a1 1 0 0 0 0-2Zm0 7H4a1 1 0 0 0 0 2h16a1 1 0 0 0 0-2Z"/></svg></button>
+<button class="btn ghost" id="menuBtn" aria-label="Menu" aria-expanded="false" aria-controls="menuPanel"><svg viewBox="0 0 24 24" aria-hidden="true" style="width:18px;height:18px;display:block;"><path fill="currentColor" d="M4 6.5h16a1 1 0 0 0 0-2H4a1 1 0 0 0 0 2Zm16 5H4a1 1 0 0 0 0 2h16a1 1 0 0 0 0-2Zm0 7H4a1 1 0 0 0 0 2h16a1 1 0 0 0 0-2Z"/></svg></button>
 <button class="btn ghost" id="shareSiteBtn">Share</button>
       <button class="btn" id="pdfBtn">PDF</button>
       <button class="btn primary" id="profileBtn">Sign in</button>
@@ -589,10 +599,11 @@ body[data-mode="m3"]::before{background:
   <div class="menuHeader">
     <div>
       <div class="t">Menu</div>
-      <div class="s">Quick links & settings</div>
+      <div class="s">Quick links</div>
     </div>
     <button class="btn small" id="menuCloseBtn" aria-label="Close menu">Close</button>
   </div>
+  <button class="menuItem" id="uniSettingsBtn" role="menuitem">🎓 University settings</button>
   <button class="menuItem" id="faqBtn" role="menuitem">❓ FAQ</button>
   <div class="menuSep"></div>
   <button class="menuItem" id="termsBtn" role="menuitem">📄 Terms & Conditions</button>
@@ -985,7 +996,7 @@ body[data-mode="m3"]::before{background:
     planId:null,
     plansList:[],
 
-    profile:{ nickname:"Guest" },
+    profile:{ nickname:"Guest", university:"", branch:"", semester:"", regulation:"", usn:"" },
 
     plan:{
       name:"My Plan",
@@ -1229,9 +1240,14 @@ body[data-mode="m3"]::before{background:
     }, { merge:true });
 
     await profileRef(uid).set({
-      nickname: state.profile.nickname,
-      theme: state.theme,
-      lastPlanId: state.planId,
+    nickname: state.profile.nickname,
+    theme: state.theme,
+    university: state.profile.university,
+    branch: state.profile.branch,
+    semester: state.profile.semester,
+    regulation: state.profile.regulation,
+    usn: state.profile.usn,
+    lastPlanId: state.planId,
       updatedAt: firebase.firestore.FieldValue.serverTimestamp()
     }, { merge:true });
 
@@ -1362,7 +1378,8 @@ body[data-mode="m3"]::before{background:
     // header text
     const name = state.profile.nickname || "Guest";
     const cloud = auth.currentUser ? "Cloud autosave" : "Guest mode";
-    $("#subLine").textContent = `Made for you, ${name} • ${cloud}`;
+ const acad = state.profile.university ? (` • ${state.profile.university}${state.profile.semester ? (" • " + state.profile.semester) : ""}`) : "";
+    $("#subLine").textContent = `Made for you, ${name} • ${cloud}${acad}`;
     $("#profileBtn").textContent = auth.currentUser ? "Profile" : "Sign in";
     $("#statusPill").textContent = auth.currentUser ? "Cloud" : "Guest";
     $("#statusPill").className = auth.currentUser ? "pill good" : "pill";
@@ -1791,33 +1808,279 @@ body[data-mode="m3"]::before{background:
   }
 
   function openProfile(){
-    if (!auth.currentUser){ openSignInModal(); return; }
-    openModal({
-      title:"Profile",
-      desc:"Change your nickname.",
-      bodyHTML: `
-        <label class="label">Nickname</label>
-        <input class="input" id="nickInput" value="${esc(state.profile.nickname||"")}" placeholder="e.g., Student">
-        <div class="hint">Autosaved in 10–20 seconds.</div>
-      `,
-      footHTML: `
-        <button class="btn primary" id="saveNickBtn">Save</button>
-        <button class="btn danger" id="logoutBtn">Sign out</button>
-        <button class="btn" id="closeBtn">Close</button>
-      `
-    });
-    $("#saveNickBtn").onclick = ()=>{
-      state.profile.nickname = ($("#nickInput").value||"Student").trim() || "Student";
-      markDirty();
-      renderAllStatic();
-      scheduleRecalc(0);
-      closeModal();
-    };
-    $("#logoutBtn").onclick = async()=>{ await auth.signOut(); closeModal(); };
-    $("#closeBtn").onclick = closeModal;
-  }
+  if (!auth.currentUser){ openSignInModal(); return; }
+  const u = auth.currentUser;
+  const providerName = (u.providerData && u.providerData[0] && u.providerData[0].providerId) ? u.providerData[0].providerId.replace('.com','') : 'google';
+  const verified = u.emailVerified ? '✅ Email verified' : '⚠️ Email not verified';
 
-  /* ========= Simple share / pdf ========= */
+  openModal({
+    title: 'Account',
+    desc: 'Profile • Academic • Security • Data',
+    bodyHTML: `
+      <div class="tabBar" role="tablist" aria-label="Account tabs">
+        <button class="tabBtn active" data-tab="tProfile" role="tab" aria-selected="true">👤 Profile</button>
+        <button class="tabBtn" data-tab="tAcademic" role="tab">🎓 Academic</button>
+        <button class="tabBtn" data-tab="tSecurity" role="tab">🛡️ Security</button>
+        <button class="tabBtn" data-tab="tData" role="tab">🗂️ Data</button>
+      </div>
+
+      <div class="tabPane show" id="tProfile" role="tabpanel">
+        <div class="subCard" style="display:flex; gap:12px; align-items:center;">
+          <div style="width:44px;height:44px;border-radius:14px;overflow:hidden;border:1px solid var(--stroke);background:var(--card);display:grid;place-items:center;">
+            ${u.photoURL ? `<img src="${esc(u.photoURL)}" alt="avatar" style="width:44px;height:44px;object-fit:cover;">` : `<div style="font-weight:990;">${esc((state.profile.nickname||'U').slice(0,1).toUpperCase())}</div>`}
+          </div>
+          <div>
+            <div style="font-weight:990">${esc(u.email || 'Signed in')}</div>
+            <div class="hint">Provider: ${esc(providerName)} • <span class="badgeMini">${verified}</span></div>
+          </div>
+        </div>
+
+        <label class="label">Nickname (in-app)</label>
+        <input class="input" id="nickInput" value="${esc(state.profile.nickname || '')}" placeholder="e.g., Student">
+        <div class="hint">Used only inside GRADEO.</div>
+
+        <div class="kv" style="margin-top:10px;">
+          <div>
+            <label class="label">Display name (Firebase Auth)</label>
+            <input class="input" id="dispNameInput" value="${esc(u.displayName || '')}" placeholder="Your name">
+          </div>
+          <div>
+            <label class="label">Photo URL (optional)</label>
+            <input class="input" id="photoUrlInput" value="${esc(u.photoURL || '')}" placeholder="https://...">
+          </div>
+        </div>
+        <div class="hint">Google sign-in: name/photo may revert to your Google profile on next login.</div>
+
+        <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:10px;">
+          <button class="btn" id="saveAuthProfileBtn">Update auth profile</button>
+          <a class="btn ghost linkBtn" href="https://myaccount.google.com/" target="_blank" rel="noopener">Open Google Account</a>
+        </div>
+      </div>
+
+      <div class="tabPane" id="tAcademic" role="tabpanel">
+        <div class="hint">Save academic details to personalize your experience.</div>
+        <div class="kv" style="margin-top:10px;">
+          <div>
+            <label class="label">University</label>
+            <input class="input" id="uniName" placeholder="e.g., VTU" value="${esc(state.profile.university||'')}">
+          </div>
+          <div>
+            <label class="label">Regulation / Scheme</label>
+            <input class="input" id="uniReg" placeholder="e.g., 2021" value="${esc(state.profile.regulation||'')}">
+          </div>
+          <div>
+            <label class="label">Branch</label>
+            <input class="input" id="uniBranch" placeholder="e.g., CSE" value="${esc(state.profile.branch||'')}">
+          </div>
+          <div>
+            <label class="label">Semester</label>
+            <input class="input" id="uniSem" placeholder="e.g., Sem 4" value="${esc(state.profile.semester||'')}">
+          </div>
+          <div class="span2">
+            <label class="label">USN / Roll No (optional)</label>
+            <input class="input" id="uniUsn" placeholder="Your ID" value="${esc(state.profile.usn||'')}">
+          </div>
+        </div>
+      </div>
+
+      <div class="tabPane" id="tSecurity" role="tabpanel">
+        <div class="subCard">
+          <div style="font-weight:990">Email verification</div>
+          <div class="hint">Status: ${verified}</div>
+          <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:10px;">
+            <button class="btn" id="sendVerifyBtn" ${u.emailVerified ? 'disabled' : ''}>Send verification email</button>
+            <button class="btn" id="reauthBtn">Re-authenticate</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="tabPane" id="tData" role="tabpanel">
+        <div style="display:flex; gap:10px; flex-wrap:wrap;">
+          <button class="btn" id="exportDataBtn">Export my data</button>
+          <button class="btn" id="syncNowBtn">Sync now</button>
+        </div>
+        <div class="hint">Export downloads a JSON file with your plans and profile settings.</div>
+
+        <div class="subCard" style="margin-top:12px; border-color:rgba(239,68,68,.35); background:rgba(239,68,68,.08);">
+          <div style="font-weight:990;">Danger zone</div>
+          <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:10px;">
+            <button class="btn danger" id="deleteCloudDataBtn">Delete cloud data</button>
+            <button class="btn danger" id="deleteAccountBtn">Delete account</button>
+          </div>
+        </div>
+      </div>
+    `,
+    footHTML: `
+      <button class="btn primary" id="saveAccountBtn">Save</button>
+      <button class="btn danger" id="logoutBtn">Sign out</button>
+      <button class="btn" id="closeBtn">Close</button>
+    `
+  });
+
+  // Tabs
+  const tabBtns = Array.from(document.querySelectorAll('.tabBtn'));
+  const showTab = (id) => {
+    tabBtns.forEach(b=>b.classList.toggle('active', b.getAttribute('data-tab')===id));
+    document.querySelectorAll('.tabPane').forEach(p=>p.classList.toggle('show', p.id===id));
+  };
+  tabBtns.forEach(b=>b.addEventListener('click', ()=> showTab(b.getAttribute('data-tab'))));
+
+  // Save account
+  document.getElementById('saveAccountBtn').onclick = async () => {
+    state.profile.nickname = (document.getElementById('nickInput').value || 'Student').trim() || 'Student';
+    state.profile.university = (document.getElementById('uniName').value || '').trim();
+    state.profile.regulation = (document.getElementById('uniReg').value || '').trim();
+    state.profile.branch = (document.getElementById('uniBranch').value || '').trim();
+    state.profile.semester = (document.getElementById('uniSem').value || '').trim();
+    state.profile.usn = (document.getElementById('uniUsn').value || '').trim();
+    markDirty();
+    renderAllStatic();
+    try{ await saveIfDirty('profile'); }catch(e){}
+    toast('Saved');
+    closeModal();
+  };
+
+  document.getElementById('logoutBtn').onclick = async () => { await auth.signOut(); closeModal(); };
+  document.getElementById('closeBtn').onclick = closeModal;
+
+  // Auth profile update
+  const authBtn = document.getElementById('saveAuthProfileBtn');
+  if(authBtn) authBtn.onclick = async () => {
+    try{
+      const dn = (document.getElementById('dispNameInput').value || '').trim();
+      const pu = (document.getElementById('photoUrlInput').value || '').trim();
+      await auth.currentUser.updateProfile({ displayName: dn || null, photoURL: pu || null });
+      toast('Auth profile updated');
+    }catch(e){ console.error(e); toast('Update failed'); }
+  };
+
+  // Verification + reauth
+  const verifyBtn = document.getElementById('sendVerifyBtn');
+  if(verifyBtn) verifyBtn.onclick = async () => {
+    try{ await auth.currentUser.sendEmailVerification(); toast('Verification sent'); }
+    catch(e){ console.error(e); toast('Send failed'); }
+  };
+  const reauthBtn = document.getElementById('reauthBtn');
+  if(reauthBtn) reauthBtn.onclick = async () => {
+    try{ await auth.signInWithPopup(provider); toast('Re-authenticated'); }
+    catch(e){ console.error(e); toast('Reauth failed'); }
+  };
+
+  // Data actions
+  document.getElementById('syncNowBtn').onclick = async () => {
+    try{ await saveIfDirty('manual'); toast('Synced'); }catch(e){ toast('Sync failed'); }
+  };
+  document.getElementById('exportDataBtn').onclick = async () => {
+    try{ await exportMyData(); }catch(e){ console.error(e); toast('Export failed'); }
+  };
+  document.getElementById('deleteCloudDataBtn').onclick = async () => {
+    try{ await confirmAndDeleteCloudData(); }catch(e){ console.error(e); toast('Delete failed'); }
+  };
+  document.getElementById('deleteAccountBtn').onclick = async () => {
+    try{ await confirmAndDeleteAccount(); }catch(e){ console.error(e); toast('Delete failed'); }
+  };
+}
+
+async function exportMyData(){
+  if(!auth.currentUser) return;
+  const uid = auth.currentUser.uid;
+  const profSnap = await profileRef(uid).get();
+  const plansSnap = await plansCol(uid).orderBy('updatedAt','desc').get();
+  const payload = {
+    exportedAt: new Date().toISOString(),
+    uid,
+    profile: profSnap.exists ? profSnap.data() : {},
+    plans: plansSnap.docs.map(d => ({ id: d.id, ...d.data() }))
+  };
+  const blob = new Blob([JSON.stringify(payload, null, 2)], {type:'application/json'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = `gradeo-export-${uid.slice(0,6)}.json`;
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  setTimeout(()=>URL.revokeObjectURL(a.href), 1200);
+  toast('Export downloaded');
+}
+
+async function confirmAndDeleteCloudData(){
+  if(!auth.currentUser) return;
+  const uid = auth.currentUser.uid;
+  openModal({
+    title: 'Delete cloud data',
+    desc: 'Deletes your plans and profile settings from Firestore.',
+    bodyHTML: `
+      <div class="subCard" style="border-color:rgba(239,68,68,.35); background:rgba(239,68,68,.08);">
+        <div style="font-weight:990">Type DELETE to confirm</div>
+        <input class="input" id="delDataConfirm" placeholder="DELETE" style="margin-top:10px;">
+      </div>
+    `,
+    footHTML: `
+      <button class="btn danger" id="doDelDataBtn">Delete</button>
+      <button class="btn" id="cancelDelDataBtn">Cancel</button>
+    `
+  });
+  document.getElementById('cancelDelDataBtn').onclick = closeModal;
+  document.getElementById('doDelDataBtn').onclick = async () => {
+    const v = (document.getElementById('delDataConfirm').value || '').trim();
+    if(v !== 'DELETE'){ toast('Type DELETE'); return; }
+    await deleteAllUserPlans(uid);
+    await profileRef(uid).delete().catch(()=>{});
+    toast('Cloud data deleted');
+    closeModal();
+  };
+}
+
+async function confirmAndDeleteAccount(){
+  if(!auth.currentUser) return;
+  openModal({
+    title: 'Delete account',
+    desc: 'Deletes your Firebase account + all GRADEO data.',
+    bodyHTML: `
+      <div class="subCard" style="border-color:rgba(239,68,68,.35); background:rgba(239,68,68,.08);">
+        <div style="font-weight:990">Type DELETE ACCOUNT to confirm</div>
+        <input class="input" id="delAccConfirm" placeholder="DELETE ACCOUNT" style="margin-top:10px;">
+      </div>
+      <div class="hint">If deletion fails, you may need to sign in again (recent login required).</div>
+    `,
+    footHTML: `
+      <button class="btn danger" id="doDelAccBtn">Delete account</button>
+      <button class="btn" id="cancelDelAccBtn">Cancel</button>
+    `
+  });
+  document.getElementById('cancelDelAccBtn').onclick = closeModal;
+  document.getElementById('doDelAccBtn').onclick = async () => {
+    const v = (document.getElementById('delAccConfirm').value || '').trim();
+    if(v !== 'DELETE ACCOUNT'){ toast('Type DELETE ACCOUNT'); return; }
+    const uid = auth.currentUser.uid;
+    await deleteAllUserPlans(uid);
+    await profileRef(uid).delete().catch(()=>{});
+    try{ await auth.currentUser.delete(); }
+    catch(err){
+      if(err && err.code==='auth/requires-recent-login'){
+        await auth.signInWithPopup(provider);
+        await deleteAllUserPlans(uid);
+        await profileRef(uid).delete().catch(()=>{});
+        await auth.currentUser.delete();
+      }else{ throw err; }
+    }
+    toast('Account deleted');
+    closeModal();
+  };
+}
+
+async function deleteAllUserPlans(uid){
+  let snap = await plansCol(uid).get();
+  const docs = snap.docs;
+  for(let i=0; i<docs.length; i+=450){
+    const batch = db.batch();
+    docs.slice(i, i+450).forEach(d => batch.delete(d.ref));
+    await batch.commit();
+  }
+}
+
+
+ /* ========= Simple share / pdf ========= */
   async function shareSite(){
     const url = `https://gradeo.in/`;
     try{
@@ -1860,7 +2123,111 @@ body[data-mode="m3"]::before{background:
     $("#okHelp").onclick = closeModal;
   }
 
-  /* ========= Accordion ========= */
+  
+
+/* ========= University / FAQ / Contact ========= */
+function showUniversitySettings(){
+  openModal({
+    title: 'University settings',
+    desc: 'Save your academic details (optional)',
+    bodyHTML: `
+      <div class="kv">
+        <div>
+          <label class="label">University</label>
+          <input class="input" id="uniName" placeholder="e.g., VTU" value="${esc(state.profile.university||'')}">
+        </div>
+        <div>
+          <label class="label">Regulation / Scheme</label>
+          <input class="input" id="uniReg" placeholder="e.g., 2021" value="${esc(state.profile.regulation||'')}">
+        </div>
+        <div>
+          <label class="label">Branch</label>
+          <input class="input" id="uniBranch" placeholder="e.g., CSE" value="${esc(state.profile.branch||'')}">
+        </div>
+        <div>
+          <label class="label">Semester</label>
+          <input class="input" id="uniSem" placeholder="e.g., Sem 4" value="${esc(state.profile.semester||'')}">
+        </div>
+        <div class="span2">
+          <label class="label">USN / Roll No (optional)</label>
+          <input class="input" id="uniUsn" placeholder="Your ID" value="${esc(state.profile.usn||'')}">
+          <div class="hint">Optional. Stored in your account only.</div>
+        </div>
+      </div>
+    `,
+    footHTML: `
+      <button class="btn primary" id="saveUniBtn">Save</button>
+      <button class="btn" id="closeUniBtn">Close</button>
+    `
+  });
+
+  document.getElementById('saveUniBtn').onclick = async () => {
+    state.profile.university = (document.getElementById('uniName').value || '').trim();
+    state.profile.regulation = (document.getElementById('uniReg').value || '').trim();
+    state.profile.branch = (document.getElementById('uniBranch').value || '').trim();
+    state.profile.semester = (document.getElementById('uniSem').value || '').trim();
+    state.profile.usn = (document.getElementById('uniUsn').value || '').trim();
+    markDirty();
+    renderAllStatic();
+    try{ await saveIfDirty('profile'); }catch(e){}
+    toast('Saved');
+    closeModal();
+  };
+  document.getElementById('closeUniBtn').onclick = closeModal;
+}
+
+function showFAQ(){
+  const body = `
+  <div class="subCard"><div style="font-weight:990">What is GRADEO?</div>
+    <div class="hint">A planner to estimate SGPA/CGPA and minimum SEE required. Results are educational estimates.</div>
+  </div>
+  <div class="subCard"><div style="font-weight:990">How are marks calculated?</div>
+    <div class="hint">Normal subjects: Total/100 = CIE/50 + SEE/2 (if SEE is out of 100). Pass rules used are shown in the app.</div>
+  </div>
+  <div class="subCard"><div style="font-weight:990">Can I use this for different universities?</div>
+    <div class="hint">Yes—save your university details in University settings. Calculations are based on the app’s selected rules, so always verify with your official scheme.</div>
+  </div>`;
+  openModal({ title:'FAQ', desc:'Quick answers', bodyHTML: body, footHTML:`<button class="btn" id="faqClose">Close</button>` });
+  document.getElementById('faqClose').onclick = closeModal;
+}
+
+function showContact(){
+  openModal({
+    title:'Contact / Feedback',
+    desc:'Tell us what to improve',
+    bodyHTML:`
+      <label class="label">Message</label>
+      <textarea class="textarea" id="contactMsg" placeholder="Feature request / bug report…"></textarea>
+      <label class="label">Your email (optional)</label>
+      <input class="input" id="contactEmail" placeholder="you@example.com" value="${esc(auth?.currentUser?.email || '')}">
+      <div class="hint">Don’t share passwords or sensitive info.</div>
+    `,
+    footHTML:`
+      <button class="btn primary" id="sendContactBtn">Send</button>
+      <button class="btn" id="contactClose">Close</button>
+    `
+  });
+
+  document.getElementById('contactClose').onclick = closeModal;
+  document.getElementById('sendContactBtn').onclick = async () => {
+    try{
+      const msg = (document.getElementById('contactMsg').value || '').trim();
+      if(!msg){ toast('Write a message first'); return; }
+      const email = (document.getElementById('contactEmail').value || '').trim();
+      // You can switch to a dedicated EmailJS template for feedback.
+      await emailjs.send('service_h64ayo1','template_ty5v5nz',{
+        name: state.profile.nickname || 'User',
+        email: email || (auth?.currentUser?.email || 'not_provided'),
+        year: new Date().getFullYear(),
+        message: msg
+      });
+      toast('Sent! Thanks 🙌');
+      closeModal();
+    }catch(e){ console.error(e); toast('Send failed'); }
+  };
+}
+
+/* ========= Accordion ========= */
   function wireAccordion(accId, chevronId){
     const acc = $(accId);
     const chev = $(chevronId);
@@ -2087,7 +2454,7 @@ if (changelogBtn){
 
    
 
-  // Hamburger menu (portal) - keep panel above backdrop
+  // Hamburger menu (portal)
   const menuBtn = document.getElementById('menuBtn');
   const menuPanel = document.getElementById('menuPanel');
   const menuBackdrop = document.getElementById('menuBackdrop');
@@ -2118,16 +2485,17 @@ if (changelogBtn){
     menuBackdrop.addEventListener('click', closeMenu);
   }
   if(menuPanel){
-    // prevent clicks inside menu from bubbling to document and closing immediately
     menuPanel.addEventListener('click', (e)=> e.stopPropagation());
   }
   document.addEventListener('keydown', (e)=>{ if(e.key==='Escape') closeMenu(); });
 
   // Menu actions
+  const uniSettingsBtn = document.getElementById('uniSettingsBtn');
+  if(uniSettingsBtn) uniSettingsBtn.addEventListener('click', ()=>{ closeMenu(); showUniversitySettings(); });
   const faqBtn = document.getElementById('faqBtn');
-  if(faqBtn) faqBtn.addEventListener('click', ()=>{ closeMenu(); if(typeof showFAQ==='function') showFAQ(); });
+  if(faqBtn) faqBtn.addEventListener('click', ()=>{ closeMenu(); showFAQ(); });
   const contactBtn = document.getElementById('contactBtn');
-  if(contactBtn) contactBtn.addEventListener('click', ()=>{ closeMenu(); if(typeof showContact==='function') showContact(); });
+  if(contactBtn) contactBtn.addEventListener('click', ()=>{ closeMenu(); showContact(); });
   const acctManage = document.getElementById('accountManageBtn');
   if(acctManage) acctManage.addEventListener('click', ()=>{ closeMenu(); openProfile(); });
 
@@ -2163,6 +2531,11 @@ if (changelogBtn){
         const nick = prof.exists ? (prof.data().nickname || state.profile.nickname) : state.profile.nickname;
 
         state.profile.nickname = nick;
+   state.profile.university = prof.exists ? (prof.data().university || '') : '';
+   state.profile.branch = prof.exists ? (prof.data().branch || '') : '';
+   state.profile.semester = prof.exists ? (prof.data().semester || '') : '';
+   state.profile.regulation = prof.exists ? (prof.data().regulation || '') : '';
+   state.profile.usn = prof.exists ? (prof.data().usn || '') : '';
         state.theme = 'light';
         document.body.setAttribute('data-theme','light');
         await fetchPlans();
