@@ -755,7 +755,7 @@ body[data-theme-variant="neon"] .panel, body[data-theme-variant="neon"] .subCard
 
 /* ================= Sticky Summary (desktop) ================= */
 @media (min-width: 981px){
-  #summaryPanel{position:sticky; top:calc(var(--navH,56px) + 12px); align-self:start;
+  #summaryPanel{position:sticky; top:var(--summaryTop, calc(var(--navH,56px) + 12px)); align-self:start;
     max-height:calc(100vh - var(--navH,56px) - 24px); overflow:auto;}
   #summaryPanel::-webkit-scrollbar{width:10px;}
   #summaryPanel::-webkit-scrollbar-thumb{background:color-mix(in oklab, var(--stroke) 70%, transparent);border-radius:999px;}
@@ -803,6 +803,28 @@ body[data-theme-variant="neon"] .panel, body[data-theme-variant="neon"] .subCard
 input[type=number]{-moz-appearance:textfield;}
 input[type=number]::-webkit-outer-spin-button,
 input[type=number]::-webkit-inner-spin-button{ -webkit-appearance:none; margin:0; }
+
+
+/* ================= Follow active subject (desktop) ================= */
+:root{ --summaryTop: calc(var(--navH,56px) + 12px); }
+.activeSubjectCard{border-color:color-mix(in oklab, var(--accent) 40%, var(--stroke));
+  background:linear-gradient(135deg, color-mix(in oklab, var(--accent) 12%, var(--card)), var(--card));}
+.activeSubjectCard .v{font-weight:990;}
+
+/* More student-attractive viral rail */
+.viralBtn{isolation:isolate;}
+.viralBtn::before{content:"";position:absolute;inset:0;border-radius:inherit;opacity:0;transition:opacity var(--t);
+  background:radial-gradient(120px 90px at 50% 30%, rgba(255,255,255,.28), transparent 60%);pointer-events:none;z-index:-1;}
+.viralBtn:hover::before{opacity:1;}
+.viralBtn:hover .vi{transform:translateY(-1px) scale(1.06);}
+.viralBtn .vi{transition:transform var(--t);}
+/* Gentle float animation for icons (desktop only) */
+@media (hover:hover) and (pointer:fine){
+  .viralBtn{animation:viralFloat 3.6s ease-in-out infinite;}
+  .viralBtn:nth-child(2n){animation-duration:4.1s;}
+  .viralBtn:nth-child(3n){animation-duration:4.6s;}
+}
+@keyframes viralFloat{0%,100%{transform:translateY(0);}50%{transform:translateY(-2px);}}
 </style>
 </head>
 
@@ -1029,6 +1051,22 @@ input[type=number]::-webkit-inner-spin-button{ -webkit-appearance:none; margin:0
         </div>
       </div>
       <div class="panelBody">
+        <div class="subCard activeSubjectCard" id="activeSubjectCard" style="display:none;">
+  <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;">
+    <div>
+      <div class="k">Active subject</div>
+      <div class="v" id="activeSubjectName" style="font-size:16px;">—</div>
+    </div>
+    <span class="pill" id="activeSubjectBadge">—</span>
+  </div>
+  <div class="s" id="activeSubjectLabel" style="margin-top:6px;">—</div>
+  <div class="progress" style="width:100%; margin-top:10px;"><div class="bar" id="activeSubjectBar" style="width:0%"></div></div>
+  <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:10px;">
+    <button class="btn small" type="button" id="activeJumpBtn">Jump</button>
+    <button class="btn small ghost" type="button" id="activeClearBtn">Clear</button>
+  </div>
+</div>
+
         <div class="stats" id="summaryBox"></div>
 
         <div class="subCard" style="margin-top:16px;">
@@ -3834,6 +3872,121 @@ if (changelogBtn){
           if(k==='disclaimer') return document.getElementById('disclaimerBtn')?.click();
         });
       });
+    }catch(_e){}
+
+
+// activeSubjectFollowWiring
+    try{
+      let activeSubId = null;
+      let activeSubEl = null;
+      const summary = document.getElementById('summaryPanel');
+      const card = document.getElementById('activeSubjectCard');
+      const nameEl = document.getElementById('activeSubjectName');
+      const badgeEl = document.getElementById('activeSubjectBadge');
+      const labelEl = document.getElementById('activeSubjectLabel');
+      const barEl = document.getElementById('activeSubjectBar');
+      const jumpBtn = document.getElementById('activeJumpBtn');
+      const clearBtn = document.getElementById('activeClearBtn');
+
+      const setSummaryTop = (px)=>{
+        document.documentElement.style.setProperty('--summaryTop', px+'px');
+      };
+      const resetSummaryTop = ()=>{
+        const navH = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--navH')) || 56;
+        setSummaryTop(navH + 12);
+      };
+
+      const syncActiveCard = ()=>{
+        if(!activeSubId) return;
+        const labelSrc = document.getElementById('label-'+activeSubId);
+        const badgeSrc = document.getElementById('badge-'+activeSubId);
+        const barSrc = document.getElementById('bar-'+activeSubId);
+        const sObj = state.plan && Array.isArray(state.plan.subjects) ? state.plan.subjects.find(x=>x.id===activeSubId) : null;
+        if(!labelSrc || !badgeSrc) return;
+        if(card) card.style.display = 'block';
+        if(nameEl) nameEl.textContent = (sObj && sObj.name) ? sObj.name : 'Subject';
+        if(badgeEl){ badgeEl.textContent = badgeSrc.textContent || '—'; badgeEl.className = badgeSrc.className; }
+        if(labelEl) labelEl.textContent = labelSrc.textContent || '—';
+        if(barEl && barSrc){ barEl.style.width = barSrc.style.width || '0%'; barEl.className = barSrc.className; }
+      };
+
+      const followTick = ()=>{
+        if(!activeSubEl || !summary) return;
+        const navH = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--navH')) || 56;
+        const sumH = summary.getBoundingClientRect().height;
+        const r = activeSubEl.getBoundingClientRect();
+        const desired = Math.min(
+          Math.max(navH + 12, Math.round(r.top)),
+          Math.max(navH + 12, window.innerHeight - sumH - 12)
+        );
+        setSummaryTop(desired);
+      };
+
+      const setActive = (id)=>{
+        if(!id) return;
+        activeSubId = id;
+        activeSubEl = document.getElementById('subjectCard-'+id);
+        syncActiveCard();
+        followTick();
+      };
+
+      // Track focus inside any subject card
+      document.addEventListener('focusin', (e)=>{
+        const inp = e.target && (e.target.closest('input[data-id], select[data-id], textarea[data-id]'));
+        if(!inp) return;
+        const id = inp.getAttribute('data-id');
+        if(id) setActive(id);
+      });
+
+      // Update live as user types (so active card always correct)
+      document.addEventListener('input', (e)=>{
+        const inp = e.target && (e.target.closest('input[data-id], select[data-id], textarea[data-id]'));
+        if(!inp) return;
+        const id = inp.getAttribute('data-id');
+        if(id) { activeSubId = id; activeSubEl = document.getElementById('subjectCard-'+id); }
+        // after debounce recalc, labels update; we sync with a tiny delay
+        setTimeout(syncActiveCard, 60);
+        setTimeout(followTick, 60);
+      }, {passive:true});
+
+      window.addEventListener('scroll', ()=>{ if(activeSubId) followTick(); }, {passive:true});
+      window.addEventListener('resize', ()=>{ if(activeSubId) followTick(); else resetSummaryTop(); }, {passive:true});
+
+      if(jumpBtn) jumpBtn.addEventListener('click', ()=>{
+        if(!activeSubId) return;
+        const el = document.getElementById('subjectCard-'+activeSubId);
+        if(!el) return;
+        const navH = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--navH')) || 56;
+        const y = el.getBoundingClientRect().top + window.scrollY - navH - 12;
+        window.scrollTo({ top:y, behavior:'smooth' });
+      });
+
+      if(clearBtn) clearBtn.addEventListener('click', ()=>{
+        activeSubId = null; activeSubEl = null;
+        if(card) card.style.display='none';
+        resetSummaryTop();
+      });
+
+      // Ensure chart clicks also set active
+      const hookChartScroll = (origFn)=>{
+        return function(id){
+          try{
+            if(id && id.startsWith('subjectCard-')){
+              const sid = id.replace('subjectCard-','');
+              setActive(sid);
+            }
+          }catch(_e){}
+          return origFn.apply(this, arguments);
+        }
+      };
+      // If updateCharts defines scrollToId internally, we still set active via is-active class already; fallback:
+      document.addEventListener('click', (e)=>{
+        const sc = e.target && e.target.closest('.subCard');
+        if(sc && sc.id && sc.id.startsWith('subjectCard-')){
+          setActive(sc.id.replace('subjectCard-',''));
+        }
+      }, {passive:true});
+
     }catch(_e){}
 
 // default mode
