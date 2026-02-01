@@ -673,27 +673,82 @@ body[data-mode="m3"]{ --modeGlow1: rgba(20,184,166,.24); --modeGlow2: rgba(124,5
 }
 
 
-/* ===== Desktop Spotlight ===== */
-@media (min-width: 981px){ #featureSpotlight{display:block !important;} }
-.spotGrid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;}
-@media (max-width: 1200px){.spotGrid{grid-template-columns:repeat(2,minmax(0,1fr));}}
-.spotCard{border:1px solid var(--stroke);background:var(--card);border-radius:16px;padding:12px;box-shadow:var(--shadow2);
-  display:flex;gap:12px;align-items:center;cursor:pointer;transition:transform var(--t), border-color var(--t), filter var(--t);
-  text-align:left;
+/* ================= Student Pack (Cool + Easy) ================= */
+:root{
+  --neon1:#00e5ff; --neon2:#a855f7; --neon3:#22c55e; --neonBg:#060b18;
 }
-.spotCard:hover{transform:translateY(-2px);border-color:color-mix(in oklab, var(--accent) 40%, var(--stroke));}
-.spotCard:active{transform:translateY(0);} 
-.spotCard.hot{background:linear-gradient(135deg, color-mix(in oklab, var(--accent) 26%, var(--card)), color-mix(in oklab, var(--accent2) 18%, var(--card)));}
-.spotIcon{width:42px;height:42px;border-radius:14px;display:grid;place-items:center;
-  background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;font-size:20px;
+body[data-theme-variant="neon"]{
+  --bg: var(--neonBg);
+  --panel: color-mix(in oklab, var(--neonBg) 92%, #0b57d0 8%);
+  --card: color-mix(in oklab, var(--neonBg) 85%, #7c3aed 15%);
+  --stroke: color-mix(in oklab, #2b3a6a 65%, var(--neon2));
+  --text: #eaf2ff;
+  --muted: #b9ccff;
+  --muted2:#90b4ff;
 }
-.spotTitle{font-weight:1000;}
-.spotSub{font-weight:850;color:var(--muted2);font-size:12px;margin-top:4px;}
-.spotTag{display:inline-flex;margin-left:8px;padding:3px 8px;border-radius:999px;font-size:11px;font-weight:1000;
-  background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.25);
+body[data-theme-variant="neon"] .btn.primary{
+  background: linear-gradient(135deg, var(--neon1), var(--neon2)) !important;
 }
-/* Donut smoothing */
-#donutMain{border-radius:999px;background:color-mix(in oklab, var(--panel) 70%, transparent);border:1px solid color-mix(in oklab, var(--stroke) 65%, transparent);}
+body[data-theme-variant="neon"] .logo{background: linear-gradient(135deg, var(--neon1), var(--neon2)) !important;}
+body[data-theme-variant="neon"] .panel, body[data-theme-variant="neon"] .subCard, body[data-theme-variant="neon"] .stat{
+  box-shadow: 0 18px 60px rgba(0,229,255,.08), 0 18px 60px rgba(168,85,247,.08);
+}
+
+/* Highlighted Share Plan */
+.menuItem.sharePrimary{
+  position:relative;
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  color:#fff !important;
+  border-radius:14px;
+  margin:8px 10px;
+  border:1px solid rgba(255,255,255,.18);
+  box-shadow:0 18px 42px rgba(0,0,0,.18);
+}
+.menuItem.sharePrimary .tag{margin-left:auto;font-size:11px;font-weight:1000;padding:4px 8px;border-radius:999px;background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.22);}
+.menuItem.sharePrimary::after{content:"";position:absolute;inset:-2px;border-radius:16px;background:conic-gradient(from 180deg, transparent, rgba(255,255,255,.45), transparent 35%);opacity:.35;filter:blur(6px);animation:shareGlow 2.6s ease-in-out infinite;pointer-events:none;}
+@keyframes shareGlow{0%,100%{opacity:.18;transform:rotate(-10deg) scale(1)}50%{opacity:.38;transform:rotate(10deg) scale(1.02)}}
+.heroShare{display:inline-flex;align-items:center;gap:8px}
+.heroShare .dot{width:8px;height:8px;border-radius:999px;background:#fff;box-shadow:0 0 0 0 rgba(255,255,255,.6);animation:dotPulse 1.6s ease-out infinite;}
+@keyframes dotPulse{0%{box-shadow:0 0 0 0 rgba(255,255,255,.55)}70%{box-shadow:0 0 0 14px rgba(255,255,255,0)}100%{box-shadow:0 0 0 0 rgba(255,255,255,0)}}
+
+/* Confetti */
+.confettiWrap{position:fixed;inset:0;pointer-events:none;z-index:20000;overflow:hidden;}
+.confetti{position:absolute;width:10px;height:14px;border-radius:3px;opacity:.95;transform:translateY(-20px) rotate(0deg);animation:confettiFall 1400ms linear forwards;}
+@keyframes confettiFall{to{transform:translateY(calc(100vh + 40px)) rotate(720deg);opacity:.95}}
+
+/* Emoji rain */
+.emojiRain{position:fixed;inset:0;pointer-events:none;z-index:18000;overflow:hidden;}
+.emojiDrop{position:absolute;top:-40px;font-size:20px;opacity:.9;animation:emojiFall 1400ms linear forwards;filter:drop-shadow(0 10px 18px rgba(0,0,0,.15));}
+@keyframes emojiFall{to{transform:translateY(calc(100vh + 80px)) rotate(240deg);opacity:0.95}}
+
+/* Chat widget */
+.chatFab{position:fixed;left:16px;bottom:16px;z-index:9000;display:flex;flex-direction:column;gap:10px;}
+.chatFab .btn{border-radius:999px;}
+.chatPanel{position:fixed;left:16px;bottom:86px;z-index:9100;width:min(380px, calc(100vw - 32px));max-height:70vh;display:none;flex-direction:column;border:1px solid var(--stroke);border-radius:18px;background:color-mix(in oklab, var(--panel) 92%, transparent);backdrop-filter: blur(12px) saturate(1.2);box-shadow:0 22px 70px rgba(0,0,0,.25);overflow:hidden;}
+.chatPanel.show{display:flex;animation:popIn 220ms cubic-bezier(.16,1,.3,1)}
+.chatHead{padding:10px 12px;border-bottom:1px solid var(--stroke);display:flex;align-items:center;justify-content:space-between;gap:10px;}
+.chatHead .t{font-weight:990}
+.chatMsgs{padding:12px;display:flex;flex-direction:column;gap:10px;overflow:auto;}
+.msg{max-width:92%;padding:10px 12px;border-radius:14px;border:1px solid var(--stroke);background:var(--card);font-weight:850;font-size:13px;line-height:1.35}
+.msg.me{align-self:flex-end;background:color-mix(in oklab, var(--accent) 16%, var(--card));}
+.msg.bot{align-self:flex-start;}
+.chatFoot{padding:10px 12px;border-top:1px solid var(--stroke);display:flex;gap:8px;}
+.chatFoot input{flex:1}
+
+/* Badges */
+.badgesGrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;}
+.badgeCard{border:1px solid var(--stroke);background:var(--card);border-radius:14px;padding:12px;box-shadow:var(--shadow2);}
+.badgeCard .b{font-weight:990}
+.badgeCard .d{font-size:12px;color:var(--muted2);font-weight:850;margin-top:6px;}
+.badgeOn{border-color: color-mix(in oklab, var(--good) 55%, var(--stroke));background: color-mix(in oklab, var(--good) 12%, var(--card));}
+
+/* Study mode overlay */
+.studyOverlay{position:fixed;inset:0;z-index:15000;background:rgba(0,0,0,.55);display:none;align-items:center;justify-content:center;padding:16px;}
+.studyOverlay.show{display:flex;}
+.studyBox{width:min(620px,100%);border:1px solid var(--stroke);background:var(--panel);border-radius:18px;box-shadow:0 30px 90px rgba(0,0,0,.35);overflow:hidden;}
+.studyBox .h{padding:12px;border-bottom:1px solid var(--stroke);display:flex;align-items:center;justify-content:space-between;gap:10px;}
+.studyBox .c{padding:12px;display:flex;flex-direction:column;gap:10px;}
+.timerBig{font-size:40px;font-weight:1000;letter-spacing:.02em;}
 
 </style>
 </head>
@@ -736,7 +791,17 @@ body[data-mode="m3"]{ --modeGlow1: rgba(20,184,166,.24); --modeGlow2: rgba(124,5
     </div>
     <button class="btn small" id="menuCloseBtn" aria-label="Close menu">Close</button>
   </div>
-  <button class="menuItem" id="uniSettingsBtn" role="menuitem">🎓 University settings</button>
+  <button class="menuItem sharePrimary" id="sharePlanBtn" role="menuitem">🔗 Share plan <span class="tag">HOT</span></button>
+<button class="menuItem" id="shareGradeBtn" role="menuitem">📄 Share grade card</button>
+<button class="menuItem" id="exportGradePdfBtn" role="menuitem">🖨️ Export grade card PDF</button>
+<div class="menuSep"></div>
+<button class="menuItem" id="studyModeBtn" role="menuitem">🎧 Study Mode (Pomodoro)</button>
+<button class="menuItem" id="roastBtn" role="menuitem">🔥 Roast my SGPA (friendly)</button>
+<button class="menuItem" id="badgesBtn" role="menuitem">🏅 Achievements</button>
+<button class="menuItem" id="leaderBtn" role="menuitem">🏆 Leaderboard (anonymous)</button>
+<button class="menuItem" id="themeNeonBtn" role="menuitem">🌗 Toggle Neon Mode</button>
+<div class="menuSep"></div>
+<button class="menuItem" id="uniSettingsBtn" role="menuitem">🎓 University settings</button>
   <button class="menuItem" id="howItWorksBtn" role="menuitem">ℹ️ How it works</button>
   <button class="menuItem" id="faqBtn" role="menuitem">❓ FAQ</button>
   <div class="menuSep"></div>
@@ -763,88 +828,13 @@ body[data-mode="m3"]{ --modeGlow1: rgba(20,184,166,.24); --modeGlow2: rgba(124,5
     </div>
     <div class="pills heroTools">
   <button class="btn small" id="heroInfoBtn">ℹ️ Info</button>
+ <button class="btn small primary heroShare" id="heroSharePlanBtn"><span class="dot" aria-hidden="true"></span>Share plan</button>
       <span class="pill" id="statusPill">Guest</span>
       <span class="pill good" id="savePill" style="display:none;">Saved</span>
     </div>
-  
-</section>
+  </section>
 
-<!-- ===== Feature Spotlight (Desktop / Windows) ===== -->
-<section class="panel noPrint" id="featureSpotlight" style="margin-top:12px; display:none;">
-  <div class="panelHead">
-    <div>
-      <h2>🔥 Hot & Viral Features</h2>
-      <p>Everything important is here — no hunting in menus.</p>
-    </div>
-    <div style="display:flex; gap:10px; flex-wrap:wrap;">
-      <button class="btn small" id="spotlightHideBtn">Hide</button>
-      <button class="btn small primary" id="spotlightWhatsNewBtn">What’s new</button>
-    </div>
-  </div>
-  <div class="panelBody">
-    <div class="spotGrid">
-      <button class="spotCard hot" id="spotShare">
-        <div class="spotIcon">🔗</div>
-        <div class="spotText">
-          <div class="spotTitle">Share plan <span class="spotTag">HOT</span></div>
-          <div class="spotSub">Send link to friends / group</div>
-        </div>
-      </button>
-      <button class="spotCard" id="spotPdf">
-        <div class="spotIcon">🖨️</div>
-        <div class="spotText">
-          <div class="spotTitle">Export PDF</div>
-          <div class="spotSub">Print / save as PDF</div>
-        </div>
-      </button>
-      <button class="spotCard" id="spotModes">
-        <div class="spotIcon">🎛️</div>
-        <div class="spotText">
-          <div class="spotTitle">Quick modes</div>
-          <div class="spotSub">Press 1 / 2 / 3 keys</div>
-        </div>
-      </button>
-      <button class="spotCard" id="spotGrade">
-        <div class="spotIcon">📊</div>
-        <div class="spotText">
-          <div class="spotTitle">Grade scale</div>
-          <div class="spotSub">S/A/B… → GP table</div>
-        </div>
-      </button>
-      <button class="spotCard" id="spotHelp">
-        <div class="spotIcon">🆘</div>
-        <div class="spotText">
-          <div class="spotTitle">Help</div>
-          <div class="spotSub">How it works</div>
-        </div>
-      </button>
-      <button class="spotCard" id="spotSign">
-        <div class="spotIcon">👤</div>
-        <div class="spotText">
-          <div class="spotTitle">Sign in</div>
-          <div class="spotSub">Save plans & sync</div>
-        </div>
-      </button>
-      <button class="spotCard" id="spotUni">
-        <div class="spotIcon">🎓</div>
-        <div class="spotText">
-          <div class="spotTitle">University</div>
-          <div class="spotSub">Set branch / sem</div>
-        </div>
-      </button>
-      <button class="spotCard" id="spotContact">
-        <div class="spotIcon">✉️</div>
-        <div class="spotText">
-          <div class="spotTitle">Feedback</div>
-          <div class="spotSub">Report bugs / ideas</div>
-        </div>
-      </button>
-    </div>
-    <div class="hint" style="margin-top:12px;">Tip: The charts below update automatically so you don’t have to read numbers all the time.</div>
-  </div>
-</section>
-
-<div class="grid">
+  <div class="grid">
     <!-- Workspace -->
     <section class="panel">
       <div class="panelHead">
@@ -986,19 +976,6 @@ body[data-mode="m3"]{ --modeGlow1: rgba(20,184,166,.24); --modeGlow2: rgba(124,5
       </div>
       <div class="panelBody">
         <div class="stats" id="summaryBox"></div>
-
-<div class="stat" id="vizCard" style="margin-top:12px;">
-  <div class="k">Visual summary</div>
-  <div style="display:flex; gap:12px; flex-wrap:wrap; align-items:center; margin-top:10px;">
-    <canvas id="donutMain" width="180" height="180" style="width:180px;height:180px;"></canvas>
-    <div style="min-width:200px; flex:1;">
-      <div style="font-weight:990; font-size:16px;" id="donutLabel">—</div>
-      <div class="s" id="donutSub">—</div>
-      <div class="hint" style="margin-top:8px;">Animated donut = progress (0–10 scale) • Auto-updates</div>
-    </div>
-  </div>
-</div>
-
 
         <!-- Account / Plans (hidden behind profile) -->
         <div class="accordion" id="accountAcc" style="margin-top:12px; display:none;">
@@ -1354,6 +1331,8 @@ body[data-mode="m3"]{ --modeGlow1: rgba(20,184,166,.24); --modeGlow2: rgba(124,5
   const profileRef = uid => db.doc(`users/${uid}/profile/main`);
   const plansCol = uid => db.collection(`users/${uid}/plans`);
   const planRef = (uid, pid) => db.doc(`users/${uid}/plans/${pid}`);
+  const sharesCol = () => db.collection(`publicShares`);
+  const shareRef = (sid) => db.doc(`publicShares/${sid}`);
 
   async function fetchPlans(){
     const uid = auth.currentUser.uid;
@@ -1379,15 +1358,19 @@ body[data-mode="m3"]{ --modeGlow1: rgba(20,184,166,.24); --modeGlow2: rgba(124,5
       subjects: Array.isArray(p.subjects) ? p.subjects : []
     };
     if (p.history) state.history = p.history;
+    // Restore saved mode for this plan
+    const inferPlanMode = () => p.mode || "m1";
+    state.mode = inferPlanMode();
     renderPlansSelect();
-    renderAllStatic();
-    scheduleRecalc();
+    setMode(state.mode, {push:false});
+    scheduleRecalc(0);
   }
 
   async function createNewPlan(){
     const uid = auth.currentUser.uid;
     const payload = {
       name:"New Plan",
+    mode: state.mode || "m1",
       notes:"",
       rounding:"nearest",
       mode1:{ currentCgpa:"", completedCredits:"", targetCgpa:"" },
@@ -1410,6 +1393,7 @@ body[data-mode="m3"]{ --modeGlow1: rgba(20,184,166,.24); --modeGlow2: rgba(124,5
     copy.name = (copy.name||"Plan") + " (Copy)";
     const ref = await plansCol(uid).add({
       ...copy,
+    mode: state.mode || "m1",
       createdAt: firebase.firestore.FieldValue.serverTimestamp(),
       updatedAt: firebase.firestore.FieldValue.serverTimestamp()
     });
@@ -1461,6 +1445,7 @@ body[data-mode="m3"]{ --modeGlow1: rgba(20,184,166,.24); --modeGlow2: rgba(124,5
       name: state.plan.name,
       notes: state.plan.notes,
       rounding: state.plan.rounding,
+    mode: state.mode,
       mode1: state.plan.mode1,
       subjects: state.plan.subjects,
       updatedAt: firebase.firestore.FieldValue.serverTimestamp()
@@ -1709,7 +1694,12 @@ body[data-mode="m3"]{ --modeGlow1: rgba(20,184,166,.24); --modeGlow2: rgba(124,5
           </div>
           <div>
             <label class="label">SEE /${seeMax}</label>
-            <input class="input" data-id="${s.id}" data-field="see" type="number" min="0" max="${seeMax}" step="1" value="${esc(s.see??"")}">
+            ${
+              state.mode === "m1"
+                ? `<input class="input mono" id="reqsee-${s.id}" readonly value="—/${seeMax}">`
+                : `<input class="input" data-id="${s.id}" data-field="see" type="number" min="0" max="${seeMax}" step="1" value="${esc(s.see ?? "")}">`
+            }
+          </div>
           </div>
           ${cr===1 ? `
           <div>
@@ -1862,7 +1852,7 @@ body[data-mode="m3"]{ --modeGlow1: rgba(20,184,166,.24); --modeGlow2: rgba(124,5
   function renderSummary(){
     const box = $("#summaryBox");
     // Guests can enter data, but results are locked until sign-in
-    if (!auth.currentUser){
+    if (!auth.currentUser && !state.sharedView){
       box.innerHTML = `
         <div class="stat">
           <div class="k">Results locked</div>
@@ -1928,7 +1918,7 @@ body[data-mode="m3"]{ --modeGlow1: rgba(20,184,166,.24); --modeGlow2: rgba(124,5
     renderSummary();
 
     // Guests: keep per-subject badges locked
-    if (!auth.currentUser){
+    if (!auth.currentUser && !state.sharedView){
       for (const s of state.plan.subjects){
         const badgeEl = $("#badge-"+s.id);
         const labelEl = $("#label-"+s.id);
@@ -1988,14 +1978,19 @@ body[data-mode="m3"]{ --modeGlow1: rgba(20,184,166,.24); --modeGlow2: rgba(124,5
         const cr = clamp(parseInt(s.credits||3,10),1,4);
         const seeMax = (cr===1) ? ((parseInt(s.seeOutOf||"50",10)===100) ? 100 : 50) : 100;
         let reqSee = (seeMax===50) ? (minTotal - cie) : (minTotal - cie) * 2;
-        if (reqSee < 0) reqSee = 0;
-        const d = difficulty(reqSee);
-        badgeEl.className="pill "+d.tone;
-        badgeEl.textContent=d.label;
-        const note = (seeMax===100 && reqSee < 35) ? " (pass needs ≥35)" : "";
-        labelEl.textContent=`Minimum SEE: ${Math.round(reqSee)}/${seeMax}${note}`;
-        barEl.className="bar " + (d.tone==="bad"?"bad":(d.tone==="warn"?"warn":""));
-        barEl.style.width = clamp((reqSee/seeMax)*100,0,100) + "%";
+if (reqSee < 0) reqSee = 0;
+// Pass-safe requirement: respects pass rules (SEE minimum + Total ≥ 40)
+const seePass = (seeMax === 50) ? 18 : 35;
+const totalPassNeed = (seeMax === 50) ? Math.max(0, 40 - cie) : Math.max(0, (40 - cie) * 2);
+let showReq = Math.max(reqSee, seePass, totalPassNeed);
+const d = difficulty(showReq);
+badgeEl.className="pill "+d.tone;
+badgeEl.textContent=d.label;
+labelEl.textContent=`Required SEE: ${Math.round(showReq)}/${seeMax}`;
+const seeBox = document.getElementById(`reqsee-${s.id}`);
+if (seeBox) seeBox.value = `${Math.round(showReq)}/${seeMax}`;
+barEl.className="bar " + (d.tone==="bad"?"bad":(d.tone==="warn"?"warn":""));
+barEl.style.width = clamp((showReq/seeMax)*100,0,100) + "%";
         }
       }
     }
@@ -2024,6 +2019,7 @@ body[data-mode="m3"]{ --modeGlow1: rgba(20,184,166,.24); --modeGlow2: rgba(124,5
 
 function setMode(mode, opts={push:true}){
   state.mode = mode;
+  try{ localStorage.setItem(LS_MODE_KEY, mode); }catch(_e){}
   try{ document.body.setAttribute('data-mode', mode); }catch(_e){}
   renderAllStatic();
   scheduleRecalc(0);
@@ -2389,7 +2385,465 @@ async function deleteAllUserPlans(uid){
 
 
  /* ========= Simple share / pdf ========= */
-  async function shareSite(){
+  
+
+  /* ================= Student Pack JS ================= */
+  // Friendly fun toasts (no hate)
+  const FUNNY = {
+    roastOk: [
+      "Not bad 😌 You’re surviving.",
+      "Solid. Respect 🤝",
+      "This is… decent. Keep cooking 🔥"
+    ],
+    roastMid: [
+      "Mid SGPA detected 😭 but still recoverable.",
+      "Bro is balancing life & marks… mostly life 🫡",
+      "Average? More like ‘strategic’ 😏"
+    ],
+    roastLow: [
+      "Bro… this SGPA is crying with you 😭",
+      "This isn’t SGPA, this is room temperature 🥲",
+      "One more unit and you’ll be fine. Trust. (Start now)"
+    ],
+    copyLink: [
+      "Link copied 😎 Now go flex in your WhatsApp group.",
+      "Copied ✅ Don’t forget to breathe before exams 😭",
+      "Boom! Link ready 🚀 Send it before your friend says ‘share fast’."
+    ],
+    needSignin: [
+      "Bro… sign in first 😭",
+      "Nice try 😏 Sign in to unlock the magic.",
+      "Guest mode is cool, but sharing needs sign-in 🤝"
+    ],
+    sharedOpen: [
+      "Shared view opened 👀 Don’t edit—just admire.",
+      "Welcome to read-only land 📖",
+      "This plan is shared. Copy it and make it yours 🔥"
+    ],
+    pomoDone: [
+      "Focus session complete ✅ Reward: 2 mins of scrolling (max).",
+      "GG! Break time 🧃",
+      "W session. Keep going 🔥"
+    ]
+  };
+  function funToast(key){
+    const arr = FUNNY[key] || ["Done!"]; 
+    toast(arr[Math.floor(Math.random()*arr.length)]);
+  }
+
+  function confettiBurst(){
+    const wrap = document.createElement('div');
+    wrap.className = 'confettiWrap';
+    const colors = ['#ff6a00','#ff9f1c','#0ea5e9','#2563eb','#14b8a6','#7c3aed','#22c55e','#f43f5e'];
+    const N = 70;
+    for (let i=0;i<N;i++){
+      const c = document.createElement('div');
+      c.className='confetti';
+      c.style.left = (Math.random()*100)+'vw';
+      c.style.top = (-20 - Math.random()*80)+'px';
+      c.style.background = colors[i%colors.length];
+      c.style.animationDuration = (900 + Math.random()*900)+'ms';
+      c.style.animationDelay = (Math.random()*120)+'ms';
+      c.style.width = (8 + Math.random()*8)+'px';
+      c.style.height = (10 + Math.random()*10)+'px';
+      wrap.appendChild(c);
+    }
+    document.body.appendChild(wrap);
+    setTimeout(()=>wrap.remove(), 2200);
+  }
+  function emojiRain(emojis=['🔥','✨','🎉','😭','💀']){
+    const wrap = document.createElement('div');
+    wrap.className='emojiRain';
+    const N=36;
+    for(let i=0;i<N;i++){
+      const e = document.createElement('div');
+      e.className='emojiDrop';
+      e.textContent = emojis[Math.floor(Math.random()*emojis.length)];
+      e.style.left = (Math.random()*100)+'vw';
+      e.style.animationDuration = (900 + Math.random()*1200)+'ms';
+      e.style.animationDelay = (Math.random()*140)+'ms';
+      e.style.fontSize = (16 + Math.random()*18)+'px';
+      wrap.appendChild(e);
+    }
+    document.body.appendChild(wrap);
+    setTimeout(()=>wrap.remove(), 2400);
+  }
+
+  // Achievements (local)
+  const BADGES = [
+    { id:'first_share', icon:'🔗', name:'Link Lord', desc:'Shared your first plan' },
+    { id:'first_pdf', icon:'🖨️', name:'PDF Pro', desc:'Exported a grade card PDF' },
+    { id:'pomo_done', icon:'⏱️', name:'Focus Beast', desc:'Completed a Pomodoro session' },
+    { id:'subjects_6', icon:'📚', name:'Full Load', desc:'Added 6+ subjects' },
+    { id:'planner_used', icon:'🎯', name:'Target Tactician', desc:'Used planner mode (Mode 1)' },
+    { id:'sgpa_calc', icon:'🧮', name:'SGPA Summoner', desc:'Calculated SGPA (Mode 2)' },
+  ];
+  function badgeKey(id){ return 'badge_'+id; }
+  function hasBadge(id){ try{ return localStorage.getItem(badgeKey(id))==='1'; }catch(_e){return false;} }
+  function awardBadge(id){
+    if (hasBadge(id)) return;
+    try{ localStorage.setItem(badgeKey(id),'1'); }catch(_e){}
+    confettiBurst();
+    toast('🏅 Achievement unlocked!');
+  }
+
+  function openBadgesModal(){
+    const cards = BADGES.map(b=>{
+      const on = hasBadge(b.id);
+      return `<div class="badgeCard ${on?'badgeOn':''}"><div class="b">${b.icon} ${esc(b.name)}</div><div class="d">${esc(b.desc)}${on?' • ✅':''}</div></div>`;
+    }).join('');
+    openModal({
+      title:'Achievements',
+      desc:'Collect badges as you use GRADEO',
+      bodyHTML:`<div class="badgesGrid">${cards}</div>`,
+      footHTML:`<button class="btn" id="closeBadges">Close</button>`
+    });
+    document.getElementById('closeBadges').onclick = closeModal;
+  }
+
+  // Leaderboard (anonymous, local-only)
+  function getLB(){
+    try{ return JSON.parse(localStorage.getItem('gradeo_lb')||'[]'); }catch(_e){ return []; }
+  }
+  function setLB(rows){
+    try{ localStorage.setItem('gradeo_lb', JSON.stringify(rows.slice(0,25))); }catch(_e){}
+  }
+  function pushLB(score){
+    if (!Number.isFinite(score)) return;
+    let rows = getLB();
+    const nick = (state.profile.nickname||'Student').slice(0,12);
+    rows.push({ nick, score: Math.round(score*100)/100, t: Date.now() });
+    rows.sort((a,b)=>b.score-a.score);
+    setLB(rows);
+  }
+  function openLeaderboard(){
+    const rows=getLB();
+    const list = rows.length? rows.map((r,i)=>`<div class="subCard" style="display:flex;justify-content:space-between;align-items:center;"><div style="font-weight:990">#${i+1} ${esc(r.nick)}</div><div class="pill good">${r.score}</div></div>`).join('') : `<div class="subCard"><div style="font-weight:990">No entries yet</div><div class="hint">Calculate SGPA then opt-in.</div></div>`;
+    openModal({
+      title:'Leaderboard (Anonymous)',
+      desc:'Local to your device • Opt-in only',
+      bodyHTML:`${list}<div class="hint" style="margin-top:10px;">Tip: this leaderboard is stored only on your device.</div>`,
+      footHTML:`<button class="btn" id="lbClose">Close</button>`
+    });
+    document.getElementById('lbClose').onclick = closeModal;
+  }
+
+  // Roast my SGPA (friendly)
+  function roastNow(){
+    let v = null;
+    if (state.mode==='m2'){
+      const sem = computeSGPA();
+      v = sem && Number.isFinite(sem.sgpa) ? sem.sgpa : null;
+    } else if (state.mode==='m3'){
+      const r = computeHistoryCGPA();
+      v = r && Number.isFinite(r.cgpa) ? r.cgpa : null;
+    } else {
+      const req = requiredSemesterSGPA();
+      v = Number.isFinite(req) ? req : null;
+    }
+    if (v==null){ toast('Enter some data first 🙂'); return; }
+    let key='roastOk';
+    if (v<5.0) key='roastLow';
+    else if (v<7.0) key='roastMid';
+    funToast(key);
+    emojiRain(key==='roastLow'?['😭','💀','🥲','📉']:key==='roastMid'?['😏','🫡','📚','😬']:['🔥','✨','🧠','😎']);
+  }
+
+  // Study plan generator (heuristic)
+  function genMicroPlan(){
+    const subs = Array.isArray(state.plan.subjects)? state.plan.subjects:[];
+    if (!subs.length){ return 'Add subjects first. Then I’ll plan your day 😄'; }
+    // Difficulty estimate based on missing marks (Mode1) or total (Mode2)
+    let items=[];
+    if (state.mode==='m1'){
+      awardBadge('planner_used');
+      const req = requiredSemesterSGPA();
+      const gp = Number.isFinite(req) ? gpFromSgpa(req) : 8;
+      const minTotal = minMarksForGP(gp);
+      for (const s of subs){
+        if (s.kind==='activity') continue;
+        const cr = clamp(parseInt(s.credits||3,10),1,4);
+        const seeMax = (cr===1) ? ((parseInt(s.seeOutOf||'50',10)===100)?100:50) : 100;
+        const cie = clamp(parseFloat(s.cie||0),0,50);
+        let reqSee = (seeMax===50) ? (minTotal - cie) : (minTotal - cie) * 2;
+        if (reqSee < 0) reqSee = 0;
+        const seePass = (seeMax===50)?18:35;
+        const totalNeed = (seeMax===50) ? Math.max(0,40-cie) : Math.max(0,(40-cie)*2);
+        let showReq = Math.max(reqSee, seePass, totalNeed);
+        const ratio = showReq/seeMax;
+        items.push({ name: s.name||'Subject', ratio, seeMax, need: Math.round(showReq) });
+      }
+      items.sort((a,b)=>b.ratio-a.ratio);
+    } else {
+      // Mode2: focus on lowest totals
+      for (const s of subs){
+        const r = calcSubjectMode2(s);
+        items.push({ name: s.name||'Subject', ratio: (100 - (r.pct||0))/100, need: Math.round(100-(r.pct||0)) });
+      }
+      items.sort((a,b)=>b.ratio-a.ratio);
+    }
+    const top = items.slice(0,4);
+    const blocks = [
+      `1) ${top[0]?top[0].name:'Subject'} — 45 min (hardest)`,
+      `2) ${top[1]?top[1].name:'Subject'} — 35 min`,
+      `3) ${top[2]?top[2].name:'Subject'} — 30 min`,
+      `4) ${top[3]?top[3].name:'Subject'} — 20 min quick revise`,
+      `Breaks: 5–10 min after each block.`,
+      `Rule: Phone only after 2 blocks 😭`
+    ];
+    if (subs.length>=6) awardBadge('subjects_6');
+    return blocks.join('\n');
+  }
+
+  // Pomodoro
+  let pomoTimer=null, pomoLeft=1500, pomoMode='focus';
+  function fmtTime(sec){
+    sec=Math.max(0,Math.floor(sec));
+    const m=String(Math.floor(sec/60)).padStart(2,'0');
+    const s=String(sec%60).padStart(2,'0');
+    return `${m}:${s}`;
+  }
+  function syncPomoUI(){
+    const el = document.getElementById('pomoTimer');
+    if (el) el.textContent = fmtTime(pomoLeft);
+  }
+  function setPomoFromInputs(){
+    const f = clamp(parseInt(document.getElementById('focusMin')?.value||25,10),5,90);
+    const b = clamp(parseInt(document.getElementById('breakMin')?.value||5,10),3,30);
+    pomoLeft = (pomoMode==='focus'? f : b)*60;
+    syncPomoUI();
+  }
+  function pomoTick(){
+    pomoLeft -= 1;
+    syncPomoUI();
+    if (pomoLeft<=0){
+      clearInterval(pomoTimer); pomoTimer=null;
+      awardBadge('pomo_done');
+      confettiBurst();
+      funToast('pomoDone');
+      // switch mode
+      pomoMode = (pomoMode==='focus') ? 'break' : 'focus';
+      setPomoFromInputs();
+    }
+  }
+  function openStudy(){
+    const ov = document.getElementById('studyOverlay');
+    if (!ov) return;
+    ov.classList.add('show');
+    setPomoFromInputs();
+    document.getElementById('microPlan').textContent = genMicroPlan();
+  }
+  function closeStudy(){
+    const ov = document.getElementById('studyOverlay');
+    if (!ov) return;
+    ov.classList.remove('show');
+  }
+
+  // PWA install prompt
+  let deferredPrompt=null;
+  window.addEventListener('beforeinstallprompt', (e)=>{ deferredPrompt=e; });
+  async function promptInstall(){
+    if (!deferredPrompt){ toast('Install not available now'); return; }
+    deferredPrompt.prompt();
+    deferredPrompt=null;
+  }
+
+  // Offline/online toasts
+  window.addEventListener('offline', ()=>toast('Offline mode 📴 (data still here)'));
+  window.addEventListener('online', ()=>toast('Back online ✅'));
+
+  // Tiny chat bot (rule-based)
+  function chatAdd(text, who='bot'){
+    const wrap = document.getElementById('chatMsgs');
+    if (!wrap) return;
+    const d = document.createElement('div');
+    d.className = 'msg '+(who==='me'?'me':'bot');
+    d.textContent = text;
+    wrap.appendChild(d);
+    wrap.scrollTop = wrap.scrollHeight;
+  }
+  function chatReply(q){
+    const t = (q||'').toLowerCase();
+    if (!t.trim()) return;
+    if (t.includes('roast')){ roastNow(); return 'Roast delivered 🔥'; }
+    if (t.includes('study') || t.includes('plan')){ return genMicroPlan(); }
+    if (t.includes('install') || t.includes('app')){ promptInstall(); return 'Trying install…'; }
+    if (t.includes('8') && (t.includes('sgpa')||t.includes('cgpa'))){ return 'Possible ✅ Add your subjects & marks; I’ll show minimum SEE needed.'; }
+    if (t.includes('pass')){ return 'Pass rule: Total ≥ 40 and SEE minimum (≥35 for /100, ≥18 for /50).'; }
+    return 'Try: “study plan”, “roast me”, “pass rule”, “install app” 🙂';
+  }
+
+  // Theme toggle
+  function toggleNeon(){
+    const cur = document.body.getAttribute('data-theme-variant')||'';
+    const next = cur==='neon' ? '' : 'neon';
+    if (next) document.body.setAttribute('data-theme-variant','neon');
+    else document.body.removeAttribute('data-theme-variant');
+    try{ localStorage.setItem('theme_variant', next); }catch(_e){}
+    toast(next?'Neon mode ON ✨':'Neon mode OFF');
+  }
+  function loadThemeVariant(){
+    try{ const v = localStorage.getItem('theme_variant')||''; if (v==='neon') document.body.setAttribute('data-theme-variant','neon'); }catch(_e){}
+  }
+
+  async function createShareDoc(type){
+    if (!auth.currentUser){ funToast('needSignin'); openSignInModal(); return; }
+    const uid = auth.currentUser.uid;
+    const nowMs = Date.now();
+    let payload = { type, mode: state.mode, createdAt: firebase.firestore.FieldValue.serverTimestamp(), createdMs: nowMs, uid };
+
+    if (type === 'plan'){
+      payload.data = { mode: state.mode, plan: state.plan, history: state.history, profile: { nickname: state.profile.nickname, university: state.profile.university, branch: state.profile.branch, semester: state.profile.semester, regulation: state.profile.regulation } };
+    } else {
+      const rows = state.plan.subjects.map(s => {
+        const cr = (s.kind==="activity") ? 1 : clamp(parseInt(s.credits||3,10),1,4);
+        const seeMax = (cr===1) ? ((parseInt(s.seeOutOf||"50",10)===100) ? 100 : 50) : 100;
+        const r = calcSubjectMode2(s);
+        return { name: s.name||"Subject", kind: s.kind, credits: cr, seeMax,
+          cie: (s.kind==="activity")? null : clamp(parseFloat(s.cie||0),0,50),
+          see: (s.kind==="activity")? null : clamp(parseFloat(s.see||0),0,seeMax),
+          final: (s.kind==="activity")? clamp(parseFloat(s.final||0),0,100) : null,
+          result: r
+        };
+      });
+      const sem = computeSGPA();
+      payload.mode = 'm2';
+      payload.data = { mode:'m2', semesterName: $("#semesterName")?.value || "", rows, sgpa: sem, profile: { nickname: state.profile.nickname, university: state.profile.university, branch: state.profile.branch, semester: state.profile.semester, regulation: state.profile.regulation } };
+    }
+
+    const ref = await sharesCol().add(payload);
+    const link = location.origin + location.pathname + '?share=' + ref.id;
+    const waLink = 'https://wa.me/?text=' + encodeURIComponent('GRADEO link: ' + link);
+    const qrLink = 'https://quickchart.io/qr?text=' + encodeURIComponent(link) + '&size=220';
+
+    openModal({
+      title: (type==='plan') ? 'Share plan' : 'Share grade card',
+      desc: 'Anyone with the link can view (read-only).',
+      bodyHTML: `
+        <div class="subCard">
+          <div style="font-weight:990">Share link</div>
+          <input class="input" id="shareLinkBox" value="${esc(link)}" readonly style="margin-top:10px">
+          <div class="hint">Tip: Drop it in your class WhatsApp group 👀</div>
+        </div>
+        <div class="subCard" style="display:flex; gap:14px; flex-wrap:wrap; align-items:center; justify-content:space-between;">
+          <div>
+            <div style="font-weight:990">QR code</div>
+            <div class="hint">Scan = instant open.</div>
+          </div>
+          <img alt="QR" id="qrImg" src="${qrLink}" style="width:140px;height:140px;border-radius:14px;border:1px solid var(--stroke);background:#fff;object-fit:cover;">
+        </div>
+      `,
+      footHTML: `
+        <button class="btn primary" id="copyShareLink">Copy link</button>
+        <a class="btn" id="waShareBtn" href="${waLink}" target="_blank" rel="noopener">WhatsApp</a>
+        <button class="btn" id="dlQrBtn">Download QR</button>
+        <button class="btn" id="closeShare">Close</button>
+      `
+    });
+
+    document.getElementById('copyShareLink').onclick = async () => {
+      try{ await navigator.clipboard.writeText(link); confettiBurst(); funToast('copyLink'); awardBadge('first_share'); }catch(_e){ toast('Copy failed'); }
+    };
+    document.getElementById('dlQrBtn').onclick = () => {
+      try{ const img=document.getElementById('qrImg'); const a=document.createElement('a'); a.href=img.src; a.download='gradeo-qr.png'; document.body.appendChild(a); a.click(); a.remove(); toast('QR downloading…'); }catch(_e){ toast('Download failed'); }
+    };
+    document.getElementById('closeShare').onclick = closeModal;
+  }
+
+  async function loadSharedSnapshot(shareId){
+    try{
+      const snap = await shareRef(shareId).get();
+      if (!snap.exists){ toast('Share not found'); return; }
+      const sh = snap.data();
+      if (!sh || !sh.data){ toast('Invalid share'); return; }
+      state.sharedView = true;
+      state.readOnly = true;
+      state.sharedData = sh;
+      if (sh.data.plan){
+        state.plan = sh.data.plan;
+        if (sh.data.history) state.history = sh.data.history;
+        state.mode = sh.data.mode || sh.mode || 'm1';
+      } else {
+        state.mode = 'm2';
+        if (Array.isArray(sh.data.rows)){
+          state.plan.subjects = sh.data.rows.map(r => {
+            if (r.kind==='activity') return { id: crypto.randomUUID(), kind:'activity', name:r.name||'Activity', credits:1, final: String(r.final ?? '') };
+            const seeOutOf = (r.seeMax===50) ? '50' : '100';
+            return { id: crypto.randomUUID(), kind:'normal', name:r.name||'Subject', credits:String(r.credits||3), cie: String(r.cie ?? ''), see: String(r.see ?? ''), seeOutOf };
+          });
+        }
+      }
+      renderAllStatic();
+      setMode(state.mode, {push:false});
+      scheduleRecalc(0);
+      funToast('sharedOpen');
+    }catch(e){ console.error(e); toast('Failed to load share'); }
+  }
+
+  function exportGradeCardPDF(){
+    const semName = (document.getElementById('semesterName')?.value || '').trim();
+    const prof = state.profile || {};
+    const rows = state.plan.subjects.map(s => {
+      const cr = (s.kind==="activity") ? 1 : clamp(parseInt(s.credits||3,10),1,4);
+      const seeMax = (cr===1) ? ((parseInt(s.seeOutOf||"50",10)===100) ? 100 : 50) : 100;
+      const r = calcSubjectMode2(s);
+      return { name:(s.name||'Subject'), kind:s.kind, cr, seeMax, cie:s.cie, see:s.see, final:s.final, label:r.label, gp:r.gp };
+    });
+    const sem = computeSGPA();
+    const html = `
+      <html><head><meta charset="utf-8"><title>GRADEO Grade Card</title>
+      <style>
+        body{font-family:system-ui,Segoe UI,Roboto,Arial;margin:24px;color:#111}
+        .top{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;align-items:flex-start}
+        .brand{font-weight:900;letter-spacing:.08em;text-transform:uppercase;color:#ff6a00}
+        .box{border:1px solid #e5e7eb;border-radius:14px;padding:14px;background:#fff7f0}
+        .muted{color:#6b7280;font-size:12px;font-weight:700}
+        table{width:100%;border-collapse:collapse;margin-top:14px}
+        th,td{border:1px solid #e5e7eb;padding:10px;font-size:12px;text-align:left}
+        th{background:#fff1e6}
+        @media print{button{display:none}}
+      </style></head><body>
+      <div class="top">
+        <div>
+          <div class="brand">GRADEO • Grade Card</div>
+          <div class="muted">${semName ? ('Semester: '+semName) : ''}</div>
+          <div class="muted">${[prof.university, prof.branch, prof.semester].filter(Boolean).join(' • ')}</div>
+        </div>
+        <div class="box">
+          <div class="muted">SGPA</div>
+          <div style="font-size:28px;font-weight:900">${(Number.isFinite(sem.sgpa)? sem.sgpa.toFixed(2):'—')}</div>
+          <div class="muted">Credits: ${sem.credits}</div>
+        </div>
+      </div>
+      <table>
+        <thead><tr><th>Subject</th><th>Type</th><th>Cr</th><th>CIE</th><th>SEE</th><th>Result</th><th>GP</th></tr></thead>
+        <tbody>
+          ${rows.map(r=>`
+            <tr>
+              <td><b>${String(r.name).replace(/</g,'&lt;')}</b></td>
+              <td>${r.kind==='activity'?'Activity':'Normal'}</td>
+              <td>${r.cr}</td>
+              <td>${r.kind==='activity'?'—':(String(r.cie||'')+'/50')}</td>
+              <td>${r.kind==='activity'?(String(r.final||'')+'/100'):(String(r.see||'')+'/'+r.seeMax)}</td>
+              <td>${String(r.label||'').replace(/</g,'&lt;')}</td>
+              <td>${r.gp}</td>
+            </tr>
+          `).join('')}
+        </tbody>
+      </table>
+      <div style="margin-top:16px;display:flex;gap:10px;flex-wrap:wrap">
+        <button onclick="window.print()" style="padding:10px 12px;border-radius:12px;border:1px solid #e5e7eb;font-weight:900;cursor:pointer">Print / Save as PDF</button>
+      </div>
+      </body></html>`;
+    const w = window.open('', '_blank');
+    if (!w){ toast('Popup blocked'); return; }
+    w.document.open(); w.document.write(html); w.document.close();
+    awardBadge('first_pdf');
+    toast('Grade card ready 🖨️');
+  }
+
+
+async function shareSite(){
     const url = `https://gradeo.in/`;
     try{
       if (navigator.share) await navigator.share({title:"Gradeo", url});
@@ -2589,9 +3043,73 @@ function showContact(){
     $("#profileBtn").onclick = openProfile;
     $("#lockSignInBtn").onclick = openSignInModal;
 
-    $("#shareSiteBtn").onclick = shareSite;
+    $("#shareSiteBtn").onclick = () => {
+    if (auth && auth.currentUser) createShareDoc('plan');
+    else shareSite();
+  };
     $("#pdfBtn").onclick = ()=>window.print();
     $("#gradeScaleBtn").onclick = showGradeScale;
+
+  // Student Pack buttons
+  const sp = document.getElementById('sharePlanBtn');
+  if (sp) sp.addEventListener('click', () => { try{ closeMenu(); }catch(_e){} createShareDoc('plan'); });
+  const sg = document.getElementById('shareGradeBtn');
+  if (sg) sg.addEventListener('click', () => { try{ closeMenu(); }catch(_e){} createShareDoc('grade'); });
+  const ep = document.getElementById('exportGradePdfBtn');
+  if (ep) ep.addEventListener('click', () => { try{ closeMenu(); }catch(_e){} exportGradeCardPDF(); });
+  const hs = document.getElementById('heroSharePlanBtn');
+  if (hs) hs.addEventListener('click', () => createShareDoc('plan'));
+
+  const st = document.getElementById('studyModeBtn');
+  if (st) st.addEventListener('click', () => { try{ closeMenu(); }catch(_e){} openStudy(); });
+  const rb = document.getElementById('roastBtn');
+  if (rb) rb.addEventListener('click', () => { try{ closeMenu(); }catch(_e){} roastNow(); });
+  const bb = document.getElementById('badgesBtn');
+  if (bb) bb.addEventListener('click', () => { try{ closeMenu(); }catch(_e){} openBadgesModal(); });
+  const lb = document.getElementById('leaderBtn');
+  if (lb) lb.addEventListener('click', () => { try{ closeMenu(); }catch(_e){} openLeaderboard(); });
+  const tn = document.getElementById('themeNeonBtn');
+  if (tn) tn.addEventListener('click', () => { try{ closeMenu(); }catch(_e){} toggleNeon(); });
+
+  // Study overlay controls
+  const sc = document.getElementById('studyCloseBtn');
+  if (sc) sc.onclick = closeStudy;
+  const ms = document.getElementById('makePlanBtn');
+  if (ms) ms.onclick = () => { const el=document.getElementById('microPlan'); if(el) el.textContent = genMicroPlan(); };
+  const ps = document.getElementById('pomoStartBtn');
+  const pp = document.getElementById('pomoPauseBtn');
+  const pr = document.getElementById('pomoResetBtn');
+  const pk = document.getElementById('pomoSkipBtn');
+  if (ps) ps.onclick = () => { if (pomoTimer) return; pomoTimer=setInterval(pomoTick,1000); };
+  if (pp) pp.onclick = () => { if (pomoTimer){ clearInterval(pomoTimer); pomoTimer=null; } };
+  if (pr) pr.onclick = () => { if (pomoTimer){ clearInterval(pomoTimer); pomoTimer=null; } pomoMode='focus'; setPomoFromInputs(); };
+  if (pk) pk.onclick = () => { if (pomoTimer){ clearInterval(pomoTimer); pomoTimer=null; } pomoMode = (pomoMode==='focus')?'break':'focus'; setPomoFromInputs(); };
+  const fm = document.getElementById('focusMin');
+  const bm = document.getElementById('breakMin');
+  if (fm) fm.onchange = setPomoFromInputs;
+  if (bm) bm.onchange = setPomoFromInputs;
+
+  // Chat widget
+  const cOpen = document.getElementById('chatOpenBtn');
+  const cPanel = document.getElementById('chatPanel');
+  const cClose = document.getElementById('chatCloseBtn');
+  const cSend = document.getElementById('chatSendBtn');
+  const cInp  = document.getElementById('chatInput');
+  if (cOpen && cPanel){
+    cOpen.onclick = () => { cPanel.classList.toggle('show'); if (cPanel.classList.contains('show')){ if(!document.getElementById('chatMsgs')?.children.length){ chatAdd('Hey! I can roast, plan, and explain rules 😄', 'bot'); } } };
+  }
+  if (cClose && cPanel) cClose.onclick = () => cPanel.classList.remove('show');
+  const sendChat = () => {
+    const q = (cInp?.value||'').trim();
+    if (!q) return;
+    chatAdd(q,'me');
+    cInp.value='';
+    const r = chatReply(q);
+    if (r) chatAdd(r,'bot');
+  };
+  if (cSend) cSend.onclick = sendChat;
+  if (cInp) cInp.addEventListener('keydown', (e)=>{ if (e.key==='Enter') sendChat(); });
+
     $("#helpBtn").onclick = showHelp;
   const heroInfoBtn = document.getElementById('heroInfoBtn');
   if(heroInfoBtn) heroInfoBtn.onclick = showHeroInfo;
@@ -2950,6 +3468,9 @@ if (changelogBtn){
     state.theme = state.theme || "light";
     document.body.setAttribute("data-theme", state.theme);
     initAuth();
+    // Student Pack init
+    try{ loadThemeVariant(); }catch(_e){}
+    try{ const sid = new URLSearchParams(location.search).get('share'); if (sid) loadSharedSnapshot(sid); }catch(_e){}
 
   // Set CSS var for nav height (helps fixed panels avoid overlapping the nav)
   try{
@@ -3426,197 +3947,91 @@ const prefersReduce = window.matchMedia && window.matchMedia('(prefers-reduced-m
 <script defer src="https://static.cloudflareinsights.com/beacon.min.js/vcd15cbe7772f49c399c6a5babf22c1241717689176015" integrity="sha512-ZpsOmlRQV6y907TI0dKBHq9Md29nnaEIPlkf84rnaERnq6zvWvPUqr2ft8M1aS28oN72PdrCzSjY4U6VaAw1EQ==" data-cf-beacon='{"version":"2024.11.0","token":"32f0b0530bdb47d89109f78f09c965e1","r":1,"server_timing":{"name":{"cfCacheStatus":true,"cfEdge":true,"cfExtPri":true,"cfL4":true,"cfOrigin":true,"cfSpeedBrain":true},"location_startswith":null}}' crossorigin="anonymous"></script>
 <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9c730b7bcb7081ba',t:'MTc2OTk2NTY0NA=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script>
 <script>
-// === CGPA clamp (0–10) without breaking decimals like 7.43 ===
+// === CGPA hard clamp (0–10) ===
 (function(){
-  function isTypingState(raw){
-    return raw === '' || raw === '.' || raw === '0.' || raw.endsWith('.');
-  }
-  function clampLive(raw){
-    if (isTypingState(raw)) return null;
-    const v = parseFloat(raw);
-    if (!Number.isFinite(v)) return null;
-    if (v < 0) return '0';
-    if (v > 10) return '10';
-    return null;
-  }
-  function finalize(el){
-    const raw = (el.value || '').trim();
-    if (raw === '' || raw === '.') { el.value = ''; return; }
-    let v = parseFloat(raw);
-    if (!Number.isFinite(v)) { el.value = ''; return; }
-    v = Math.min(10, Math.max(0, v));
-    // Don't force 2 decimals; keep it natural
-    el.value = String(v);
-  }
-  function bind(id){
+  function bindCgpaClamp(id){
     const el = document.getElementById(id);
-    if (!el) return;
-    try{ el.setAttribute('inputmode','decimal'); el.setAttribute('step','0.01'); }catch(_e){}
-    el.addEventListener('input', ()=>{
-      const forced = clampLive(el.value);
-      if (forced !== null) el.value = forced;
+    if(!el) return;
+    el.addEventListener("input", () => {
+      let v = parseFloat(el.value);
+      if (!Number.isFinite(v)) return;
+      v = Math.min(10, Math.max(0, v));
+      el.value = v;
     });
-    el.addEventListener('blur', ()=>finalize(el));
-    el.addEventListener('change', ()=>finalize(el));
   }
-  bind('currentCgpa');
-  bind('targetCgpa');
-  bind('curCgpa2');
+
+  // Apply only to CGPA fields
+  bindCgpaClamp("currentCgpa");
+  bindCgpaClamp("targetCgpa");
+  bindCgpaClamp("curCgpa2");
 })();
 </script>
 
 
-<script>
-(function(){
-  'use strict';
-  // ========== Spotlight wiring (desktop) ==========
-  function $(id){ return document.getElementById(id); }
-  function click(id){ const el=$(id); if(el) el.click(); }
 
-  function isDesktop(){ try{ return window.matchMedia && window.matchMedia('(min-width: 981px)').matches; }catch(e){ return true; } }
+<!-- Student Pack Widgets -->
+<div class="chatFab noPrint">
+  <button class="btn primary" id="chatOpenBtn" aria-label="Chat">💬</button>
+</div>
+<div class="chatPanel" id="chatPanel" aria-label="GRADEO Chat">
+  <div class="chatHead">
+    <div>
+      <div class="t">GRADEO Bot 🤖</div>
+      <div class="hint" style="margin-top:2px;">Ask: “can I get 8 sgpa?” • “roast me” • “study plan”</div>
+    </div>
+    <button class="btn small" id="chatCloseBtn">Close</button>
+  </div>
+  <div class="chatMsgs" id="chatMsgs"></div>
+  <div class="chatFoot">
+    <input class="input" id="chatInput" placeholder="Type..." />
+    <button class="btn primary" id="chatSendBtn">Send</button>
+  </div>
+</div>
 
-  if (isDesktop()){
-    const hideBtn=$('spotlightHideBtn');
-    if (hideBtn) hideBtn.onclick = ()=>{ const p=$('featureSpotlight'); if(p) p.style.display='none'; };
-
-    const whatsNew=$('spotlightWhatsNewBtn');
-    if (whatsNew) whatsNew.onclick = ()=>{
-      alert('🔥 Hot features:\n\n• Share (for friends/groups)\n• PDF export\n• Quick mode keys: 1 / 2 / 3\n• Animated donut chart in Summary\n\nTip: Try Grade scale + Help if you are confused.');
-    };
-
-    const map = {
-      spotPdf: 'pdfBtn',
-      spotSign: 'profileBtn',
-      spotGrade: 'gradeScaleBtn',
-      spotHelp: 'helpBtn'
-    };
-    Object.keys(map).forEach(k=>{ const b=$(k); if(b) b.onclick=()=>click(map[k]); });
-
-    // Share (use existing share button)
-    const share=$('spotShare');
-    if (share) share.onclick=()=>click('shareSiteBtn');
-
-    // Modes tip
-    const modes=$('spotModes');
-    if (modes) modes.onclick=()=>alert('Keyboard shortcuts:\n1 = Mode 1\n2 = Mode 2\n3 = Mode 3');
-
-    // Menu items: open menu then click
-    function openMenuThen(item){
-      click('menuBtn');
-      setTimeout(()=>click(item), 140);
-    }
-    const uni=$('spotUni'); if(uni) uni.onclick=()=>openMenuThen('uniSettingsBtn');
-    const contact=$('spotContact'); if(contact) contact.onclick=()=>openMenuThen('contactBtn');
-  }
-
-  // ========== Animated Donut Chart ==========
-  const canvas = $('donutMain');
-  if (!canvas) return;
-  const ctx = canvas.getContext('2d');
-  const labelEl = $('donutLabel');
-  const subEl = $('donutSub');
-
-  let cur=0; // current [0..1]
-  let tgt=0;
-
-  function parseMainValue(){
-    // Read from Summary numbers displayed (works even without touching core app JS)
-    const mode = document.body.getAttribute('data-mode') || 'm1';
-    const box = document.getElementById('summaryBox');
-    if (!box) return {pct:0, label:'—', sub:'Enter data to see chart'};
-
-    // Find first visible stat value
-    const vals = Array.from(box.querySelectorAll('.stat .v')).map(x=>x.textContent.trim());
-
-    function numFrom(text){
-      const m = text.match(/(\d+(?:\.\d+)?)/);
-      return m ? parseFloat(m[1]) : null;
-    }
-
-    if (vals.some(v=>v.toLowerCase().includes('sign in'))){
-      return {pct:0, label:'Locked 🔒', sub:'Sign in to calculate results'};
-    }
-
-    let v=null;
-    if (mode==='m2'){
-      // SGPA is usually first
-      v = numFrom(vals[0]||'');
-      if (v==null) return {pct:0, label:'SGPA —', sub:'Enter marks to compute'};
-      return {pct:Math.max(0,Math.min(1, v/10)), label:`SGPA ${v.toFixed(2)} / 10`, sub:'Visual SGPA gauge'};
-    }
-    if (mode==='m3'){
-      v = numFrom(vals[0]||'');
-      if (v==null) return {pct:0, label:'CGPA —', sub:'Enter SGPA history'};
-      return {pct:Math.max(0,Math.min(1, v/10)), label:`CGPA ${v.toFixed(2)} / 10`, sub:'Visual CGPA gauge'};
-    }
-    // mode1: required semester SGPA shown first
-    v = numFrom(vals[0]||'');
-    if (v==null) return {pct:0, label:'Required SGPA —', sub:'Enter current+credits+target'};
-    return {pct:Math.max(0,Math.min(1, v/10)), label:`Required SGPA ${v.toFixed(2)} / 10`, sub:'Visual target gauge'};
-  }
-
-  function drawDonut(p){
-    const w = canvas.width, h = canvas.height;
-    const cx = w/2, cy = h/2;
-    const r = Math.min(w,h)*0.38;
-    const thick = Math.max(12, Math.min(18, r*0.28));
-
-    ctx.clearRect(0,0,w,h);
-
-    // track
-    ctx.beginPath();
-    ctx.strokeStyle = 'rgba(148,163,184,0.25)';
-    ctx.lineWidth = thick;
-    ctx.arc(cx,cy,r,0,Math.PI*2);
-    ctx.stroke();
-
-    // progress
-    const start = -Math.PI/2;
-    const end = start + (Math.PI*2*p);
-    const grad = ctx.createLinearGradient(0,0,w,0);
-    grad.addColorStop(0, '#ff6a00');
-    grad.addColorStop(1, '#7c3aed');
-
-    ctx.beginPath();
-    ctx.strokeStyle = grad;
-    ctx.lineCap = 'round';
-    ctx.lineWidth = thick;
-    ctx.arc(cx,cy,r,start,end);
-    ctx.stroke();
-
-    // center text
-    ctx.fillStyle = 'rgba(17,24,39,0.9)';
-    ctx.font = '900 28px system-ui, Segoe UI, Roboto';
-    ctx.textAlign = 'center';
-    ctx.textBaseline = 'middle';
-    ctx.fillText(Math.round(p*100) + '%', cx, cy);
-  }
-
-  function tick(){
-    // smooth approach
-    cur += (tgt - cur) * 0.12;
-    if (Math.abs(tgt-cur) < 0.001) cur = tgt;
-    drawDonut(cur);
-    requestAnimationFrame(tick);
-  }
-
-  // update target every 700ms
-  setInterval(()=>{
-    const info = parseMainValue();
-    tgt = info.pct;
-    if (labelEl) labelEl.textContent = info.label;
-    if (subEl) subEl.textContent = info.sub;
-  }, 700);
-
-  // start animation
-  const init = parseMainValue();
-  tgt = init.pct;
-  if (labelEl) labelEl.textContent = init.label;
-  if (subEl) subEl.textContent = init.sub;
-  requestAnimationFrame(tick);
-})();
-</script>
-
+<div class="studyOverlay" id="studyOverlay" aria-hidden="true">
+  <div class="studyBox">
+    <div class="h">
+      <div style="font-weight:990">🎧 Study Mode</div>
+      <button class="btn small" id="studyCloseBtn">Close</button>
+    </div>
+    <div class="c">
+      <div class="subCard">
+        <div class="hint">Pomodoro • Focus 25m → Break 5m. (You can change.)</div>
+        <div class="timerBig" id="pomoTimer">25:00</div>
+        <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:10px;">
+          <button class="btn primary" id="pomoStartBtn">Start</button>
+          <button class="btn" id="pomoPauseBtn">Pause</button>
+          <button class="btn" id="pomoResetBtn">Reset</button>
+          <button class="btn" id="pomoSkipBtn">Skip</button>
+        </div>
+        <div class="row" style="margin-top:10px;">
+          <div>
+            <label class="label">Focus (min)</label>
+            <input class="input" id="focusMin" type="number" min="5" max="90" step="1" value="25" />
+          </div>
+          <div>
+            <label class="label">Break (min)</label>
+            <input class="input" id="breakMin" type="number" min="3" max="30" step="1" value="5" />
+          </div>
+        </div>
+      </div>
+      <div class="subCard">
+        <div style="font-weight:990">📌 Today’s micro-plan</div>
+        <div class="hint" id="microPlan">Add subjects and your marks; I’ll suggest priorities.</div>
+        <button class="btn" id="makePlanBtn" style="margin-top:10px;">Generate plan</button>
+      </div>
+      <div class="subCard">
+        <div style="font-weight:990">🎵 Quick playlists</div>
+        <div class="hint">Open in a new tab:</div>
+        <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:8px;">
+          <a class="btn" href="https://www.youtube.com/results?search_query=lofi+study" target="_blank" rel="noopener">Lo‑fi</a>
+          <a class="btn" href="https://www.youtube.com/results?search_query=white+noise" target="_blank" rel="noopener">White noise</a>
+          <a class="btn" href="https://www.youtube.com/results?search_query=focus+music" target="_blank" rel="noopener">Focus</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 </body>
 </html>
 
