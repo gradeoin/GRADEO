@@ -729,73 +729,58 @@ body::before{
   // ===== Welcome email (EmailJS) =====
   // Sends only once per user (uses BOTH: Firestore flag + localStorage fallback)
   async function sendWelcomeEmailOnce(user){
-  try{
-    if(!user || !user.uid || !user.email) return;
-
-    // Ensure EmailJS loaded
-    if(!window.emailjs || typeof window.emailjs.send !== 'function'){
-      console.error('❌ EmailJS not loaded');
-      return;
-    }
-
-    // Local (per-browser) guard
-    const key = 'welcome_sent_' + user.uid;
-    if(localStorage.getItem(key)) return;
-
-    // Cloud (per-account) guard (skip if already sent on another device)
     try{
-      if(typeof profileRef === 'function' && db){
-        const snap = await profileRef(user.uid).get();
-        if(snap && snap.exists && snap.data && snap.data() && snap.data().welcomeEmailSent){
-          localStorage.setItem(key,'1');
-          return;
+      if(!user || !user.uid || !user.email) return;
+
+      // Local (per-browser) guard
+      const key = "welcome_sent_" + user.uid;
+      if (localStorage.getItem(key)) return;
+
+      // Cloud (per-account) guard: if already sent on any device, skip
+      try{
+        if (typeof profileRef === 'function' && db){
+          const snap = await profileRef(user.uid).get();
+          if (snap && snap.exists && snap.data() && snap.data().welcomeEmailSent){
+            localStorage.setItem(key, "1");
+            return;
+          }
         }
-      }
-    }catch(_e){ /* ignore cloud-check errors */ }
+      }catch(_e){ /* ignore cloud-check errors */ }
 
-    const params = {
-      // Recipient (must be used in EmailJS template settings: To Email = {{to_email}})
-      to_email: user.email,
-      to_name: user.displayName || 'Friend',
+      await emailjs.send(
+        "service_h64ayo1", // your Service ID
+        "template_ty5v5nz", // your Template ID
+        {
+          // IMPORTANT: use variable names that exist in your EmailJS template.
+          // We send common names to avoid 'undefined' in template.
+          to_email: user.email,
+          to_name: user.displayName || 'Friend',
+          user_email: user.email,
+          user_name: user.displayName || 'Friend',
+          email: user.email,
+          name: user.displayName || 'Friend'
+        }
+      );
 
-      // Content variables used inside the HTML template
-      name: user.displayName || 'Friend',
-      email: user.email,
-      year: new Date().getFullYear()
-    };
+      localStorage.setItem(key, "1");
 
-    const res = await emailjs.send(
-      'service_h64ayo1',
-      'template_ty5v5nz',
-      params
-    );
+      // Save flag to Firestore so it won't resend on another device
+      try{
+        if (typeof profileRef === 'function' && db && window.firebase){
+          await profileRef(user.uid).set({
+            welcomeEmailSent: true,
+            welcomeEmailSentAt: firebase.firestore.FieldValue.serverTimestamp()
+          }, { merge: true });
+        }
+      }catch(_e){ /* ignore cloud write errors */ }
 
-    console.log('✅ EmailJS response:', res);
-    localStorage.setItem(key,'1');
-
-    // Save flag to Firestore so it won't resend on another device
-    try{
-      if(typeof profileRef === 'function' && db && window.firebase){
-        await profileRef(user.uid).set({
-          welcomeEmailSent: true,
-          welcomeEmailSentAt: firebase.firestore.FieldValue.serverTimestamp()
-        }, { merge: true });
-      }
-    }catch(_e){ /* ignore cloud write errors */ }
-
-    console.log('✅ Welcome email sent to:', user.email);
-  }catch(err){
-    console.error('❌ Welcome email failed:', {
-      status: err && err.status,
-      text: err && err.text,
-      message: err && err.message,
-      err
-    });
-    try{ toast('Welcome email failed: ' + ((err && err.text) || (err && err.message) || 'Unknown')); }catch(_e){}
+      console.log("✅ Welcome email sent to:", user.email);
+    }catch(err){
+      console.error("❌ Welcome email failed:", err);
+    }
   }
-}
 
-/* ========= Firebase config (yours) ========= */
+  /* ========= Firebase config (yours) ========= */
   const firebaseConfig = {
   apiKey: "AIzaSyDB_FK8-3ATZBpuvfL34EMp9WHTTd5sfIo",
   authDomain: "gradeo-in.firebaseapp.com",
@@ -1689,19 +1674,11 @@ body::before{
       footHTML:`<button class="btn primary" id="doSignin">Continue with Google</button>
                 <button class="btn" id="cancel">Cancel</button>`
     });
-    $("#doSignin").onclick = async() => {
-  const result = await auth.signInWithPopup(provider);
-
-  // Send welcome email only for new users (extra safety; cloud/local guard also exists)
-  const isNew = (result && result.additionalUserInfo && result.additionalUserInfo.isNewUser === true) ||
-    (result && result.user && result.user.metadata && result.user.metadata.creationTime === result.user.metadata.lastSignInTime);
-
-  if(isNew){
-    await sendWelcomeEmailOnce(result.user);
-  }
-
-  closeModal();
-};
+    $("#doSignin").onclick = async()=>{ 
+   const result = await auth.signInWithPopup(provider);
+   await sendWelcomeEmailOnce(result.user);
+   closeModal(); 
+ };
     $("#cancel").onclick = closeModal;
   }
 
