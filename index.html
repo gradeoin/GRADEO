@@ -80,28 +80,28 @@
       --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
     }
     [data-theme="light"]{
-  --bg:#fff7ed; --panel:#ffffff; --card:#fff1e6; --stroke:#ffd7b3;
-  --text:#2a1a0a; --muted:#6b3d12; --muted2:#8a5a2b;
-  --brand:#ff6a00; --brand2:#ffb703;
-  --good:#22c55e; --warn:#f59e0b; --bad:#ef4444;
-  --shadow:0 14px 28px rgba(255,106,0,.10);
-  --shadow2:0 8px 16px rgba(255,106,0,.08);
+  --bg:#ffffff; --panel:#ffffff; --card:#fff7f0; --stroke:#ffd7bf;
+  --text:#111827; --muted:#374151; --muted2:#6b7280;
+  --brand:#ff6a00; --brand2:#ff9f1c;
+  --good:#16a34a; --warn:#f59e0b; --bad:#ef4444;
+  --shadow:0 14px 28px rgba(17,24,39,.08);
+  --shadow2:0 8px 16px rgba(17,24,39,.06);
 }
 @media (prefers-color-scheme: light){
   [data-theme="system"]{
-    --bg:#fff7ed; --panel:#ffffff; --card:#fff1e6; --stroke:#ffd7b3;
-    --text:#2a1a0a; --muted:#6b3d12; --muted2:#8a5a2b;
-    --brand:#ff6a00; --brand2:#ffb703;
-    --shadow:0 14px 28px rgba(255,106,0,.10);
-    --shadow2:0 8px 16px rgba(255,106,0,.08);
+    --bg:#ffffff; --panel:#ffffff; --card:#fff7f0; --stroke:#ffd7bf;
+    --text:#111827; --muted:#374151; --muted2:#6b7280;
+    --brand:#ff6a00; --brand2:#ff9f1c;
+    --shadow:0 14px 28px rgba(17,24,39,.08);
+    --shadow2:0 8px 16px rgba(17,24,39,.06);
   }
 }
 *{box-sizing:border-box}
     body{
       margin:0; font-family:var(--ui); color:var(--text);
       background:
-  radial-gradient(900px 600px at 15% -10%, rgba(255,106,0,.28), transparent 60%),
-  radial-gradient(900px 600px at 85% 0%, rgba(255,183,3,.22), transparent 60%),
+  radial-gradient(900px 600px at 12% -10%, rgba(255,106,0,.14), transparent 62%),
+  radial-gradient(900px 600px at 90% 0%, rgba(255,159,28,.12), transparent 60%),
   linear-gradient(180deg, var(--bg), var(--bg));
       overflow-x:hidden;
     }
@@ -411,6 +411,31 @@ body::before{
 .legal ul{margin:8px 0 0 18px; padding:0;}
 .legal li{margin:6px 0;}
 .legal .hint{margin-top:8px;}
+
+/* ===== Clean Orange + White (Typography accents) ===== */
+[data-theme="light"] .hero h1,
+[data-theme="light"] .panelHead h2,
+[data-theme="light"] .title{
+  color: var(--brand);
+}
+[data-theme="light"] .hero h1{
+  font-weight: 1000;
+  letter-spacing: -0.02em;
+}
+[data-theme="light"] .panelHead h2{
+  font-weight: 990;
+}
+[data-theme="light"] .btn.primary{
+  background: linear-gradient(135deg, var(--brand), var(--brand2));
+}
+[data-theme="light"] .pill{
+  background: #ffffff;
+}
+[data-theme="light"] .nav{
+  background: rgba(255,255,255,.82);
+  border-bottom: 1px solid var(--stroke);
+}
+
 </style>
 </head>
 
