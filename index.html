@@ -6,6 +6,7 @@
 
 
 
+
 <!doctype html>
 <html lang="en">
 <head>
@@ -715,7 +716,7 @@ body::before{
 <!-- EmailJS -->
 <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 <script>
-  emailjs.init({ publicKey: "jBp2SNoQciWnlU2Fo" }); // ✅ Your Public Key
+  emailjs.init({ publicKey: "xwlbvek6Ba47Eyg21" }); // ✅ Your Public Key
 </script>
 
 <!-- Firebase compat -->
@@ -749,17 +750,12 @@ body::before{
       }catch(_e){ /* ignore cloud-check errors */ }
 
       await emailjs.send(
-        "service_h64ayo1", // your Service ID
-        "template_ty5v5nz", // your Template ID
+        "service_h64ayo1",
+        "template_ty5v5nz",
         {
-          // IMPORTANT: use variable names that exist in your EmailJS template.
-          // We send common names to avoid 'undefined' in template.
-          to_email: user.email,
-          to_name: user.displayName || 'Friend',
-          user_email: user.email,
-          user_name: user.displayName || 'Friend',
+          name: user.displayName || "Friend",
           email: user.email,
-          name: user.displayName || 'Friend'
+          year: new Date().getFullYear()
         }
       );
 
