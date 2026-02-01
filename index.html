@@ -673,84 +673,82 @@ body[data-mode="m3"]{ --modeGlow1: rgba(20,184,166,.24); --modeGlow2: rgba(124,5
 }
 
 
-/* ===== Share highlight (student-friendly) ===== */
+/* ================= Student Pack (Cool + Easy) ================= */
+:root{
+  --neon1:#00e5ff; --neon2:#a855f7; --neon3:#22c55e; --neonBg:#060b18;
+}
+body[data-theme-variant="neon"]{
+  --bg: var(--neonBg);
+  --panel: color-mix(in oklab, var(--neonBg) 92%, #0b57d0 8%);
+  --card: color-mix(in oklab, var(--neonBg) 85%, #7c3aed 15%);
+  --stroke: color-mix(in oklab, #2b3a6a 65%, var(--neon2));
+  --text: #eaf2ff;
+  --muted: #b9ccff;
+  --muted2:#90b4ff;
+}
+body[data-theme-variant="neon"] .btn.primary{
+  background: linear-gradient(135deg, var(--neon1), var(--neon2)) !important;
+}
+body[data-theme-variant="neon"] .logo{background: linear-gradient(135deg, var(--neon1), var(--neon2)) !important;}
+body[data-theme-variant="neon"] .panel, body[data-theme-variant="neon"] .subCard, body[data-theme-variant="neon"] .stat{
+  box-shadow: 0 18px 60px rgba(0,229,255,.08), 0 18px 60px rgba(168,85,247,.08);
+}
+
+/* Highlighted Share Plan */
 .menuItem.sharePrimary{
   position:relative;
   background: linear-gradient(135deg, var(--accent), var(--accent2));
-  color: #fff !important;
-  border-radius: 14px;
-  margin: 8px 10px;
-  border: 1px solid rgba(255,255,255,.18);
-  box-shadow: 0 18px 42px rgba(0,0,0,.18);
+  color:#fff !important;
+  border-radius:14px;
+  margin:8px 10px;
+  border:1px solid rgba(255,255,255,.18);
+  box-shadow:0 18px 42px rgba(0,0,0,.18);
 }
-.menuItem.sharePrimary:hover{filter:brightness(1.03)}
-.menuItem.sharePrimary:active{transform:scale(.995)}
-.menuItem.sharePrimary .tag{
-  margin-left:auto;
-  font-size:11px;
-  font-weight:1000;
-  padding:4px 8px;
-  border-radius:999px;
-  background: rgba(255,255,255,.18);
-  border:1px solid rgba(255,255,255,.22);
-}
-.menuItem.sharePrimary::after{
-  content:"";
-  position:absolute;
-  inset:-2px;
-  border-radius: 16px;
-  background: conic-gradient(from 180deg, transparent, rgba(255,255,255,.45), transparent 35%);
-  opacity:.35;
-  filter: blur(6px);
-  animation: shareGlow 2.6s ease-in-out infinite;
-  pointer-events:none;
-}
-@keyframes shareGlow{
-  0%,100%{opacity:.18; transform:rotate(-10deg) scale(1.00)}
-  50%{opacity:.38; transform:rotate(10deg) scale(1.02)}
-}
-.heroShare{
-  display:inline-flex;
-  align-items:center;
-  gap:8px;
-}
-.heroShare .dot{
-  width:8px;height:8px;border-radius:999px;
-  background: #fff;
-  box-shadow: 0 0 0 0 rgba(255,255,255,.6);
-  animation: dotPulse 1.6s ease-out infinite;
-}
-@keyframes dotPulse{
-  0%{box-shadow:0 0 0 0 rgba(255,255,255,.55)}
-  70%{box-shadow:0 0 0 14px rgba(255,255,255,0)}
-  100%{box-shadow:0 0 0 0 rgba(255,255,255,0)}
-}
+.menuItem.sharePrimary .tag{margin-left:auto;font-size:11px;font-weight:1000;padding:4px 8px;border-radius:999px;background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.22);}
+.menuItem.sharePrimary::after{content:"";position:absolute;inset:-2px;border-radius:16px;background:conic-gradient(from 180deg, transparent, rgba(255,255,255,.45), transparent 35%);opacity:.35;filter:blur(6px);animation:shareGlow 2.6s ease-in-out infinite;pointer-events:none;}
+@keyframes shareGlow{0%,100%{opacity:.18;transform:rotate(-10deg) scale(1)}50%{opacity:.38;transform:rotate(10deg) scale(1.02)}}
+.heroShare{display:inline-flex;align-items:center;gap:8px}
+.heroShare .dot{width:8px;height:8px;border-radius:999px;background:#fff;box-shadow:0 0 0 0 rgba(255,255,255,.6);animation:dotPulse 1.6s ease-out infinite;}
+@keyframes dotPulse{0%{box-shadow:0 0 0 0 rgba(255,255,255,.55)}70%{box-shadow:0 0 0 14px rgba(255,255,255,0)}100%{box-shadow:0 0 0 0 rgba(255,255,255,0)}}
+
 /* Confetti */
-.confettiWrap{position:fixed; inset:0; pointer-events:none; z-index:20000; overflow:hidden;}
-.confetti{position:absolute; width:10px; height:14px; border-radius:3px; opacity:.95;
-  transform: translateY(-20px) rotate(0deg);
-  animation: confettiFall 1400ms linear forwards;
-}
-@keyframes confettiFall{
-  to{ transform: translateY(calc(100vh + 40px)) rotate(720deg); opacity:0.95; }
-}
-/* Shared profile card */
-.shareProfileCard{
-  border:1px solid var(--stroke);
-  background: color-mix(in oklab, var(--card) 75%, white);
-  border-radius: 16px;
-  padding: 12px;
-  box-shadow: var(--shadow2);
-  display:flex;
-  justify-content:space-between;
-  gap:10px;
-  flex-wrap:wrap;
-  align-items:center;
-}
-.shareProfileCard .left{display:flex; flex-direction:column; gap:2px;}
-.shareProfileCard .name{font-weight:990;}
-.shareProfileCard .meta{font-size:12px; font-weight:850; color:var(--muted2)}
-.shareProfileCard .pill{margin:0;}
+.confettiWrap{position:fixed;inset:0;pointer-events:none;z-index:20000;overflow:hidden;}
+.confetti{position:absolute;width:10px;height:14px;border-radius:3px;opacity:.95;transform:translateY(-20px) rotate(0deg);animation:confettiFall 1400ms linear forwards;}
+@keyframes confettiFall{to{transform:translateY(calc(100vh + 40px)) rotate(720deg);opacity:.95}}
+
+/* Emoji rain */
+.emojiRain{position:fixed;inset:0;pointer-events:none;z-index:18000;overflow:hidden;}
+.emojiDrop{position:absolute;top:-40px;font-size:20px;opacity:.9;animation:emojiFall 1400ms linear forwards;filter:drop-shadow(0 10px 18px rgba(0,0,0,.15));}
+@keyframes emojiFall{to{transform:translateY(calc(100vh + 80px)) rotate(240deg);opacity:0.95}}
+
+/* Chat widget */
+.chatFab{position:fixed;left:16px;bottom:16px;z-index:9000;display:flex;flex-direction:column;gap:10px;}
+.chatFab .btn{border-radius:999px;}
+.chatPanel{position:fixed;left:16px;bottom:86px;z-index:9100;width:min(380px, calc(100vw - 32px));max-height:70vh;display:none;flex-direction:column;border:1px solid var(--stroke);border-radius:18px;background:color-mix(in oklab, var(--panel) 92%, transparent);backdrop-filter: blur(12px) saturate(1.2);box-shadow:0 22px 70px rgba(0,0,0,.25);overflow:hidden;}
+.chatPanel.show{display:flex;animation:popIn 220ms cubic-bezier(.16,1,.3,1)}
+.chatHead{padding:10px 12px;border-bottom:1px solid var(--stroke);display:flex;align-items:center;justify-content:space-between;gap:10px;}
+.chatHead .t{font-weight:990}
+.chatMsgs{padding:12px;display:flex;flex-direction:column;gap:10px;overflow:auto;}
+.msg{max-width:92%;padding:10px 12px;border-radius:14px;border:1px solid var(--stroke);background:var(--card);font-weight:850;font-size:13px;line-height:1.35}
+.msg.me{align-self:flex-end;background:color-mix(in oklab, var(--accent) 16%, var(--card));}
+.msg.bot{align-self:flex-start;}
+.chatFoot{padding:10px 12px;border-top:1px solid var(--stroke);display:flex;gap:8px;}
+.chatFoot input{flex:1}
+
+/* Badges */
+.badgesGrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;}
+.badgeCard{border:1px solid var(--stroke);background:var(--card);border-radius:14px;padding:12px;box-shadow:var(--shadow2);}
+.badgeCard .b{font-weight:990}
+.badgeCard .d{font-size:12px;color:var(--muted2);font-weight:850;margin-top:6px;}
+.badgeOn{border-color: color-mix(in oklab, var(--good) 55%, var(--stroke));background: color-mix(in oklab, var(--good) 12%, var(--card));}
+
+/* Study mode overlay */
+.studyOverlay{position:fixed;inset:0;z-index:15000;background:rgba(0,0,0,.55);display:none;align-items:center;justify-content:center;padding:16px;}
+.studyOverlay.show{display:flex;}
+.studyBox{width:min(620px,100%);border:1px solid var(--stroke);background:var(--panel);border-radius:18px;box-shadow:0 30px 90px rgba(0,0,0,.35);overflow:hidden;}
+.studyBox .h{padding:12px;border-bottom:1px solid var(--stroke);display:flex;align-items:center;justify-content:space-between;gap:10px;}
+.studyBox .c{padding:12px;display:flex;flex-direction:column;gap:10px;}
+.timerBig{font-size:40px;font-weight:1000;letter-spacing:.02em;}
 
 </style>
 </head>
@@ -796,6 +794,13 @@ body[data-mode="m3"]{ --modeGlow1: rgba(20,184,166,.24); --modeGlow2: rgba(124,5
   <button class="menuItem sharePrimary" id="sharePlanBtn" role="menuitem">🔗 Share plan <span class="tag">HOT</span></button>
 <button class="menuItem" id="shareGradeBtn" role="menuitem">📄 Share grade card</button>
 <button class="menuItem" id="exportGradePdfBtn" role="menuitem">🖨️ Export grade card PDF</button>
+<div class="menuSep"></div>
+<button class="menuItem" id="studyModeBtn" role="menuitem">🎧 Study Mode (Pomodoro)</button>
+<button class="menuItem" id="roastBtn" role="menuitem">🔥 Roast my SGPA (friendly)</button>
+<button class="menuItem" id="badgesBtn" role="menuitem">🏅 Achievements</button>
+<button class="menuItem" id="leaderBtn" role="menuitem">🏆 Leaderboard (anonymous)</button>
+<button class="menuItem" id="themeNeonBtn" role="menuitem">🌗 Toggle Neon Mode</button>
+<div class="menuSep"></div>
 <button class="menuItem" id="uniSettingsBtn" role="menuitem">🎓 University settings</button>
   <button class="menuItem" id="howItWorksBtn" role="menuitem">ℹ️ How it works</button>
   <button class="menuItem" id="faqBtn" role="menuitem">❓ FAQ</button>
@@ -814,7 +819,6 @@ body[data-mode="m3"]{ --modeGlow1: rgba(20,184,166,.24); --modeGlow2: rgba(124,5
   <section class="hero heroCompact">
     <div>
       <h1 id="heroTitle">Target CGPA → Minimum SEE Needed</h1>
- <div id="sharedProfileMount" style="margin-top:10px;"></div>
       <p id="heroSub">Step 1: Enter current CGPA & credits • Step 2: Add subjects • Step 3: Enter CIE • We show minimum SEE.</p>
 
 <div class="hint" id="eduNotice" style="margin-top:10px;">
@@ -913,7 +917,6 @@ body[data-mode="m3"]{ --modeGlow1: rgba(20,184,166,.24); --modeGlow2: rgba(124,5
             <div style="display:flex; gap:10px; flex-wrap:wrap; align-items:end;">
               <button class="btn primary" id="addNormalBtn2">+ Subject</button>
               <button class="btn" id="addActivityBtn2">+ Activity</button>
- <button class="btn" id="exportPdfInlineBtn">🖨️ Grade PDF</button>
             </div>
           </div>
 
@@ -953,11 +956,10 @@ body[data-mode="m3"]{ --modeGlow1: rgba(20,184,166,.24); --modeGlow2: rgba(124,5
         <div class="subCard" id="lockBar" style="display:none; margin-top:12px;">
           <div style="display:flex; justify-content:space-between; gap:10px; flex-wrap:wrap; align-items:center;">
             <div>
-              <div id="lockTitle" style="font-weight:990">View‑only mode</div>
-              <div class="hint" id="lockHint">Sign in to edit and autosave to your account.</div>
+              <div style="font-weight:990">View‑only mode</div>
+              <div class="hint">Sign in to edit and autosave to your account.</div>
             </div>
             <button class="btn primary" id="lockSignInBtn">Sign in</button>
-      <button class="btn" id="copyShareBtn" style="display:none;">Copy to my plans</button>
           </div>
         </div>
 
@@ -1191,8 +1193,6 @@ body[data-mode="m3"]{ --modeGlow1: rgba(20,184,166,.24); --modeGlow2: rgba(124,5
     mode:"m1",
     user:null,
     readOnly:false,
-  sharedView:false,
-  sharedData:null,
     dirty:false,
     lastSavedAt:null,
 
@@ -1285,7 +1285,6 @@ body[data-mode="m3"]{ --modeGlow1: rgba(20,184,166,.24); --modeGlow2: rgba(124,5
       name: data.plan.name || "Imported Plan",
       notes: data.plan.notes || "",
       rounding: data.plan.rounding || "nearest",
-    mode: data.mode || state.mode || "m1",
       mode1: data.plan.mode1 || { currentCgpa:"", completedCredits:"", targetCgpa:"" },
       subjects: Array.isArray(data.plan.subjects) ? data.plan.subjects : [],
       history: data.history || null,
@@ -1359,15 +1358,9 @@ body[data-mode="m3"]{ --modeGlow1: rgba(20,184,166,.24); --modeGlow2: rgba(124,5
       subjects: Array.isArray(p.subjects) ? p.subjects : []
     };
     if (p.history) state.history = p.history;
-    // Restore saved mode for this plan (fallback for older plans)
-    const inferPlanMode = () => {
-      if (p.mode) return p.mode;
-      try{ if (p.history && p.history.rows && p.history.rows.some(r => Number.isFinite(parseFloat(r.sgpa)))) return "m3"; }catch(_e){}
-      try{ if (Array.isArray(p.subjects) && p.subjects.some(ss => ss && ss.kind !== "activity" && String(ss.see ?? "").trim() !== "")) return "m2"; }catch(_e){}
-      return "m1";
-    };
+    // Restore saved mode for this plan
+    const inferPlanMode = () => p.mode || "m1";
     state.mode = inferPlanMode();
-    if (!p.mode) { try{ await planRef(uid, planId).set({ mode: state.mode }, { merge:true }); }catch(_e){} }
     renderPlansSelect();
     setMode(state.mode, {push:false});
     scheduleRecalc(0);
@@ -1599,50 +1592,10 @@ body[data-mode="m3"]{ --modeGlow1: rgba(20,184,166,.24); --modeGlow2: rgba(124,5
     const cloud = auth.currentUser ? "Cloud autosave" : "Guest mode";
  const acad = state.profile.university ? (` • ${state.profile.university}${state.profile.semester ? (" • " + state.profile.semester) : ""}`) : "";
     $("#subLine").textContent = `Made for you, ${name} • ${cloud}${acad}`;
-    // Shared profile card (cool & clear)
-    try{
-      const mount = document.getElementById("sharedProfileMount");
-      if (mount){
-        if (state.sharedView && state.sharedData && state.sharedData.data && state.sharedData.data.profile){
-          const p = state.sharedData.data.profile;
-          const meta = [p.university, p.branch, p.semester, p.regulation].filter(Boolean).join(" • ");
-          mount.innerHTML = `
-            <div class="shareProfileCard">
-              <div class="left">
-                <div class="name">👤 ${esc(p.nickname || "Student")}</div>
-                <div class="meta">${esc(meta || "Shared snapshot")}</div>
-              </div>
-              <span class="pill good">🔒 Read-only</span>
-            </div>`;
-        } else {
-          mount.innerHTML = "";
-        }
-      }
-    }catch(_e){}
     $("#profileBtn").textContent = auth.currentUser ? "Profile" : "Sign in";
     $("#statusPill").textContent = auth.currentUser ? "Cloud" : "Guest";
     $("#statusPill").className = auth.currentUser ? "pill good" : "pill";
-    $("#lockBar").style.display = (state.sharedView || !auth.currentUser) ? "block" : "none";
-    // Update lock banner for shared view
-    if (state.sharedView){
-      const lt = document.getElementById("lockTitle");
-      const lh = document.getElementById("lockHint");
-      if (lt) lt.textContent = "Shared view (read-only)";
-      if (lh) lh.textContent = "This is a shared snapshot. Copy it to your account to edit.";
-      const si = document.getElementById("lockSignInBtn");
-      const cp = document.getElementById("copyShareBtn");
-      if (si) si.style.display = auth.currentUser ? "none" : "inline-flex";
-      if (cp) cp.style.display = auth.currentUser ? "inline-flex" : "none";
-    } else {
-      const lt = document.getElementById("lockTitle");
-      const lh = document.getElementById("lockHint");
-      if (lt) lt.textContent = "View-only mode";
-      if (lh) lh.textContent = "Sign in to calculate, edit, and autosave.";
-      const si = document.getElementById("lockSignInBtn");
-      const cp = document.getElementById("copyShareBtn");
-      if (si) si.style.display = "inline-flex";
-      if (cp) cp.style.display = "none";
-    }
+    $("#lockBar").style.display = auth.currentUser ? "none" : "block";
 
     // show account panel only after sign-in
     $("#accountAcc").style.display = auth.currentUser ? "block" : "none";
@@ -1799,7 +1752,7 @@ body[data-mode="m3"]{ --modeGlow1: rgba(20,184,166,.24); --modeGlow2: rgba(124,5
   function wireSubjectInputs(container){
   // delete buttons
   container.querySelectorAll("button[data-action='del']").forEach(btn=>{
-    btn.addEventListener("click", () => { if (state.readOnly) { toast('View-only'); return; }
+    btn.addEventListener("click", ()=>{
       const id = btn.getAttribute("data-id");
       state.plan.subjects = state.plan.subjects.filter(x=>x.id!==id);
       markDirty();
@@ -1822,7 +1775,7 @@ body[data-mode="m3"]{ --modeGlow1: rgba(20,184,166,.24); --modeGlow2: rgba(124,5
     }
 
     // LIVE typing: update state only
-    inp.addEventListener("input", () => { if (state.readOnly) return;
+    inp.addEventListener("input", ()=>{
       if (field==="name") s.name = inp.value;
       else if (field==="credits"){
         // keep as typed (string); validation happens on finish
@@ -2154,55 +2107,7 @@ function setMode(mode, opts={push:true}){
    const result = await auth.signInWithPopup(provider);
    await sendWelcomeEmailOnce(result.user);
    closeModal(); 
- }
-
-  // ===== Fun student toasts (friendly, no hate) =====
-  const FUNNY = {
-    copyLink: [
-      "Link copied 😎 Now go flex in your WhatsApp group.",
-      "Copied ✅ Don’t forget to breathe before exams 😭",
-      "Boom! Link ready 🚀 Send it before your friend says ‘share fast’."
-    ],
-    needSignin: [
-      "Bro… sign in first 😭",
-      "Nice try 😏 Sign in to unlock the magic.",
-      "Guest mode is cool, but sharing needs sign-in 🤝"
-    ],
-    sharedOpen: [
-      "Shared view opened 👀 Don’t edit—just admire.",
-      "Welcome to read-only land 📖",
-      "This plan is shared. Copy it and make it yours 🔥"
-    ]
-  };
-  function funToast(key){
-    const arr = FUNNY[key] || ["Done!"]; 
-    const msg = arr[Math.floor(Math.random()*arr.length)];
-    toast(msg);
-  }
-
-  // ===== Confetti (tiny, fast) =====
-  function confettiBurst(){
-    const wrap = document.createElement('div');
-    wrap.className = 'confettiWrap';
-    const colors = ['#ff6a00','#ff9f1c','#0ea5e9','#2563eb','#14b8a6','#7c3aed','#22c55e','#f43f5e'];
-    const N = 70;
-    for (let i=0;i<N;i++){
-      const c = document.createElement('div');
-      c.className='confetti';
-      c.style.left = (Math.random()*100)+'vw';
-      c.style.top = (-20 - Math.random()*80)+'px';
-      c.style.background = colors[i%colors.length];
-      c.style.transform = `translateY(-20px) rotate(${Math.random()*120}deg)`;
-      c.style.animationDuration = (900 + Math.random()*900)+'ms';
-      c.style.animationDelay = (Math.random()*120)+'ms';
-      c.style.width = (8 + Math.random()*8)+'px';
-      c.style.height = (10 + Math.random()*10)+'px';
-      wrap.appendChild(c);
-    }
-    document.body.appendChild(wrap);
-    setTimeout(()=>wrap.remove(), 2200);
-  }
-;
+ };
     $("#cancel").onclick = closeModal;
   }
 
@@ -2481,7 +2386,306 @@ async function deleteAllUserPlans(uid){
 
  /* ========= Simple share / pdf ========= */
   
-  /* ========= Public share (Plan / Grade card) ========= */
+
+  /* ================= Student Pack JS ================= */
+  // Friendly fun toasts (no hate)
+  const FUNNY = {
+    roastOk: [
+      "Not bad 😌 You’re surviving.",
+      "Solid. Respect 🤝",
+      "This is… decent. Keep cooking 🔥"
+    ],
+    roastMid: [
+      "Mid SGPA detected 😭 but still recoverable.",
+      "Bro is balancing life & marks… mostly life 🫡",
+      "Average? More like ‘strategic’ 😏"
+    ],
+    roastLow: [
+      "Bro… this SGPA is crying with you 😭",
+      "This isn’t SGPA, this is room temperature 🥲",
+      "One more unit and you’ll be fine. Trust. (Start now)"
+    ],
+    copyLink: [
+      "Link copied 😎 Now go flex in your WhatsApp group.",
+      "Copied ✅ Don’t forget to breathe before exams 😭",
+      "Boom! Link ready 🚀 Send it before your friend says ‘share fast’."
+    ],
+    needSignin: [
+      "Bro… sign in first 😭",
+      "Nice try 😏 Sign in to unlock the magic.",
+      "Guest mode is cool, but sharing needs sign-in 🤝"
+    ],
+    sharedOpen: [
+      "Shared view opened 👀 Don’t edit—just admire.",
+      "Welcome to read-only land 📖",
+      "This plan is shared. Copy it and make it yours 🔥"
+    ],
+    pomoDone: [
+      "Focus session complete ✅ Reward: 2 mins of scrolling (max).",
+      "GG! Break time 🧃",
+      "W session. Keep going 🔥"
+    ]
+  };
+  function funToast(key){
+    const arr = FUNNY[key] || ["Done!"]; 
+    toast(arr[Math.floor(Math.random()*arr.length)]);
+  }
+
+  function confettiBurst(){
+    const wrap = document.createElement('div');
+    wrap.className = 'confettiWrap';
+    const colors = ['#ff6a00','#ff9f1c','#0ea5e9','#2563eb','#14b8a6','#7c3aed','#22c55e','#f43f5e'];
+    const N = 70;
+    for (let i=0;i<N;i++){
+      const c = document.createElement('div');
+      c.className='confetti';
+      c.style.left = (Math.random()*100)+'vw';
+      c.style.top = (-20 - Math.random()*80)+'px';
+      c.style.background = colors[i%colors.length];
+      c.style.animationDuration = (900 + Math.random()*900)+'ms';
+      c.style.animationDelay = (Math.random()*120)+'ms';
+      c.style.width = (8 + Math.random()*8)+'px';
+      c.style.height = (10 + Math.random()*10)+'px';
+      wrap.appendChild(c);
+    }
+    document.body.appendChild(wrap);
+    setTimeout(()=>wrap.remove(), 2200);
+  }
+  function emojiRain(emojis=['🔥','✨','🎉','😭','💀']){
+    const wrap = document.createElement('div');
+    wrap.className='emojiRain';
+    const N=36;
+    for(let i=0;i<N;i++){
+      const e = document.createElement('div');
+      e.className='emojiDrop';
+      e.textContent = emojis[Math.floor(Math.random()*emojis.length)];
+      e.style.left = (Math.random()*100)+'vw';
+      e.style.animationDuration = (900 + Math.random()*1200)+'ms';
+      e.style.animationDelay = (Math.random()*140)+'ms';
+      e.style.fontSize = (16 + Math.random()*18)+'px';
+      wrap.appendChild(e);
+    }
+    document.body.appendChild(wrap);
+    setTimeout(()=>wrap.remove(), 2400);
+  }
+
+  // Achievements (local)
+  const BADGES = [
+    { id:'first_share', icon:'🔗', name:'Link Lord', desc:'Shared your first plan' },
+    { id:'first_pdf', icon:'🖨️', name:'PDF Pro', desc:'Exported a grade card PDF' },
+    { id:'pomo_done', icon:'⏱️', name:'Focus Beast', desc:'Completed a Pomodoro session' },
+    { id:'subjects_6', icon:'📚', name:'Full Load', desc:'Added 6+ subjects' },
+    { id:'planner_used', icon:'🎯', name:'Target Tactician', desc:'Used planner mode (Mode 1)' },
+    { id:'sgpa_calc', icon:'🧮', name:'SGPA Summoner', desc:'Calculated SGPA (Mode 2)' },
+  ];
+  function badgeKey(id){ return 'badge_'+id; }
+  function hasBadge(id){ try{ return localStorage.getItem(badgeKey(id))==='1'; }catch(_e){return false;} }
+  function awardBadge(id){
+    if (hasBadge(id)) return;
+    try{ localStorage.setItem(badgeKey(id),'1'); }catch(_e){}
+    confettiBurst();
+    toast('🏅 Achievement unlocked!');
+  }
+
+  function openBadgesModal(){
+    const cards = BADGES.map(b=>{
+      const on = hasBadge(b.id);
+      return `<div class="badgeCard ${on?'badgeOn':''}"><div class="b">${b.icon} ${esc(b.name)}</div><div class="d">${esc(b.desc)}${on?' • ✅':''}</div></div>`;
+    }).join('');
+    openModal({
+      title:'Achievements',
+      desc:'Collect badges as you use GRADEO',
+      bodyHTML:`<div class="badgesGrid">${cards}</div>`,
+      footHTML:`<button class="btn" id="closeBadges">Close</button>`
+    });
+    document.getElementById('closeBadges').onclick = closeModal;
+  }
+
+  // Leaderboard (anonymous, local-only)
+  function getLB(){
+    try{ return JSON.parse(localStorage.getItem('gradeo_lb')||'[]'); }catch(_e){ return []; }
+  }
+  function setLB(rows){
+    try{ localStorage.setItem('gradeo_lb', JSON.stringify(rows.slice(0,25))); }catch(_e){}
+  }
+  function pushLB(score){
+    if (!Number.isFinite(score)) return;
+    let rows = getLB();
+    const nick = (state.profile.nickname||'Student').slice(0,12);
+    rows.push({ nick, score: Math.round(score*100)/100, t: Date.now() });
+    rows.sort((a,b)=>b.score-a.score);
+    setLB(rows);
+  }
+  function openLeaderboard(){
+    const rows=getLB();
+    const list = rows.length? rows.map((r,i)=>`<div class="subCard" style="display:flex;justify-content:space-between;align-items:center;"><div style="font-weight:990">#${i+1} ${esc(r.nick)}</div><div class="pill good">${r.score}</div></div>`).join('') : `<div class="subCard"><div style="font-weight:990">No entries yet</div><div class="hint">Calculate SGPA then opt-in.</div></div>`;
+    openModal({
+      title:'Leaderboard (Anonymous)',
+      desc:'Local to your device • Opt-in only',
+      bodyHTML:`${list}<div class="hint" style="margin-top:10px;">Tip: this leaderboard is stored only on your device.</div>`,
+      footHTML:`<button class="btn" id="lbClose">Close</button>`
+    });
+    document.getElementById('lbClose').onclick = closeModal;
+  }
+
+  // Roast my SGPA (friendly)
+  function roastNow(){
+    let v = null;
+    if (state.mode==='m2'){
+      const sem = computeSGPA();
+      v = sem && Number.isFinite(sem.sgpa) ? sem.sgpa : null;
+    } else if (state.mode==='m3'){
+      const r = computeHistoryCGPA();
+      v = r && Number.isFinite(r.cgpa) ? r.cgpa : null;
+    } else {
+      const req = requiredSemesterSGPA();
+      v = Number.isFinite(req) ? req : null;
+    }
+    if (v==null){ toast('Enter some data first 🙂'); return; }
+    let key='roastOk';
+    if (v<5.0) key='roastLow';
+    else if (v<7.0) key='roastMid';
+    funToast(key);
+    emojiRain(key==='roastLow'?['😭','💀','🥲','📉']:key==='roastMid'?['😏','🫡','📚','😬']:['🔥','✨','🧠','😎']);
+  }
+
+  // Study plan generator (heuristic)
+  function genMicroPlan(){
+    const subs = Array.isArray(state.plan.subjects)? state.plan.subjects:[];
+    if (!subs.length){ return 'Add subjects first. Then I’ll plan your day 😄'; }
+    // Difficulty estimate based on missing marks (Mode1) or total (Mode2)
+    let items=[];
+    if (state.mode==='m1'){
+      awardBadge('planner_used');
+      const req = requiredSemesterSGPA();
+      const gp = Number.isFinite(req) ? gpFromSgpa(req) : 8;
+      const minTotal = minMarksForGP(gp);
+      for (const s of subs){
+        if (s.kind==='activity') continue;
+        const cr = clamp(parseInt(s.credits||3,10),1,4);
+        const seeMax = (cr===1) ? ((parseInt(s.seeOutOf||'50',10)===100)?100:50) : 100;
+        const cie = clamp(parseFloat(s.cie||0),0,50);
+        let reqSee = (seeMax===50) ? (minTotal - cie) : (minTotal - cie) * 2;
+        if (reqSee < 0) reqSee = 0;
+        const seePass = (seeMax===50)?18:35;
+        const totalNeed = (seeMax===50) ? Math.max(0,40-cie) : Math.max(0,(40-cie)*2);
+        let showReq = Math.max(reqSee, seePass, totalNeed);
+        const ratio = showReq/seeMax;
+        items.push({ name: s.name||'Subject', ratio, seeMax, need: Math.round(showReq) });
+      }
+      items.sort((a,b)=>b.ratio-a.ratio);
+    } else {
+      // Mode2: focus on lowest totals
+      for (const s of subs){
+        const r = calcSubjectMode2(s);
+        items.push({ name: s.name||'Subject', ratio: (100 - (r.pct||0))/100, need: Math.round(100-(r.pct||0)) });
+      }
+      items.sort((a,b)=>b.ratio-a.ratio);
+    }
+    const top = items.slice(0,4);
+    const blocks = [
+      `1) ${top[0]?top[0].name:'Subject'} — 45 min (hardest)`,
+      `2) ${top[1]?top[1].name:'Subject'} — 35 min`,
+      `3) ${top[2]?top[2].name:'Subject'} — 30 min`,
+      `4) ${top[3]?top[3].name:'Subject'} — 20 min quick revise`,
+      `Breaks: 5–10 min after each block.`,
+      `Rule: Phone only after 2 blocks 😭`
+    ];
+    if (subs.length>=6) awardBadge('subjects_6');
+    return blocks.join('\n');
+  }
+
+  // Pomodoro
+  let pomoTimer=null, pomoLeft=1500, pomoMode='focus';
+  function fmtTime(sec){
+    sec=Math.max(0,Math.floor(sec));
+    const m=String(Math.floor(sec/60)).padStart(2,'0');
+    const s=String(sec%60).padStart(2,'0');
+    return `${m}:${s}`;
+  }
+  function syncPomoUI(){
+    const el = document.getElementById('pomoTimer');
+    if (el) el.textContent = fmtTime(pomoLeft);
+  }
+  function setPomoFromInputs(){
+    const f = clamp(parseInt(document.getElementById('focusMin')?.value||25,10),5,90);
+    const b = clamp(parseInt(document.getElementById('breakMin')?.value||5,10),3,30);
+    pomoLeft = (pomoMode==='focus'? f : b)*60;
+    syncPomoUI();
+  }
+  function pomoTick(){
+    pomoLeft -= 1;
+    syncPomoUI();
+    if (pomoLeft<=0){
+      clearInterval(pomoTimer); pomoTimer=null;
+      awardBadge('pomo_done');
+      confettiBurst();
+      funToast('pomoDone');
+      // switch mode
+      pomoMode = (pomoMode==='focus') ? 'break' : 'focus';
+      setPomoFromInputs();
+    }
+  }
+  function openStudy(){
+    const ov = document.getElementById('studyOverlay');
+    if (!ov) return;
+    ov.classList.add('show');
+    setPomoFromInputs();
+    document.getElementById('microPlan').textContent = genMicroPlan();
+  }
+  function closeStudy(){
+    const ov = document.getElementById('studyOverlay');
+    if (!ov) return;
+    ov.classList.remove('show');
+  }
+
+  // PWA install prompt
+  let deferredPrompt=null;
+  window.addEventListener('beforeinstallprompt', (e)=>{ deferredPrompt=e; });
+  async function promptInstall(){
+    if (!deferredPrompt){ toast('Install not available now'); return; }
+    deferredPrompt.prompt();
+    deferredPrompt=null;
+  }
+
+  // Offline/online toasts
+  window.addEventListener('offline', ()=>toast('Offline mode 📴 (data still here)'));
+  window.addEventListener('online', ()=>toast('Back online ✅'));
+
+  // Tiny chat bot (rule-based)
+  function chatAdd(text, who='bot'){
+    const wrap = document.getElementById('chatMsgs');
+    if (!wrap) return;
+    const d = document.createElement('div');
+    d.className = 'msg '+(who==='me'?'me':'bot');
+    d.textContent = text;
+    wrap.appendChild(d);
+    wrap.scrollTop = wrap.scrollHeight;
+  }
+  function chatReply(q){
+    const t = (q||'').toLowerCase();
+    if (!t.trim()) return;
+    if (t.includes('roast')){ roastNow(); return 'Roast delivered 🔥'; }
+    if (t.includes('study') || t.includes('plan')){ return genMicroPlan(); }
+    if (t.includes('install') || t.includes('app')){ promptInstall(); return 'Trying install…'; }
+    if (t.includes('8') && (t.includes('sgpa')||t.includes('cgpa'))){ return 'Possible ✅ Add your subjects & marks; I’ll show minimum SEE needed.'; }
+    if (t.includes('pass')){ return 'Pass rule: Total ≥ 40 and SEE minimum (≥35 for /100, ≥18 for /50).'; }
+    return 'Try: “study plan”, “roast me”, “pass rule”, “install app” 🙂';
+  }
+
+  // Theme toggle
+  function toggleNeon(){
+    const cur = document.body.getAttribute('data-theme-variant')||'';
+    const next = cur==='neon' ? '' : 'neon';
+    if (next) document.body.setAttribute('data-theme-variant','neon');
+    else document.body.removeAttribute('data-theme-variant');
+    try{ localStorage.setItem('theme_variant', next); }catch(_e){}
+    toast(next?'Neon mode ON ✨':'Neon mode OFF');
+  }
+  function loadThemeVariant(){
+    try{ const v = localStorage.getItem('theme_variant')||''; if (v==='neon') document.body.setAttribute('data-theme-variant','neon'); }catch(_e){}
+  }
+
   async function createShareDoc(type){
     if (!auth.currentUser){ funToast('needSignin'); openSignInModal(); return; }
     const uid = auth.currentUser.uid;
@@ -2491,15 +2695,16 @@ async function deleteAllUserPlans(uid){
     if (type === 'plan'){
       payload.data = { mode: state.mode, plan: state.plan, history: state.history, profile: { nickname: state.profile.nickname, university: state.profile.university, branch: state.profile.branch, semester: state.profile.semester, regulation: state.profile.regulation } };
     } else {
-      // Grade card snapshot (Mode 2)
       const rows = state.plan.subjects.map(s => {
         const cr = (s.kind==="activity") ? 1 : clamp(parseInt(s.credits||3,10),1,4);
         const seeMax = (cr===1) ? ((parseInt(s.seeOutOf||"50",10)===100) ? 100 : 50) : 100;
-        const cie = (s.kind==="activity") ? null : clamp(parseFloat(s.cie||0),0,50);
-        const see = (s.kind==="activity") ? null : clamp(parseFloat(s.see||0),0,seeMax);
-        const final = (s.kind==="activity") ? clamp(parseFloat(s.final||0),0,100) : null;
         const r = calcSubjectMode2(s);
-        return { name: s.name||"Subject", kind: s.kind, credits: cr, seeMax, cie, see, final, result: r };
+        return { name: s.name||"Subject", kind: s.kind, credits: cr, seeMax,
+          cie: (s.kind==="activity")? null : clamp(parseFloat(s.cie||0),0,50),
+          see: (s.kind==="activity")? null : clamp(parseFloat(s.see||0),0,seeMax),
+          final: (s.kind==="activity")? clamp(parseFloat(s.final||0),0,100) : null,
+          result: r
+        };
       });
       const sem = computeSGPA();
       payload.mode = 'm2';
@@ -2537,19 +2742,10 @@ async function deleteAllUserPlans(uid){
     });
 
     document.getElementById('copyShareLink').onclick = async () => {
-      try{ await navigator.clipboard.writeText(link); confettiBurst(); funToast('copyLink'); }catch(_e){ toast('Copy failed'); }
+      try{ await navigator.clipboard.writeText(link); confettiBurst(); funToast('copyLink'); awardBadge('first_share'); }catch(_e){ toast('Copy failed'); }
     };
-    document.getElementById('dlQrBtn').onclick = async () => {
-      try{
-        const img = document.getElementById('qrImg');
-        const a = document.createElement('a');
-        a.href = img.src;
-        a.download = 'gradeo-qr.png';
-        document.body.appendChild(a);
-        a.click();
-        a.remove();
-        toast('QR downloading…');
-      }catch(_e){ toast('Download failed'); }
+    document.getElementById('dlQrBtn').onclick = () => {
+      try{ const img=document.getElementById('qrImg'); const a=document.createElement('a'); a.href=img.src; a.download='gradeo-qr.png'; document.body.appendChild(a); a.click(); a.remove(); toast('QR downloading…'); }catch(_e){ toast('Download failed'); }
     };
     document.getElementById('closeShare').onclick = closeModal;
   }
@@ -2560,12 +2756,9 @@ async function deleteAllUserPlans(uid){
       if (!snap.exists){ toast('Share not found'); return; }
       const sh = snap.data();
       if (!sh || !sh.data){ toast('Invalid share'); return; }
-
       state.sharedView = true;
       state.readOnly = true;
       state.sharedData = sh;
-
-      // Apply snapshot
       if (sh.data.plan){
         state.plan = sh.data.plan;
         if (sh.data.history) state.history = sh.data.history;
@@ -2580,7 +2773,6 @@ async function deleteAllUserPlans(uid){
           });
         }
       }
-
       renderAllStatic();
       setMode(state.mode, {push:false});
       scheduleRecalc(0);
@@ -2588,22 +2780,16 @@ async function deleteAllUserPlans(uid){
     }catch(e){ console.error(e); toast('Failed to load share'); }
   }
 
-  /* ========= Grade card PDF export (student-friendly) ========= */
   function exportGradeCardPDF(){
-    // We export based on current subjects using Mode 2 formula
     const semName = (document.getElementById('semesterName')?.value || '').trim();
     const prof = state.profile || {};
     const rows = state.plan.subjects.map(s => {
       const cr = (s.kind==="activity") ? 1 : clamp(parseInt(s.credits||3,10),1,4);
       const seeMax = (cr===1) ? ((parseInt(s.seeOutOf||"50",10)===100) ? 100 : 50) : 100;
-      const cie = (s.kind==="activity") ? '' : clamp(parseFloat(s.cie||0),0,50).toFixed(1);
-      const see = (s.kind==="activity") ? '' : clamp(parseFloat(s.see||0),0,seeMax).toFixed(1);
-      const final = (s.kind==="activity") ? clamp(parseFloat(s.final||0),0,100).toFixed(1) : '';
       const r = calcSubjectMode2(s);
-      return { name: (s.name||'Subject'), kind:s.kind, cr, cie, see, seeMax, final, status: r.badge, gp: r.gp, label: r.label };
+      return { name:(s.name||'Subject'), kind:s.kind, cr, seeMax, cie:s.cie, see:s.see, final:s.final, label:r.label, gp:r.gp };
     });
     const sem = computeSGPA();
-
     const html = `
       <html><head><meta charset="utf-8"><title>GRADEO Grade Card</title>
       <style>
@@ -2615,11 +2801,6 @@ async function deleteAllUserPlans(uid){
         table{width:100%;border-collapse:collapse;margin-top:14px}
         th,td{border:1px solid #e5e7eb;padding:10px;font-size:12px;text-align:left}
         th{background:#fff1e6}
-        .pill{display:inline-block;padding:3px 8px;border-radius:999px;font-weight:800;font-size:11px}
-        .pass{background:#dcfce7;color:#166534}
-        .fail{background:#fee2e2;color:#991b1b}
-        .sum{display:flex;gap:12px;flex-wrap:wrap;margin-top:14px}
-        .sum .box{flex:1;min-width:220px}
         @media print{button{display:none}}
       </style></head><body>
       <div class="top">
@@ -2634,45 +2815,34 @@ async function deleteAllUserPlans(uid){
           <div class="muted">Credits: ${sem.credits}</div>
         </div>
       </div>
-
       <table>
-        <thead><tr>
-          <th>Subject</th><th>Type</th><th>Cr</th><th>CIE</th><th>SEE</th><th>Total/Result</th><th>GP</th>
-        </tr></thead>
+        <thead><tr><th>Subject</th><th>Type</th><th>Cr</th><th>CIE</th><th>SEE</th><th>Result</th><th>GP</th></tr></thead>
         <tbody>
           ${rows.map(r=>`
             <tr>
-              <td><b>${r.name.replace(/</g,'&lt;')}</b></td>
+              <td><b>${String(r.name).replace(/</g,'&lt;')}</b></td>
               <td>${r.kind==='activity'?'Activity':'Normal'}</td>
               <td>${r.cr}</td>
-              <td>${r.kind==='activity'?'—':(r.cie+'/50')}</td>
-              <td>${r.kind==='activity'?(r.final+'/100'):(r.see+'/'+r.seeMax)}</td>
-              <td>${r.label.replace(/</g,'&lt;')}</td>
+              <td>${r.kind==='activity'?'—':(String(r.cie||'')+'/50')}</td>
+              <td>${r.kind==='activity'?(String(r.final||'')+'/100'):(String(r.see||'')+'/'+r.seeMax)}</td>
+              <td>${String(r.label||'').replace(/</g,'&lt;')}</td>
               <td>${r.gp}</td>
             </tr>
           `).join('')}
         </tbody>
       </table>
-
-      <div class="sum">
-        <div class="box"><div class="muted">Points</div><div style="font-size:18px;font-weight:900">${sem.points} / ${sem.maxPoints}</div></div>
-        <div class="box"><div class="muted">Generated by</div><div style="font-weight:900">gradeo.in</div><div class="muted">Educational estimate only</div></div>
-      </div>
-
       <div style="margin-top:16px;display:flex;gap:10px;flex-wrap:wrap">
         <button onclick="window.print()" style="padding:10px 12px;border-radius:12px;border:1px solid #e5e7eb;font-weight:900;cursor:pointer">Print / Save as PDF</button>
-        <button onclick="history.back()" style="padding:10px 12px;border-radius:12px;border:1px solid #e5e7eb;font-weight:900;cursor:pointer">Back</button>
       </div>
-      </body></html>
-    `;
-
+      </body></html>`;
     const w = window.open('', '_blank');
     if (!w){ toast('Popup blocked'); return; }
-    w.document.open();
-    w.document.write(html);
-    w.document.close();
+    w.document.open(); w.document.write(html); w.document.close();
+    awardBadge('first_pdf');
     toast('Grade card ready 🖨️');
   }
+
+
 async function shareSite(){
     const url = `https://gradeo.in/`;
     try{
@@ -2874,14 +3044,72 @@ function showContact(){
     $("#lockSignInBtn").onclick = openSignInModal;
 
     $("#shareSiteBtn").onclick = () => {
-    // Quick share: plan (if signed in), else share site
     if (auth && auth.currentUser) createShareDoc('plan');
     else shareSite();
   };
     $("#pdfBtn").onclick = ()=>window.print();
     $("#gradeScaleBtn").onclick = showGradeScale;
-  const exportPdfInlineBtn = document.getElementById("exportPdfInlineBtn");
-  if (exportPdfInlineBtn) exportPdfInlineBtn.onclick = exportGradeCardPDF;
+
+  // Student Pack buttons
+  const sp = document.getElementById('sharePlanBtn');
+  if (sp) sp.addEventListener('click', () => { try{ closeMenu(); }catch(_e){} createShareDoc('plan'); });
+  const sg = document.getElementById('shareGradeBtn');
+  if (sg) sg.addEventListener('click', () => { try{ closeMenu(); }catch(_e){} createShareDoc('grade'); });
+  const ep = document.getElementById('exportGradePdfBtn');
+  if (ep) ep.addEventListener('click', () => { try{ closeMenu(); }catch(_e){} exportGradeCardPDF(); });
+  const hs = document.getElementById('heroSharePlanBtn');
+  if (hs) hs.addEventListener('click', () => createShareDoc('plan'));
+
+  const st = document.getElementById('studyModeBtn');
+  if (st) st.addEventListener('click', () => { try{ closeMenu(); }catch(_e){} openStudy(); });
+  const rb = document.getElementById('roastBtn');
+  if (rb) rb.addEventListener('click', () => { try{ closeMenu(); }catch(_e){} roastNow(); });
+  const bb = document.getElementById('badgesBtn');
+  if (bb) bb.addEventListener('click', () => { try{ closeMenu(); }catch(_e){} openBadgesModal(); });
+  const lb = document.getElementById('leaderBtn');
+  if (lb) lb.addEventListener('click', () => { try{ closeMenu(); }catch(_e){} openLeaderboard(); });
+  const tn = document.getElementById('themeNeonBtn');
+  if (tn) tn.addEventListener('click', () => { try{ closeMenu(); }catch(_e){} toggleNeon(); });
+
+  // Study overlay controls
+  const sc = document.getElementById('studyCloseBtn');
+  if (sc) sc.onclick = closeStudy;
+  const ms = document.getElementById('makePlanBtn');
+  if (ms) ms.onclick = () => { const el=document.getElementById('microPlan'); if(el) el.textContent = genMicroPlan(); };
+  const ps = document.getElementById('pomoStartBtn');
+  const pp = document.getElementById('pomoPauseBtn');
+  const pr = document.getElementById('pomoResetBtn');
+  const pk = document.getElementById('pomoSkipBtn');
+  if (ps) ps.onclick = () => { if (pomoTimer) return; pomoTimer=setInterval(pomoTick,1000); };
+  if (pp) pp.onclick = () => { if (pomoTimer){ clearInterval(pomoTimer); pomoTimer=null; } };
+  if (pr) pr.onclick = () => { if (pomoTimer){ clearInterval(pomoTimer); pomoTimer=null; } pomoMode='focus'; setPomoFromInputs(); };
+  if (pk) pk.onclick = () => { if (pomoTimer){ clearInterval(pomoTimer); pomoTimer=null; } pomoMode = (pomoMode==='focus')?'break':'focus'; setPomoFromInputs(); };
+  const fm = document.getElementById('focusMin');
+  const bm = document.getElementById('breakMin');
+  if (fm) fm.onchange = setPomoFromInputs;
+  if (bm) bm.onchange = setPomoFromInputs;
+
+  // Chat widget
+  const cOpen = document.getElementById('chatOpenBtn');
+  const cPanel = document.getElementById('chatPanel');
+  const cClose = document.getElementById('chatCloseBtn');
+  const cSend = document.getElementById('chatSendBtn');
+  const cInp  = document.getElementById('chatInput');
+  if (cOpen && cPanel){
+    cOpen.onclick = () => { cPanel.classList.toggle('show'); if (cPanel.classList.contains('show')){ if(!document.getElementById('chatMsgs')?.children.length){ chatAdd('Hey! I can roast, plan, and explain rules 😄', 'bot'); } } };
+  }
+  if (cClose && cPanel) cClose.onclick = () => cPanel.classList.remove('show');
+  const sendChat = () => {
+    const q = (cInp?.value||'').trim();
+    if (!q) return;
+    chatAdd(q,'me');
+    cInp.value='';
+    const r = chatReply(q);
+    if (r) chatAdd(r,'bot');
+  };
+  if (cSend) cSend.onclick = sendChat;
+  if (cInp) cInp.addEventListener('keydown', (e)=>{ if (e.key==='Enter') sendChat(); });
+
     $("#helpBtn").onclick = showHelp;
   const heroInfoBtn = document.getElementById('heroInfoBtn');
   if(heroInfoBtn) heroInfoBtn.onclick = showHeroInfo;
@@ -3020,13 +3248,13 @@ if (changelogBtn){
     wireAccordion("#accountAcc","#accChevron");
 
     // Add subject actions (only rebuild list on add/remove)
-    const addNormal = () => { if (state.readOnly) { toast('View-only'); return; }
+    const addNormal = ()=>{
       state.plan.subjects.push(mkSubject("normal"));
       markDirty();
       renderSubjectsDOM();
       scheduleRecalc(0);
     };
-    const addActivity = () => { if (state.readOnly) { toast('View-only'); return; }
+    const addActivity = ()=>{
       state.plan.subjects.push(mkSubject("activity"));
       markDirty();
       renderSubjectsDOM();
@@ -3040,7 +3268,7 @@ if (changelogBtn){
     $("#fabAdd").onclick = addNormal;
     $("#fabActivity").onclick = addActivity;
 
-    $("#clearSubjectsBtn").onclick = () => { if (state.readOnly) { toast('View-only'); return; }
+    $("#clearSubjectsBtn").onclick = ()=>{
       state.plan.subjects=[];
       markDirty();
       renderSubjectsDOM();
@@ -3132,48 +3360,7 @@ if (changelogBtn){
   const howItWorksBtn = document.getElementById('howItWorksBtn');
   if(howItWorksBtn) howItWorksBtn.addEventListener('click', ()=>{ closeMenu(); showHeroInfo(); });
   if(faqBtn) faqBtn.addEventListener('click', ()=>{ closeMenu(); showFAQ(); });
-  
-  const sharePlanBtn = document.getElementById('sharePlanBtn');
-  if (sharePlanBtn) sharePlanBtn.addEventListener('click', () => { try{ closeMenu(); }catch(_e){} createShareDoc('plan'); });
-  const shareGradeBtn = document.getElementById('shareGradeBtn');
-  if (shareGradeBtn) shareGradeBtn.addEventListener('click', () => { try{ closeMenu(); }catch(_e){} createShareDoc('grade'); });
-  const exportGradePdfBtn = document.getElementById('exportGradePdfBtn');
-  if (exportGradePdfBtn) exportGradePdfBtn.addEventListener('click', () => { try{ closeMenu(); }catch(_e){} exportGradeCardPDF(); });
-  const heroSharePlanBtn = document.getElementById('heroSharePlanBtn');
-  if (heroSharePlanBtn) heroSharePlanBtn.addEventListener('click', () => createShareDoc('plan'));
-
-  const copyShareBtn = document.getElementById('copyShareBtn');
-  if (copyShareBtn) copyShareBtn.addEventListener('click', async () => {
-    if (!auth.currentUser) { openSignInModal(); return; }
-    if (!state.sharedView || !state.sharedData || !state.sharedData.data) return;
-    try{
-      const uid = auth.currentUser.uid;
-      const snapData = state.sharedData.data;
-      const newPlan = {
-        name: (snapData.plan && snapData.plan.name ? snapData.plan.name : 'Shared copy'),
-        notes: snapData.plan?.notes || '',
-        rounding: snapData.plan?.rounding || 'nearest',
-        mode1: snapData.plan?.mode1 || { currentCgpa:'', completedCredits:'', targetCgpa:'' },
-        subjects: Array.isArray(snapData.plan?.subjects) ? snapData.plan.subjects : (Array.isArray(state.plan.subjects) ? state.plan.subjects : []),
-        history: snapData.history || state.history || null,
-        mode: snapData.mode || state.mode || 'm1',
-        createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-        updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
-        importedFromShare: true
-      };
-      const ref = await plansCol(uid).add(newPlan);
-      await profileRef(uid).set({ lastPlanId: ref.id }, { merge:true });
-      state.sharedView = false;
-      state.readOnly = false;
-      state.sharedData = null;
-      await fetchPlans();
-      renderPlansSelect();
-      await openPlan(ref.id);
-      confettiBurst();
-      toast('Copied to your plans ✅');
-    }catch(e){ console.error(e); toast('Copy failed'); }
-  });
-const contactBtn = document.getElementById('contactBtn');
+  const contactBtn = document.getElementById('contactBtn');
   if(contactBtn) contactBtn.addEventListener('click', ()=>{ closeMenu(); showContact(); });
   const acctManage = document.getElementById('accountManageBtn');
   if(acctManage) acctManage.addEventListener('click', ()=>{ closeMenu(); openProfile(); });
@@ -3281,6 +3468,9 @@ const contactBtn = document.getElementById('contactBtn');
     state.theme = state.theme || "light";
     document.body.setAttribute("data-theme", state.theme);
     initAuth();
+    // Student Pack init
+    try{ loadThemeVariant(); }catch(_e){}
+    try{ const sid = new URLSearchParams(location.search).get('share'); if (sid) loadSharedSnapshot(sid); }catch(_e){}
 
   // Set CSS var for nav height (helps fixed panels avoid overlapping the nav)
   try{
@@ -3777,6 +3967,71 @@ const prefersReduce = window.matchMedia && window.matchMedia('(prefers-reduced-m
 })();
 </script>
 
+
+
+<!-- Student Pack Widgets -->
+<div class="chatFab noPrint">
+  <button class="btn primary" id="chatOpenBtn" aria-label="Chat">💬</button>
+</div>
+<div class="chatPanel" id="chatPanel" aria-label="GRADEO Chat">
+  <div class="chatHead">
+    <div>
+      <div class="t">GRADEO Bot 🤖</div>
+      <div class="hint" style="margin-top:2px;">Ask: “can I get 8 sgpa?” • “roast me” • “study plan”</div>
+    </div>
+    <button class="btn small" id="chatCloseBtn">Close</button>
+  </div>
+  <div class="chatMsgs" id="chatMsgs"></div>
+  <div class="chatFoot">
+    <input class="input" id="chatInput" placeholder="Type..." />
+    <button class="btn primary" id="chatSendBtn">Send</button>
+  </div>
+</div>
+
+<div class="studyOverlay" id="studyOverlay" aria-hidden="true">
+  <div class="studyBox">
+    <div class="h">
+      <div style="font-weight:990">🎧 Study Mode</div>
+      <button class="btn small" id="studyCloseBtn">Close</button>
+    </div>
+    <div class="c">
+      <div class="subCard">
+        <div class="hint">Pomodoro • Focus 25m → Break 5m. (You can change.)</div>
+        <div class="timerBig" id="pomoTimer">25:00</div>
+        <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:10px;">
+          <button class="btn primary" id="pomoStartBtn">Start</button>
+          <button class="btn" id="pomoPauseBtn">Pause</button>
+          <button class="btn" id="pomoResetBtn">Reset</button>
+          <button class="btn" id="pomoSkipBtn">Skip</button>
+        </div>
+        <div class="row" style="margin-top:10px;">
+          <div>
+            <label class="label">Focus (min)</label>
+            <input class="input" id="focusMin" type="number" min="5" max="90" step="1" value="25" />
+          </div>
+          <div>
+            <label class="label">Break (min)</label>
+            <input class="input" id="breakMin" type="number" min="3" max="30" step="1" value="5" />
+          </div>
+        </div>
+      </div>
+      <div class="subCard">
+        <div style="font-weight:990">📌 Today’s micro-plan</div>
+        <div class="hint" id="microPlan">Add subjects and your marks; I’ll suggest priorities.</div>
+        <button class="btn" id="makePlanBtn" style="margin-top:10px;">Generate plan</button>
+      </div>
+      <div class="subCard">
+        <div style="font-weight:990">🎵 Quick playlists</div>
+        <div class="hint">Open in a new tab:</div>
+        <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:8px;">
+          <a class="btn" href="https://www.youtube.com/results?search_query=lofi+study" target="_blank" rel="noopener">Lo‑fi</a>
+          <a class="btn" href="https://www.youtube.com/results?search_query=white+noise" target="_blank" rel="noopener">White noise</a>
+          <a class="btn" href="https://www.youtube.com/results?search_query=focus+music" target="_blank" rel="noopener">Focus</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 </body>
 </html>
 
