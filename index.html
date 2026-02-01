@@ -571,15 +571,76 @@ body[data-mode="m3"]::before{background:
 }
 
 
-/* ===================== Mode-based light theme (variables) ===================== */
+
+
+
+/* ===================== Mode Accent Theming (colors & fonts) ===================== */
 :root{
-  --modeGlow1: rgba(255,106,0,.16);
-  --modeGlow2: rgba(255,159,28,.14);
-  --modeBase: #fff7f0;
+  /* default (Mode 1 warm) */
+  --accent: #ff6a00;
+  --accent2: #ff9f1c;
+  --accentSoft: rgba(255,106,0,.16);
+  --accentText: #b84300;
+  --titleText: #9a3500;
 }
-body[data-mode="m1"]{ --modeGlow1: rgba(255,106,0,.16); --modeGlow2: rgba(255,159,28,.14); --modeBase:#fff7f0; }
-body[data-mode="m2"]{ --modeGlow1: rgba(56,189,248,.18); --modeGlow2: rgba(59,130,246,.12); --modeBase:#eef7ff; }
-body[data-mode="m3"]{ --modeGlow1: rgba(20,184,166,.16); --modeGlow2: rgba(124,58,237,.10); --modeBase:#f3fffb; }
+
+/* Mode 1: Warm orange */
+body[data-mode="m1"]{
+  --accent:#ff6a00;
+  --accent2:#ff9f1c;
+  --accentSoft: rgba(255,106,0,.20);
+  --accentText:#b84300;
+  --titleText:#9a3500;
+}
+/* Mode 2: Sky blue */
+body[data-mode="m2"]{
+  --accent:#0ea5e9;
+  --accent2:#2563eb;
+  --accentSoft: rgba(14,165,233,.18);
+  --accentText:#075985;
+  --titleText:#0b3a75;
+}
+/* Mode 3: Mint / violet */
+body[data-mode="m3"]{
+  --accent:#14b8a6;
+  --accent2:#7c3aed;
+  --accentSoft: rgba(20,184,166,.18);
+  --accentText:#0f766e;
+  --titleText:#0b5f59;
+}
+
+/* Slightly darker (but still light) backgrounds per mode using existing vars */
+:root{
+  --modeGlow1: rgba(255,106,0,.26);
+  --modeGlow2: rgba(255,159,28,.20);
+  --modeBase: #ffead8;
+}
+body[data-mode="m2"]{ --modeGlow1: rgba(56,189,248,.26); --modeGlow2: rgba(59,130,246,.18); --modeBase:#dfefff; }
+body[data-mode="m3"]{ --modeGlow1: rgba(20,184,166,.24); --modeGlow2: rgba(124,58,237,.16); --modeBase:#dcfff1; }
+
+/* Typography accents */
+.title{ color: var(--titleText) !important; }
+.hero h1{ color: var(--titleText) !important; }
+.panelHead h2{ color: var(--titleText) !important; }
+
+/* Mode pills/buttons pick up accent */
+.modeBtn.active{ background: color-mix(in oklab, var(--accent) 18%, transparent) !important; color: var(--accentText) !important; border-bottom: 2px solid color-mix(in oklab, var(--accent) 55%, white); }
+
+/* Primary buttons use mode gradient */
+.btn.primary{ background: linear-gradient(135deg, var(--accent), var(--accent2)) !important; }
+
+/* Focus ring matches mode */
+:focus-visible{ outline:2px solid color-mix(in oklab, var(--accent) 65%, white) !important; }
+
+/* Progress bars get mode tint */
+.bar{ background: linear-gradient(90deg, var(--good), color-mix(in oklab, var(--accent) 80%, white)) !important; }
+.bar.warn{ background: linear-gradient(90deg, var(--warn), color-mix(in oklab, var(--accent) 80%, white)) !important; }
+
+/* Subtle accent borders on hover */
+.subCard:hover, .stat:hover{ border-color: color-mix(in oklab, var(--accent) 42%, var(--stroke)) !important; }
+
+/* Bottom island active button accent */
+.bIsBtn.active{ border-color: color-mix(in oklab, var(--accent) 35%, transparent) !important; background: color-mix(in oklab, var(--accent) 10%, transparent) !important; }
 
 </style>
 </head>
@@ -687,7 +748,7 @@ body[data-mode="m3"]{ --modeGlow1: rgba(20,184,166,.16); --modeGlow2: rgba(124,5
               <select class="select" id="rounding">
                 <option value="nearest">Nearest GP</option>
                 <option value="floor">Floor GP</option>
-             
+                <option value="ceil">Ceil GP</option>
               </select>
             </div>
           </div>
