@@ -684,7 +684,7 @@ body::before{
 <!-- EmailJS -->
 <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 <script>
-  emailjs.init("jBp2SNoQciWnlU2Fo"); // ✅ Your Public Key
+  emailjs.init({ publicKey: "jBp2SNoQciWnlU2Fo" }); // ✅ Your Public Key
 </script>
 
 <!-- Firebase compat -->
@@ -697,32 +697,62 @@ body::before{
   "use strict";
 
   // ===== Welcome email (EmailJS) =====
-  // Sends only once per user per browser using localStorage
+  // Sends only once per user (uses BOTH: Firestore flag + localStorage fallback)
   async function sendWelcomeEmailOnce(user){
     try{
       if(!user || !user.uid || !user.email) return;
+
+      // Local (per-browser) guard
       const key = "welcome_sent_" + user.uid;
       if (localStorage.getItem(key)) return;
 
+      // Cloud (per-account) guard: if already sent on any device, skip
+      try{
+        if (typeof profileRef === 'function' && db){
+          const snap = await profileRef(user.uid).get();
+          if (snap && snap.exists && snap.data() && snap.data().welcomeEmailSent){
+            localStorage.setItem(key, "1");
+            return;
+          }
+        }
+      }catch(_e){ /* ignore cloud-check errors */ }
+
+      // Send email via EmailJS template
       await emailjs.send(
-        "service_wsd8g2w",     // your Service ID
-        "template_47p1tjd",    // your Template ID
+        "service_h64ayo1",     // your Service ID (updated)
+        "template_ty5v5nz",    // your Template ID (updated)
         {
           // IMPORTANT: variable names must match your EmailJS template variables
+          // To maximize compatibility, we send multiple common field names.
+          to_email: user.email,
+          to_name: user.displayName || 'Friend',
+          user_email: user.email,
+          user_name: user.displayName || 'Friend',
           email: user.email,
-          user_name: user.displayName || "Friend"
+          name: user.displayName || 'Friend'
         }
       );
 
+      // Mark as sent locally
       localStorage.setItem(key, "1");
+
+      // Mark as sent in Firestore so it won't resend on other devices
+      try{
+        if (typeof profileRef === 'function' && db && window.firebase){
+          await profileRef(user.uid).set({
+            welcomeEmailSent: true,
+            welcomeEmailSentAt: firebase.firestore.FieldValue.serverTimestamp()
+          }, { merge: true });
+        }
+      }catch(_e){ /* ignore cloud-flag errors */ }
+
       console.log("✅ Welcome email sent to:", user.email);
     }catch(err){
       console.error("❌ Welcome email failed:", err);
     }
   }
 
-
-  /* ========= Firebase config (yours) ========= */
+  /* ========= Firebase config (yours) ========= */ (yours) ========= */
   const firebaseConfig = {
   apiKey: "AIzaSyDB_FK8-3ATZBpuvfL34EMp9WHTTd5sfIo",
   authDomain: "gradeo-in.firebaseapp.com",
