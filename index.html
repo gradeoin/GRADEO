@@ -713,7 +713,9 @@ body[data-mode="m3"]{ --modeGlow1: rgba(20,184,166,.24); --modeGlow2: rgba(124,5
     </div>
     <button class="btn small" id="menuCloseBtn" aria-label="Close menu">Close</button>
   </div>
-  <button class="menuItem" id="uniSettingsBtn" role="menuitem">🎓 University settings</button>
+  <button class="menuItem" id="sharePlanBtn" role="menuitem">🔗 Share plan</button>
+<button class="menuItem" id="shareGradeBtn" role="menuitem">📄 Share grade card</button>
+<button class="menuItem" id="uniSettingsBtn" role="menuitem">🎓 University settings</button>
   <button class="menuItem" id="howItWorksBtn" role="menuitem">ℹ️ How it works</button>
   <button class="menuItem" id="faqBtn" role="menuitem">❓ FAQ</button>
   <div class="menuSep"></div>
@@ -867,10 +869,11 @@ body[data-mode="m3"]{ --modeGlow1: rgba(20,184,166,.24); --modeGlow2: rgba(124,5
         <div class="subCard" id="lockBar" style="display:none; margin-top:12px;">
           <div style="display:flex; justify-content:space-between; gap:10px; flex-wrap:wrap; align-items:center;">
             <div>
-              <div style="font-weight:990">View‑only mode</div>
-              <div class="hint">Sign in to edit and autosave to your account.</div>
+              <div id="lockTitle" style="font-weight:990">View‑only mode</div>
+              <div class="hint" id="lockHint">Sign in to edit and autosave to your account.</div>
             </div>
             <button class="btn primary" id="lockSignInBtn">Sign in</button>
+      <button class="btn" id="copyShareBtn" style="display:none;">Copy to my plans</button>
           </div>
         </div>
 
@@ -1104,6 +1107,8 @@ body[data-mode="m3"]{ --modeGlow1: rgba(20,184,166,.24); --modeGlow2: rgba(124,5
     mode:"m1",
     user:null,
     readOnly:false,
+    sharedView:false,
+    sharedData:null,
     dirty:false,
     lastSavedAt:null,
 
@@ -1196,6 +1201,7 @@ body[data-mode="m3"]{ --modeGlow1: rgba(20,184,166,.24); --modeGlow2: rgba(124,5
       name: data.plan.name || "Imported Plan",
       notes: data.plan.notes || "",
       rounding: data.plan.rounding || "nearest",
+    mode: data.mode || state.mode || "m1",
       mode1: data.plan.mode1 || { currentCgpa:"", completedCredits:"", targetCgpa:"" },
       subjects: Array.isArray(data.plan.subjects) ? data.plan.subjects : [],
       history: data.history || null,
@@ -1242,6 +1248,8 @@ body[data-mode="m3"]{ --modeGlow1: rgba(20,184,166,.24); --modeGlow2: rgba(124,5
   const profileRef = uid => db.doc(`users/${uid}/profile/main`);
   const plansCol = uid => db.collection(`users/${uid}/plans`);
   const planRef = (uid, pid) => db.doc(`users/${uid}/plans/${pid}`);
+  const sharesCol = () => db.collection(`publicShares`);
+  const shareRef = (sid) => db.doc(`publicShares/${sid}`);
 
   async function fetchPlans(){
     const uid = auth.currentUser.uid;
@@ -1267,15 +1275,25 @@ body[data-mode="m3"]{ --modeGlow1: rgba(20,184,166,.24); --modeGlow2: rgba(124,5
       subjects: Array.isArray(p.subjects) ? p.subjects : []
     };
     if (p.history) state.history = p.history;
+    // Restore saved mode for this plan (fallback for older plans)
+    const inferPlanMode = () => {
+      if (p.mode) return p.mode;
+      try{ if (p.history && p.history.rows && p.history.rows.some(r => Number.isFinite(parseFloat(r.sgpa)))) return "m3"; }catch(_e){}
+      try{ if (Array.isArray(p.subjects) && p.subjects.some(ss => ss && ss.kind !== "activity" && String(ss.see ?? "").trim() !== "")) return "m2"; }catch(_e){}
+      return "m1";
+    };
+    state.mode = inferPlanMode();
+    if (!p.mode) { try{ await planRef(uid, planId).set({ mode: state.mode }, { merge:true }); }catch(_e){} }
     renderPlansSelect();
-    renderAllStatic();
-    scheduleRecalc();
+    setMode(state.mode, {push:false});
+    scheduleRecalc(0);
   }
 
   async function createNewPlan(){
     const uid = auth.currentUser.uid;
     const payload = {
       name:"New Plan",
+    mode: state.mode || "m1",
       notes:"",
       rounding:"nearest",
       mode1:{ currentCgpa:"", completedCredits:"", targetCgpa:"" },
@@ -1298,6 +1316,7 @@ body[data-mode="m3"]{ --modeGlow1: rgba(20,184,166,.24); --modeGlow2: rgba(124,5
     copy.name = (copy.name||"Plan") + " (Copy)";
     const ref = await plansCol(uid).add({
       ...copy,
+    mode: state.mode || "m1",
       createdAt: firebase.firestore.FieldValue.serverTimestamp(),
       updatedAt: firebase.firestore.FieldValue.serverTimestamp()
     });
@@ -1349,6 +1368,7 @@ body[data-mode="m3"]{ --modeGlow1: rgba(20,184,166,.24); --modeGlow2: rgba(124,5
       name: state.plan.name,
       notes: state.plan.notes,
       rounding: state.plan.rounding,
+    mode: state.mode,
       mode1: state.plan.mode1,
       subjects: state.plan.subjects,
       updatedAt: firebase.firestore.FieldValue.serverTimestamp()
@@ -1498,7 +1518,27 @@ body[data-mode="m3"]{ --modeGlow1: rgba(20,184,166,.24); --modeGlow2: rgba(124,5
     $("#profileBtn").textContent = auth.currentUser ? "Profile" : "Sign in";
     $("#statusPill").textContent = auth.currentUser ? "Cloud" : "Guest";
     $("#statusPill").className = auth.currentUser ? "pill good" : "pill";
-    $("#lockBar").style.display = auth.currentUser ? "none" : "block";
+    $("#lockBar").style.display = (state.sharedView || !auth.currentUser) ? "block" : "none";
+    // Update lock banner for shared view
+    if (state.sharedView){
+      const lt = document.getElementById("lockTitle");
+      const lh = document.getElementById("lockHint");
+      if (lt) lt.textContent = "Shared view (read-only)";
+      if (lh) lh.textContent = "This is a shared snapshot. You can copy it to your account.";
+      const si = document.getElementById("lockSignInBtn");
+      const cp = document.getElementById("copyShareBtn");
+      if (si) si.style.display = auth.currentUser ? "none" : "inline-flex";
+      if (cp) cp.style.display = auth.currentUser ? "inline-flex" : "none";
+    } else {
+      const lt = document.getElementById("lockTitle");
+      const lh = document.getElementById("lockHint");
+      if (lt) lt.textContent = "View-only mode";
+      if (lh) lh.textContent = "Sign in to edit and autosave to your account.";
+      const si = document.getElementById("lockSignInBtn");
+      const cp = document.getElementById("copyShareBtn");
+      if (si) si.style.display = "inline-flex";
+      if (cp) cp.style.display = "none";
+    }
 
     // show account panel only after sign-in
     $("#accountAcc").style.display = auth.currentUser ? "block" : "none";
@@ -1655,7 +1695,7 @@ body[data-mode="m3"]{ --modeGlow1: rgba(20,184,166,.24); --modeGlow2: rgba(124,5
   function wireSubjectInputs(container){
   // delete buttons
   container.querySelectorAll("button[data-action='del']").forEach(btn=>{
-    btn.addEventListener("click", ()=>{
+    btn.addEventListener("click", () => { if (state.readOnly) { toast('View-only'); return; }
       const id = btn.getAttribute("data-id");
       state.plan.subjects = state.plan.subjects.filter(x=>x.id!==id);
       markDirty();
@@ -1678,7 +1718,7 @@ body[data-mode="m3"]{ --modeGlow1: rgba(20,184,166,.24); --modeGlow2: rgba(124,5
     }
 
     // LIVE typing: update state only
-    inp.addEventListener("input", ()=>{
+    inp.addEventListener("input", () => { if (state.readOnly) return;
       if (field==="name") s.name = inp.value;
       else if (field==="credits"){
         // keep as typed (string); validation happens on finish
@@ -1755,7 +1795,7 @@ body[data-mode="m3"]{ --modeGlow1: rgba(20,184,166,.24); --modeGlow2: rgba(124,5
   function renderSummary(){
     const box = $("#summaryBox");
     // Guests can enter data, but results are locked until sign-in
-    if (!auth.currentUser){
+    if (!auth.currentUser && !state.sharedView){
       box.innerHTML = `
         <div class="stat">
           <div class="k">Results locked</div>
@@ -1821,7 +1861,7 @@ body[data-mode="m3"]{ --modeGlow1: rgba(20,184,166,.24); --modeGlow2: rgba(124,5
     renderSummary();
 
     // Guests: keep per-subject badges locked
-    if (!auth.currentUser){
+    if (!auth.currentUser && !state.sharedView){
       for (const s of state.plan.subjects){
         const badgeEl = $("#badge-"+s.id);
         const labelEl = $("#label-"+s.id);
@@ -1881,17 +1921,19 @@ body[data-mode="m3"]{ --modeGlow1: rgba(20,184,166,.24); --modeGlow2: rgba(124,5
         const cr = clamp(parseInt(s.credits||3,10),1,4);
         const seeMax = (cr===1) ? ((parseInt(s.seeOutOf||"50",10)===100) ? 100 : 50) : 100;
         let reqSee = (seeMax===50) ? (minTotal - cie) : (minTotal - cie) * 2;
-        if (reqSee < 0) reqSee = 0;
-        const d = difficulty(reqSee);
-        badgeEl.className="pill "+d.tone;
-        badgeEl.textContent=d.label;
-        const note = (seeMax===100 && reqSee < 35) ? " (pass needs ≥35)" : "";
-        labelEl.textContent=`Minimum SEE: ${Math.round(reqSee)}/${seeMax}${note}`;
-              // NEW: show only required marks like X/100 inside SEE box (Mode 1)
-              const seeBox = document.getElementById(`reqsee-${s.id}`);
-              if (seeBox) seeBox.value = `${Math.round(reqSee)}/${seeMax}`;
-        barEl.className="bar " + (d.tone==="bad"?"bad":(d.tone==="warn"?"warn":""));
-        barEl.style.width = clamp((reqSee/seeMax)*100,0,100) + "%";
+if (reqSee < 0) reqSee = 0;
+// Pass-safe requirement: respects pass rules (SEE minimum + Total ≥ 40)
+const seePass = (seeMax === 50) ? 18 : 35;
+const totalPassNeed = (seeMax === 50) ? Math.max(0, 40 - cie) : Math.max(0, (40 - cie) * 2);
+let showReq = Math.max(reqSee, seePass, totalPassNeed);
+const d = difficulty(showReq);
+badgeEl.className="pill "+d.tone;
+badgeEl.textContent=d.label;
+labelEl.textContent=`Required SEE: ${Math.round(showReq)}/${seeMax}`;
+const seeBox = document.getElementById(`reqsee-${s.id}`);
+if (seeBox) seeBox.value = `${Math.round(showReq)}/${seeMax}`;
+barEl.className="bar " + (d.tone==="bad"?"bad":(d.tone==="warn"?"warn":""));
+barEl.style.width = clamp((showReq/seeMax)*100,0,100) + "%";
         }
       }
     }
@@ -1920,6 +1962,7 @@ body[data-mode="m3"]{ --modeGlow1: rgba(20,184,166,.24); --modeGlow2: rgba(124,5
 
 function setMode(mode, opts={push:true}){
   state.mode = mode;
+  try{ localStorage.setItem(LS_MODE_KEY, mode); }catch(_e){}
   try{ document.body.setAttribute('data-mode', mode); }catch(_e){}
   renderAllStatic();
   scheduleRecalc(0);
@@ -2285,7 +2328,76 @@ async function deleteAllUserPlans(uid){
 
 
  /* ========= Simple share / pdf ========= */
-  async function shareSite(){
+  
+  /* ========= Public share (Plan / Grade card) ========= */
+  async function createShareDoc(type){
+    if (!auth.currentUser){ openSignInModal(); return; }
+    const uid = auth.currentUser.uid;
+    const nowMs = Date.now();
+    // Snapshot payload
+    let payload = { type, mode: state.mode, createdAt: firebase.firestore.FieldValue.serverTimestamp(), createdMs: nowMs, uid };
+    if (type === 'plan'){
+      payload.data = { mode: state.mode, plan: state.plan, history: state.history, profile: { nickname: state.profile.nickname, university: state.profile.university, branch: state.profile.branch, semester: state.profile.semester, regulation: state.profile.regulation } };
+    } else {
+      // Grade card snapshot (Mode 2)
+      const rows = state.plan.subjects.map(s => {
+        const cr = (s.kind==="activity") ? 1 : clamp(parseInt(s.credits||3,10),1,4);
+        const seeMax = (cr===1) ? ((parseInt(s.seeOutOf||"50",10)===100) ? 100 : 50) : 100;
+        const cie = (s.kind==="activity") ? null : clamp(parseFloat(s.cie||0),0,50);
+        const see = (s.kind==="activity") ? null : clamp(parseFloat(s.see||0),0,seeMax);
+        const final = (s.kind==="activity") ? clamp(parseFloat(s.final||0),0,100) : null;
+        const r = calcSubjectMode2(s);
+        return { name: s.name||"Subject", kind: s.kind, credits: cr, seeMax, cie, see, final, result: r };
+      });
+      const sem = computeSGPA();
+      payload.mode = 'm2';
+      payload.data = { mode:'m2', semesterName: $("#semesterName")?.value || "", rows, sgpa: sem, profile: { nickname: state.profile.nickname, university: state.profile.university, branch: state.profile.branch, semester: state.profile.semester, regulation: state.profile.regulation } };
+    }
+    const ref = await sharesCol().add(payload);
+    const link = location.origin + location.pathname + '?share=' + ref.id;
+    openModal({
+      title: (type==='plan') ? 'Share plan' : 'Share grade card',
+      desc: 'Anyone with the link can view (read-only).',
+      bodyHTML: `<div class="subCard"><div style="font-weight:990">Share link</div><input class="input" id="shareLinkBox" value="${esc(link)}" readonly style="margin-top:10px"></div>`,
+      footHTML: `<button class="btn primary" id="copyShareLink">Copy link</button><button class="btn" id="closeShare">Close</button>`
+    });
+    document.getElementById('copyShareLink').onclick = async () => { try{ await navigator.clipboard.writeText(link); toast('Link copied'); }catch(_e){ toast('Copy failed'); } };
+    document.getElementById('closeShare').onclick = closeModal;
+  }
+
+  async function loadSharedSnapshot(shareId){
+    try{
+      const snap = await shareRef(shareId).get();
+      if (!snap.exists){ toast('Share not found'); return; }
+      const sh = snap.data();
+      if (!sh || !sh.data){ toast('Invalid share'); return; }
+      state.sharedView = true;
+      state.readOnly = true;
+      state.sharedData = sh;
+      // Apply snapshot
+      if (sh.data.plan){
+        state.plan = sh.data.plan;
+        if (sh.data.history) state.history = sh.data.history;
+        state.mode = sh.data.mode || sh.mode || 'm1';
+      } else {
+        // grade card share: render in mode2 using saved rows -> map back to subjects
+        state.mode = 'm2';
+        if (Array.isArray(sh.data.rows)){
+          // Recreate subjects from shared rows
+          state.plan.subjects = sh.data.rows.map(r => {
+            if (r.kind==='activity') return { id: crypto.randomUUID(), kind:'activity', name:r.name||'Activity', credits:1, final: String(r.final ?? '') };
+            const seeOutOf = (r.seeMax===50) ? '50' : '100';
+            return { id: crypto.randomUUID(), kind:'normal', name:r.name||'Subject', credits:String(r.credits||3), cie: String(r.cie ?? ''), see: String(r.see ?? ''), seeOutOf };
+          });
+        }
+      }
+      renderAllStatic();
+      setMode(state.mode, {push:false});
+      scheduleRecalc(0);
+      toast('Opened shared view');
+    }catch(e){ console.error(e); toast('Failed to load share'); }
+  }
+async function shareSite(){
     const url = `https://gradeo.in/`;
     try{
       if (navigator.share) await navigator.share({title:"Gradeo", url});
@@ -2626,13 +2738,13 @@ if (changelogBtn){
     wireAccordion("#accountAcc","#accChevron");
 
     // Add subject actions (only rebuild list on add/remove)
-    const addNormal = ()=>{
+    const addNormal = () => { if (state.readOnly) { toast('View-only'); return; }
       state.plan.subjects.push(mkSubject("normal"));
       markDirty();
       renderSubjectsDOM();
       scheduleRecalc(0);
     };
-    const addActivity = ()=>{
+    const addActivity = () => { if (state.readOnly) { toast('View-only'); return; }
       state.plan.subjects.push(mkSubject("activity"));
       markDirty();
       renderSubjectsDOM();
@@ -2646,7 +2758,7 @@ if (changelogBtn){
     $("#fabAdd").onclick = addNormal;
     $("#fabActivity").onclick = addActivity;
 
-    $("#clearSubjectsBtn").onclick = ()=>{
+    $("#clearSubjectsBtn").onclick = () => { if (state.readOnly) { toast('View-only'); return; }
       state.plan.subjects=[];
       markDirty();
       renderSubjectsDOM();
@@ -2738,7 +2850,41 @@ if (changelogBtn){
   const howItWorksBtn = document.getElementById('howItWorksBtn');
   if(howItWorksBtn) howItWorksBtn.addEventListener('click', ()=>{ closeMenu(); showHeroInfo(); });
   if(faqBtn) faqBtn.addEventListener('click', ()=>{ closeMenu(); showFAQ(); });
-  const contactBtn = document.getElementById('contactBtn');
+  
+  const sharePlanBtn = document.getElementById('sharePlanBtn');
+  if (sharePlanBtn) sharePlanBtn.addEventListener('click', () => { try{ closeMenu(); }catch(_e){} createShareDoc('plan'); });
+  const shareGradeBtn = document.getElementById('shareGradeBtn');
+  if (shareGradeBtn) shareGradeBtn.addEventListener('click', () => { try{ closeMenu(); }catch(_e){} createShareDoc('grade'); });
+  const copyShareBtn = document.getElementById('copyShareBtn');
+  if (copyShareBtn) copyShareBtn.addEventListener('click', async () => {
+    if (!auth.currentUser) { openSignInModal(); return; }
+    if (!state.sharedView || !state.sharedData || !state.sharedData.data) return;
+    try{
+      const uid = auth.currentUser.uid;
+      // Create a new plan from the shared snapshot
+      const snapData = state.sharedData.data;
+      const newPlan = {
+        name: (snapData.plan && snapData.plan.name ? snapData.plan.name : 'Shared copy'),
+        notes: snapData.plan?.notes || '',
+        rounding: snapData.plan?.rounding || 'nearest',
+        mode1: snapData.plan?.mode1 || { currentCgpa:'', completedCredits:'', targetCgpa:'' },
+        subjects: Array.isArray(snapData.plan?.subjects) ? snapData.plan.subjects : (Array.isArray(state.plan.subjects) ? state.plan.subjects : []),
+        history: snapData.history || state.history || null,
+        mode: snapData.mode || state.mode || 'm1',
+        createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+        updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
+        importedFromShare: true
+      };
+      const ref = await plansCol(uid).add(newPlan);
+      await profileRef(uid).set({ lastPlanId: ref.id }, { merge:true });
+      state.sharedView = false;
+      state.readOnly = false;
+      state.sharedData = null;
+      await openPlan(ref.id);
+      toast('Copied to your plans');
+    }catch(e){ console.error(e); toast('Copy failed'); }
+  });
+const contactBtn = document.getElementById('contactBtn');
   if(contactBtn) contactBtn.addEventListener('click', ()=>{ closeMenu(); showContact(); });
   const acctManage = document.getElementById('accountManageBtn');
   if(acctManage) acctManage.addEventListener('click', ()=>{ closeMenu(); openProfile(); });
@@ -2846,6 +2992,11 @@ if (changelogBtn){
     state.theme = state.theme || "light";
     document.body.setAttribute("data-theme", state.theme);
     initAuth();
+    // Open shared snapshot if link contains ?share=...
+    try{
+      const sid = new URLSearchParams(location.search).get('share');
+      if (sid) loadSharedSnapshot(sid);
+    }catch(_e){}
 
   // Set CSS var for nav height (helps fixed panels avoid overlapping the nav)
   try{
