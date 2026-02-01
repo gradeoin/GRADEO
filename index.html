@@ -3,6 +3,8 @@
 
 
 
+
+
 <!doctype html>
 <html lang="en">
 <head>
@@ -727,58 +729,73 @@ body::before{
   // ===== Welcome email (EmailJS) =====
   // Sends only once per user (uses BOTH: Firestore flag + localStorage fallback)
   async function sendWelcomeEmailOnce(user){
-    try{
-      if(!user || !user.uid || !user.email) return;
+  try{
+    if(!user || !user.uid || !user.email) return;
 
-      // Local (per-browser) guard
-      const key = "welcome_sent_" + user.uid;
-      if (localStorage.getItem(key)) return;
-
-      // Cloud (per-account) guard: if already sent on any device, skip
-      try{
-        if (typeof profileRef === 'function' && db){
-          const snap = await profileRef(user.uid).get();
-          if (snap && snap.exists && snap.data() && snap.data().welcomeEmailSent){
-            localStorage.setItem(key, "1");
-            return;
-          }
-        }
-      }catch(_e){ /* ignore cloud-check errors */ }
-
-      await emailjs.send(
-        "service_h64ayo1", // your Service ID
-        "template_ty5v5nz", // your Template ID
-        {
-          // IMPORTANT: use variable names that exist in your EmailJS template.
-          // We send common names to avoid 'undefined' in template.
-          to_email: user.email,
-          to_name: user.displayName || 'Friend',
-          user_email: user.email,
-          user_name: user.displayName || 'Friend',
-          email: user.email,
-          name: user.displayName || 'Friend'
-        }
-      );
-
-      localStorage.setItem(key, "1");
-
-      // Save flag to Firestore so it won't resend on another device
-      try{
-        if (typeof profileRef === 'function' && db && window.firebase){
-          await profileRef(user.uid).set({
-            welcomeEmailSent: true,
-            welcomeEmailSentAt: firebase.firestore.FieldValue.serverTimestamp()
-          }, { merge: true });
-        }
-      }catch(_e){ /* ignore cloud write errors */ }
-
-      console.log("✅ Welcome email sent to:", user.email);
-    }catch(err){
-      console.error("❌ Welcome email failed:", err);
+    // Ensure EmailJS loaded
+    if(!window.emailjs || typeof window.emailjs.send !== 'function'){
+      console.error('❌ EmailJS not loaded');
+      return;
     }
-  }
 
-  /* ========= Firebase config (yours) ========= */
+    // Local (per-browser) guard
+    const key = 'welcome_sent_' + user.uid;
+    if(localStorage.getItem(key)) return;
+
+    // Cloud (per-account) guard (skip if already sent on another device)
+    try{
+      if(typeof profileRef === 'function' && db){
+        const snap = await profileRef(user.uid).get();
+        if(snap && snap.exists && snap.data && snap.data() && snap.data().welcomeEmailSent){
+          localStorage.setItem(key,'1');
+          return;
+        }
+      }
+    }catch(_e){ /* ignore cloud-check errors */ }
+
+    const params = {
+      // Recipient (must be used in EmailJS template settings: To Email = {{to_email}})
+      to_email: user.email,
+      to_name: user.displayName || 'Friend',
+
+      // Content variables used inside the HTML template
+      name: user.displayName || 'Friend',
+      email: user.email,
+      year: new Date().getFullYear()
+    };
+
+    const res = await emailjs.send(
+      'service_h64ayo1',
+      'template_ty5v5nz',
+      params
+    );
+
+    console.log('✅ EmailJS response:', res);
+    localStorage.setItem(key,'1');
+
+    // Save flag to Firestore so it won't resend on another device
+    try{
+      if(typeof profileRef === 'function' && db && window.firebase){
+        await profileRef(user.uid).set({
+          welcomeEmailSent: true,
+          welcomeEmailSentAt: firebase.firestore.FieldValue.serverTimestamp()
+        }, { merge: true });
+      }
+    }catch(_e){ /* ignore cloud write errors */ }
+
+    console.log('✅ Welcome email sent to:', user.email);
+  }catch(err){
+    console.error('❌ Welcome email failed:', {
+      status: err && err.status,
+      text: err && err.text,
+      message: err && err.message,
+      err
+    });
+    try{ toast('Welcome email failed: ' + ((err && err.text) || (err && err.message) || 'Unknown')); }catch(_e){}
+  }
+}
+
+/* ========= Firebase config (yours) ========= */
   const firebaseConfig = {
   apiKey: "AIzaSyDB_FK8-3ATZBpuvfL34EMp9WHTTd5sfIo",
   authDomain: "gradeo-in.firebaseapp.com",
@@ -1672,11 +1689,19 @@ body::before{
       footHTML:`<button class="btn primary" id="doSignin">Continue with Google</button>
                 <button class="btn" id="cancel">Cancel</button>`
     });
-    $("#doSignin").onclick = async()=>{ 
-   const result = await auth.signInWithPopup(provider);
-   await sendWelcomeEmailOnce(result.user);
-   closeModal(); 
- };
+    $("#doSignin").onclick = async() => {
+  const result = await auth.signInWithPopup(provider);
+
+  // Send welcome email only for new users (extra safety; cloud/local guard also exists)
+  const isNew = (result && result.additionalUserInfo && result.additionalUserInfo.isNewUser === true) ||
+    (result && result.user && result.user.metadata && result.user.metadata.creationTime === result.user.metadata.lastSignInTime);
+
+  if(isNew){
+    await sendWelcomeEmailOnce(result.user);
+  }
+
+  closeModal();
+};
     $("#cancel").onclick = closeModal;
   }
 
@@ -2469,7 +2494,8 @@ const prefersReduce = window.matchMedia && window.matchMedia('(prefers-reduced-m
 
 })();
 </script>
-</body>
+<script defer src="https://static.cloudflareinsights.com/beacon.min.js/vcd15cbe7772f49c399c6a5babf22c1241717689176015" integrity="sha512-ZpsOmlRQV6y907TI0dKBHq9Md29nnaEIPlkf84rnaERnq6zvWvPUqr2ft8M1aS28oN72PdrCzSjY4U6VaAw1EQ==" data-cf-beacon='{"version":"2024.11.0","token":"32f0b0530bdb47d89109f78f09c965e1","r":1,"server_timing":{"name":{"cfCacheStatus":true,"cfEdge":true,"cfExtPri":true,"cfL4":true,"cfOrigin":true,"cfSpeedBrain":true},"location_startswith":null}}' crossorigin="anonymous"></script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9c711f0dcc345f7c',t:'MTc2OTk0NTQ3NA=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
 
 
