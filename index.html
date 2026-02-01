@@ -80,26 +80,29 @@
       --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
     }
     [data-theme="light"]{
-      --bg:#f6f8ff; --panel:#ffffff; --card:#f1f5ff; --stroke:#d6e0ff;
-      --text:#0c1633; --muted:#4b5e8a; --muted2:#5f75ad;
-      --shadow:0 14px 28px rgba(12,22,51,.10);
-      --shadow2:0 8px 16px rgba(12,22,51,.08);
-    }
-    @media (prefers-color-scheme: light){
-      [data-theme="system"]{
-        --bg:#f6f8ff; --panel:#ffffff; --card:#f1f5ff; --stroke:#d6e0ff;
-        --text:#0c1633; --muted:#4b5e8a; --muted2:#5f75ad;
-        --shadow:0 14px 28px rgba(12,22,51,.10);
-        --shadow2:0 8px 16px rgba(12,22,51,.08);
-      }
-    }
-    *{box-sizing:border-box}
+  --bg:#fff7ed; --panel:#ffffff; --card:#fff1e6; --stroke:#ffd7b3;
+  --text:#2a1a0a; --muted:#6b3d12; --muted2:#8a5a2b;
+  --brand:#ff6a00; --brand2:#ffb703;
+  --good:#22c55e; --warn:#f59e0b; --bad:#ef4444;
+  --shadow:0 14px 28px rgba(255,106,0,.10);
+  --shadow2:0 8px 16px rgba(255,106,0,.08);
+}
+@media (prefers-color-scheme: light){
+  [data-theme="system"]{
+    --bg:#fff7ed; --panel:#ffffff; --card:#fff1e6; --stroke:#ffd7b3;
+    --text:#2a1a0a; --muted:#6b3d12; --muted2:#8a5a2b;
+    --brand:#ff6a00; --brand2:#ffb703;
+    --shadow:0 14px 28px rgba(255,106,0,.10);
+    --shadow2:0 8px 16px rgba(255,106,0,.08);
+  }
+}
+*{box-sizing:border-box}
     body{
       margin:0; font-family:var(--ui); color:var(--text);
       background:
-        radial-gradient(900px 600px at 15% -10%, rgba(11,87,208,.35), transparent 60%),
-        radial-gradient(900px 600px at 85% 0%, rgba(124,58,237,.22), transparent 60%),
-        linear-gradient(180deg, var(--bg), var(--bg));
+  radial-gradient(900px 600px at 15% -10%, rgba(255,106,0,.28), transparent 60%),
+  radial-gradient(900px 600px at 85% 0%, rgba(255,183,3,.22), transparent 60%),
+  linear-gradient(180deg, var(--bg), var(--bg));
       overflow-x:hidden;
     }
 
@@ -717,13 +720,12 @@ body::before{
         }
       }catch(_e){ /* ignore cloud-check errors */ }
 
-      // Send email via EmailJS template
       await emailjs.send(
-        "service_h64ayo1",     // your Service ID (updated)
-        "template_ty5v5nz",    // your Template ID (updated)
+        "service_h64ayo1", // your Service ID
+        "template_ty5v5nz", // your Template ID
         {
-          // IMPORTANT: variable names must match your EmailJS template variables
-          // To maximize compatibility, we send multiple common field names.
+          // IMPORTANT: use variable names that exist in your EmailJS template.
+          // We send common names to avoid 'undefined' in template.
           to_email: user.email,
           to_name: user.displayName || 'Friend',
           user_email: user.email,
@@ -733,10 +735,9 @@ body::before{
         }
       );
 
-      // Mark as sent locally
       localStorage.setItem(key, "1");
 
-      // Mark as sent in Firestore so it won't resend on other devices
+      // Save flag to Firestore so it won't resend on another device
       try{
         if (typeof profileRef === 'function' && db && window.firebase){
           await profileRef(user.uid).set({
@@ -744,7 +745,7 @@ body::before{
             welcomeEmailSentAt: firebase.firestore.FieldValue.serverTimestamp()
           }, { merge: true });
         }
-      }catch(_e){ /* ignore cloud-flag errors */ }
+      }catch(_e){ /* ignore cloud write errors */ }
 
       console.log("✅ Welcome email sent to:", user.email);
     }catch(err){
@@ -752,7 +753,7 @@ body::before{
     }
   }
 
-  /* ========= Firebase config (yours) ========= */ (yours) ========= */
+  /* ========= Firebase config (yours) ========= */
   const firebaseConfig = {
   apiKey: "AIzaSyDB_FK8-3ATZBpuvfL34EMp9WHTTd5sfIo",
   authDomain: "gradeo-in.firebaseapp.com",
