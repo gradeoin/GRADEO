@@ -1,12 +1,3 @@
-
-
-
-
-
-
-
-
-
 <!doctype html>
 <html lang="en">
 <head>
@@ -464,14 +455,7 @@ body::before{
         <button class="modeBtn" id="m2Btn">🧮 Marks → SGPA</button>
         <button class="modeBtn" id="m3Btn">📈 SGPA → CGPA</button>
       </div>
-
-      <select class="select" id="themeSelect" style="width:150px">
-        <option value="system">Theme: System</option>
-        <option value="dark">Theme: Dark</option>
-        <option value="light" selected>Theme: Light</option>
-      </select>
-
-      <button class="btn ghost" id="shareSiteBtn">Share</button>
+<button class="btn ghost" id="shareSiteBtn">Share</button>
       <button class="btn" id="pdfBtn">PDF</button>
       <button class="btn primary" id="profileBtn">Sign in</button>
     </div>
@@ -1768,7 +1752,10 @@ body::before{
     $("#m2Btn").onclick = ()=>setMode("m2");
     $("#m3Btn").onclick = ()=>setMode("m3");
 
-    $("#themeSelect").onchange = (e)=>{ state.theme=e.target.value; document.body.setAttribute("data-theme", state.theme); markDirty(); };
+    const __themeSel = document.getElementById("themeSelect");
+ if(__themeSel){
+   __themeSel.onchange = (e)=>{ state.theme=e.target.value; document.body.setAttribute("data-theme", state.theme); markDirty(); };
+ }
 
     $("#profileBtn").onclick = openProfile;
     $("#lockSignInBtn").onclick = openSignInModal;
@@ -2003,8 +1990,6 @@ if (changelogBtn){
         state.profile.nickname = nick;
         state.theme = theme;
         document.body.setAttribute("data-theme", theme);
-        $("#themeSelect").value = theme;
-
         await fetchPlans();
         renderPlansSelect();
 
@@ -2053,7 +2038,6 @@ if (changelogBtn){
         $("#accountAcc").style.display="none";
         $("#savePill").style.display="none";
         document.body.setAttribute("data-theme", state.theme);
-        $("#themeSelect").value = state.theme;
         renderAllStatic();
         scheduleRecalc(0);
       }
@@ -2069,7 +2053,6 @@ if (changelogBtn){
     // Default to light theme on first visit (user can still switch)
     state.theme = state.theme || "light";
     document.body.setAttribute("data-theme", state.theme);
-    $("#themeSelect").value = state.theme;
     initAuth();
 
     // default mode
