@@ -1597,7 +1597,12 @@ body[data-mode="m3"]{ --modeGlow1: rgba(20,184,166,.24); --modeGlow2: rgba(124,5
           </div>
           <div>
             <label class="label">SEE /${seeMax}</label>
-            <input class="input" data-id="${s.id}" data-field="see" type="number" min="0" max="${seeMax}" step="1" value="${esc(s.see??"")}">
+            ${
+              state.mode === "m1"
+                ? `<input class="input mono" id="reqsee-${s.id}" readonly value="—/${seeMax}">`
+                : `<input class="input" data-id="${s.id}" data-field="see" type="number" min="0" max="${seeMax}" step="1" value="${esc(s.see ?? "")}">`
+            }
+          </div>
           </div>
           ${cr===1 ? `
           <div>
@@ -1882,6 +1887,9 @@ body[data-mode="m3"]{ --modeGlow1: rgba(20,184,166,.24); --modeGlow2: rgba(124,5
         badgeEl.textContent=d.label;
         const note = (seeMax===100 && reqSee < 35) ? " (pass needs ≥35)" : "";
         labelEl.textContent=`Minimum SEE: ${Math.round(reqSee)}/${seeMax}${note}`;
+              // NEW: show only required marks like X/100 inside SEE box (Mode 1)
+              const seeBox = document.getElementById(`reqsee-${s.id}`);
+              if (seeBox) seeBox.value = `${Math.round(reqSee)}/${seeMax}`;
         barEl.className="bar " + (d.tone==="bad"?"bad":(d.tone==="warn"?"warn":""));
         barEl.style.width = clamp((reqSee/seeMax)*100,0,100) + "%";
         }
