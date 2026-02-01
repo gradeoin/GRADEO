@@ -12,7 +12,7 @@
 <head>
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
-  <title>GRADEO — VTU SGPA & CGPA Calculator | Marks → SGPA | Target CGPA → Minimum SEE</title>
+  <title>GRADEO</title>
  <link rel="icon" href="https://res.cloudinary.com/djy3mjtsz/image/upload/v1769939761/Untitled_1_vtehdh.png" type="image/gif">
  <link rel="shortcut icon" href="https://res.cloudinary.com/djy3mjtsz/image/upload/v1769939761/Untitled_1_vtehdh.png" type="image/gif">
  <link rel="apple-touch-icon" sizes="180x180" href="https://res.cloudinary.com/djy3mjtsz/image/upload/v1769939761/Untitled_1_vtehdh.png">
@@ -20,8 +20,8 @@
 
   <meta name="theme-color" content="#0B57D0"/>
   <!-- Primary SEO -->
-  <meta name="description" content="GRADEO is a fast VTU-friendly SGPA & CGPA calculator. Convert Marks → SGPA, SGPA → CGPA, and Target CGPA → Minimum SEE needed. Cloud autosave, PDF export, and shareable plans."/>
-  <meta name="keywords" content="VTU SGPA calculator, VTU CGPA calculator, SGPA calculator, CGPA calculator, marks to SGPA, SGPA to CGPA, SEE marks calculator, CIE SEE calculator, engineering GPA calculator, grade points, GRADEO"/>
+  <meta name="description" content="GRADEO helps you calculate SGPA from marks, convert SGPA→CGPA, and estimate minimum SEE marks needed for a target CGPA. Cloud autosave and PDF export."/>
+  <meta name="keywords" content="GRADEO, SGPA calculator, CGPA calculator, VTU SGPA, VTU CGPA, SEE marks calculator, CIE SEE calculator, grade points, GPA planner"/>
   <meta name="robots" content="index,follow,max-snippet:-1,max-image-preview:large,max-video-preview:-1"/>
  <meta name="googlebot" content="index,follow,max-snippet:-1,max-image-preview:large,max-video-preview:-1"/>
   <meta name="referrer" content="strict-origin-when-cross-origin"/>
@@ -40,9 +40,9 @@
   <meta property="og:image" content="https://res.cloudinary.com/djy3mjtsz/image/upload/v1769939761/Untitled_1_vtehdh.png"/>
 
   <meta property="og:image:secure_url" content="https://res.cloudinary.com/djy3mjtsz/image/upload/v1769939761/Untitled_1_vtehdh.png"/>
- <meta property="og:image:type" content="image/png"/>
- <meta property="og:image:width" content="512"/>
- <meta property="og:image:height" content="512"/>
+ <meta property="og:image:type" content="image/gif"/>
+ <meta property="og:image:width" content="1200"/>
+ <meta property="og:image:height" content="630"/>
  <meta property="og:image:alt" content="GRADEO — CGPA & SGPA calculator and planner"/>
  <!-- Twitter -->
   <meta name="twitter:card" content="summary_large_image"/>
@@ -464,130 +464,109 @@ body::before{
   border-bottom: 1px solid var(--stroke);
 }
 
-/* ===== Profile + Sign-in UX (added) ===== */
-.authBtn{position:relative;}
-.authBtn.loading{opacity:.85; pointer-events:none;}
-.authBtn .spinner{display:none; width:16px; height:16px; border-radius:999px; border:2px solid rgba(255,255,255,.55); border-top-color:rgba(255,255,255,.0); animation:spin360 .8s linear infinite;}
-.authBtn.loading .spinner{display:inline-block;}
-@keyframes spin360{to{transform:rotate(360deg)}}
-
-.profileCard{display:flex; gap:12px; align-items:center; border:1px solid var(--stroke); background:var(--card); border-radius:14px; padding:12px; box-shadow:var(--shadow2); flex-wrap:wrap;}
-.profileAvatar{width:54px;height:54px;border-radius:16px; object-fit:cover; border:1px solid color-mix(in oklab, var(--stroke) 70%, transparent); background:rgba(255,255,255,.08); flex:0 0 auto;}
-.profileMeta{display:flex;flex-direction:column;gap:4px; min-width:0;}
-.profileMeta .name{font-weight:990; font-size:15px; overflow-wrap:anywhere; word-break:break-word;}
-.profileMeta .email{font-weight:850; font-size:12px; color:var(--muted); overflow-wrap:anywhere; word-break:break-word;}
-.profileGrid{display:grid; grid-template-columns:1fr 1fr; gap:10px;}
-@media (max-width:520px){.profileGrid{grid-template-columns:1fr;}}
-.chipRow{display:flex; gap:8px; flex-wrap:wrap; margin-top:8px;}
-.chip{display:inline-flex;align-items:center;gap:6px; padding:6px 10px; border-radius:999px; border:1px solid var(--stroke); background:rgba(255,255,255,.06); font-weight:950; font-size:12px; max-width:100%;}
-.chip .mono{word-break:break-all; overflow-wrap:anywhere;}
-
-/* ===== Modal overflow & app-like behavior (added) ===== */
-html.modalOpen, body.modalOpen{overflow:hidden; overscroll-behavior:contain; touch-action:none;}
-.overlay{padding:14px;}
-.modal{max-height:calc(100vh - 28px); overflow:hidden; width:min(740px,100%);} 
-.modalHead{position:sticky; top:0; background:color-mix(in oklab, var(--panel) 92%, transparent); backdrop-filter:saturate(1.2) blur(10px); z-index:2;}
-.modalBody{max-height:calc(100vh - 220px); overflow:auto; -webkit-overflow-scrolling:touch; padding-bottom:10px;}
-.modalFoot{position:sticky; bottom:0; z-index:2; background:color-mix(in oklab, var(--panel) 92%, transparent); backdrop-filter:saturate(1.2) blur(10px); border-top:1px solid var(--stroke); flex-wrap:wrap;}
-.modalFoot .btn{max-width:100%;}
-.swipePill{display:none; width:52px; height:5px; border-radius:999px; background:color-mix(in oklab, var(--muted2) 35%, transparent); margin:0 auto 8px;}
-@media (max-width:520px){.swipePill{display:block;} .overlay{padding:10px;} .modal{width:100%;} .profileAvatar{width:50px;height:50px;}}
-
-/* ===== Dynamic Island ===== */
-.island{position:fixed;left:50%;top:10px;transform:translateX(-50%);z-index:200;width:min(520px, calc(100vw - 24px));pointer-events:none;opacity:0;}
-.island.show{opacity:1; pointer-events:auto;}
-.islandInner{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:999px;border:1px solid color-mix(in oklab, var(--stroke) 70%, transparent);background:color-mix(in oklab, var(--panel) 86%, transparent);backdrop-filter:saturate(1.3) blur(12px);box-shadow:0 18px 50px rgba(0,0,0,.28);transform:translateY(-8px) scale(.98);transition:transform 220ms cubic-bezier(.16,1,.3,1), opacity 220ms cubic-bezier(.16,1,.3,1);} 
-.island.show .islandInner{transform:none;}
-.islandIcon{width:28px;height:28px;border-radius:999px;display:grid;place-items:center;background:linear-gradient(135deg,var(--brand),var(--brand2));color:#fff;font-weight:1000;}
-.islandText{min-width:0;display:flex;flex-direction:column;gap:2px;}
-.islandTitle{font-weight:1000;font-size:13px;line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-.islandSub{font-weight:850;font-size:12px;color:var(--muted);line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-.islandClose{margin-left:auto;border:none;background:rgba(255,255,255,.10);color:var(--text);width:30px;height:30px;border-radius:999px;cursor:pointer;font-weight:1000;}
-
-/* ===== Bottom Navigation (mobile) ===== */
-.bottomNav{position:fixed;left:50%;bottom:10px;transform:translateX(-50%);width:min(560px, calc(100vw - 20px));display:none;gap:8px;padding:8px;border-radius:18px;border:1px solid color-mix(in oklab, var(--stroke) 70%, transparent);background:color-mix(in oklab, var(--panel) 86%, transparent);backdrop-filter:saturate(1.2) blur(12px);box-shadow:0 18px 50px rgba(0,0,0,.28);z-index:120;}
-.bottomBtn{flex:1;border:1px solid transparent;background:transparent;color:var(--muted);border-radius:14px;padding:10px 8px;display:flex;flex-direction:column;align-items:center;gap:4px;font-weight:1000;cursor:pointer;transition:background 180ms cubic-bezier(.2,.8,.2,1), color 180ms cubic-bezier(.2,.8,.2,1), transform 180ms cubic-bezier(.2,.8,.2,1);} 
-.bottomBtn:active{transform:scale(.98)}
-.bottomBtn .bI{font-size:16px;line-height:1;}
-.bottomBtn .bT{font-size:12px;}
-.bottomBtn.active{color:var(--text);background:rgba(11,87,208,.20);border-color:rgba(11,87,208,.30);} 
-
-/* Mobile tweaks: hide top mode pills, rely on bottom nav */
-@media (max-width:640px){
-  .bottomNav{display:flex;}
-  .modeSwitch{display:none;}
-  .container{padding-bottom:150px;}
-  .fab{bottom:86px;}
-  #backToTop{bottom:86px;}
-}
-
-@media (prefers-reduced-motion: reduce){
-  .islandInner, .bottomBtn{transition:none;}
-}
 </style>
 
-<!-- Brand/SEO structured data (added) -->
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "WebSite",
-  "name": "GRADEO",
-  "url": "https://gradeo.in/",
-  "description": "SGPA & CGPA calculator for VTU and engineering students.",
-  "potentialAction": {
-    "@type": "SearchAction",
-    "target": "https://gradeo.in/?q={search_term_string}",
-    "query-input": "required name=search_term_string"
-  }
-}
-</script>
 
+<!-- Enhanced entity graph for SEO/AI (added) -->
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
-  "@type": "Organization",
-  "name": "GRADEO",
-  "url": "https://gradeo.in/",
-  "logo": "https://res.cloudinary.com/djy3mjtsz/image/upload/v1769939761/Untitled_1_vtehdh.png"
-}
-</script>
-
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "FAQPage",
-  "mainEntity": [
+  "@graph": [
     {
-      "@type": "Question",
-      "name": "How to calculate VTU SGPA from marks?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "Enter CIE and SEE for each subject with credits. GRADEO computes Total/100, maps it to grade points, and calculates SGPA as Σ(credits×GP)/Σ(credits)."
+      "@type": "Organization",
+      "@id": "https://gradeo.in/#org",
+      "name": "GRADEO",
+      "url": "https://gradeo.in/",
+      "logo": "https://res.cloudinary.com/djy3mjtsz/image/upload/v1769939761/Untitled_1_vtehdh.png",
+      "description": "GRADEO is a VTU-friendly SGPA & CGPA calculator for engineering students.",
+      "sameAs": [
+        "https://gradeo.in/"
+      ]
+    },
+    {
+      "@type": "WebSite",
+      "@id": "https://gradeo.in/#website",
+      "url": "https://gradeo.in/",
+      "name": "GRADEO",
+      "publisher": {
+        "@id": "https://gradeo.in/#org"
+      },
+      "inLanguage": "en-IN",
+      "description": "Calculate SGPA from marks, convert SGPA to CGPA, and estimate minimum SEE for a target CGPA.",
+      "potentialAction": {
+        "@type": "SearchAction",
+        "target": "https://gradeo.in/?q={search_term_string}",
+        "query-input": "required name=search_term_string"
       }
     },
     {
-      "@type": "Question",
-      "name": "How to convert SGPA to CGPA?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "Use SGPA→CGPA mode. Enter semester SGPA values (and credits if needed) to get CGPA instantly."
+      "@type": "WebPage",
+      "@id": "https://gradeo.in/#webpage",
+      "url": "https://gradeo.in/",
+      "name": "GRADEO — VTU SGPA & CGPA Calculator",
+      "description": "GRADEO helps students calculate SGPA from marks, convert SGPA to CGPA, and estimate minimum SEE required for a target CGPA.",
+      "isPartOf": {
+        "@id": "https://gradeo.in/#website"
+      },
+      "about": {
+        "@id": "https://gradeo.in/#app"
       }
     },
     {
-      "@type": "Question",
-      "name": "How to find minimum SEE marks for a target CGPA?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "Use Target→SEE mode. Enter current CGPA and completed credits, add subjects and CIE. GRADEO estimates the minimum SEE required for your target CGPA based on the grade scale."
+      "@type": "SoftwareApplication",
+      "@id": "https://gradeo.in/#app",
+      "name": "GRADEO",
+      "applicationCategory": "EducationalApplication",
+      "operatingSystem": "All",
+      "url": "https://gradeo.in/",
+      "image": "https://res.cloudinary.com/djy3mjtsz/image/upload/v1769939761/Untitled_1_vtehdh.png",
+      "description": "A VTU-friendly SGPA & CGPA calculator: Target CGPA → Minimum SEE, Marks → SGPA, SGPA → CGPA. Includes cloud autosave, PDF export and sharing.",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "INR"
+      },
+      "publisher": {
+        "@id": "https://gradeo.in/#org"
       }
     },
     {
-      "@type": "Question",
-      "name": "Is GRADEO an official university tool?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "No. GRADEO is an educational estimation tool. Always verify with your official marks card and university rules."
-      }
+      "@type": "FAQPage",
+      "@id": "https://gradeo.in/#faq",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "How do I calculate SGPA from marks?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Enter each subject’s CIE and SEE (or Final/100 for activity). GRADEO converts Total/100 to grade points and calculates SGPA using credits."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How do I convert SGPA to CGPA?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Use SGPA → CGPA mode. Enter semester SGPA (and credits if needed). GRADEO calculates CGPA instantly."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How do I find the minimum SEE marks needed for a target CGPA?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Use Target → SEE. Enter current CGPA, completed credits, subjects and CIE. GRADEO estimates minimum SEE required based on grade scale and rounding."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Is GRADEO an official university tool?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "No. GRADEO provides educational estimates. Always verify with official university rules and marks cards."
+          }
+        }
+      ]
     }
   ]
 }
@@ -597,16 +576,6 @@ html.modalOpen, body.modalOpen{overflow:hidden; overscroll-behavior:contain; tou
 <body data-theme="light">
 <canvas id="bg3d" aria-hidden="true"></canvas>
 <div class="cursorGlow" id="cursorGlow" aria-hidden="true"></div>
-<div id="dynamicIsland" class="island" role="status" aria-live="polite" aria-atomic="true">
-  <div class="islandInner">
-    <div class="islandIcon" aria-hidden="true">✨</div>
-    <div class="islandText">
-      <div class="islandTitle" id="islandTitle">Welcome to GRADEO</div>
-      <div class="islandSub" id="islandSub">Ready.</div>
-    </div>
-    <button class="islandClose" id="islandClose" aria-label="Close">✕</button>
-  </div>
-</div>
 <header class="nav noPrint" id="nav">
   <div class="navInner">
     <div class="brand">
@@ -824,12 +793,35 @@ html.modalOpen, body.modalOpen{overflow:hidden; overscroll-behavior:contain; tou
       </div>
     </aside>
   </div>
-<div id="seoText" aria-label="GRADEO information" style="position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden;">
-  <h2>GRADEO SGPA and CGPA Calculator</h2>
-  <p>GRADEO helps engineering students calculate VTU SGPA from marks (CIE + SEE), convert SGPA to CGPA, and estimate the minimum SEE marks needed for a target CGPA. Features include cloud autosave, PDF export, and shareable plans.</p>
-  <p>Popular searches: VTU SGPA calculator, VTU CGPA calculator, marks to SGPA, SGPA to CGPA, SEE marks calculator.</p>
-</div>
 </main>
+
+<section class="panel" id="about-gradeo" style="margin-top:12px;">
+  <div class="panelHead">
+    <div>
+      <h2>About GRADEO</h2>
+      <p>SGPA & CGPA calculator built for VTU and engineering students.</p>
+    </div>
+  </div>
+  <div class="panelBody">
+    <div class="subCard">
+      <div style="font-weight:990;">What GRADEO does</div>
+      <div class="hint" style="margin-top:6px;">
+        • <b>Target CGPA → Minimum SEE</b>: estimate required SEE marks per subject<br>
+        • <b>Marks → SGPA</b>: calculate SGPA from CIE & SEE with pass checks<br>
+        • <b>SGPA → CGPA</b>: convert semester SGPA to overall CGPA<br>
+        • <b>Cloud autosave</b> after Google sign-in • <b>PDF export</b> • Shareable plans
+      </div>
+    </div>
+    <div class="subCard" style="margin-top:10px;">
+      <div style="font-weight:990;">Who it’s for</div>
+      <div class="hint" style="margin-top:6px;">Engineering students (VTU-friendly) who want fast GPA calculations, planning and result estimates.</div>
+    </div>
+    <div class="subCard" style="margin-top:10px;">
+      <div style="font-weight:990;">Disclaimer</div>
+      <div class="hint" style="margin-top:6px;">Educational estimate only. Actual results may differ due to official university rules, moderation, rounding or policy changes.</div>
+    </div>
+  </div>
+</section>
 
 <footer class="noPrint" style="max-width:1200px; margin:0 auto; padding:0 14px 24px;">
   <div class="panel" style="padding:12px; display:flex; justify-content:space-between; gap:10px; flex-wrap:wrap; align-items:center;">
@@ -869,11 +861,11 @@ html.modalOpen, body.modalOpen{overflow:hidden; overscroll-behavior:contain; tou
 </div>
 
 <!-- Three.js (for premium background motion) -->
-<script defer src="https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.min.js"></script>
 
 
 <!-- EmailJS -->
-<script defer src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 <script>
   emailjs.init({ publicKey: "xwlbvek6Ba47Eyg21" }); // ✅ Your Public Key
 </script>
@@ -982,82 +974,19 @@ html.modalOpen, body.modalOpen{overflow:hidden; overscroll-behavior:contain; tou
     setTimeout(()=>{ t.style.opacity="0"; t.style.transition="opacity 200ms"; }, 1400);
     setTimeout(()=>t.remove(), 1700);
   }
- window.toast = toast;
 
-  
-let __lastFocus = null;
-let __swipe = {active:false, y0:0, dy:0};
-
-function openModal({title, desc, bodyHTML, footHTML}){
-  __lastFocus = document.activeElement;
-  $("#modalTitle").textContent = title || "";
-  $("#modalDesc").textContent = desc || "";
-  const pill = '<div class="swipePill" aria-hidden="true"></div>';
-  $("#modalBody").innerHTML = (pill + (bodyHTML || ""));
-  $("#modalFoot").innerHTML = footHTML || "";
-  $("#overlay").classList.add("show");
-  document.documentElement.classList.add('modalOpen');
-  document.body.classList.add('modalOpen');
-
-  setTimeout(()=>{
-    const root = $("#overlay");
-    const focusable = root.querySelector('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])');
-    focusable && focusable.focus && focusable.focus();
-  }, 0);
-
-  // Swipe-to-close (mobile)
-  const modal = document.querySelector('.modal');
-  const head = document.querySelector('.modalHead');
-  const body = document.querySelector('.modalBody');
-  if (!modal || !head || !body) return;
-
-  const start = (e)=>{
-    if (body.scrollTop > 2) return;
-    const y = (e.touches && e.touches[0]) ? e.touches[0].clientY : e.clientY;
-    __swipe.active = true; __swipe.y0 = y; __swipe.dy = 0;
-    modal.style.transition = 'none';
-  };
-  const move = (e)=>{
-    if (!__swipe.active) return;
-    const y = (e.touches && e.touches[0]) ? e.touches[0].clientY : e.clientY;
-    __swipe.dy = Math.max(0, y - __swipe.y0);
-    const translate = Math.min(__swipe.dy, 160);
-    modal.style.transform = `translateY(${translate}px)`;
-    modal.style.opacity = String(1 - Math.min(translate/260, 0.35));
-  };
-  const end = ()=>{
-    if (!__swipe.active) return;
-    __swipe.active = false;
-    const shouldClose = __swipe.dy > 90;
-    modal.style.transition = 'transform 180ms cubic-bezier(.16,1,.3,1), opacity 180ms cubic-bezier(.16,1,.3,1)';
-    if (shouldClose){
-      modal.style.transform = 'translateY(180px)';
-      modal.style.opacity = '0';
-      setTimeout(()=>closeModal(), 140);
-    } else {
-      modal.style.transform = '';
-      modal.style.opacity = '';
-    }
-  };
-
-  head.addEventListener('pointerdown', start, {passive:true});
-  window.addEventListener('pointermove', move, {passive:true});
-  window.addEventListener('pointerup', end, {passive:true});
-  window.addEventListener('pointercancel', end, {passive:true});
-
-  body.addEventListener('touchstart', (e)=>{ if (body.scrollTop<=2) start(e); }, {passive:true});
-  body.addEventListener('touchmove', move, {passive:true});
-  body.addEventListener('touchend', end, {passive:true});
-}
-
-function closeModal(){
-  $("#overlay").classList.remove("show");
-  document.documentElement.classList.remove('modalOpen');
-  document.body.classList.remove('modalOpen');
-  $("#modalBody").innerHTML = "";
-  $("#modalFoot").innerHTML = "";
-  try{ __lastFocus && __lastFocus.focus && __lastFocus.focus(); }catch(e){}
-}
+  function openModal({title, desc, bodyHTML, footHTML}){
+    $("#modalTitle").textContent = title || "";
+    $("#modalDesc").textContent = desc || "";
+    $("#modalBody").innerHTML = bodyHTML || "";
+    $("#modalFoot").innerHTML = footHTML || "";
+    $("#overlay").classList.add("show");
+  }
+  function closeModal(){
+    $("#overlay").classList.remove("show");
+    $("#modalBody").innerHTML = "";
+    $("#modalFoot").innerHTML = "";
+  }
 
   function gradeFromMarks(total){
     const t = clamp(total, 0, 100);
@@ -1112,9 +1041,6 @@ function closeModal(){
       rows:Array.from({length:8},(_,i)=>({sem:i+1, sgpa:"", credits:""}))
     }
   };
-
- // Expose for integrations
- window.state = state;
 
   /* ========= Local (guest) storage ========= */
   const LS_KEY = "cgpa_planner_local_v2";
@@ -1888,259 +1814,54 @@ function closeModal(){
   }
 
   /* ========= Profile + Sign-in ========= */
-  
-function openSignInModal(){
-  openModal({
-    title:"Sign in to unlock results & autosave",
-    desc:"Fast Google sign-in • Sync across devices • Export PDF • Share plans",
-    bodyHTML:`
-      <div class="subCard">
-        <div style="font-weight:990; margin-bottom:6px;">Why sign in?</div>
-        <div class="hint">• Unlock calculations & required marks<br>• Cloud autosave every ~15s<br>• Multiple plans & view-only sharing<br>• PDF export</div>
-      </div>
-      <div class="hint">We use Google sign-in via Firebase. No passwords stored.</div>
-    `,
-    footHTML:`
-      <button class="btn primary authBtn" id="doSignin">
-        <span class="spinner" aria-hidden="true"></span>
-        <span class="btnText">Continue with Google</span>
-      </button>
-      <button class="btn" id="cancel">Cancel</button>
-    `
-  });
-
-  const btn = document.getElementById('doSignin');
-  const cancel = document.getElementById('cancel');
-  if (cancel) cancel.onclick = closeModal;
-
-  if (btn) btn.onclick = async()=>{
-    try{
-      btn.classList.add('loading');
-      const t = btn.querySelector('.btnText');
-      if (t) t.textContent = 'Signing in…';
-      const result = await auth.signInWithPopup(provider);
-      await sendWelcomeEmailOnce(result.user);
-      closeModal();
-      toast('Signed in');
-    }catch(e){
-      console.error(e);
-      toast('Sign-in cancelled');
-      btn.classList.remove('loading');
-      const t = btn.querySelector('.btnText');
-      if (t) t.textContent = 'Continue with Google';
-    }
-  };
-}
-
-
-function openProfile(){
-  if (!auth.currentUser){ openSignInModal(); return; }
-  const u = auth.currentUser;
-  const displayName = (u.displayName || '').trim() || 'Student';
-  const email = (u.email || '').trim() || '—';
-  const photo = (u.photoURL || '').trim();
-  const createdAt = (u.metadata && u.metadata.creationTime) ? u.metadata.creationTime : '—';
-  const lastLogin = (u.metadata && u.metadata.lastSignInTime) ? u.metadata.lastSignInTime : '—';
-
-  openModal({
-    title:"Profile & Account",
-    desc:"Update your name, photo, and account settings.",
-    bodyHTML: `
-      <div class="profileCard">
-        <img class="profileAvatar" id="avatarPreview" src="${photo || 'https://res.cloudinary.com/djy3mjtsz/image/upload/v1769939761/Untitled_1_vtehdh.png'}" alt="Profile picture"/>
-        <div class="profileMeta">
-          <div class="name" id="profileNameText">${esc(displayName)}</div>
-          <div class="email">${esc(email)}</div>
-          <div class="chipRow">
-            <span class="chip">UID: <span class="mono" id="uidChip">${esc(u.uid)}</span></span>
-            <span class="chip">Created: ${esc(createdAt)}</span>
-            <span class="chip">Last login: ${esc(lastLogin)}</span>
-          </div>
-        </div>
-      </div>
-
-      <div class="subCard" style="margin-top:10px;">
-        <div style="font-weight:990; margin-bottom:8px;">Edit profile</div>
-        <div class="profileGrid">
-          <div>
-            <label class="label">Display name</label>
-            <input class="input" id="displayNameInput" value="${esc(displayName)}" placeholder="Your name" />
-            <div class="hint">Shown in your Google account and GRADEO.</div>
-          </div>
-          <div>
-            <label class="label">Nickname (inside app)</label>
-            <input class="input" id="nickInput" value="${esc(state.profile.nickname || displayName)}" placeholder="e.g., Student" />
-            <div class="hint">Used in the header “Made for you”.</div>
-          </div>
-          <div class="span2">
-            <label class="label">Profile photo URL</label>
-            <input class="input" id="photoUrlInput" value="${esc(photo)}" placeholder="Paste an image URL (https://…)" />
-            <div class="hint">Tip: Use your Google photo or any public image URL.</div>
-          </div>
-        </div>
-      </div>
-
-      <div class="subCard" style="margin-top:10px;">
-        <div style="font-weight:990; margin-bottom:8px;">Security & Data</div>
-        <div class="profileGrid">
-          <div>
-            <label class="label">Email</label>
-            <input class="input" id="emailInput" value="${esc(email)}" placeholder="name@example.com" />
-            <div class="hint">Updating email may require re‑login for security.</div>
-          </div>
-          <div>
-            <label class="label">Account actions</label>
-            <div style="display:flex; gap:10px; flex-wrap:wrap; align-items:center;">
-              <button class="btn small" id="copyUidBtn">Copy UID</button>
-              <button class="btn small" id="downloadDataBtn">Download data</button>
-            </div>
-            <div class="hint">Download includes your profile + plans as JSON.</div>
-          </div>
-        </div>
-      </div>
-
-      <div class="hint" style="margin-top:8px;">Privacy: GRADEO stores your plans in Firebase under your account. You can sign out anytime.</div>
-    `,
-    footHTML: `
-      <button class="btn primary" id="saveProfileBtn">Save changes</button>
-      <button class="btn" id="reauthBtn">Re‑login</button>
-      <button class="btn danger" id="deleteAccountBtn">Delete account</button>
-      <button class="btn" id="logoutBtn">Sign out</button>
-      <button class="btn" id="closeBtn">Close</button>
-    `
-  });
-
-  const photoInp = document.getElementById('photoUrlInput');
-  const avatar = document.getElementById('avatarPreview');
-  if (photoInp && avatar){
-    photoInp.addEventListener('input', ()=>{
-      const v = (photoInp.value||'').trim();
-      if (v) avatar.src = v;
-    }, {passive:true});
+  function openSignInModal(){
+    openModal({
+      title:"Sign in to edit & autosave",
+      desc:"Sign in to calculate results and sync your locally saved plan to the cloud.",
+      bodyHTML:`<div class="hint">You can fill everything in guest mode. When you sign in, we'll import your locally saved data to your cloud account.</div>`,
+      footHTML:`<button class="btn primary" id="doSignin">Continue with Google</button>
+                <button class="btn" id="cancel">Cancel</button>`
+    });
+    $("#doSignin").onclick = async()=>{ 
+   const result = await auth.signInWithPopup(provider);
+   await sendWelcomeEmailOnce(result.user);
+   closeModal(); 
+ };
+    $("#cancel").onclick = closeModal;
   }
 
-  async function reauthGoogle(){
-    try{ await auth.currentUser.reauthenticateWithPopup(provider); toast('Re‑login successful'); return true; }
-    catch(e){ console.error(e); toast('Re‑login cancelled'); return false; }
-  }
-
-  async function saveProfile(){
-    const nameEl = document.getElementById('displayNameInput');
-    const nickEl = document.getElementById('nickInput');
-    const photoEl = document.getElementById('photoUrlInput');
-    const emailEl = document.getElementById('emailInput');
-
-    const newName = (nameEl?.value || '').trim() || 'Student';
-    const newNick = (nickEl?.value || '').trim() || 'Student';
-    const newPhoto = (photoEl?.value || '').trim();
-    const newEmail = (emailEl?.value || '').trim();
-
-    const btn = document.getElementById('saveProfileBtn');
-    if (btn){ btn.disabled = true; btn.textContent = 'Saving…'; }
-
-    try{
-      await auth.currentUser.updateProfile({ displayName: newName, photoURL: newPhoto || null });
-      // force light theme always
-      state.profile.nickname = newNick;
-      state.theme = 'light';
-      document.body.setAttribute('data-theme','light');
-      await profileRef(auth.currentUser.uid).set({
-        nickname: newNick,
-        theme: 'light',
-        displayName: newName,
-        photoURL: newPhoto || null,
-        updatedAt: firebase.firestore.FieldValue.serverTimestamp()
-      }, { merge:true });
-
-      if (newEmail && newEmail !== email){
-        try{ await auth.currentUser.updateEmail(newEmail); toast('Email updated'); }
-        catch(e){
-          if (String(e.code||'').includes('requires-recent-login')){
-            toast('Please re‑login to update email');
-            const ok = await reauthGoogle();
-            if (ok) await auth.currentUser.updateEmail(newEmail);
-          } else { throw e; }
-        }
-      }
-
+  function openProfile(){
+    if (!auth.currentUser){ openSignInModal(); return; }
+    openModal({
+      title:"Profile",
+      desc:"Change your nickname.",
+      bodyHTML: `
+        <label class="label">Nickname</label>
+        <input class="input" id="nickInput" value="${esc(state.profile.nickname||"")}" placeholder="e.g., Student">
+        <div class="hint">Autosaved in 10–20 seconds.</div>
+      `,
+      footHTML: `
+        <button class="btn primary" id="saveNickBtn">Save</button>
+        <button class="btn danger" id="logoutBtn">Sign out</button>
+        <button class="btn" id="closeBtn">Close</button>
+      `
+    });
+    $("#saveNickBtn").onclick = ()=>{
+      state.profile.nickname = ($("#nickInput").value||"Student").trim() || "Student";
+      markDirty();
       renderAllStatic();
       scheduleRecalc(0);
-      const nameText = document.getElementById('profileNameText');
-      if (nameText) nameText.textContent = newName;
-      toast('Profile saved');
-    }catch(e){
-      console.error(e);
-      toast('Save failed');
-    }finally{
-      if (btn){ btn.disabled = false; btn.textContent = 'Save changes'; }
-    }
-  }
-
-  async function downloadMyData(){
-    try{
-      const uid = auth.currentUser.uid;
-      const profSnap = await profileRef(uid).get();
-      const profData = profSnap.exists ? profSnap.data() : {};
-      const plansSnap = await plansCol(uid).orderBy('updatedAt','desc').get();
-      const plans = plansSnap.docs.map(d=>({ id:d.id, ...d.data() }));
-      const payload = { exportedAt: new Date().toISOString(), uid, email: auth.currentUser.email, profile: profData, plans };
-      const blob = new Blob([JSON.stringify(payload, null, 2)], {type:'application/json'});
-      const a = document.createElement('a');
-      a.href = URL.createObjectURL(blob);
-      a.download = `gradeo-data-${uid.slice(0,6)}.json`;
-      document.body.appendChild(a); a.click(); a.remove();
-      toast('Download started');
-    }catch(e){ console.error(e); toast('Download failed'); }
-  }
-
-  async function deleteAccount(){
-    if (!confirm('Delete your account permanently? This will remove access to your cloud plans.')) return;
-    try{
-      const ok = await reauthGoogle();
-      if (!ok) return;
-      const uid = auth.currentUser.uid;
-      const snap = await plansCol(uid).get();
-      const batch = db.batch();
-      snap.docs.forEach(d=>batch.delete(d.ref));
-      batch.delete(profileRef(uid));
-      await batch.commit();
-      await auth.currentUser.delete();
       closeModal();
-      toast('Account deleted');
-    }catch(e){
-      console.error(e);
-      if (String(e.code||'').includes('requires-recent-login')) toast('Please re‑login to delete');
-      else toast('Delete failed');
-    }
+    };
+    $("#logoutBtn").onclick = async()=>{ await auth.signOut(); closeModal(); };
+    $("#closeBtn").onclick = closeModal;
   }
 
-  const closeBtn = document.getElementById('closeBtn');
-  if (closeBtn) closeBtn.onclick = closeModal;
-
-  const logoutBtn = document.getElementById('logoutBtn');
-  if (logoutBtn) logoutBtn.onclick = async()=>{ await auth.signOut(); closeModal(); toast('Signed out'); };
-
-  const saveBtn = document.getElementById('saveProfileBtn');
-  if (saveBtn) saveBtn.onclick = saveProfile;
-
-  const reauthBtn = document.getElementById('reauthBtn');
-  if (reauthBtn) reauthBtn.onclick = reauthGoogle;
-
-  const copyUidBtn = document.getElementById('copyUidBtn');
-  if (copyUidBtn) copyUidBtn.onclick = async()=>{ try{ await navigator.clipboard.writeText(u.uid); toast('UID copied'); }catch(e){ toast('Copy failed'); } };
-
-  const dlBtn = document.getElementById('downloadDataBtn');
-  if (dlBtn) dlBtn.onclick = downloadMyData;
-
-  const delBtn = document.getElementById('deleteAccountBtn');
-  if (delBtn) delBtn.onclick = deleteAccount;
-}
-
-/* ========= Simple share / pdf ========= */
+  /* ========= Simple share / pdf ========= */
   async function shareSite(){
-    const url = location.href;
+    const url = `https://gradeo.in/`;
     try{
-      if (navigator.share) await navigator.share({ title: 'GRADEO', text: 'Try GRADEO — VTU SGPA/CGPA Calculator: Target CGPA→Minimum SEE • Marks→SGPA • SGPA→CGPA • PDF export. #VTU #SGPA #CGPA', url });
+      if (navigator.share) await navigator.share({title:"Gradeo", url});
       else { await navigator.clipboard.writeText(url); toast("Link copied"); }
     }catch(e){}
   }
@@ -2193,8 +1914,6 @@ function openProfile(){
   function wireEvents(){
     $("#modalClose").onclick = closeModal;
     $("#overlay").addEventListener("click", (e)=>{ if (e.target.id==="overlay") closeModal(); });
- // ESC to close modal
- document.addEventListener("keydown", (e)=>{ if (e.key==="Escape" && $("#overlay").classList.contains("show")) closeModal(); });
 
     $("#m1Btn").onclick = ()=>setMode("m1");
     $("#m2Btn").onclick = ()=>setMode("m2");
@@ -2432,12 +2151,12 @@ if (changelogBtn){
 
         const prof = await profileRef(user.uid).get();
         const lastPlanId = prof.exists ? (prof.data().lastPlanId || null) : null;
-        const theme = (prof.exists && prof.data() && prof.data().theme) ? prof.data().theme : "light";
+        const theme = prof.exists ? (prof.data().theme || "light") : "system";
         const nick = prof.exists ? (prof.data().nickname || state.profile.nickname) : state.profile.nickname;
 
         state.profile.nickname = nick;
-        state.theme = 'light';
-        document.body.setAttribute('data-theme','light');
+        state.theme = theme;
+        document.body.setAttribute("data-theme", theme);
         await fetchPlans();
         renderPlansSelect();
 
@@ -2901,127 +2620,6 @@ const prefersReduce = window.matchMedia && window.matchMedia('(prefers-reduced-m
 </script>
 <script defer src="https://static.cloudflareinsights.com/beacon.min.js/vcd15cbe7772f49c399c6a5babf22c1241717689176015" integrity="sha512-ZpsOmlRQV6y907TI0dKBHq9Md29nnaEIPlkf84rnaERnq6zvWvPUqr2ft8M1aS28oN72PdrCzSjY4U6VaAw1EQ==" data-cf-beacon='{"version":"2024.11.0","token":"32f0b0530bdb47d89109f78f09c965e1","r":1,"server_timing":{"name":{"cfCacheStatus":true,"cfEdge":true,"cfExtPri":true,"cfL4":true,"cfOrigin":true,"cfSpeedBrain":true},"location_startswith":null}}' crossorigin="anonymous"></script>
 <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9c711f0dcc345f7c',t:'MTc2OTk0NTQ3NA=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script><script defer src="https://static.cloudflareinsights.com/beacon.min.js/vcd15cbe7772f49c399c6a5babf22c1241717689176015" integrity="sha512-ZpsOmlRQV6y907TI0dKBHq9Md29nnaEIPlkf84rnaERnq6zvWvPUqr2ft8M1aS28oN72PdrCzSjY4U6VaAw1EQ==" data-cf-beacon='{"version":"2024.11.0","token":"32f0b0530bdb47d89109f78f09c965e1","r":1,"server_timing":{"name":{"cfCacheStatus":true,"cfEdge":true,"cfExtPri":true,"cfL4":true,"cfOrigin":true,"cfSpeedBrain":true},"location_startswith":null}}' crossorigin="anonymous"></script>
-<nav class="bottomNav noPrint" aria-label="Bottom navigation">
-  <button class="bottomBtn" data-bnav="m1" aria-label="Target to SEE"><span class="bI">🎯</span><span class="bT">Target</span></button>
-  <button class="bottomBtn" data-bnav="m2" aria-label="Marks to SGPA"><span class="bI">🧮</span><span class="bT">Marks</span></button>
-  <button class="bottomBtn" data-bnav="m3" aria-label="SGPA to CGPA"><span class="bI">📈</span><span class="bT">Convert</span></button>
-</nav>
-<script>
-(()=>{
-  'use strict';
-
-  // ===== Haptics & Dynamic Island (added) =====
-  const HKEY = 'gradeo_haptics_v1';
-  const SKEY = 'gradeo_scroll_haptics_v1';
-  let hapticsEnabled = true;
-  let scrollHapticsEnabled = true;
-  let userGesture = false;
-
-  try{
-    const hv = localStorage.getItem(HKEY);
-    if (hv === '0') hapticsEnabled = false;
-    const sv = localStorage.getItem(SKEY);
-    if (sv === '0') scrollHapticsEnabled = false;
-  }catch(e){}
-
-  const markGesture = ()=>{ userGesture = true; };
-  window.addEventListener('pointerdown', markGesture, {passive:true, once:true});
-  window.addEventListener('touchstart', markGesture, {passive:true, once:true});
-
-  function canVibrate(){
-    return !!(navigator.vibrate && userGesture && hapticsEnabled && !window.matchMedia('(prefers-reduced-motion: reduce)').matches);
-  }
-  function haptic(ms=8){ try{ if (canVibrate()) navigator.vibrate(ms); }catch(e){} }
-  function hapticSoft(){ haptic(6); }
-  function hapticTap(){ haptic(10); }
-  function hapticSuccess(){ try{ if (canVibrate()) navigator.vibrate([8,18,10]); }catch(e){} }
-
-  // Dynamic Island
-  const island = document.getElementById('dynamicIsland');
-  const iTitle = document.getElementById('islandTitle');
-  const iSub = document.getElementById('islandSub');
-  const iClose = document.getElementById('islandClose');
-  let islandTimer = null;
-
-  function islandShow(title='GRADEO', sub='', tone='info', duration=2200){
-    if (!island || !iTitle || !iSub) return;
-    iTitle.textContent = title;
-    iSub.textContent = sub;
-    const icon = island.querySelector('.islandIcon');
-    if (icon){
-      icon.textContent = tone==='success' ? '✅' : tone==='warn' ? '⚠️' : tone==='bad' ? '❌' : '✨';
-    }
-    island.classList.add('show');
-    clearTimeout(islandTimer);
-    islandTimer = setTimeout(()=> island.classList.remove('show'), duration);
-  }
-  if (iClose) iClose.onclick = ()=> island.classList.remove('show');
-
-  // Enhance toast
-  if (typeof window.toast === 'function'){
-    const _toast = window.toast;
-    window.toast = (msg)=>{
-      try{ _toast(msg); }catch(e){}
-      islandShow('GRADEO', String(msg||''));
-      hapticSoft();
-    };
-  }
-
-  // Scroll haptics (very light, throttled)
-  let lastVibeAt = 0;
-  let lastStep = 0;
-  function onScroll(){
-    if (!scrollHapticsEnabled) return;
-    const now = performance.now();
-    if (now - lastVibeAt < 650) return;
-    const y = window.scrollY || 0;
-    const step = Math.floor(y / 160);
-    if (step !== lastStep){
-      lastStep = step;
-      haptic(5);
-      lastVibeAt = now;
-    }
-  }
-  window.addEventListener('scroll', onScroll, {passive:true});
-
-  // Haptic on taps
-  document.addEventListener('click', (e)=>{
-    const btn = e.target.closest('button, a');
-    if (!btn || btn.disabled) return;
-    hapticTap();
-  }, {passive:true});
-
-  // Bottom nav
-  const nav = document.querySelector('.bottomNav');
-  const updateNav = ()=>{
-    if (!nav) return;
-    const mode = (window.state && window.state.mode) ? window.state.mode : null;
-    nav.querySelectorAll('.bottomBtn').forEach(b=> b.classList.toggle('active', b.getAttribute('data-bnav')===mode));
-  };
-  if (nav){
-    nav.querySelectorAll('.bottomBtn').forEach(b=>{
-      b.addEventListener('click', ()=>{
-        const m = b.getAttribute('data-bnav');
-        if (typeof window.setMode === 'function') window.setMode(m);
-        updateNav();
-        islandShow('Mode changed', m==='m1' ? 'Target → SEE' : m==='m2' ? 'Marks → SGPA' : 'SGPA → CGPA', 'success', 1600);
-        hapticSuccess();
-      });
-    });
-    setInterval(updateNav, 400);
-  }
-
-  // Expose toggles (future)
-  window.__GRADEO_HAPTICS__ = {
-    get haptics(){return hapticsEnabled;},
-    setHaptics(v){hapticsEnabled=!!v; try{localStorage.setItem(HKEY, v? '1':'0');}catch(e){} islandShow('Haptics', v?'On':'Off', v?'success':'warn');},
-    get scrollHaptics(){return scrollHapticsEnabled;},
-    setScrollHaptics(v){scrollHapticsEnabled=!!v; try{localStorage.setItem(SKEY, v? '1':'0');}catch(e){} islandShow('Scroll haptics', v?'On':'Off', v?'success':'warn');}
-  };
-
-  islandShow('GRADEO', 'Ready.');
-})();
-</script>
 </body>
 </html>
 
