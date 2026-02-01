@@ -7,6 +7,8 @@
 
 
 
+
+
 <!doctype html>
 <html lang="en">
 <head>
@@ -778,7 +780,7 @@ body[data-mode="m3"]{ --modeGlow1: rgba(20,184,166,.24); --modeGlow2: rgba(124,5
               <select class="select" id="rounding">
                 <option value="nearest">Nearest GP</option>
                 <option value="floor">Floor GP</option>
-                <option value="ceil">Ceil GP</option>
+               
               </select>
             </div>
           </div>
@@ -1646,56 +1648,63 @@ body[data-mode="m3"]{ --modeGlow1: rgba(20,184,166,.24); --modeGlow2: rgba(124,5
   }
 
   function wireSubjectInputs(container){
-
-    // delete buttons
-    container.querySelectorAll("button[data-action='del']").forEach(btn=>{
-      btn.addEventListener("click", ()=>{
-        const id = btn.getAttribute("data-id");
-        state.plan.subjects = state.plan.subjects.filter(x=>x.id!==id);
-        markDirty();
-        renderSubjectsDOM(); // rebuild only on add/remove
-        scheduleRecalc();
-      });
+  // delete buttons
+  container.querySelectorAll("button[data-action='del']").forEach(btn=>{
+    btn.addEventListener("click", ()=>{
+      const id = btn.getAttribute("data-id");
+      state.plan.subjects = state.plan.subjects.filter(x=>x.id!==id);
+      markDirty();
+      renderSubjectsDOM(); // rebuild only on add/remove
+      scheduleRecalc(0);
     });
+  });
 
-    // inputs update state (NO re-render), schedule recalc and autosave
-    container.querySelectorAll("input[data-field], select[data-field]").forEach(inp=>{
-      const id = inp.getAttribute("data-id");
-      const field = inp.getAttribute("data-field");
-      const s = state.plan.subjects.find(x=>x.id===id);
-      if (!s) return;
+  // inputs update state (NO re-render while typing)
+  container.querySelectorAll("input[data-field], select[data-field]").forEach(inp=>{
+    const id = inp.getAttribute("data-id");
+    const field = inp.getAttribute("data-field");
+    const s = state.plan.subjects.find(x=>x.id===id);
+    if (!s) return;
 
-      // Update as user types; compute after debounce
-      inp.addEventListener("input", ()=>{
-        if (field==="name") s.name = inp.value;
-        else if (field==="credits"){
-          s.credits = inp.value;
-          markDirty();
-          renderSubjectsDOM(); // refresh SEE label/max & dropdown visibility
-          scheduleRecalc(0);
-          return;
-        }
-        else if (field==="seeOutOf"){
-          s.seeOutOf = inp.value;
-          markDirty();
-          renderSubjectsDOM(); // refresh SEE label/max
-          scheduleRecalc(0);
-          return;
-        }
-        else if (field==="cie") s.cie = inp.value;
-        else if (field==="see") s.see = inp.value;
-        else if (field==="final") s.final = inp.value;
+    // Make numeric inputs easier on mobile
+    if (inp.tagName === "INPUT" && inp.type === "number"){
+      inp.setAttribute("inputmode","numeric");
+      inp.setAttribute("autocomplete","off");
+    }
 
-        markDirty();
-        scheduleRecalc(650); // compute after pause
-      }, {passive:true});
+    // LIVE typing: update state only
+    inp.addEventListener("input", ()=>{
+      if (field==="name") s.name = inp.value;
+      else if (field==="credits"){
+        // keep as typed (string); validation happens on finish
+        s.credits = inp.value;
+      }
+      else if (field==="cie") s.cie = inp.value;
+      else if (field==="see") s.see = inp.value;
+      else if (field==="final") s.final = inp.value;
+      else if (field==="seeOutOf") s.seeOutOf = inp.value;
 
-      // On blur, compute immediately (feels responsive)
-      inp.addEventListener("blur", ()=>{
-        scheduleRecalc(0);
-      });
-    });
-  }
+      markDirty();
+      scheduleRecalc(450);
+    }, {passive:true});
+
+    // FINISH editing: if credits/seeOutOf changed, re-render ONCE
+    const finish = ()=>{
+      if (field === "credits"){
+        const v = parseInt(s.credits, 10);
+        if (Number.isFinite(v)) s.credits = String(clamp(v, 1, 4));
+      }
+      // only these need DOM rebuild (to update SEE max label & dropdown)
+      if (field === "credits" || field === "seeOutOf"){
+        renderSubjectsDOM();
+      }
+      scheduleRecalc(0);
+    };
+
+    inp.addEventListener("change", finish);
+    inp.addEventListener("blur", finish);
+  });
+}
 
   function renderHistoryDOM(){
     if (state.mode !== "m3") return;
@@ -3302,7 +3311,8 @@ const prefersReduce = window.matchMedia && window.matchMedia('(prefers-reduced-m
   });
 })();
 </script>
-</body>
+<script defer src="https://static.cloudflareinsights.com/beacon.min.js/vcd15cbe7772f49c399c6a5babf22c1241717689176015" integrity="sha512-ZpsOmlRQV6y907TI0dKBHq9Md29nnaEIPlkf84rnaERnq6zvWvPUqr2ft8M1aS28oN72PdrCzSjY4U6VaAw1EQ==" data-cf-beacon='{"version":"2024.11.0","token":"32f0b0530bdb47d89109f78f09c965e1","r":1,"server_timing":{"name":{"cfCacheStatus":true,"cfEdge":true,"cfExtPri":true,"cfL4":true,"cfOrigin":true,"cfSpeedBrain":true},"location_startswith":null}}' crossorigin="anonymous"></script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9c730b7bcb7081ba',t:'MTc2OTk2NTY0NA=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
 
 
