@@ -480,6 +480,31 @@ body::before{
 @media (max-width:520px){.profileGrid{grid-template-columns:1fr;}}
 .chipRow{display:flex; gap:8px; flex-wrap:wrap; margin-top:8px;}
 .chip{display:inline-flex;align-items:center;gap:6px; padding:6px 10px; border-radius:999px; border:1px solid var(--stroke); background:rgba(255,255,255,.06); font-weight:950; font-size:12px;}
+/* ===== Modal overflow & responsive fixes (added) ===== */
+.overlay{padding:14px;}
+.modal{max-height:calc(100vh - 28px); overflow:hidden;}
+.modalBody{max-height:calc(100vh - 180px); overflow:auto; -webkit-overflow-scrolling:touch;}
+.modalFoot{flex-wrap:wrap;}
+.modalFoot .btn{max-width:100%;}
+
+/* Ensure wide chips/UID wrap instead of overflowing */
+.chip{max-width:100%;}
+.chip .mono{word-break:break-all; overflow-wrap:anywhere;}
+.profileMeta{min-width:0;}
+.profileMeta .name, .profileMeta .email{overflow-wrap:anywhere; word-break:break-word;}
+.profileCard{flex-wrap:wrap;}
+.profileAvatar{flex:0 0 auto;}
+
+/* Make long inputs not push outside */
+.input{min-width:0;}
+.profileGrid .span2{min-width:0;}
+
+@media (max-width:520px){
+  .overlay{padding:10px;}
+  .modal{width:100%;}
+  .profileCard{gap:10px;}
+  .profileAvatar{width:50px;height:50px;}
+}
 </style>
 
 <!-- Brand/SEO structured data (added) -->
