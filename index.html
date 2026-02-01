@@ -686,13 +686,14 @@ body::before{
 <script>
   emailjs.init("jBp2SNoQciWnlU2Fo"); // ✅ Your Public Key
 </script>
-<!-- Firebase (modular v9) -->
-<script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
-import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
-import { getFirestore, doc, collection, addDoc, setDoc, getDoc, getDocs, deleteDoc, query, orderBy, serverTimestamp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
 
-(\(\) => {
+<!-- Firebase compat -->
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+
+<script>
+(() => {
   "use strict";
 
   // ===== Welcome email (EmailJS) =====
@@ -907,16 +908,16 @@ import { getFirestore, doc, collection, addDoc, setDoc, getDoc, getDocs, deleteD
       subjects: Array.isArray(data.plan.subjects) ? data.plan.subjects : [],
       history: data.history || null,
       importedFromLocal: true,
-      createdAt: serverTimestamp(),
-      updatedAt: serverTimestamp()
+      createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+      updatedAt: firebase.firestore.FieldValue.serverTimestamp()
     };
 
-    const ref = await addDoc(plansCol(uid), payload);
-    await setDoc(profileRef(uid), {
+    const ref = await plansCol(uid).add(payload);
+    await profileRef(uid).set({
       lastPlanId: ref.id,
       nickname: state.profile.nickname,
       theme: state.theme,
-      updatedAt: serverTimestamp()
+      updatedAt: firebase.firestore.FieldValue.serverTimestamp()
     }, { merge:true });
 
     try{ localStorage.removeItem(LS_KEY); }catch(e){}
@@ -939,15 +940,16 @@ import { getFirestore, doc, collection, addDoc, setDoc, getDoc, getDocs, deleteD
   let auth=null, db=null, provider=null;
 
   function initFirebase(){
-  const app = initializeApp(firebaseConfig);
-  auth = getAuth(app);
-  db = getFirestore(app);
-  provider = new GoogleAuthProvider();
-}
+    firebase.initializeApp(firebaseConfig);
+    auth = firebase.auth();
+    db = firebase.firestore();
+    provider = new firebase.auth.GoogleAuthProvider();
+    // no offline persistence
+  }
 
-  const profileRef = (uid) => doc(db, `users/${uid}/profile/main`);
-  const plansCol = (uid) => collection(db, `users/${uid}/plans`);
-  const planRef = (uid, pid) => doc(db, `users/${uid}/plans/${pid}`);
+  const profileRef = uid => db.doc(`users/${uid}/profile/main`);
+  const plansCol = uid => db.collection(`users/${uid}/plans`);
+  const planRef = (uid, pid) => db.doc(`users/${uid}/plans/${pid}`);
 
   async function fetchPlans(){
     const uid = auth.currentUser.uid;
@@ -957,8 +959,8 @@ import { getFirestore, doc, collection, addDoc, setDoc, getDoc, getDocs, deleteD
 
   async function openPlan(planId){
     const uid = auth.currentUser.uid;
-    const snap = await getDoc(planRef(uid, planId));
-    if (!snap.exists()) return;
+    const snap = await planRef(uid, planId).get();
+    if (!snap.exists) return;
     const p = snap.data();
     state.planId = planId;
     state.plan = {
@@ -986,11 +988,11 @@ import { getFirestore, doc, collection, addDoc, setDoc, getDoc, getDocs, deleteD
       rounding:"nearest",
       mode1:{ currentCgpa:"", completedCredits:"", targetCgpa:"" },
       subjects:[ mkSubject("normal"), mkSubject("activity") ],
-      createdAt: serverTimestamp(),
-      updatedAt: serverTimestamp()
+      createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+      updatedAt: firebase.firestore.FieldValue.serverTimestamp()
     };
-    const ref = await addDoc(plansCol(uid), payload);
-    await setDoc(profileRef(uid), { lastPlanId: ref.id }, { merge:true });
+    const ref = await plansCol(uid).add(payload);
+    await profileRef(uid).set({ lastPlanId: ref.id }, { merge:true });
     await fetchPlans();
     renderPlansSelect();
     await openPlan(ref.id);
@@ -1002,10 +1004,10 @@ import { getFirestore, doc, collection, addDoc, setDoc, getDoc, getDocs, deleteD
     if (!state.planId) return;
     const copy = JSON.parse(JSON.stringify(state.plan));
     copy.name = (copy.name||"Plan") + " (Copy)";
-    const ref = await addDoc(plansCol(uid), {
+    const ref = await plansCol(uid).add({
       ...copy,
-      createdAt: serverTimestamp(),
-      updatedAt: serverTimestamp()
+      createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+      updatedAt: firebase.firestore.FieldValue.serverTimestamp()
     });
     await fetchPlans();
     renderPlansSelect();
@@ -1017,7 +1019,7 @@ import { getFirestore, doc, collection, addDoc, setDoc, getDoc, getDocs, deleteD
     const uid = auth.currentUser.uid;
     if (!state.planId) return;
     if (!confirm("Delete this plan permanently?")) return;
-    await deleteDoc(planRef(uid, state.planId));
+    await planRef(uid, state.planId).delete();
     state.planId = null;
     await fetchPlans();
     if (state.plansList.length) await openPlan(state.plansList[0].id);
@@ -1051,20 +1053,20 @@ import { getFirestore, doc, collection, addDoc, setDoc, getDoc, getDocs, deleteD
     $("#savePill").className="pill warn";
 
     const uid = auth.currentUser.uid;
-    await setDoc(planRef(uid, state.planId), {
+    await planRef(uid, state.planId).set({
       name: state.plan.name,
       notes: state.plan.notes,
       rounding: state.plan.rounding,
       mode1: state.plan.mode1,
       subjects: state.plan.subjects,
-      updatedAt: serverTimestamp()
+      updatedAt: firebase.firestore.FieldValue.serverTimestamp()
     }, { merge:true });
 
-    await setDoc(profileRef(uid), {
+    await profileRef(uid).set({
       nickname: state.profile.nickname,
       theme: state.theme,
       lastPlanId: state.planId,
-      updatedAt: serverTimestamp()
+      updatedAt: firebase.firestore.FieldValue.serverTimestamp()
     }, { merge:true });
 
     state.lastSavedAt = now();
@@ -1615,7 +1617,7 @@ import { getFirestore, doc, collection, addDoc, setDoc, getDoc, getDocs, deleteD
                 <button class="btn" id="cancel">Cancel</button>`
     });
     $("#doSignin").onclick = async()=>{ 
-   const result = await signInWithPopup(auth, provider);
+   const result = await auth.signInWithPopup(provider);
    await sendWelcomeEmailOnce(result.user);
    closeModal(); 
  };
@@ -1645,13 +1647,13 @@ import { getFirestore, doc, collection, addDoc, setDoc, getDoc, getDocs, deleteD
       scheduleRecalc(0);
       closeModal();
     };
-    $("#logoutBtn").onclick = async()=>{ await signOut(auth); closeModal(); };
+    $("#logoutBtn").onclick = async()=>{ await auth.signOut(); closeModal(); };
     $("#closeBtn").onclick = closeModal;
   }
 
   /* ========= Simple share / pdf ========= */
   async function shareSite(){
-    const url = `${location.origin}${location.pathname}`;
+    const url = `https://gradeo.in/`;
     try{
       if (navigator.share) await navigator.share({title:"Gradeo", url});
       else { await navigator.clipboard.writeText(url); toast("Link copied"); }
@@ -1930,7 +1932,7 @@ if (changelogBtn){
 
   /* ========= Auth state ========= */
   function initAuth(){
-    onAuthStateChanged(auth, async(user)=>{
+    auth.onAuthStateChanged(async(user)=>{
       state.user = user || null;
 
       if (user){
@@ -1938,10 +1940,10 @@ if (changelogBtn){
         $("#profileBtn").textContent="Profile";
         $("#savePill").style.display="inline-flex";
 
-        const prof = await getDoc(profileRef(user.uid));
-        const lastPlanId = prof.exists() ? (prof.data().lastPlanId || null) : null;
-        const theme = prof.exists() ? (prof.data().theme || "light") : "system";
-        const nick = prof.exists() ? (prof.data().nickname || state.profile.nickname) : state.profile.nickname;
+        const prof = await profileRef(user.uid).get();
+        const lastPlanId = prof.exists ? (prof.data().lastPlanId || null) : null;
+        const theme = prof.exists ? (prof.data().theme || "light") : "system";
+        const nick = prof.exists ? (prof.data().nickname || state.profile.nickname) : state.profile.nickname;
 
         state.profile.nickname = nick;
         state.theme = theme;
