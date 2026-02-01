@@ -328,7 +328,7 @@
 
 
 /* ===================== Premium Interactions & Motion ===================== */
-html{scroll-behavior:smooth;}
+html{scroll-behavior:smooth; overflow-x:hidden;}
 
 /* 3D canvas background */
 #bg3d{position:fixed; inset:0; width:100%; height:100%; z-index:-3; pointer-events:none;}
@@ -513,6 +513,56 @@ body[data-mode="m3"]::before{background:
   #backToTop{bottom:calc(env(safe-area-inset-bottom,0px) + var(--bottomIslandH)) !important;}
   .container{padding-bottom:calc(180px + var(--bottomIslandH)) !important;}
 }
+
+
+/* ===================== Top Hamburger Menu ===================== */
+.menuWrap{position:relative; display:inline-flex; align-items:center;}
+#menuBtn{padding:10px 12px; border-radius:12px;}
+#menuBtn .hamb{width:18px; height:18px; display:block;}
+/* Backdrop without blur (blur was making the page look blurry) */
+.menuBackdrop{position:fixed; inset:0; background:rgba(0,0,0,.38); display:none; z-index:90;}
+.menuBackdrop.show{display:block;}
+.menuPanel{
+  position:absolute; right:0; top:calc(100% + 10px);
+  width:min(320px, calc(100vw - 24px));
+  max-height:min(70vh, 520px);
+  overflow:auto;
+  -webkit-overflow-scrolling:touch;
+  background:color-mix(in oklab, var(--panel) 92%, transparent);
+  border:1px solid var(--stroke);
+  border-radius:16px;
+  box-shadow:0 22px 70px rgba(0,0,0,.28);
+  display:none;
+  z-index:95;
+}
+.menuPanel.show{display:block; animation:popIn 200ms cubic-bezier(.16,1,.3,1);} 
+.menuHeader{padding:10px 12px; border-bottom:1px solid var(--stroke); display:flex; justify-content:space-between; align-items:center; gap:10px;}
+.menuHeader .t{font-weight:990; font-size:13px;}
+.menuHeader .s{font-weight:850; font-size:12px; color:var(--muted);}
+.menuItem{width:100%; text-align:left; border:none; background:transparent; color:var(--text);
+  padding:12px 12px; cursor:pointer; font-weight:920; display:flex; align-items:center; gap:10px;}
+.menuItem:hover{background:rgba(11,87,208,.10);} 
+.menuItem:active{background:rgba(11,87,208,.16);} 
+.menuSep{height:1px; background:var(--stroke); opacity:.8;}
+.menuDanger{color:color-mix(in oklab, var(--bad) 70%, var(--text));}
+
+@media (max-width: 640px){
+  /* Keep top bar clean on small screens */
+  #menuBtn{padding:9px 11px;}
+  /* Fixed panel so it NEVER goes outside the phone screen */
+  .menuPanel{
+    position:fixed;
+    left:12px;
+    right:12px;
+    top:calc(56px + env(safe-area-inset-top, 0px));
+    width:auto;
+    border-radius:18px;
+  }
+}
+@media (max-width: 380px){
+  .menuPanel{left:10px; right:10px;}
+}
+
 </style>
 </head>
 
@@ -537,12 +587,37 @@ body[data-mode="m3"]::before{background:
         <button class="modeBtn" id="m2Btn">🧮 Marks → SGPA</button>
         <button class="modeBtn" id="m3Btn">📈 SGPA → CGPA</button>
       </div>
+
+
+<div class="menuWrap">
+  <button class="btn ghost" id="menuBtn" aria-label="Menu" aria-expanded="false" aria-controls="menuPanel"><svg class="hamb" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M4 6.5h16a1 1 0 0 0 0-2H4a1 1 0 0 0 0 2Zm16 5H4a1 1 0 0 0 0 2h16a1 1 0 0 0 0-2Zm0 7H4a1 1 0 0 0 0 2h16a1 1 0 0 0 0-2Z"/></svg></button>
+  <div class="menuPanel" id="menuPanel" role="menu" aria-label="Site menu">
+    <div class="menuHeader">
+      <div>
+        <div class="t">Menu</div>
+        <div class="s">Quick links & settings</div>
+      </div>
+      <button class="btn small" id="menuCloseBtn" aria-label="Close menu">Close</button>
+    </div>
+    <button class="menuItem" id="faqBtn" role="menuitem">❓ FAQ</button>
+    <div class="menuSep"></div>
+    <button class="menuItem" id="termsBtn" role="menuitem">📄 Terms & Conditions</button>
+    <button class="menuItem" id="privacyBtn" role="menuitem">🔒 Privacy Policy</button>
+    <button class="menuItem" id="disclaimerBtn" role="menuitem">⚠️ Disclaimer</button>
+    <button class="menuItem" id="changelogBtn" role="menuitem">🧾 Changelog</button>
+    <div class="menuSep"></div>
+    <button class="menuItem" id="contactBtn" role="menuitem">✉️ Contact / Feedback</button>
+    <button class="menuItem menuDanger" id="accountManageBtn" role="menuitem">🗑️ Manage account</button>
+  </div>
+</div>
 <button class="btn ghost" id="shareSiteBtn">Share</button>
       <button class="btn" id="pdfBtn">PDF</button>
       <button class="btn primary" id="profileBtn">Sign in</button>
     </div>
   </div>
 </header>
+<div class="menuBackdrop" id="menuBackdrop" aria-hidden="true"></div>
+
 
 <main class="container">
   <section class="hero">
@@ -1729,34 +1804,187 @@ body[data-mode="m3"]::before{background:
     $("#cancel").onclick = closeModal;
   }
 
-  function openProfile(){
-    if (!auth.currentUser){ openSignInModal(); return; }
-    openModal({
-      title:"Profile",
-      desc:"Change your nickname.",
-      bodyHTML: `
-        <label class="label">Nickname</label>
-        <input class="input" id="nickInput" value="${esc(state.profile.nickname||"")}" placeholder="e.g., Student">
-        <div class="hint">Autosaved in 10–20 seconds.</div>
-      `,
-      footHTML: `
-        <button class="btn primary" id="saveNickBtn">Save</button>
-        <button class="btn danger" id="logoutBtn">Sign out</button>
-        <button class="btn" id="closeBtn">Close</button>
-      `
-    });
-    $("#saveNickBtn").onclick = ()=>{
-      state.profile.nickname = ($("#nickInput").value||"Student").trim() || "Student";
-      markDirty();
-      renderAllStatic();
-      scheduleRecalc(0);
-      closeModal();
-    };
-    $("#logoutBtn").onclick = async()=>{ await auth.signOut(); closeModal(); };
-    $("#closeBtn").onclick = closeModal;
-  }
+  
+function openProfile(){
+  if (!auth.currentUser){ openSignInModal(); return; }
 
-  /* ========= Simple share / pdf ========= */
+  const u = auth.currentUser;
+  const providerName = (u.providerData && u.providerData[0] && u.providerData[0].providerId) ? u.providerData[0].providerId.replace('.com','') : 'google';
+
+  openModal({
+    title: 'Profile',
+    desc: 'Update your details • export • delete',
+    bodyHTML: `
+      <div class="subCard" style="display:flex; gap:12px; align-items:center;">
+        <div style="width:44px;height:44px;border-radius:14px;overflow:hidden;border:1px solid var(--stroke);background:var(--card);display:grid;place-items:center;">
+          ${u.photoURL ? `<img src="${esc(u.photoURL)}" alt="avatar" style="width:44px;height:44px;object-fit:cover;">` : `<div style="font-weight:990;">${esc((state.profile.nickname||'U').slice(0,1).toUpperCase())}</div>`}
+        </div>
+        <div>
+          <div style="font-weight:990">${esc(u.email || 'Signed in')}</div>
+          <div class="hint">Provider: ${esc(providerName)} • UID: <span class="mono">${esc(u.uid)}</span></div>
+        </div>
+      </div>
+
+      <label class="label">Nickname (in-app)</label>
+      <input class="input" id="nickInput" value="${esc(state.profile.nickname || '')}" placeholder="e.g., Student">
+      <div class="hint">Nickname is used only inside GRADEO.</div>
+
+      <div class="accordion" id="acctToolsAcc" style="margin-top:12px;">
+        <div class="accHead"><span>Account tools</span><span class="mono" id="acctToolsChevron">+</span></div>
+        <div class="accBody">
+          <div style="display:flex; gap:10px; flex-wrap:wrap;">
+            <button class="btn" id="exportDataBtn">Export my data</button>
+            <button class="btn" id="syncNowBtn">Sync now</button>
+          </div>
+          <div class="hint">Export downloads a JSON file with your plans and profile settings.</div>
+          <div class="subCard" style="margin-top:12px; border-color:rgba(239,68,68,.35); background:rgba(239,68,68,.08);">
+            <div style="font-weight:990;">Danger zone</div>
+            <div class="hint">These actions are permanent.</div>
+            <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:10px;">
+              <button class="btn danger" id="deleteCloudDataBtn">Delete cloud data</button>
+              <button class="btn danger" id="deleteAccountBtn">Delete account</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    `,
+    footHTML: `
+      <button class="btn primary" id="saveNickBtn">Save</button>
+      <button class="btn danger" id="logoutBtn">Sign out</button>
+      <button class="btn" id="closeBtn">Close</button>
+    `
+  });
+
+  wireAccordion('#acctToolsAcc', '#acctToolsChevron');
+
+  document.getElementById('saveNickBtn').onclick = () => {
+    state.profile.nickname = (document.getElementById('nickInput').value || 'Student').trim() || 'Student';
+    markDirty();
+    renderAllStatic();
+    scheduleRecalc(0);
+    closeModal();
+  };
+
+  document.getElementById('logoutBtn').onclick = async () => { await auth.signOut(); closeModal(); };
+  document.getElementById('closeBtn').onclick = closeModal;
+
+  document.getElementById('syncNowBtn').onclick = async () => {
+    try{ await saveIfDirty('manual'); toast('Synced'); }catch(e){ toast('Sync failed'); }
+  };
+
+  document.getElementById('exportDataBtn').onclick = async () => {
+    try{ await exportMyData(); }catch(e){ console.error(e); toast('Export failed'); }
+  };
+
+  document.getElementById('deleteCloudDataBtn').onclick = async () => {
+    try{ await confirmAndDeleteCloudData(); }catch(e){ console.error(e); toast('Delete failed'); }
+  };
+
+  document.getElementById('deleteAccountBtn').onclick = async () => {
+    try{ await confirmAndDeleteAccount(); }catch(e){ console.error(e); toast('Delete failed'); }
+  };
+}
+
+async function exportMyData(){
+  if(!auth.currentUser) return;
+  const uid = auth.currentUser.uid;
+  const profSnap = await profileRef(uid).get();
+  const plansSnap = await plansCol(uid).orderBy('updatedAt','desc').get();
+  const payload = {
+    exportedAt: new Date().toISOString(),
+    uid,
+    profile: profSnap.exists ? profSnap.data() : {},
+    plans: plansSnap.docs.map(d => ({ id: d.id, ...d.data() }))
+  };
+  const blob = new Blob([JSON.stringify(payload, null, 2)], {type:'application/json'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = `gradeo-export-${uid.slice(0,6)}.json`;
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  setTimeout(()=>URL.revokeObjectURL(a.href), 1200);
+  toast('Export downloaded');
+}
+
+async function confirmAndDeleteCloudData(){
+  if(!auth.currentUser) return;
+  const uid = auth.currentUser.uid;
+  openModal({
+    title: 'Delete cloud data',
+    desc: 'This will delete your plans and profile settings from Firestore.',
+    bodyHTML: `
+      <div class="subCard" style="border-color:rgba(239,68,68,.35); background:rgba(239,68,68,.08);">
+        <div style="font-weight:990">Type DELETE to confirm</div>
+        <input class="input" id="delDataConfirm" placeholder="DELETE" style="margin-top:10px;">
+      </div>
+    `,
+    footHTML: `
+      <button class="btn danger" id="doDelDataBtn">Delete</button>
+      <button class="btn" id="cancelDelDataBtn">Cancel</button>
+    `
+  });
+  document.getElementById('cancelDelDataBtn').onclick = closeModal;
+  document.getElementById('doDelDataBtn').onclick = async () => {
+    const v = (document.getElementById('delDataConfirm').value || '').trim();
+    if(v !== 'DELETE'){ toast('Type DELETE'); return; }
+    await deleteAllUserPlans(uid);
+    await profileRef(uid).delete().catch(()=>{});
+    toast('Cloud data deleted');
+    closeModal();
+  };
+}
+
+async function confirmAndDeleteAccount(){
+  if(!auth.currentUser) return;
+  openModal({
+    title: 'Delete account',
+    desc: 'Deletes your Firebase account + all your GRADEO data.',
+    bodyHTML: `
+      <div class="subCard" style="border-color:rgba(239,68,68,.35); background:rgba(239,68,68,.08);">
+        <div style="font-weight:990">Type DELETE ACCOUNT to confirm</div>
+        <input class="input" id="delAccConfirm" placeholder="DELETE ACCOUNT" style="margin-top:10px;">
+      </div>
+      <div class="hint">If deletion fails, sign in again (recent login required).</div>
+    `,
+    footHTML: `
+      <button class="btn danger" id="doDelAccBtn">Delete account</button>
+      <button class="btn" id="cancelDelAccBtn">Cancel</button>
+    `
+  });
+  document.getElementById('cancelDelAccBtn').onclick = closeModal;
+  document.getElementById('doDelAccBtn').onclick = async () => {
+    const v = (document.getElementById('delAccConfirm').value || '').trim();
+    if(v !== 'DELETE ACCOUNT'){ toast('Type DELETE ACCOUNT'); return; }
+    const uid = auth.currentUser.uid;
+    await deleteAllUserPlans(uid);
+    await profileRef(uid).delete().catch(()=>{});
+    try{ await auth.currentUser.delete(); }
+    catch(err){
+      if(err && err.code==='auth/requires-recent-login'){
+        await auth.signInWithPopup(provider);
+        await deleteAllUserPlans(uid);
+        await profileRef(uid).delete().catch(()=>{});
+        await auth.currentUser.delete();
+      }else{ throw err; }
+    }
+    toast('Account deleted');
+    closeModal();
+  };
+}
+
+async function deleteAllUserPlans(uid){
+  let snap = await plansCol(uid).get();
+  const docs = snap.docs;
+  for(let i=0; i<docs.length; i+=450){
+    const batch = db.batch();
+    docs.slice(i, i+450).forEach(d => batch.delete(d.ref));
+    await batch.commit();
+  }
+}
+
+
+ /* ========= Simple share / pdf ========= */
   async function shareSite(){
     const url = `https://gradeo.in/`;
     try{
@@ -2024,7 +2252,57 @@ if (changelogBtn){
     $("#deletePlanBtn").onclick = async()=>{ await deletePlan(); };
     $("#planSelect").onchange = async()=>{ await openPlan($("#planSelect").value); };
 
-    // header hide on scroll
+   
+
+  // Hamburger menu
+  const menuBtn = document.getElementById('menuBtn');
+  const menuPanel = document.getElementById('menuPanel');
+  const menuBackdrop = document.getElementById('menuBackdrop');
+  const menuCloseBtn = document.getElementById('menuCloseBtn');
+  const closeMenu = () => {
+    if(!menuPanel) return;
+    menuPanel.classList.remove('show');
+    if(menuBackdrop) menuBackdrop.classList.remove('show');
+    if(menuBtn) menuBtn.setAttribute('aria-expanded','false');
+  };
+  const openMenu = () => {
+    if(!menuPanel) return;
+    menuPanel.classList.add('show');
+    if(menuBackdrop) menuBackdrop.classList.add('show');
+    if(menuBtn) menuBtn.setAttribute('aria-expanded','true');
+  };
+  const toggleMenu = () => {
+    if(!menuPanel) return;
+    menuPanel.classList.contains('show') ? closeMenu() : openMenu();
+  };
+  if(menuBtn){
+    menuBtn.onclick = (e) => { e.preventDefault(); toggleMenu(); };
+  }
+  if(menuCloseBtn){
+    menuCloseBtn.onclick = closeMenu;
+  }
+  if(menuBackdrop){
+    menuBackdrop.onclick = closeMenu;
+  }
+  document.addEventListener('keydown', (e) => {
+    if(e.key === 'Escape') closeMenu();
+  });
+  document.addEventListener('click', (e) => {
+    if(!menuPanel || !menuPanel.classList.contains('show')) return;
+    const inside = e.target.closest('#menuPanel, #menuBtn');
+    if(!inside) closeMenu();
+  }, { capture:true });
+
+  // Menu actions
+  const faqBtn = document.getElementById('faqBtn');
+  if(faqBtn) faqBtn.onclick = () => { closeMenu(); showFAQ(); };
+  const contactBtn = document.getElementById('contactBtn');
+  if(contactBtn) contactBtn.onclick = () => { closeMenu(); showContact(); };
+  const acctManage = document.getElementById('accountManageBtn');
+  if(acctManage) acctManage.onclick = () => { closeMenu(); openProfile(); };
+
+
+ // header hide on scroll
     let lastY=window.scrollY, ticking=false;
     window.addEventListener("scroll", ()=>{
       if (ticking) return;
