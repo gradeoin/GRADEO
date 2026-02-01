@@ -725,6 +725,32 @@ body[data-mode="m3"]{ --modeGlow1: rgba(20,184,166,.24); --modeGlow2: rgba(124,5
   70%{box-shadow:0 0 0 14px rgba(255,255,255,0)}
   100%{box-shadow:0 0 0 0 rgba(255,255,255,0)}
 }
+/* Confetti */
+.confettiWrap{position:fixed; inset:0; pointer-events:none; z-index:20000; overflow:hidden;}
+.confetti{position:absolute; width:10px; height:14px; border-radius:3px; opacity:.95;
+  transform: translateY(-20px) rotate(0deg);
+  animation: confettiFall 1400ms linear forwards;
+}
+@keyframes confettiFall{
+  to{ transform: translateY(calc(100vh + 40px)) rotate(720deg); opacity:0.95; }
+}
+/* Shared profile card */
+.shareProfileCard{
+  border:1px solid var(--stroke);
+  background: color-mix(in oklab, var(--card) 75%, white);
+  border-radius: 16px;
+  padding: 12px;
+  box-shadow: var(--shadow2);
+  display:flex;
+  justify-content:space-between;
+  gap:10px;
+  flex-wrap:wrap;
+  align-items:center;
+}
+.shareProfileCard .left{display:flex; flex-direction:column; gap:2px;}
+.shareProfileCard .name{font-weight:990;}
+.shareProfileCard .meta{font-size:12px; font-weight:850; color:var(--muted2)}
+.shareProfileCard .pill{margin:0;}
 
 </style>
 </head>
@@ -769,6 +795,7 @@ body[data-mode="m3"]{ --modeGlow1: rgba(20,184,166,.24); --modeGlow2: rgba(124,5
   </div>
   <button class="menuItem sharePrimary" id="sharePlanBtn" role="menuitem">🔗 Share plan <span class="tag">HOT</span></button>
 <button class="menuItem" id="shareGradeBtn" role="menuitem">📄 Share grade card</button>
+<button class="menuItem" id="exportGradePdfBtn" role="menuitem">🖨️ Export grade card PDF</button>
 <button class="menuItem" id="uniSettingsBtn" role="menuitem">🎓 University settings</button>
   <button class="menuItem" id="howItWorksBtn" role="menuitem">ℹ️ How it works</button>
   <button class="menuItem" id="faqBtn" role="menuitem">❓ FAQ</button>
@@ -787,6 +814,7 @@ body[data-mode="m3"]{ --modeGlow1: rgba(20,184,166,.24); --modeGlow2: rgba(124,5
   <section class="hero heroCompact">
     <div>
       <h1 id="heroTitle">Target CGPA → Minimum SEE Needed</h1>
+ <div id="sharedProfileMount" style="margin-top:10px;"></div>
       <p id="heroSub">Step 1: Enter current CGPA & credits • Step 2: Add subjects • Step 3: Enter CIE • We show minimum SEE.</p>
 
 <div class="hint" id="eduNotice" style="margin-top:10px;">
@@ -797,7 +825,6 @@ body[data-mode="m3"]{ --modeGlow1: rgba(20,184,166,.24); --modeGlow2: rgba(124,5
     <div class="pills heroTools">
   <button class="btn small" id="heroInfoBtn">ℹ️ Info</button>
  <button class="btn small primary heroShare" id="heroSharePlanBtn"><span class="dot" aria-hidden="true"></span>Share plan</button>
- 
       <span class="pill" id="statusPill">Guest</span>
       <span class="pill good" id="savePill" style="display:none;">Saved</span>
     </div>
@@ -886,6 +913,7 @@ body[data-mode="m3"]{ --modeGlow1: rgba(20,184,166,.24); --modeGlow2: rgba(124,5
             <div style="display:flex; gap:10px; flex-wrap:wrap; align-items:end;">
               <button class="btn primary" id="addNormalBtn2">+ Subject</button>
               <button class="btn" id="addActivityBtn2">+ Activity</button>
+ <button class="btn" id="exportPdfInlineBtn">🖨️ Grade PDF</button>
             </div>
           </div>
 
@@ -1571,6 +1599,26 @@ body[data-mode="m3"]{ --modeGlow1: rgba(20,184,166,.24); --modeGlow2: rgba(124,5
     const cloud = auth.currentUser ? "Cloud autosave" : "Guest mode";
  const acad = state.profile.university ? (` • ${state.profile.university}${state.profile.semester ? (" • " + state.profile.semester) : ""}`) : "";
     $("#subLine").textContent = `Made for you, ${name} • ${cloud}${acad}`;
+    // Shared profile card (cool & clear)
+    try{
+      const mount = document.getElementById("sharedProfileMount");
+      if (mount){
+        if (state.sharedView && state.sharedData && state.sharedData.data && state.sharedData.data.profile){
+          const p = state.sharedData.data.profile;
+          const meta = [p.university, p.branch, p.semester, p.regulation].filter(Boolean).join(" • ");
+          mount.innerHTML = `
+            <div class="shareProfileCard">
+              <div class="left">
+                <div class="name">👤 ${esc(p.nickname || "Student")}</div>
+                <div class="meta">${esc(meta || "Shared snapshot")}</div>
+              </div>
+              <span class="pill good">🔒 Read-only</span>
+            </div>`;
+        } else {
+          mount.innerHTML = "";
+        }
+      }
+    }catch(_e){}
     $("#profileBtn").textContent = auth.currentUser ? "Profile" : "Sign in";
     $("#statusPill").textContent = auth.currentUser ? "Cloud" : "Guest";
     $("#statusPill").className = auth.currentUser ? "pill good" : "pill";
@@ -1580,7 +1628,7 @@ body[data-mode="m3"]{ --modeGlow1: rgba(20,184,166,.24); --modeGlow2: rgba(124,5
       const lt = document.getElementById("lockTitle");
       const lh = document.getElementById("lockHint");
       if (lt) lt.textContent = "Shared view (read-only)";
-      if (lh) lh.textContent = "This is a shared snapshot. You can copy it to your account.";
+      if (lh) lh.textContent = "This is a shared snapshot. Copy it to your account to edit.";
       const si = document.getElementById("lockSignInBtn");
       const cp = document.getElementById("copyShareBtn");
       if (si) si.style.display = auth.currentUser ? "none" : "inline-flex";
@@ -1589,7 +1637,7 @@ body[data-mode="m3"]{ --modeGlow1: rgba(20,184,166,.24); --modeGlow2: rgba(124,5
       const lt = document.getElementById("lockTitle");
       const lh = document.getElementById("lockHint");
       if (lt) lt.textContent = "View-only mode";
-      if (lh) lh.textContent = "Sign in to edit and autosave to your account.";
+      if (lh) lh.textContent = "Sign in to calculate, edit, and autosave.";
       const si = document.getElementById("lockSignInBtn");
       const cp = document.getElementById("copyShareBtn");
       if (si) si.style.display = "inline-flex";
@@ -2106,7 +2154,55 @@ function setMode(mode, opts={push:true}){
    const result = await auth.signInWithPopup(provider);
    await sendWelcomeEmailOnce(result.user);
    closeModal(); 
- };
+ }
+
+  // ===== Fun student toasts (friendly, no hate) =====
+  const FUNNY = {
+    copyLink: [
+      "Link copied 😎 Now go flex in your WhatsApp group.",
+      "Copied ✅ Don’t forget to breathe before exams 😭",
+      "Boom! Link ready 🚀 Send it before your friend says ‘share fast’."
+    ],
+    needSignin: [
+      "Bro… sign in first 😭",
+      "Nice try 😏 Sign in to unlock the magic.",
+      "Guest mode is cool, but sharing needs sign-in 🤝"
+    ],
+    sharedOpen: [
+      "Shared view opened 👀 Don’t edit—just admire.",
+      "Welcome to read-only land 📖",
+      "This plan is shared. Copy it and make it yours 🔥"
+    ]
+  };
+  function funToast(key){
+    const arr = FUNNY[key] || ["Done!"]; 
+    const msg = arr[Math.floor(Math.random()*arr.length)];
+    toast(msg);
+  }
+
+  // ===== Confetti (tiny, fast) =====
+  function confettiBurst(){
+    const wrap = document.createElement('div');
+    wrap.className = 'confettiWrap';
+    const colors = ['#ff6a00','#ff9f1c','#0ea5e9','#2563eb','#14b8a6','#7c3aed','#22c55e','#f43f5e'];
+    const N = 70;
+    for (let i=0;i<N;i++){
+      const c = document.createElement('div');
+      c.className='confetti';
+      c.style.left = (Math.random()*100)+'vw';
+      c.style.top = (-20 - Math.random()*80)+'px';
+      c.style.background = colors[i%colors.length];
+      c.style.transform = `translateY(-20px) rotate(${Math.random()*120}deg)`;
+      c.style.animationDuration = (900 + Math.random()*900)+'ms';
+      c.style.animationDelay = (Math.random()*120)+'ms';
+      c.style.width = (8 + Math.random()*8)+'px';
+      c.style.height = (10 + Math.random()*10)+'px';
+      wrap.appendChild(c);
+    }
+    document.body.appendChild(wrap);
+    setTimeout(()=>wrap.remove(), 2200);
+  }
+;
     $("#cancel").onclick = closeModal;
   }
 
@@ -2387,7 +2483,7 @@ async function deleteAllUserPlans(uid){
   
   /* ========= Public share (Plan / Grade card) ========= */
   async function createShareDoc(type){
-    if (!auth.currentUser){ openSignInModal(); return; }
+    if (!auth.currentUser){ funToast('needSignin'); openSignInModal(); return; }
     const uid = auth.currentUser.uid;
     const nowMs = Date.now();
     let payload = { type, mode: state.mode, createdAt: firebase.firestore.FieldValue.serverTimestamp(), createdMs: nowMs, uid };
@@ -2412,17 +2508,48 @@ async function deleteAllUserPlans(uid){
 
     const ref = await sharesCol().add(payload);
     const link = location.origin + location.pathname + '?share=' + ref.id;
+    const waLink = 'https://wa.me/?text=' + encodeURIComponent('GRADEO link: ' + link);
+    const qrLink = 'https://quickchart.io/qr?text=' + encodeURIComponent(link) + '&size=220';
 
     openModal({
       title: (type==='plan') ? 'Share plan' : 'Share grade card',
       desc: 'Anyone with the link can view (read-only).',
-      bodyHTML: `<div class="subCard"><div style="font-weight:990">Share link</div><input class="input" id="shareLinkBox" value="${esc(link)}" readonly style="margin-top:10px"></div>
-<div class="hint">Tip: Share this on your class WhatsApp group 👀</div>`,
-      footHTML: `<button class="btn primary" id="copyShareLink">Copy link</button><button class="btn" id="closeShare">Close</button>`
+      bodyHTML: `
+        <div class="subCard">
+          <div style="font-weight:990">Share link</div>
+          <input class="input" id="shareLinkBox" value="${esc(link)}" readonly style="margin-top:10px">
+          <div class="hint">Tip: Drop it in your class WhatsApp group 👀</div>
+        </div>
+        <div class="subCard" style="display:flex; gap:14px; flex-wrap:wrap; align-items:center; justify-content:space-between;">
+          <div>
+            <div style="font-weight:990">QR code</div>
+            <div class="hint">Scan = instant open.</div>
+          </div>
+          <img alt="QR" id="qrImg" src="${qrLink}" style="width:140px;height:140px;border-radius:14px;border:1px solid var(--stroke);background:#fff;object-fit:cover;">
+        </div>
+      `,
+      footHTML: `
+        <button class="btn primary" id="copyShareLink">Copy link</button>
+        <a class="btn" id="waShareBtn" href="${waLink}" target="_blank" rel="noopener">WhatsApp</a>
+        <button class="btn" id="dlQrBtn">Download QR</button>
+        <button class="btn" id="closeShare">Close</button>
+      `
     });
 
     document.getElementById('copyShareLink').onclick = async () => {
-      try{ await navigator.clipboard.writeText(link); toast('Link copied'); }catch(_e){ toast('Copy failed'); }
+      try{ await navigator.clipboard.writeText(link); confettiBurst(); funToast('copyLink'); }catch(_e){ toast('Copy failed'); }
+    };
+    document.getElementById('dlQrBtn').onclick = async () => {
+      try{
+        const img = document.getElementById('qrImg');
+        const a = document.createElement('a');
+        a.href = img.src;
+        a.download = 'gradeo-qr.png';
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        toast('QR downloading…');
+      }catch(_e){ toast('Download failed'); }
     };
     document.getElementById('closeShare').onclick = closeModal;
   }
@@ -2438,6 +2565,7 @@ async function deleteAllUserPlans(uid){
       state.readOnly = true;
       state.sharedData = sh;
 
+      // Apply snapshot
       if (sh.data.plan){
         state.plan = sh.data.plan;
         if (sh.data.history) state.history = sh.data.history;
@@ -2456,8 +2584,94 @@ async function deleteAllUserPlans(uid){
       renderAllStatic();
       setMode(state.mode, {push:false});
       scheduleRecalc(0);
-      toast('Opened shared view');
+      funToast('sharedOpen');
     }catch(e){ console.error(e); toast('Failed to load share'); }
+  }
+
+  /* ========= Grade card PDF export (student-friendly) ========= */
+  function exportGradeCardPDF(){
+    // We export based on current subjects using Mode 2 formula
+    const semName = (document.getElementById('semesterName')?.value || '').trim();
+    const prof = state.profile || {};
+    const rows = state.plan.subjects.map(s => {
+      const cr = (s.kind==="activity") ? 1 : clamp(parseInt(s.credits||3,10),1,4);
+      const seeMax = (cr===1) ? ((parseInt(s.seeOutOf||"50",10)===100) ? 100 : 50) : 100;
+      const cie = (s.kind==="activity") ? '' : clamp(parseFloat(s.cie||0),0,50).toFixed(1);
+      const see = (s.kind==="activity") ? '' : clamp(parseFloat(s.see||0),0,seeMax).toFixed(1);
+      const final = (s.kind==="activity") ? clamp(parseFloat(s.final||0),0,100).toFixed(1) : '';
+      const r = calcSubjectMode2(s);
+      return { name: (s.name||'Subject'), kind:s.kind, cr, cie, see, seeMax, final, status: r.badge, gp: r.gp, label: r.label };
+    });
+    const sem = computeSGPA();
+
+    const html = `
+      <html><head><meta charset="utf-8"><title>GRADEO Grade Card</title>
+      <style>
+        body{font-family:system-ui,Segoe UI,Roboto,Arial;margin:24px;color:#111}
+        .top{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;align-items:flex-start}
+        .brand{font-weight:900;letter-spacing:.08em;text-transform:uppercase;color:#ff6a00}
+        .box{border:1px solid #e5e7eb;border-radius:14px;padding:14px;background:#fff7f0}
+        .muted{color:#6b7280;font-size:12px;font-weight:700}
+        table{width:100%;border-collapse:collapse;margin-top:14px}
+        th,td{border:1px solid #e5e7eb;padding:10px;font-size:12px;text-align:left}
+        th{background:#fff1e6}
+        .pill{display:inline-block;padding:3px 8px;border-radius:999px;font-weight:800;font-size:11px}
+        .pass{background:#dcfce7;color:#166534}
+        .fail{background:#fee2e2;color:#991b1b}
+        .sum{display:flex;gap:12px;flex-wrap:wrap;margin-top:14px}
+        .sum .box{flex:1;min-width:220px}
+        @media print{button{display:none}}
+      </style></head><body>
+      <div class="top">
+        <div>
+          <div class="brand">GRADEO • Grade Card</div>
+          <div class="muted">${semName ? ('Semester: '+semName) : ''}</div>
+          <div class="muted">${[prof.university, prof.branch, prof.semester].filter(Boolean).join(' • ')}</div>
+        </div>
+        <div class="box">
+          <div class="muted">SGPA</div>
+          <div style="font-size:28px;font-weight:900">${(Number.isFinite(sem.sgpa)? sem.sgpa.toFixed(2):'—')}</div>
+          <div class="muted">Credits: ${sem.credits}</div>
+        </div>
+      </div>
+
+      <table>
+        <thead><tr>
+          <th>Subject</th><th>Type</th><th>Cr</th><th>CIE</th><th>SEE</th><th>Total/Result</th><th>GP</th>
+        </tr></thead>
+        <tbody>
+          ${rows.map(r=>`
+            <tr>
+              <td><b>${r.name.replace(/</g,'&lt;')}</b></td>
+              <td>${r.kind==='activity'?'Activity':'Normal'}</td>
+              <td>${r.cr}</td>
+              <td>${r.kind==='activity'?'—':(r.cie+'/50')}</td>
+              <td>${r.kind==='activity'?(r.final+'/100'):(r.see+'/'+r.seeMax)}</td>
+              <td>${r.label.replace(/</g,'&lt;')}</td>
+              <td>${r.gp}</td>
+            </tr>
+          `).join('')}
+        </tbody>
+      </table>
+
+      <div class="sum">
+        <div class="box"><div class="muted">Points</div><div style="font-size:18px;font-weight:900">${sem.points} / ${sem.maxPoints}</div></div>
+        <div class="box"><div class="muted">Generated by</div><div style="font-weight:900">gradeo.in</div><div class="muted">Educational estimate only</div></div>
+      </div>
+
+      <div style="margin-top:16px;display:flex;gap:10px;flex-wrap:wrap">
+        <button onclick="window.print()" style="padding:10px 12px;border-radius:12px;border:1px solid #e5e7eb;font-weight:900;cursor:pointer">Print / Save as PDF</button>
+        <button onclick="history.back()" style="padding:10px 12px;border-radius:12px;border:1px solid #e5e7eb;font-weight:900;cursor:pointer">Back</button>
+      </div>
+      </body></html>
+    `;
+
+    const w = window.open('', '_blank');
+    if (!w){ toast('Popup blocked'); return; }
+    w.document.open();
+    w.document.write(html);
+    w.document.close();
+    toast('Grade card ready 🖨️');
   }
 async function shareSite(){
     const url = `https://gradeo.in/`;
@@ -2659,9 +2873,15 @@ function showContact(){
     $("#profileBtn").onclick = openProfile;
     $("#lockSignInBtn").onclick = openSignInModal;
 
-    $("#shareSiteBtn").onclick = shareSite;
+    $("#shareSiteBtn").onclick = () => {
+    // Quick share: plan (if signed in), else share site
+    if (auth && auth.currentUser) createShareDoc('plan');
+    else shareSite();
+  };
     $("#pdfBtn").onclick = ()=>window.print();
     $("#gradeScaleBtn").onclick = showGradeScale;
+  const exportPdfInlineBtn = document.getElementById("exportPdfInlineBtn");
+  if (exportPdfInlineBtn) exportPdfInlineBtn.onclick = exportGradeCardPDF;
     $("#helpBtn").onclick = showHelp;
   const heroInfoBtn = document.getElementById('heroInfoBtn');
   if(heroInfoBtn) heroInfoBtn.onclick = showHeroInfo;
@@ -2917,6 +3137,8 @@ if (changelogBtn){
   if (sharePlanBtn) sharePlanBtn.addEventListener('click', () => { try{ closeMenu(); }catch(_e){} createShareDoc('plan'); });
   const shareGradeBtn = document.getElementById('shareGradeBtn');
   if (shareGradeBtn) shareGradeBtn.addEventListener('click', () => { try{ closeMenu(); }catch(_e){} createShareDoc('grade'); });
+  const exportGradePdfBtn = document.getElementById('exportGradePdfBtn');
+  if (exportGradePdfBtn) exportGradePdfBtn.addEventListener('click', () => { try{ closeMenu(); }catch(_e){} exportGradeCardPDF(); });
   const heroSharePlanBtn = document.getElementById('heroSharePlanBtn');
   if (heroSharePlanBtn) heroSharePlanBtn.addEventListener('click', () => createShareDoc('plan'));
 
@@ -2947,7 +3169,8 @@ if (changelogBtn){
       await fetchPlans();
       renderPlansSelect();
       await openPlan(ref.id);
-      toast('Copied to your plans');
+      confettiBurst();
+      toast('Copied to your plans ✅');
     }catch(e){ console.error(e); toast('Copy failed'); }
   });
 const contactBtn = document.getElementById('contactBtn');
@@ -3058,11 +3281,6 @@ const contactBtn = document.getElementById('contactBtn');
     state.theme = state.theme || "light";
     document.body.setAttribute("data-theme", state.theme);
     initAuth();
-    // Open shared snapshot if link contains ?share=...
-    try{
-      const sid = new URLSearchParams(location.search).get('share');
-      if (sid) loadSharedSnapshot(sid);
-    }catch(_e){}
 
   // Set CSS var for nav height (helps fixed panels avoid overlapping the nav)
   try{
