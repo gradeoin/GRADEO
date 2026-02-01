@@ -2088,12 +2088,12 @@ if (changelogBtn){
 
         const prof = await profileRef(user.uid).get();
         const lastPlanId = prof.exists ? (prof.data().lastPlanId || null) : null;
-        const theme = prof.exists ? (prof.data().theme || "light") : "system";
+        const theme = (prof.exists && prof.data() && prof.data().theme) ? prof.data().theme : "light";
         const nick = prof.exists ? (prof.data().nickname || state.profile.nickname) : state.profile.nickname;
 
         state.profile.nickname = nick;
-        state.theme = theme;
-        document.body.setAttribute("data-theme", theme);
+        state.theme = 'light';
+        document.body.setAttribute('data-theme','light');
         await fetchPlans();
         renderPlansSelect();
 
