@@ -672,6 +672,60 @@ body[data-mode="m3"]{ --modeGlow1: rgba(20,184,166,.24); --modeGlow2: rgba(124,5
   .right{grid-template-columns:repeat(2, minmax(0,1fr));}
 }
 
+
+/* ===== Share highlight (student-friendly) ===== */
+.menuItem.sharePrimary{
+  position:relative;
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  color: #fff !important;
+  border-radius: 14px;
+  margin: 8px 10px;
+  border: 1px solid rgba(255,255,255,.18);
+  box-shadow: 0 18px 42px rgba(0,0,0,.18);
+}
+.menuItem.sharePrimary:hover{filter:brightness(1.03)}
+.menuItem.sharePrimary:active{transform:scale(.995)}
+.menuItem.sharePrimary .tag{
+  margin-left:auto;
+  font-size:11px;
+  font-weight:1000;
+  padding:4px 8px;
+  border-radius:999px;
+  background: rgba(255,255,255,.18);
+  border:1px solid rgba(255,255,255,.22);
+}
+.menuItem.sharePrimary::after{
+  content:"";
+  position:absolute;
+  inset:-2px;
+  border-radius: 16px;
+  background: conic-gradient(from 180deg, transparent, rgba(255,255,255,.45), transparent 35%);
+  opacity:.35;
+  filter: blur(6px);
+  animation: shareGlow 2.6s ease-in-out infinite;
+  pointer-events:none;
+}
+@keyframes shareGlow{
+  0%,100%{opacity:.18; transform:rotate(-10deg) scale(1.00)}
+  50%{opacity:.38; transform:rotate(10deg) scale(1.02)}
+}
+.heroShare{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+}
+.heroShare .dot{
+  width:8px;height:8px;border-radius:999px;
+  background: #fff;
+  box-shadow: 0 0 0 0 rgba(255,255,255,.6);
+  animation: dotPulse 1.6s ease-out infinite;
+}
+@keyframes dotPulse{
+  0%{box-shadow:0 0 0 0 rgba(255,255,255,.55)}
+  70%{box-shadow:0 0 0 14px rgba(255,255,255,0)}
+  100%{box-shadow:0 0 0 0 rgba(255,255,255,0)}
+}
+
 </style>
 </head>
 
@@ -713,7 +767,7 @@ body[data-mode="m3"]{ --modeGlow1: rgba(20,184,166,.24); --modeGlow2: rgba(124,5
     </div>
     <button class="btn small" id="menuCloseBtn" aria-label="Close menu">Close</button>
   </div>
-  <button class="menuItem" id="sharePlanBtn" role="menuitem">🔗 Share plan</button>
+  <button class="menuItem sharePrimary" id="sharePlanBtn" role="menuitem">🔗 Share plan <span class="tag">HOT</span></button>
 <button class="menuItem" id="shareGradeBtn" role="menuitem">📄 Share grade card</button>
 <button class="menuItem" id="uniSettingsBtn" role="menuitem">🎓 University settings</button>
   <button class="menuItem" id="howItWorksBtn" role="menuitem">ℹ️ How it works</button>
@@ -742,6 +796,8 @@ body[data-mode="m3"]{ --modeGlow1: rgba(20,184,166,.24); --modeGlow2: rgba(124,5
     </div>
     <div class="pills heroTools">
   <button class="btn small" id="heroInfoBtn">ℹ️ Info</button>
+ <button class="btn small primary heroShare" id="heroSharePlanBtn"><span class="dot" aria-hidden="true"></span>Share plan</button>
+ 
       <span class="pill" id="statusPill">Guest</span>
       <span class="pill good" id="savePill" style="display:none;">Saved</span>
     </div>
@@ -1107,8 +1163,8 @@ body[data-mode="m3"]{ --modeGlow1: rgba(20,184,166,.24); --modeGlow2: rgba(124,5
     mode:"m1",
     user:null,
     readOnly:false,
-    sharedView:false,
-    sharedData:null,
+  sharedView:false,
+  sharedData:null,
     dirty:false,
     lastSavedAt:null,
 
@@ -2334,8 +2390,8 @@ async function deleteAllUserPlans(uid){
     if (!auth.currentUser){ openSignInModal(); return; }
     const uid = auth.currentUser.uid;
     const nowMs = Date.now();
-    // Snapshot payload
     let payload = { type, mode: state.mode, createdAt: firebase.firestore.FieldValue.serverTimestamp(), createdMs: nowMs, uid };
+
     if (type === 'plan'){
       payload.data = { mode: state.mode, plan: state.plan, history: state.history, profile: { nickname: state.profile.nickname, university: state.profile.university, branch: state.profile.branch, semester: state.profile.semester, regulation: state.profile.regulation } };
     } else {
@@ -2353,15 +2409,21 @@ async function deleteAllUserPlans(uid){
       payload.mode = 'm2';
       payload.data = { mode:'m2', semesterName: $("#semesterName")?.value || "", rows, sgpa: sem, profile: { nickname: state.profile.nickname, university: state.profile.university, branch: state.profile.branch, semester: state.profile.semester, regulation: state.profile.regulation } };
     }
+
     const ref = await sharesCol().add(payload);
     const link = location.origin + location.pathname + '?share=' + ref.id;
+
     openModal({
       title: (type==='plan') ? 'Share plan' : 'Share grade card',
       desc: 'Anyone with the link can view (read-only).',
-      bodyHTML: `<div class="subCard"><div style="font-weight:990">Share link</div><input class="input" id="shareLinkBox" value="${esc(link)}" readonly style="margin-top:10px"></div>`,
+      bodyHTML: `<div class="subCard"><div style="font-weight:990">Share link</div><input class="input" id="shareLinkBox" value="${esc(link)}" readonly style="margin-top:10px"></div>
+<div class="hint">Tip: Share this on your class WhatsApp group 👀</div>`,
       footHTML: `<button class="btn primary" id="copyShareLink">Copy link</button><button class="btn" id="closeShare">Close</button>`
     });
-    document.getElementById('copyShareLink').onclick = async () => { try{ await navigator.clipboard.writeText(link); toast('Link copied'); }catch(_e){ toast('Copy failed'); } };
+
+    document.getElementById('copyShareLink').onclick = async () => {
+      try{ await navigator.clipboard.writeText(link); toast('Link copied'); }catch(_e){ toast('Copy failed'); }
+    };
     document.getElementById('closeShare').onclick = closeModal;
   }
 
@@ -2371,19 +2433,18 @@ async function deleteAllUserPlans(uid){
       if (!snap.exists){ toast('Share not found'); return; }
       const sh = snap.data();
       if (!sh || !sh.data){ toast('Invalid share'); return; }
+
       state.sharedView = true;
       state.readOnly = true;
       state.sharedData = sh;
-      // Apply snapshot
+
       if (sh.data.plan){
         state.plan = sh.data.plan;
         if (sh.data.history) state.history = sh.data.history;
         state.mode = sh.data.mode || sh.mode || 'm1';
       } else {
-        // grade card share: render in mode2 using saved rows -> map back to subjects
         state.mode = 'm2';
         if (Array.isArray(sh.data.rows)){
-          // Recreate subjects from shared rows
           state.plan.subjects = sh.data.rows.map(r => {
             if (r.kind==='activity') return { id: crypto.randomUUID(), kind:'activity', name:r.name||'Activity', credits:1, final: String(r.final ?? '') };
             const seeOutOf = (r.seeMax===50) ? '50' : '100';
@@ -2391,6 +2452,7 @@ async function deleteAllUserPlans(uid){
           });
         }
       }
+
       renderAllStatic();
       setMode(state.mode, {push:false});
       scheduleRecalc(0);
@@ -2855,13 +2917,15 @@ if (changelogBtn){
   if (sharePlanBtn) sharePlanBtn.addEventListener('click', () => { try{ closeMenu(); }catch(_e){} createShareDoc('plan'); });
   const shareGradeBtn = document.getElementById('shareGradeBtn');
   if (shareGradeBtn) shareGradeBtn.addEventListener('click', () => { try{ closeMenu(); }catch(_e){} createShareDoc('grade'); });
+  const heroSharePlanBtn = document.getElementById('heroSharePlanBtn');
+  if (heroSharePlanBtn) heroSharePlanBtn.addEventListener('click', () => createShareDoc('plan'));
+
   const copyShareBtn = document.getElementById('copyShareBtn');
   if (copyShareBtn) copyShareBtn.addEventListener('click', async () => {
     if (!auth.currentUser) { openSignInModal(); return; }
     if (!state.sharedView || !state.sharedData || !state.sharedData.data) return;
     try{
       const uid = auth.currentUser.uid;
-      // Create a new plan from the shared snapshot
       const snapData = state.sharedData.data;
       const newPlan = {
         name: (snapData.plan && snapData.plan.name ? snapData.plan.name : 'Shared copy'),
@@ -2880,6 +2944,8 @@ if (changelogBtn){
       state.sharedView = false;
       state.readOnly = false;
       state.sharedData = null;
+      await fetchPlans();
+      renderPlansSelect();
       await openPlan(ref.id);
       toast('Copied to your plans');
     }catch(e){ console.error(e); toast('Copy failed'); }
