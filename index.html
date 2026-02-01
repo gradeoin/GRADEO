@@ -687,7 +687,7 @@ body[data-mode="m3"]{ --modeGlow1: rgba(20,184,166,.16); --modeGlow2: rgba(124,5
               <select class="select" id="rounding">
                 <option value="nearest">Nearest GP</option>
                 <option value="floor">Floor GP</option>
-               
+             
               </select>
             </div>
           </div>
@@ -2338,9 +2338,7 @@ function showContact(){
     $("#modalClose").onclick = closeModal;
     $("#overlay").addEventListener("click", (e)=>{ if (e.target.id==="overlay") closeModal(); });
 
-    $("#m1Btn").onclick = ()=>setMode(state.mode || "m1", {push:false});
-  // create initial history entry for in-app navigation
-  try{ const isPhoneNav = window.matchMedia && window.matchMedia('(max-width: 640px)').matches; if(isPhoneNav) if(isPhoneNav()) history.replaceState({mode: state.mode || 'm1'}, '', '#' + (state.mode || 'm1')); }catch(_e){}
+    $("#m1Btn").onclick = ()=>setMode("m1", {push:isPhoneNav()});
     $("#m2Btn").onclick = ()=>setMode("m2", {push:isPhoneNav()});
     $("#m3Btn").onclick = ()=>setMode("m3", {push:isPhoneNav()});
 
@@ -2724,8 +2722,6 @@ if (changelogBtn){
 
     // default mode
     setMode(state.mode || "m1", {push:false});
-  // create initial history entry for in-app navigation
-  try{ const isPhoneNav = window.matchMedia && window.matchMedia('(max-width: 640px)').matches; if(isPhoneNav) if(isPhoneNav()) history.replaceState({mode: state.mode || 'm1'}, '', '#' + (state.mode || 'm1')); }catch(_e){}
     renderAllStatic();
     scheduleRecalc(0);
   });
@@ -3186,6 +3182,5 @@ const prefersReduce = window.matchMedia && window.matchMedia('(prefers-reduced-m
 </script>
 </body>
 </html>
-
 
 
