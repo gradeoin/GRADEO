@@ -1,39 +1,56 @@
+
+
+
+
+
+
+
+
+
 <!doctype html>
 <html lang="en">
 <head>
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
-  <title>Gradeo — CGPA & SGPA Planner</title>
+  <title>GRADEO — CGPA & SGPA Calculator + Planner</title>
   <link rel="icon" href="https://res.cloudinary.com/djy3mjtsz/image/upload/v1769939762/Untitled_1_xht9gh.gif" type="image/gif">
+ <link rel="shortcut icon" href="https://res.cloudinary.com/djy3mjtsz/image/upload/v1769939762/Untitled_1_xht9gh.gif" type="image/gif">
   <link rel="apple-touch-icon" href="https://res.cloudinary.com/djy3mjtsz/image/upload/v1769939762/Untitled_1_xht9gh.gif">
 
   <meta name="theme-color" content="#0B57D0"/>
   <!-- Primary SEO -->
-  <meta name="description" content="Premium Gradeo: target CGPA to minimum SEE, calculate SGPA from marks, and convert SGPA to CGPA — with cloud autosave and printable PDF."/>
-  <meta name="keywords" content="CGPA, SGPA, VTU, marks calculator, grade points, SEE, CIE, GPA"/>
+  <meta name="description" content="GRADEO helps you calculate SGPA from marks, convert SGPA→CGPA, and estimate minimum SEE marks needed for a target CGPA. Cloud autosave and PDF export."/>
+  <meta name="keywords" content="GRADEO, SGPA calculator, CGPA calculator, VTU SGPA, VTU CGPA, SEE marks calculator, CIE SEE calculator, grade points, GPA planner"/>
   <meta name="robots" content="index,follow,max-snippet:-1,max-image-preview:large,max-video-preview:-1"/>
+ <meta name="googlebot" content="index,follow,max-snippet:-1,max-image-preview:large,max-video-preview:-1"/>
   <meta name="referrer" content="strict-origin-when-cross-origin"/>
-  <meta name="author" content="Gradeo"/>
-  <meta name="application-name" content="Gradeo"/>
-  <meta name="apple-mobile-web-app-title" content="Gradeo"/>
+  <meta name="author" content="GRADEO"/>
+  <meta name="application-name" content="GRADEO"/>
+  <meta name="apple-mobile-web-app-title" content="GRADEO"/>
   <meta name="color-scheme" content="light dark"/>
 <!-- Open Graph / Facebook -->
   <meta property="og:type" content="website"/>
-  <meta property="og:title" content="Gradeo — CGPA & SGPA Planner"/>
+  <meta property="og:title" content="GRADEO — CGPA & SGPA Calculator + Planner"/>
   <meta property="og:description" content="Target CGPA → minimum SEE needed • Marks → SGPA • SGPA → CGPA • Cloud autosave • PDF export."/>
-  <meta property="og:site_name" content="Gradeo"/>
+  <meta property="og:site_name" content="GRADEO"/>
   <meta property="og:locale" content="en_IN"/>
   <meta property="og:url" content="https://gradeo.in/"/>
   <!-- Optional: set a real image URL for rich previews -->
   <meta property="og:image" content="https://res.cloudinary.com/djy3mjtsz/image/upload/v1769939762/Untitled_1_xht9gh.gif"/>
 
-  <!-- Twitter -->
+  <meta property="og:image:secure_url" content="https://res.cloudinary.com/djy3mjtsz/image/upload/v1769939762/Untitled_1_xht9gh.gif"/>
+ <meta property="og:image:type" content="image/gif"/>
+ <meta property="og:image:width" content="1200"/>
+ <meta property="og:image:height" content="630"/>
+ <meta property="og:image:alt" content="GRADEO — CGPA & SGPA calculator and planner"/>
+ <!-- Twitter -->
   <meta name="twitter:card" content="summary_large_image"/>
-  <meta name="twitter:title" content="Gradeo"/>
-  <meta name="twitter:description" content="Target SEE, compute SGPA, convert SGPA→CGPA. Premium UI with cloud autosave."/>
+  <meta name="twitter:title" content="GRADEO — CGPA & SGPA Calculator + Planner"/>
+  <meta name="twitter:description" content="Target CGPA → minimum SEE needed • Marks → SGPA • SGPA → CGPA • Cloud autosave • PDF export."/>
   <meta name="twitter:image" content="https://res.cloudinary.com/djy3mjtsz/image/upload/v1769939762/Untitled_1_xht9gh.gif"/>
 
-  <!-- PWA / Mobile -->
+  <meta name="twitter:image:alt" content="GRADEO — CGPA & SGPA calculator and planner"/>
+ <!-- PWA / Mobile -->
   <meta name="apple-mobile-web-app-capable" content="yes"/>
   <meta name="mobile-web-app-capable" content="yes"/>
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
@@ -43,24 +60,37 @@
 
   <!-- Performance hints (Firebase) -->
   <link rel="preconnect" href="https://www.gstatic.com" crossorigin>
+ <link rel="preconnect" href="https://res.cloudinary.com" crossorigin>
   <link rel="preconnect" href="https://firestore.googleapis.com" crossorigin>
 
   <!-- Structured data -->
   <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "WebApplication",
-    "name": "Gradeo",
-    "applicationCategory": "EducationalApplication",
-    "operatingSystem": "All",
-    "description": "Target CGPA to minimum SEE needed, calculate SGPA from marks, and convert SGPA to CGPA.",
-    "offers": {
-      "@type": "Offer",
-      "price": "0",
-      "priceCurrency": "INR"
-    }
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "GRADEO",
+  "url": "https://gradeo.in/",
+  "image": "https://res.cloudinary.com/djy3mjtsz/image/upload/v1769939762/Untitled_1_xht9gh.gif",
+  "applicationCategory": "EducationalApplication",
+  "operatingSystem": "All",
+  "inLanguage": "en-IN",
+  "description": "GRADEO helps students calculate SGPA from marks, convert SGPA to CGPA, and estimate the minimum SEE required for a target CGPA.",
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "INR"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "GRADEO",
+    "url": "https://gradeo.in/"
+  },
+  "potentialAction": {
+    "@type": "UseAction",
+    "target": "https://gradeo.in/"
   }
-  </script>
+}
+</script>
 
   <style>
     :root{
@@ -110,7 +140,8 @@
     .logo::after{content:""; position:absolute; inset:-70%; background:conic-gradient(from 0deg, rgba(255,255,255,.85), transparent 30%, rgba(255,255,255,.2), transparent 70%, rgba(255,255,255,.85)); animation:spin 5.5s linear infinite; opacity:.18;}
     @keyframes spin{to{transform:rotate(360deg)}}
     .logo svg{position:relative; z-index:1}
-    .title{font-weight:980; font-size:14px;}
+    .title{font-weight:980; font-size:14px; letter-spacing: .08em; text-transform: uppercase;
+ }
     .sub{font-weight:850; font-size:12px; color:var(--muted); margin-top:2px}
 
     .right{display:flex; gap:10px; align-items:center; justify-content:flex-end; flex-wrap:wrap;}
@@ -412,7 +443,8 @@ body::before{
 [data-theme="light"] .panelHead h2,
 [data-theme="light"] .title{
   color: var(--brand);
-}
+ letter-spacing: .08em; text-transform: uppercase;
+ }
 [data-theme="light"] .hero h1{
   font-weight: 1000;
   letter-spacing: -0.02em;
@@ -444,7 +476,7 @@ body::before{
   <img src="https://res.cloudinary.com/djy3mjtsz/image/upload/v1769939762/Untitled_1_xht9gh.gif" alt="Gradeo logo" style="width:36px;height:36px;border-radius:12px;object-fit:cover;">
 </div>
       <div>
-        <div class="title">Gradeo</div>
+        <div class="title">GRADEO</div>
         <div class="sub" id="subLine">Made for you, Guest • Guest mode</div>
       </div>
     </div>
@@ -659,7 +691,7 @@ body::before{
 <footer class="noPrint" style="max-width:1200px; margin:0 auto; padding:0 14px 24px;">
   <div class="panel" style="padding:12px; display:flex; justify-content:space-between; gap:10px; flex-wrap:wrap; align-items:center;">
     <div>
-      <div style="font-weight:990;">Gradeo</div>
+      <div style="font-weight:990;">GRADEO</div>
       <div class="hint">Educational tool • Cloud autosave • View‑only sharing • PDF export</div>
     </div>
     <div style="display:flex; gap:10px; flex-wrap:wrap; align-items:center;">
