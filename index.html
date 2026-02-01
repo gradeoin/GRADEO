@@ -670,17 +670,6 @@ body[data-mode="m3"]{ --modeGlow1: rgba(20,184,166,.24); --modeGlow2: rgba(124,5
   .right{grid-template-columns:repeat(2, minmax(0,1fr));}
 }
 
-
-
-/* ===================== Inline Info button next to hero title ===================== */
-.heroTitleRow{display:flex; align-items:center; gap:10px; flex-wrap:wrap;}
-.heroTitleRow h1{margin:0;}
-.heroInfoInline{padding:8px 10px; border-radius:999px; font-size:12px; font-weight:950;}
-@media (max-width: 640px){
-  .heroTitleRow{gap:8px;}
-  .heroInfoInline{padding:9px 11px; font-size:12px;}
-}
-
 </style>
 </head>
 
@@ -739,10 +728,7 @@ body[data-mode="m3"]{ --modeGlow1: rgba(20,184,166,.24); --modeGlow2: rgba(124,5
 <main class="container">
   <section class="hero heroCompact">
     <div>
-      <div class="heroTitleRow">
-  <h1 id="heroTitle">Target CGPA → Minimum SEE Needed</h1>
-  <button class="btn small heroInfoInline" id="heroInfoInlineBtn" type="button">ℹ️ Info</button>
-</div>
+      <h1 id="heroTitle">Target CGPA → Minimum SEE Needed</h1>
       <p id="heroSub">Step 1: Enter current CGPA & credits • Step 2: Add subjects • Step 3: Enter CIE • We show minimum SEE.</p>
 
 <div class="hint" id="eduNotice" style="margin-top:10px;">
@@ -750,8 +736,9 @@ body[data-mode="m3"]{ --modeGlow1: rgba(20,184,166,.24); --modeGlow2: rgba(124,5
 </div>
 
     </div>
-    <div class="pills">
-<span class="pill" id="statusPill">Guest</span>
+    <div class="pills heroTools">
+  <button class="btn small" id="heroInfoBtn">ℹ️ Info</button>
+      <span class="pill" id="statusPill">Guest</span>
       <span class="pill good" id="savePill" style="display:none;">Saved</span>
     </div>
   </section>
@@ -2485,8 +2472,8 @@ function showContact(){
     $("#pdfBtn").onclick = ()=>window.print();
     $("#gradeScaleBtn").onclick = showGradeScale;
     $("#helpBtn").onclick = showHelp;
-const heroInfoInlineBtn = document.getElementById('heroInfoInlineBtn');
-  if(heroInfoInlineBtn) heroInfoInlineBtn.onclick = showHeroInfo;
+  const heroInfoBtn = document.getElementById('heroInfoBtn');
+  if(heroInfoBtn) heroInfoBtn.onclick = showHeroInfo;
 
 // Back-to-top
 const topBtn = document.getElementById('backToTop');
