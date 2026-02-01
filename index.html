@@ -1,6 +1,12 @@
 
 
 
+
+
+
+
+
+
 <!doctype html>
 <html lang="en">
 <head>
@@ -10,6 +16,7 @@
  <link rel="icon" href="https://res.cloudinary.com/djy3mjtsz/image/upload/v1769939761/Untitled_1_vtehdh.png" type="image/gif">
  <link rel="shortcut icon" href="https://res.cloudinary.com/djy3mjtsz/image/upload/v1769939761/Untitled_1_vtehdh.png" type="image/gif">
  <link rel="apple-touch-icon" sizes="180x180" href="https://res.cloudinary.com/djy3mjtsz/image/upload/v1769939761/Untitled_1_vtehdh.png">
+
 
   <meta name="theme-color" content="#0B57D0"/>
   <!-- Primary SEO -->
@@ -318,6 +325,8 @@
   .fields{grid-template-columns:1fr;}
 }
 
+
+
 /* ===================== Premium Interactions & Motion ===================== */
 html{scroll-behavior:smooth;}
 
@@ -409,6 +418,8 @@ body::before{
   .cursorGlow{display:none;}
 }
 
+
+
 /* ===================== Launch polish ===================== */
 #backToTop{backdrop-filter: blur(10px) saturate(1.2); background:color-mix(in oklab, var(--panel) 78%, transparent);}
 #backToTop.show{display:inline-flex !important; animation:popIn 240ms cubic-bezier(.16,1,.3,1);}
@@ -453,99 +464,86 @@ body::before{
   border-bottom: 1px solid var(--stroke);
 }
 
-/* ===== App UX Pack (menu + islands + mode theme) ===== */
-:root{--navH:60px; --bottomPad:0px;}
+/* ===== GRADEO: Light-only + App-like Menu + Islands (added) ===== */
+html, body{color-scheme: light;}
+body[data-theme="light"]{background:#ffffff; color:#111827;}
 
-/* Body mode theme (adds subtle change) */
+:root{--navH:60px;}
+
+/* mode accents */
+body[data-mode="m1"]{--brand:#0B57D0; --brand2:#7C3AED;}
+body[data-mode="m2"]{--brand:#FF6A00; --brand2:#FF9F1C;}
+body[data-mode="m3"]{--brand:#7C3AED; --brand2:#0B57D0;}
+
+/* only add subtle orange wash in Marks mode */
 body[data-mode="m2"]{
   background:
     radial-gradient(900px 600px at 12% -10%, rgba(255,106,0,.18), transparent 62%),
     radial-gradient(900px 600px at 90% 0%, rgba(255,159,28,.16), transparent 60%),
-    linear-gradient(180deg, var(--bg), var(--bg));
+    #ffffff;
 }
 
 /* Hamburger icon */
 .menuBtn{padding:10px 12px; border-radius:12px;}
 .hamb{display:inline-block; width:18px; height:12px; position:relative;}
-.hamb::before{content:""; position:absolute; left:0; right:0; top:0; height:2px; border-radius:999px; background:var(--text);
-  box-shadow:0 5px 0 var(--text), 0 10px 0 var(--text);
-}
+.hamb::before{content:""; position:absolute; left:0; right:0; top:0; height:2px; border-radius:999px; background:currentColor;
+  box-shadow:0 5px 0 currentColor, 0 10px 0 currentColor;}
 
-/* Dropdown menu never outside */
-.infoMenu{
-  position:fixed;
-  top:calc(env(safe-area-inset-top, 0px) + var(--navH) + 8px);
-  right:12px;
-  width:min(320px, calc(100vw - 24px));
-  max-height:calc(100vh - (env(safe-area-inset-top, 0px) + var(--navH) + 24px));
-  overflow:auto;
-  display:none;
-  flex-direction:column;
-  gap:6px;
-  padding:10px;
-  border-radius:16px;
-  border:1px solid var(--stroke);
-  background:color-mix(in oklab, var(--panel) 92%, transparent);
-  backdrop-filter:saturate(1.2) blur(12px);
-  box-shadow:0 20px 60px rgba(0,0,0,.28);
-  z-index:260;
-}
+/* Menu panel bounded */
+.infoMenu{position:fixed; top:calc(env(safe-area-inset-top,0px) + var(--navH) + 8px); right:12px;
+  width:min(320px, calc(100vw - 24px)); max-height:calc(100vh - (env(safe-area-inset-top,0px) + var(--navH) + 24px));
+  overflow:auto; display:none; flex-direction:column; gap:6px; padding:10px;
+  border-radius:16px; border:1px solid var(--stroke);
+  background:rgba(255,255,255,.94);
+  backdrop-filter:saturate(1.2) blur(10px);
+  box-shadow:0 20px 60px rgba(17,24,39,.18); z-index:260;}
 .infoMenu.show{display:flex; animation:popInFast 120ms cubic-bezier(.16,1,.3,1);} 
 @keyframes popInFast{from{transform:translateY(-6px) scale(.985); opacity:0}to{transform:none; opacity:1}}
-.menuGroup{font-weight:990; font-size:11px; color:var(--muted2); letter-spacing:.08em; text-transform:uppercase; padding:2px 8px;}
-.menuItem{width:100%; text-align:left; border:1px solid color-mix(in oklab, var(--stroke) 70%, transparent); background:rgba(255,255,255,.06); color:var(--text); padding:10px 12px; border-radius:12px; font-weight:950; cursor:pointer;}
+.menuGroup{font-weight:990; font-size:11px; color:#6B7280; letter-spacing:.08em; text-transform:uppercase; padding:2px 8px;}
+.menuItem{width:100%; text-align:left; border:1px solid var(--stroke); background:rgba(11,87,208,.06); color:inherit;
+  padding:10px 12px; border-radius:12px; font-weight:950; cursor:pointer;}
 .menuItem:active{transform:scale(.99)}
 
-/* Mobile: menu becomes bottom-sheet */
 @media (max-width:520px){
-  .infoMenu{top:auto; left:10px; right:10px; bottom:calc(env(safe-area-inset-bottom, 0px) + 12px); width:auto; max-height:60vh; border-radius:18px;}
+  .infoMenu{top:auto; left:10px; right:10px; bottom:calc(env(safe-area-inset-bottom,0px) + 12px); width:auto; max-height:60vh; border-radius:18px;}
 }
 
-/* Dynamic Island (top notifications) */
-.island{position:fixed; left:50%; top:calc(env(safe-area-inset-top, 0px) + var(--navH) + 8px); transform:translateX(-50%); z-index:250; width:min(520px, calc(100vw - 24px)); pointer-events:none; opacity:0;}
+/* Top Dynamic island */
+.island{position:fixed; left:50%; top:calc(env(safe-area-inset-top,0px) + var(--navH) + 8px); transform:translateX(-50%);
+  z-index:250; width:min(520px, calc(100vw - 24px)); pointer-events:none; opacity:0;}
 .island.show{opacity:1; pointer-events:auto;}
-.islandInner{display:flex; align-items:center; gap:10px; padding:10px 12px; border-radius:999px; border:1px solid color-mix(in oklab, var(--stroke) 70%, transparent); background:color-mix(in oklab, var(--panel) 86%, transparent); backdrop-filter:saturate(1.3) blur(12px); box-shadow:0 18px 50px rgba(0,0,0,.28);} 
+.islandInner{display:flex; align-items:center; gap:10px; padding:10px 12px; border-radius:999px; border:1px solid var(--stroke);
+  background:rgba(255,255,255,.90); backdrop-filter:saturate(1.2) blur(10px); box-shadow:0 18px 50px rgba(17,24,39,.18);} 
 .islandIcon{width:28px;height:28px;border-radius:999px;display:grid;place-items:center;background:linear-gradient(135deg,var(--brand),var(--brand2));color:#fff;font-weight:1000;}
 .islandText{min-width:0;display:flex;flex-direction:column;gap:2px;}
 .islandTitle{font-weight:1000;font-size:13px;line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-.islandSub{font-weight:850;font-size:12px;color:var(--muted);line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-.islandClose{margin-left:auto;border:none;background:rgba(255,255,255,.10);color:var(--text);width:30px;height:30px;border-radius:999px;cursor:pointer;font-weight:1000;}
+.islandSub{font-weight:850;font-size:12px;color:#374151;line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.islandClose{margin-left:auto;border:none;background:rgba(17,24,39,.06);color:inherit;width:30px;height:30px;border-radius:999px;cursor:pointer;font-weight:1000;}
 
-/* Bottom Mode Island (mobile) */
-.modeIsland{display:none; position:fixed; left:50%; transform:translateX(-50%); bottom:calc(env(safe-area-inset-bottom, 0px) + 10px);
-  width:min(560px, calc(100vw - 20px)); padding:8px; gap:8px; border-radius:20px; border:1px solid color-mix(in oklab, var(--stroke) 70%, transparent);
-  background:color-mix(in oklab, var(--panel) 86%, transparent); backdrop-filter:saturate(1.2) blur(12px); box-shadow:0 18px 50px rgba(0,0,0,.28); z-index:230;
-}
-.mIsBtn{flex:1; border:1px solid transparent; background:transparent; color:var(--muted); border-radius:14px; padding:10px 8px; display:flex; flex-direction:column; align-items:center; gap:4px; font-weight:1000; cursor:pointer;}
+/* Bottom mode island on phone */
+.modeIsland{display:none; position:fixed; left:50%; transform:translateX(-50%);
+  bottom:calc(env(safe-area-inset-bottom,0px) + 10px);
+  width:min(560px, calc(100vw - 20px)); padding:8px; gap:8px; border-radius:20px; border:1px solid var(--stroke);
+  background:rgba(255,255,255,.94); backdrop-filter:saturate(1.2) blur(10px); box-shadow:0 18px 50px rgba(17,24,39,.18); z-index:230;}
+.mIsBtn{flex:1; border:1px solid transparent; background:transparent; color:#374151; border-radius:14px; padding:10px 8px; display:flex; flex-direction:column; align-items:center; gap:4px; font-weight:1000; cursor:pointer;}
 .mIsBtn:active{transform:scale(.98)}
 .mIsBtn .mi{font-size:16px; line-height:1;}
 .mIsBtn .mt{font-size:12px;}
-.mIsBtn.active{color:var(--text); background:rgba(11,87,208,.20); border-color:rgba(11,87,208,.30);} 
+.mIsBtn.active{color:#111827; background:rgba(255,106,0,.14); border-color:rgba(255,106,0,.25);} 
 
 @media (max-width:640px){
   .modeIsland{display:flex;}
-  .modeSwitch{display:none;} /* cleaner header */
-  :root{--bottomPad:120px;}
-  .container{padding-bottom:calc(110px + var(--bottomPad));}
-  .fab{bottom:calc(env(safe-area-inset-bottom, 0px) + 90px);} 
-  #backToTop{bottom:calc(env(safe-area-inset-bottom, 0px) + 90px);} 
+  .modeSwitch{display:none;}
+  .container{padding-bottom:200px;}
+  #backToTop{bottom:calc(env(safe-area-inset-bottom,0px) + 90px);} 
 }
-
-/* Modal: inside viewport */
-.modal{max-height:calc(100vh - 28px); overflow:hidden;}
-.modalBody{max-height:calc(100vh - 220px); overflow:auto; -webkit-overflow-scrolling:touch;}
-.modalFoot{flex-wrap:wrap;}
-
-/* Back to top always visible when needed */
-#backToTop.show{display:inline-flex !important;}
-
-@media (prefers-reduced-motion: reduce){
-  .infoMenu.show{animation:none;}
+@media (min-width:641px){
+  .modeSwitch{display:flex;}
 }
 </style>
 </head>
 
-<body data-theme=\"light\" data-mode=\"m1\">
+<body data-theme="light" data-mode="m1">
 <canvas id="bg3d" aria-hidden="true"></canvas>
 <div class="cursorGlow" id="cursorGlow" aria-hidden="true"></div>
 <div id="dynamicIsland" class="island" role="status" aria-live="polite" aria-atomic="true">
@@ -555,7 +553,7 @@ body[data-mode="m2"]{
       <div class="islandTitle" id="islandTitle">GRADEO</div>
       <div class="islandSub" id="islandSub">Ready.</div>
     </div>
-    <button class="islandClose" id="islandClose" aria-label="Close">✕</button>
+    <button class="islandClose" id="islandClose" type="button" aria-label="Close">✕</button>
   </div>
 </div>
 <header class="nav noPrint" id="nav">
@@ -576,25 +574,25 @@ body[data-mode="m2"]{
         <button class="modeBtn" id="m2Btn">🧮 Marks → SGPA</button>
         <button class="modeBtn" id="m3Btn">📈 SGPA → CGPA</button>
       </div>
-
-      
+<button class="btn ghost" id="shareSiteBtn">Share</button>
+      <button class="btn" id="pdfBtn">PDF</button>
       <div class="menuWrap" id="menuWrap">
-  <button class="btn ghost menuBtn" id="infoMenuBtn" aria-haspopup="true" aria-expanded="false" aria-controls="infoMenu" aria-label="Menu">
+  <button class="btn ghost menuBtn" id="infoMenuBtn" type="button" aria-haspopup="true" aria-expanded="false" aria-controls="infoMenu" aria-label="Menu">
     <span class="hamb" aria-hidden="true"></span>
   </button>
   <div class="infoMenu" id="infoMenu" role="menu" aria-label="Menu">
-    <div class="menuGroup">Quick actions</div>
-    <button class="menuItem" id="miProfile" role="menuitem">Profile</button>
-    <button class="menuItem" id="miShare" role="menuitem">Share</button>
-    <button class="menuItem" id="miPdf" role="menuitem">Export PDF</button>
-    <button class="menuItem" id="miTop" role="menuitem">Go to top</button>
+    <div class="menuGroup">Actions</div>
+    <button class="menuItem" id="miProfile" type="button" role="menuitem">Profile</button>
+    <button class="menuItem" id="miShare" type="button" role="menuitem">Share</button>
+    <button class="menuItem" id="miPdf" type="button" role="menuitem">Export PDF</button>
+    <button class="menuItem" id="miTop" type="button" role="menuitem">Go to top</button>
     <div class="menuGroup" style="margin-top:6px;">Info & Legal</div>
-    <button class="menuItem" id="miWhat" role="menuitem">What is GRADEO?</button>
-    <button class="menuItem" id="miFaq" role="menuitem">FAQs</button>
-    <button class="menuItem" id="miPrivacy" role="menuitem">Privacy</button>
-    <button class="menuItem" id="miTerms" role="menuitem">Terms</button>
-    <button class="menuItem" id="miDisclaimer" role="menuitem">Disclaimer</button>
-    <button class="menuItem" id="miChangelog" role="menuitem">Changelog</button>
+    <button class="menuItem" id="miWhat" type="button" role="menuitem">What is GRADEO?</button>
+    <button class="menuItem" id="miFaq" type="button" role="menuitem">FAQs</button>
+    <button class="menuItem" id="miPrivacy" type="button" role="menuitem">Privacy</button>
+    <button class="menuItem" id="miTerms" type="button" role="menuitem">Terms</button>
+    <button class="menuItem" id="miDisclaimer" type="button" role="menuitem">Disclaimer</button>
+    <button class="menuItem" id="miChangelog" type="button" role="menuitem">Changelog</button>
   </div>
 </div>
 <button class="btn primary" id="profileBtn">Sign in</button>
@@ -794,8 +792,23 @@ body[data-mode="m2"]{
       </div>
     </aside>
   </div>
-<div id="seoText" style="position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden;">GRADEO is a VTU-friendly SGPA & CGPA calculator for engineering students. Features: Target CGPA→Minimum SEE, Marks→SGPA, SGPA→CGPA, cloud autosave, PDF export, and sharing.</div>
 </main>
+
+<footer class="noPrint" style="max-width:1200px; margin:0 auto; padding:0 14px 24px;">
+  <div class="panel" style="padding:12px; display:flex; justify-content:space-between; gap:10px; flex-wrap:wrap; align-items:center;">
+    <div>
+      <div style="font-weight:990;">GRADEO</div>
+      <div class="hint"></div>
+    </div>
+    <div style="display:flex; gap:10px; flex-wrap:wrap; align-items:center;">
+      <button class="btn small" id="disclaimerBtn" type="button">Disclaimer</button>
+      <button class="btn small" id="privacyBtn" type="button">Privacy</button>
+      <button class="btn small" id="termsBtn" type="button">Terms</button>
+      <button class="btn small" id="changelogBtn" type="button">Changelog</button>
+    </div>
+  </div>
+</footer>
+
 
 <button class="btn" id="backToTop" aria-label="Back to top" style="display:none; position:fixed; left:16px; bottom:16px; z-index:60; border-radius:999px; padding:12px 14px;">⬆︎ Top</button>
 <div class="fab noPrint">
@@ -820,6 +833,7 @@ body[data-mode="m2"]{
 
 <!-- Three.js (for premium background motion) -->
 <script defer src="https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.min.js"></script>
+
 
 <!-- EmailJS -->
 <script defer src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
@@ -932,34 +946,20 @@ body[data-mode="m2"]{
     setTimeout(()=>t.remove(), 1700);
   }
 
-  
-let __lastFocus = null;
-function openModal({title, desc, bodyHTML, footHTML}){
-  __lastFocus = document.activeElement;
-  document.documentElement.classList.add('modalOpen');
-  document.body.classList.add('modalOpen');
-  $("#modalTitle").textContent = title || "";
-  $("#modalDesc").textContent = desc || "";
-  $("#modalBody").innerHTML = bodyHTML || "";
-  $("#modalFoot").innerHTML = footHTML || "";
-  $("#overlay").classList.add("show");
-  setTimeout(()=>{
-    const root = document.getElementById('overlay');
-    const el = root && root.querySelector('button,[href],input,select,textarea,[tabindex]:not([tabindex="-1"])');
-    el && el.focus && el.focus();
-  }, 0);
-}
-function closeModal(){
-  $("#overlay").classList.remove("show");
-  document.documentElement.classList.remove('modalOpen');
-  document.body.classList.remove('modalOpen');
-  $("#modalBody").innerHTML = "";
-  $("#modalFoot").innerHTML = "";
-  try{ __lastFocus && __lastFocus.focus && __lastFocus.focus(); }catch(e){}
-}
-window.openModal = openModal;
-window.closeModal = closeModal;
-function gradeFromMarks(total){
+  function openModal({title, desc, bodyHTML, footHTML}){
+    $("#modalTitle").textContent = title || "";
+    $("#modalDesc").textContent = desc || "";
+    $("#modalBody").innerHTML = bodyHTML || "";
+    $("#modalFoot").innerHTML = footHTML || "";
+    $("#overlay").classList.add("show");
+  }
+  function closeModal(){
+    $("#overlay").classList.remove("show");
+    $("#modalBody").innerHTML = "";
+    $("#modalFoot").innerHTML = "";
+  }
+
+  function gradeFromMarks(total){
     const t = clamp(total, 0, 100);
     for (const s of GRADE_SCALE) if (t >= s.min) return s;
     return { min:0, grade:"F", gp:0 };
@@ -985,8 +985,7 @@ function gradeFromMarks(total){
   }
 
   /* ========= State ========= */
-  let pendingMode = null;
-const state = {
+  const state = {
     theme:"light",
     mode:"m1",
     user:null,
@@ -1105,6 +1104,7 @@ const state = {
     toast("Imported local plan to cloud");
     return true;
   }
+
 
   function mkSubject(kind="normal"){
     if (kind==="activity"){
@@ -1778,22 +1778,13 @@ const state = {
   }
 
   /* ========= Mode switching ========= */
-  
-function setMode(mode){
-  // Ask sign-in when user tries to change modes
-  if (!auth.currentUser){
-    pendingMode = mode;
-    openSignInModal();
-    return;
+  function setMode(mode){
+    state.mode = mode;
+    renderAllStatic();
+    scheduleRecalc(0);
   }
-  state.mode = mode;
-  document.body.setAttribute('data-mode', mode);
-  renderAllStatic();
-  scheduleRecalc(0);
-}
-window.setMode = setMode;
 
-/* ========= Profile + Sign-in ========= */
+  /* ========= Profile + Sign-in ========= */
   function openSignInModal(){
     openModal({
       title:"Sign in to edit & autosave",
@@ -1810,153 +1801,34 @@ window.setMode = setMode;
     $("#cancel").onclick = closeModal;
   }
 
-  
-function openProfile(){
-  if (!auth.currentUser){ openSignInModal(); return; }
-  const u = auth.currentUser;
-  const displayName = (u.displayName || '').trim() || 'Student';
-  const email = (u.email || '').trim() || '—';
-  const photo = (u.photoURL || '').trim();
-  const createdAt = (u.metadata && u.metadata.creationTime) ? u.metadata.creationTime : '—';
-  const lastLogin = (u.metadata && u.metadata.lastSignInTime) ? u.metadata.lastSignInTime : '—';
-
-  openModal({
-    title:"Profile & Account",
-    desc:"Update your name, photo, email and account settings.",
-    bodyHTML: `
-      <div class="subCard" style="display:flex; gap:12px; align-items:center; flex-wrap:wrap;">
-        <img src="${photo || 'https://res.cloudinary.com/djy3mjtsz/image/upload/v1769939761/Untitled_1_vtehdh.png'}" alt="Profile" style="width:64px;height:64px;border-radius:18px;object-fit:cover;border:1px solid var(--stroke);"/>
-        <div style="min-width:0;">
-          <div style="font-weight:990; font-size:16px;">${esc(displayName)}</div>
-          <div class="hint" style="margin-top:4px;">${esc(email)}</div>
-          <div class="hint" style="margin-top:6px;">Created: ${esc(createdAt)} • Last login: ${esc(lastLogin)}</div>
-        </div>
-      </div>
-
-      <div class="subCard" style="margin-top:10px;">
-        <div style="font-weight:990; margin-bottom:8px;">Edit profile</div>
-        <div class="fields">
-          <div>
-            <label class="label">Display name</label>
-            <input class="input" id="displayNameInput" value="${esc(displayName)}" />
-          </div>
-          <div>
-            <label class="label">Nickname</label>
-            <input class="input" id="nickInput" value="${esc(state.profile.nickname || displayName)}" />
-          </div>
-          <div class="span2">
-            <label class="label">Photo URL</label>
-            <input class="input" id="photoUrlInput" value="${esc(photo)}" placeholder="https://…" />
-          </div>
-          <div class="span2">
-            <label class="label">Email</label>
-            <input class="input" id="emailInput" value="${esc(email)}" placeholder="name@example.com" />
-          </div>
-        </div>
-        <div class="hint">Updating email may require re-login.</div>
-      </div>
-
-      <div class="subCard" style="margin-top:10px;">
-        <div style="font-weight:990; margin-bottom:8px;">Data</div>
-        <div style="display:flex; gap:10px; flex-wrap:wrap;">
-          <button class="btn small" id="downloadDataBtn">Download my data</button>
-          <button class="btn small" id="copyUidBtn">Copy UID</button>
-        </div>
-      </div>
-    `,
-    footHTML: `
-      <button class="btn primary" id="saveProfileBtn">Save</button>
-      <button class="btn" id="reauthBtn">Re‑login</button>
-      <button class="btn danger" id="deleteAccountBtn">Delete account</button>
-      <button class="btn" id="logoutBtn">Sign out</button>
-      <button class="btn" id="closeBtn">Close</button>
-    `
-  });
-
-  async function reauthGoogle(){
-    try{ await auth.currentUser.reauthenticateWithPopup(provider); toast('Re‑login successful'); return true; }
-    catch(e){ console.error(e); toast('Re‑login cancelled'); return false; }
-  }
-
-  async function saveProfile(){
-    const newName = (document.getElementById('displayNameInput')?.value || '').trim() || 'Student';
-    const newNick = (document.getElementById('nickInput')?.value || '').trim() || 'Student';
-    const newPhoto = (document.getElementById('photoUrlInput')?.value || '').trim();
-    const newEmail = (document.getElementById('emailInput')?.value || '').trim();
-
-    const btn = document.getElementById('saveProfileBtn');
-    if (btn){ btn.disabled=true; btn.textContent='Saving…'; }
-
-    try{
-      await auth.currentUser.updateProfile({ displayName: newName, photoURL: newPhoto || null });
-      state.profile.nickname = newNick;
-      state.theme = 'light';
-      document.body.setAttribute('data-theme','light');
-      await profileRef(auth.currentUser.uid).set({ nickname:newNick, theme:'light', displayName:newName, photoURL:newPhoto||null, updatedAt: firebase.firestore.FieldValue.serverTimestamp() }, { merge:true });
-
-      if (newEmail && newEmail !== email){
-        try{ await auth.currentUser.updateEmail(newEmail); toast('Email updated'); }
-        catch(e){
-          if (String(e.code||'').includes('requires-recent-login')){ toast('Please re‑login to update email'); const ok = await reauthGoogle(); if (ok) await auth.currentUser.updateEmail(newEmail); }
-          else throw e;
-        }
-      }
-
+  function openProfile(){
+    if (!auth.currentUser){ openSignInModal(); return; }
+    openModal({
+      title:"Profile",
+      desc:"Change your nickname.",
+      bodyHTML: `
+        <label class="label">Nickname</label>
+        <input class="input" id="nickInput" value="${esc(state.profile.nickname||"")}" placeholder="e.g., Student">
+        <div class="hint">Autosaved in 10–20 seconds.</div>
+      `,
+      footHTML: `
+        <button class="btn primary" id="saveNickBtn">Save</button>
+        <button class="btn danger" id="logoutBtn">Sign out</button>
+        <button class="btn" id="closeBtn">Close</button>
+      `
+    });
+    $("#saveNickBtn").onclick = ()=>{
+      state.profile.nickname = ($("#nickInput").value||"Student").trim() || "Student";
+      markDirty();
       renderAllStatic();
       scheduleRecalc(0);
-      toast('Profile saved');
       closeModal();
-    }catch(e){
-      console.error(e);
-      toast('Save failed');
-    }finally{
-      if (btn){ btn.disabled=false; btn.textContent='Save'; }
-    }
+    };
+    $("#logoutBtn").onclick = async()=>{ await auth.signOut(); closeModal(); };
+    $("#closeBtn").onclick = closeModal;
   }
 
-  async function downloadMyData(){
-    try{
-      const uid = auth.currentUser.uid;
-      const profSnap = await profileRef(uid).get();
-      const profData = profSnap.exists ? profSnap.data() : {};
-      const plansSnap = await plansCol(uid).orderBy('updatedAt','desc').get();
-      const plans = plansSnap.docs.map(d=>({ id:d.id, ...d.data() }));
-      const payload = { exportedAt: new Date().toISOString(), uid, email: auth.currentUser.email, profile: profData, plans };
-      const blob = new Blob([JSON.stringify(payload, null, 2)], {type:'application/json'});
-      const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = `gradeo-data-${uid.slice(0,6)}.json`;
-      document.body.appendChild(a); a.click(); a.remove();
-      toast('Download started');
-    }catch(e){ console.error(e); toast('Download failed'); }
-  }
-
-  async function deleteAccount(){
-    if (!confirm('Delete your account permanently? This will remove access to your cloud plans.')) return;
-    try{
-      const ok = await reauthGoogle();
-      if (!ok) return;
-      const uid = auth.currentUser.uid;
-      const snap = await plansCol(uid).get();
-      const batch = db.batch();
-      snap.docs.forEach(d=>batch.delete(d.ref));
-      batch.delete(profileRef(uid));
-      await batch.commit();
-      await auth.currentUser.delete();
-      closeModal();
-      toast('Account deleted');
-    }catch(e){ console.error(e); toast('Delete failed'); }
-  }
-
-  document.getElementById('saveProfileBtn')?.addEventListener('click', saveProfile);
-  document.getElementById('reauthBtn')?.addEventListener('click', reauthGoogle);
-  document.getElementById('downloadDataBtn')?.addEventListener('click', downloadMyData);
-  document.getElementById('copyUidBtn')?.addEventListener('click', async()=>{ try{ await navigator.clipboard.writeText(u.uid); toast('UID copied'); }catch(e){ toast('Copy failed'); } });
-  document.getElementById('deleteAccountBtn')?.addEventListener('click', deleteAccount);
-  document.getElementById('logoutBtn')?.addEventListener('click', async()=>{ await auth.signOut(); closeModal(); toast('Signed out'); });
-  document.getElementById('closeBtn')?.addEventListener('click', closeModal);
-window.openProfile = openProfile;
-}
-
-/* ========= Simple share / pdf ========= */
+  /* ========= Simple share / pdf ========= */
   async function shareSite(){
     const url = `https://gradeo.in/`;
     try{
@@ -2027,7 +1899,7 @@ window.openProfile = openProfile;
     $("#lockSignInBtn").onclick = openSignInModal;
 
     $("#shareSiteBtn").onclick = shareSite;
-    const __pdf = $("#pdfBtn"); if(__pdf) __pdf.onclick = ()=>window.print();
+    $("#pdfBtn").onclick = ()=>window.print();
     $("#gradeScaleBtn").onclick = showGradeScale;
     $("#helpBtn").onclick = showHelp;
 
@@ -2149,6 +2021,7 @@ if (changelogBtn){
     wireCloseLegal();
   };
 }
+
 
     wireAccordion("#notesAcc","#notesChevron");
     wireAccordion("#accountAcc","#accChevron");
@@ -2287,7 +2160,6 @@ if (changelogBtn){
         }
 
         toast("Signed in");
-      if (pendingMode){ const m=pendingMode; pendingMode=null; state.mode=m; document.body.setAttribute('data-mode', m); renderAllStatic(); scheduleRecalc(0); }
       } else {
         // Guest: editable inputs, locally saved. Results remain locked until sign-in
         const loaded = loadLocal();
@@ -2329,6 +2201,7 @@ if (changelogBtn){
 
 })();
 </script>
+
 
 <script>
 (() => {
@@ -2719,119 +2592,141 @@ const prefersReduce = window.matchMedia && window.matchMedia('(prefers-reduced-m
 <script defer src="https://static.cloudflareinsights.com/beacon.min.js/vcd15cbe7772f49c399c6a5babf22c1241717689176015" integrity="sha512-ZpsOmlRQV6y907TI0dKBHq9Md29nnaEIPlkf84rnaERnq6zvWvPUqr2ft8M1aS28oN72PdrCzSjY4U6VaAw1EQ==" data-cf-beacon='{"version":"2024.11.0","token":"32f0b0530bdb47d89109f78f09c965e1","r":1,"server_timing":{"name":{"cfCacheStatus":true,"cfEdge":true,"cfExtPri":true,"cfL4":true,"cfOrigin":true,"cfSpeedBrain":true},"location_startswith":null}}' crossorigin="anonymous"></script>
 <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9c711f0dcc345f7c',t:'MTc2OTk0NTQ3NA=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script><script defer src="https://static.cloudflareinsights.com/beacon.min.js/vcd15cbe7772f49c399c6a5babf22c1241717689176015" integrity="sha512-ZpsOmlRQV6y907TI0dKBHq9Md29nnaEIPlkf84rnaERnq6zvWvPUqr2ft8M1aS28oN72PdrCzSjY4U6VaAw1EQ==" data-cf-beacon='{"version":"2024.11.0","token":"32f0b0530bdb47d89109f78f09c965e1","r":1,"server_timing":{"name":{"cfCacheStatus":true,"cfEdge":true,"cfExtPri":true,"cfL4":true,"cfOrigin":true,"cfSpeedBrain":true},"location_startswith":null}}' crossorigin="anonymous"></script>
 <div class="modeIsland noPrint" id="modeIsland" aria-label="Mode switch">
-  <button class="mIsBtn" data-mis="m1" aria-label="Target to SEE"><span class="mi">🎯</span><span class="mt">Target</span></button>
-  <button class="mIsBtn" data-mis="m2" aria-label="Marks to SGPA"><span class="mi">🧮</span><span class="mt">Marks</span></button>
-  <button class="mIsBtn" data-mis="m3" aria-label="SGPA to CGPA"><span class="mi">📈</span><span class="mt">Convert</span></button>
+  <button class="mIsBtn" type="button" data-mis="m1" aria-label="Target to SEE"><span class="mi">🎯</span><span class="mt">Target</span></button>
+  <button class="mIsBtn" type="button" data-mis="m2" aria-label="Marks to SGPA"><span class="mi">🧮</span><span class="mt">Marks</span></button>
+  <button class="mIsBtn" type="button" data-mis="m3" aria-label="SGPA to CGPA"><span class="mi">📈</span><span class="mt">Convert</span></button>
 </div>
 <script>
 (()=>{
   'use strict';
-  // ===== GRADEO_MENU_ISLAND_WIRING =====
+  // GRADEO_MENU_MODE_LIGHT_FIX_V2
 
-  // Keep nav height updated for menu/island positioning
+  const $ = (sel)=>document.querySelector(sel);
+
+  // measure nav height
   const nav = document.getElementById('nav');
   const setNavH = ()=>{
     const h = nav ? Math.max(52, nav.getBoundingClientRect().height) : 60;
     document.documentElement.style.setProperty('--navH', h + 'px');
   };
-  setNavH();
-  window.addEventListener('resize', setNavH, {passive:true});
 
-  // Dynamic Island
+  // dynamic island
   const island = document.getElementById('dynamicIsland');
   const iTitle = document.getElementById('islandTitle');
   const iSub = document.getElementById('islandSub');
   const iClose = document.getElementById('islandClose');
   let islandTimer=null;
-  const islandShow = (title='GRADEO', sub='', tone='info', duration=1600)=>{
+  const islandShow = (title='GRADEO', sub='', tone='info', duration=1400)=>{
     if (!island || !iTitle || !iSub) return;
-    iTitle.textContent = title; iSub.textContent = sub;
+    iTitle.textContent = title;
+    iSub.textContent = sub;
     const icon = island.querySelector('.islandIcon');
     if (icon) icon.textContent = tone==='success'?'✅':tone==='warn'?'⚠️':tone==='bad'?'❌':'✨';
     island.classList.add('show');
     clearTimeout(islandTimer);
     islandTimer=setTimeout(()=>island.classList.remove('show'), duration);
   };
-  if (iClose) iClose.onclick = ()=> island.classList.remove('show');
+  if (iClose) iClose.addEventListener('click', ()=>island.classList.remove('show'));
 
   // Menu open/close
   const btn = document.getElementById('infoMenuBtn');
   const menu = document.getElementById('infoMenu');
   const closeMenu = ()=>{ if(menu){menu.classList.remove('show'); btn?.setAttribute('aria-expanded','false');} };
+  const toggleMenu = (e)=>{ e?.stopPropagation(); if(!menu) return; menu.classList.toggle('show'); btn?.setAttribute('aria-expanded', menu.classList.contains('show')?'true':'false'); };
+
   if (btn && menu){
-    btn.addEventListener('click',(e)=>{ e.stopPropagation(); menu.classList.toggle('show'); btn.setAttribute('aria-expanded', menu.classList.contains('show')?'true':'false'); });
+    btn.addEventListener('click', toggleMenu);
     document.addEventListener('click', closeMenu, {passive:true});
     document.addEventListener('keydown', (e)=>{ if (e.key==='Escape') closeMenu(); });
   }
 
-  // Menu content
-  const openInfo = (title, desc, bodyHTML)=>{
-    closeMenu();
-    window.openModal && window.openModal({title, desc, bodyHTML, footHTML:'<button class="btn" id="closeInfo">Close</button>'});
-    document.getElementById('closeInfo')?.addEventListener('click', window.closeModal);
-    islandShow(title, desc, 'success');
+  // Ensure light theme always
+  document.body.setAttribute('data-theme','light');
+
+  // Mode handling
+  const applyMode = (mode)=>{
+    document.body.setAttribute('data-mode', mode);
+    // bottom island active
+    const mis = document.getElementById('modeIsland');
+    if (mis) mis.querySelectorAll('.mIsBtn').forEach(b=>b.classList.toggle('active', b.getAttribute('data-mis')===mode));
   };
 
-  const bodyWhat = `<div class="subCard"><div style="font-weight:990;">GRADEO — SGPA & CGPA Calculator</div><div class="hint" style="margin-top:8px;line-height:1.7;">• Target CGPA → Minimum SEE required per subject<br>• Marks → SGPA (CIE + SEE) with pass checks<br>• SGPA → CGPA converter<br>• Cloud autosave after sign‑in • PDF export • Sharing</div></div>`;
-  const bodyFaq = `<div class="subCard"><div style="font-weight:990;">FAQs</div><div class="hint" style="margin-top:8px;line-height:1.75;"><b>How is SGPA calculated?</b><br>SGPA = Σ(credits×GP) ÷ Σ(credits).<br><br><b>How is Total/100 calculated?</b><br>Total = CIE(out of 50) + SEE/2 (if SEE out of 100). For SEE/50: Total = CIE + SEE.<br><br><b>How to convert SGPA to CGPA?</b><br>Enter semester SGPA in SGPA → CGPA mode.<br><br><b>Target CGPA → Minimum SEE?</b><br>Enter current CGPA+credits, add subjects and CIE.</div></div>`;
-  const bodyPrivacy = `<div class="subCard"><div style="font-weight:990;">Privacy</div><div class="hint" style="margin-top:8px;line-height:1.75;">• Guest mode: data stays in your browser (localStorage).<br>• Signed‑in mode: plans saved in Firebase under your account.<br>• No passwords stored by GRADEO.</div></div>`;
-  const bodyTerms = `<div class="subCard"><div style="font-weight:990;">Terms</div><div class="hint" style="margin-top:8px;line-height:1.75;">Educational estimation tool. Outputs may differ from official university results. Verify from official sources.</div></div>`;
-  const bodyDisclaimer = `<div class="subCard"><div style="font-weight:990;">Disclaimer</div><div class="hint" style="margin-top:8px;line-height:1.75;">Educational purpose only. Not affiliated with any university. Results may vary due to moderation, rounding or policy changes.</div></div>`;
-  const bodyChange = `<div class="subCard"><div style="font-weight:990;">Changelog</div><div class="hint" style="margin-top:8px;line-height:1.75;">UI polish, autosave, profile editing, and mobile mode island.</div></div>`;
+  const callSetMode = (mode)=>{
+    // Prefer app's setMode if exists
+    if (typeof window.setMode === 'function'){
+      window.setMode(mode);
+      applyMode(mode);
+      islandShow('Mode', mode==='m2'?'Marks → SGPA':mode==='m3'?'SGPA → CGPA':'Target → SEE', 'success');
+      return;
+    }
+    // Fallback: click buttons if setMode not global
+    document.getElementById(mode+'Btn')?.click();
+    applyMode(mode);
+  };
 
-  document.getElementById('miWhat')?.addEventListener('click', ()=>openInfo('What is GRADEO?','SGPA & CGPA calculator', bodyWhat));
-  document.getElementById('miFaq')?.addEventListener('click', ()=>openInfo('FAQs','Fast answers', bodyFaq));
-  document.getElementById('miPrivacy')?.addEventListener('click', ()=>openInfo('Privacy','Data storage', bodyPrivacy));
-  document.getElementById('miTerms')?.addEventListener('click', ()=>openInfo('Terms','Usage policy', bodyTerms));
-  document.getElementById('miDisclaimer')?.addEventListener('click', ()=>openInfo('Disclaimer','Educational estimate', bodyDisclaimer));
-  document.getElementById('miChangelog')?.addEventListener('click', ()=>openInfo('Changelog','What's new', bodyChange));
+  // Wire bottom mode island
+  const mis = document.getElementById('modeIsland');
+  if (mis){
+    mis.querySelectorAll('.mIsBtn').forEach(b=>{
+      b.addEventListener('click', ()=>callSetMode(b.getAttribute('data-mis')));
+    });
+  }
 
-  // Quick actions
-  document.getElementById('miProfile')?.addEventListener('click', ()=>{ closeMenu(); window.openProfile && window.openProfile(); islandShow('Profile','', 'success'); });
-  document.getElementById('miShare')?.addEventListener('click', ()=>{ closeMenu(); document.getElementById('shareSiteBtn')?.click(); islandShow('Share','', 'success'); });
-  document.getElementById('miPdf')?.addEventListener('click', ()=>{ closeMenu(); window.print(); islandShow('PDF','Print / Save as PDF', 'success'); });
-  document.getElementById('miTop')?.addEventListener('click', ()=>{ closeMenu(); window.scrollTo({top:0, behavior:'smooth'}); islandShow('Top','', 'success', 900); });
+  // Wire top mode buttons (desktop)
+  ['m1','m2','m3'].forEach(m=>{
+    const el = document.getElementById(m+'Btn');
+    if (el) el.addEventListener('click', (e)=>{ e.preventDefault(); callSetMode(m); });
+  });
 
-  // Back-to-top show/hide (keep original behavior but ensure works)
+  // Back to top
   const topBtn = document.getElementById('backToTop');
   if (topBtn){
-    const onScroll = ()=>{
-      const show = window.scrollY > 500;
-      topBtn.classList.toggle('show', show);
+    const onScroll=()=>{
+      const show = window.scrollY>500;
       topBtn.style.display = show ? 'inline-flex' : 'none';
+      topBtn.classList.toggle('show', show);
     };
     window.addEventListener('scroll', onScroll, {passive:true});
     onScroll();
-    topBtn.onclick = ()=> window.scrollTo({top:0, behavior:'smooth'});
+    topBtn.addEventListener('click', ()=>window.scrollTo({top:0, behavior:'smooth'}));
   }
 
-  // Bottom Mode Island (mobile): mode switching is gated by setMode()
-  const mis = document.getElementById('modeIsland');
-  const updateMis = ()=>{
-    if (!mis || !window.state) return;
-    mis.querySelectorAll('.mIsBtn').forEach(b=> b.classList.toggle('active', b.getAttribute('data-mis')===window.state.mode));
+  // Menu actions
+  const openInfo = (title, body)=>{
+    closeMenu();
+    if (window.openModal){
+      window.openModal({title, desc:'', bodyHTML: body, footHTML:'<button class="btn" id="closeInfo" type="button">Close</button>'});
+      document.getElementById('closeInfo')?.addEventListener('click', window.closeModal);
+    }
+    islandShow(title,'','success');
   };
-  if (mis){
-    mis.querySelectorAll('.mIsBtn').forEach(b=>{
-      b.addEventListener('click', ()=>{
-        const m = b.getAttribute('data-mis');
-        window.setMode && window.setMode(m);
-        updateMis();
-      });
-    });
-    setInterval(updateMis, 600);
-  }
 
-  // Mode buttons in header: route through setMode (so sign-in prompt works)
-  document.getElementById('m1Btn')?.addEventListener('click', (e)=>{ e.preventDefault(); window.setMode && window.setMode('m1'); });
-  document.getElementById('m2Btn')?.addEventListener('click', (e)=>{ e.preventDefault(); window.setMode && window.setMode('m2'); });
-  document.getElementById('m3Btn')?.addEventListener('click', (e)=>{ e.preventDefault(); window.setMode && window.setMode('m3'); });
+  const bodyWhat = `<div class="subCard"><div style="font-weight:990;">GRADEO — SGPA & CGPA Calculator</div><div class="hint" style="margin-top:8px;line-height:1.7;">• Target CGPA → Minimum SEE required per subject<br>• Marks → SGPA (CIE + SEE) with pass checks<br>• SGPA → CGPA converter</div></div>`;
+  const bodyFaq = `<div class="subCard"><div style="font-weight:990;">FAQs</div><div class="hint" style="margin-top:8px;line-height:1.75;"><b>How is SGPA calculated?</b><br>SGPA = Σ(credits×GP) ÷ Σ(credits).<br><br><b>Total/100?</b><br>Total = CIE(out of 50) + SEE/2 (if SEE out of 100).</div></div>`;
+  const bodyPrivacy = `<div class="subCard"><div style="font-weight:990;">Privacy</div><div class="hint" style="margin-top:8px;line-height:1.75;">Guest mode stores locally. Signed-in mode saves plans in Firebase. No passwords stored.</div></div>`;
+  const bodyTerms = `<div class="subCard"><div style="font-weight:990;">Terms</div><div class="hint" style="margin-top:8px;line-height:1.75;">Educational estimation tool. Verify from official sources.</div></div>`;
+  const bodyDisclaimer = `<div class="subCard"><div style="font-weight:990;">Disclaimer</div><div class="hint" style="margin-top:8px;line-height:1.75;">Not affiliated with any university. Results may vary.</div></div>`;
+  const bodyChangelog = `<div class="subCard"><div style="font-weight:990;">Changelog</div><div class="hint" style="margin-top:8px;line-height:1.75;">App-like UI menu + phone mode island + mode accent colors.</div></div>`;
 
-  // Initial
-  document.body.setAttribute('data-mode', (window.state && window.state.mode) ? window.state.mode : 'm1');
+  document.getElementById('miProfile')?.addEventListener('click', ()=>{ closeMenu(); document.getElementById('profileBtn')?.click(); });
+  document.getElementById('miShare')?.addEventListener('click', ()=>{ closeMenu(); if (typeof window.shareSite==='function') window.shareSite(); else islandShow('Share','Not available','warn'); });
+  document.getElementById('miPdf')?.addEventListener('click', ()=>{ closeMenu(); window.print(); islandShow('PDF','Print / Save as PDF','success'); });
+  document.getElementById('miTop')?.addEventListener('click', ()=>{ closeMenu(); window.scrollTo({top:0, behavior:'smooth'}); });
+
+  document.getElementById('miWhat')?.addEventListener('click', ()=>openInfo('What is GRADEO?', bodyWhat));
+  document.getElementById('miFaq')?.addEventListener('click', ()=>openInfo('FAQs', bodyFaq));
+  document.getElementById('miPrivacy')?.addEventListener('click', ()=>openInfo('Privacy', bodyPrivacy));
+  document.getElementById('miTerms')?.addEventListener('click', ()=>openInfo('Terms', bodyTerms));
+  document.getElementById('miDisclaimer')?.addEventListener('click', ()=>openInfo('Disclaimer', bodyDisclaimer));
+  document.getElementById('miChangelog')?.addEventListener('click', ()=>openInfo('Changelog', bodyChangelog));
+
+  // init
+  setNavH();
+  applyMode('m1');
   islandShow('GRADEO','Ready.');
 })();
 </script>
 </body>
 </html>
+
 
