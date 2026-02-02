@@ -1998,6 +1998,80 @@ body[data-theme-variant="neon"] .panel, body[data-theme-variant="neon"] .subCard
   });
 }
 
+// ===== Mode 2: Boost suggestions (independent of Mode 1) =====
+function mode2ComputeTotal(cie, see, seeMax){
+  // Total/100 = CIE + SEE/2 for /100, or CIE + SEE for /50
+  return (seeMax===50) ? (cie + see) : (cie + see/2);
+}
+function mode2SeeMaxForSubject(s){
+  const cr = (s.kind==='activity') ? 1 : clamp(parseInt(s.credits||3,10),1,4);
+  return (cr===1) ? ((parseInt(s.seeOutOf||'50',10)===100)?100:50) : 100;
+}
+function mode2BoostForSubject(s, sem){
+  // Returns the cheapest next milestone: PASS if failing, else next GP step.
+  if(!s) return null;
+  const cr = (s.kind==='activity') ? 1 : clamp(parseInt(s.credits||3,10),1,4);
+
+  // Activity subject
+  if(s.kind==='activity'){
+    const final = clamp(parseFloat(s.final||NaN),0,100);
+    if(!Number.isFinite(final)) return null;
+    const pass = passActivity(final);
+    const curGp = pass ? gradeFromMarks(final).gp : 0;
+
+    // Next milestone
+    const targetGp = (pass ? Math.min(10, curGp+1) : 4);
+    const needTotal = (pass ? minMarksForGP(targetGp) : 40);
+    const needFinal = Math.max(needTotal, 40); // pass requires 40
+    const delta = Math.max(0, Math.ceil(needFinal - final));
+    if(delta<=0) return null;
+
+    const newGp = gradeFromMarks(needFinal).gp;
+    const newSgpa = (sem && sem.credits>0) ? round2((sem.points + cr*(newGp - curGp)) / sem.credits) : null;
+    return { kind:'activity', subject:s, credits:cr, curGp, targetGp:newGp, needFinal:Math.round(needFinal), deltaFinal:delta, newSgpa };
+  }
+
+  // Normal subject
+  const seeMax = mode2SeeMaxForSubject(s);
+  const cie = clamp(parseFloat(s.cie||0),0,50);
+  const see = clamp(parseFloat(s.see||NaN),0,seeMax);
+
+  // Current
+  const total = mode2ComputeTotal(cie, Number.isFinite(see)?see:0, seeMax);
+  const pass = passNormal(cie, Number.isFinite(see)?see:0, total, seeMax);
+  const curGp = pass ? gradeFromMarks(total).gp : 0;
+
+  // Pick milestone
+  let desiredGp = pass ? Math.min(10, curGp+1) : 4;
+  let milestoneTotal = pass ? minMarksForGP(desiredGp) : 40;
+  // Ensure at least pass total
+  milestoneTotal = Math.max(milestoneTotal, 40);
+
+  // Required SEE for that milestone
+  let reqSee = (seeMax===50) ? (milestoneTotal - cie) : (milestoneTotal - cie) * 2;
+  if(reqSee < 0) reqSee = 0;
+  const seePass = (seeMax === 50) ? 18 : 35;
+  const totalPassNeed = (seeMax === 50) ? Math.max(0, 40 - cie) : Math.max(0, (40 - cie) * 2);
+  const needSee = Math.max(reqSee, seePass, totalPassNeed);
+
+  if(!Number.isFinite(see)){
+    // If SEE not entered, still show what is needed.
+    if(needSee > seeMax) return null;
+    return { kind:'normal', subject:s, credits:cr, seeMax, curGp, targetGp:desiredGp, needSee:Math.round(needSee), deltaSee:null, newSgpa:null, milestoneTotal:Math.round(milestoneTotal) };
+  }
+
+  const deltaSee = Math.max(0, Math.ceil(needSee - see));
+  if(deltaSee<=0) return null;
+  if(needSee > seeMax) return null;
+
+  // New GP & SGPA
+  const newTotal = mode2ComputeTotal(cie, needSee, seeMax);
+  const newGp = gradeFromMarks(newTotal).gp;
+  const newSgpa = (sem && sem.credits>0) ? round2((sem.points + cr*(newGp - curGp)) / sem.credits) : null;
+
+  return { kind:'normal', subject:s, credits:cr, seeMax, cie, see, curGp, targetGp:newGp, needSee:Math.round(needSee), deltaSee, newSgpa, milestoneTotal:Math.round(newTotal) };
+}
+
   function renderHistoryDOM(){
     if (state.mode !== "m3") return;
     const wrap = $("#historyInputs");
@@ -2048,7 +2122,9 @@ body[data-theme-variant="neon"] .panel, body[data-theme-variant="neon"] .subCard
           <div class="k">Results locked</div>
           <div class="v">Sign in to calculate</div>
           <div class="s">Fill your data now — we'll import your locally saved plan to the cloud after you sign in.</div>
-        </div>`;
+        </div>
+<div class="stat" style="margin-top:10px;" id="boostTipWrap"><div class="k">Boost suggestion</div><div class="s" id="boostTip" style="display:none;">—</div></div>
+`;
       return;
     }
     box.innerHTML = "";
@@ -2376,20 +2452,55 @@ barEl.style.width = clamp((showReq/seeMax)*100,0,100) + "%";
     }
 
     if (state.mode==="m2"){
-      for (const s of state.plan.subjects){
-        const badgeEl = $("#badge-"+s.id);
-        const labelEl = $("#label-"+s.id);
-        const barEl = $("#bar-"+s.id);
-        if (!badgeEl || !labelEl || !barEl) continue;
+  const sem = computeSGPA();
+  let best = null;
+  for (const s of state.plan.subjects){
+    const badgeEl = $("#badge-"+s.id);
+    const labelEl = $("#label-"+s.id);
+    const barEl = $("#bar-"+s.id);
+    if (!badgeEl || !labelEl || !barEl) continue;
 
-        const r = calcSubjectMode2(s);
-        badgeEl.className="pill "+r.tone;
-        badgeEl.textContent=r.badge;
-        labelEl.textContent=r.label;
-        barEl.className="bar " + (r.tone==="bad"?"bad":"");
-        barEl.style.width = clamp(r.pct,0,100) + "%";
+    const r = calcSubjectMode2(s);
+    badgeEl.className="pill "+r.tone;
+    badgeEl.textContent=r.badge;
+
+    // Base label
+    let html = esc(r.label);
+
+    // Boost suggestion: PASS if failing, else next GP step
+    const b = mode2BoostForSubject(s, sem);
+    if(b){
+      if(b.kind==='activity'){
+        html += `<div class="hint" style="margin-top:6px;">📈 Boost: <b>+${b.deltaFinal}</b> marks in Final → GP <b>${b.targetGp}</b> • New SGPA ≈ <b>${b.newSgpa==null?'—':fmt(b.newSgpa,2)}</b></div>`;
+        if(!best || b.deltaFinal < best.delta){ best = {delta:b.deltaFinal, name:(s.name||'Activity'), newSgpa:b.newSgpa}; }
+      } else {
+        if(b.deltaSee==null){
+          html += `<div class="hint" style="margin-top:6px;">📌 To improve: need SEE ≈ <b>${b.needSee}</b>/${b.seeMax} for next step.</div>`;
+        } else {
+          html += `<div class="hint" style="margin-top:6px;">📈 Boost: score <b>+${b.deltaSee}</b> more in SEE → GP <b>${b.targetGp}</b> • New SGPA ≈ <b>${b.newSgpa==null?'—':fmt(b.newSgpa,2)}</b></div>`;
+          if(!best || b.deltaSee < best.delta){ best = {delta:b.deltaSee, name:(s.name||'Subject'), newSgpa:b.newSgpa}; }
+        }
       }
     }
+
+    labelEl.innerHTML = html;
+    barEl.className="bar " + (r.tone==="bad"?"bad":"");
+    barEl.style.width = clamp(r.pct,0,100) + "%";
+  }
+
+  // Summary boost tip (if present)
+  try{
+    const tip = document.getElementById('boostTip');
+    if(tip){
+      if(best){
+        tip.innerHTML = `💡 Fastest improvement: <b>+${best.delta}</b> marks in <b>${esc(best.name)}</b> → SGPA ≈ <b>${best.newSgpa==null?'—':fmt(best.newSgpa,2)}</b>`;
+        tip.style.display = 'block';
+      } else {
+        tip.style.display = 'none';
+      }
+    }
+  }catch(_e){}
+}
   
 
     // Charts
