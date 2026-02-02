@@ -5264,6 +5264,28 @@ const prefersReduce = window.matchMedia && window.matchMedia('(prefers-reduced-m
     updateLandingUI();
   });
 
+
+
+  // ===== Patch: Landing page Google button uses same sign-in flow as main app =====
+  (function wireLandingGoogleButton(){
+    try{
+      const btn = document.getElementById('landingGoogleBtn');
+      if(!btn) return;
+      // Use the existing sign-in UX (modal) that your main site uses
+      btn.addEventListener('click', function(){
+        try{
+          if (typeof openSignInModal === 'function') {
+            openSignInModal();
+          } else {
+            // fallback: click the main sign-in button if present
+            const p = document.getElementById('profileBtn');
+            if(p) p.click();
+          }
+        } catch(e){ console.error(e); }
+      });
+    }catch(e){ console.error(e); }
+  })();
+
 })();
 </script>
 
