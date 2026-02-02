@@ -1113,6 +1113,14 @@ body[data-theme-variant="neon"] .panel, body[data-theme-variant="neon"] .subCard
           </div>
         </div>
         <div class="stats" id="summaryBox"></div>
+<div id="viralStrip" class="noPrint" aria-label="Quick features">
+  <button class="vStripBtn hot" type="button" data-v="sharePlan" title="Share">🔗</button>
+  <button class="vStripBtn" type="button" data-v="exportPdf" title="PDF">🖨️</button>
+  <button class="vStripBtn" type="button" data-v="roast" title="Roast">🔥</button>
+  <button class="vStripBtn" type="button" data-v="study" title="Study">🎧</button>
+  <button class="vStripBtn" type="button" data-v="att" title="Attendance">📅</button>
+  <button class="vStripBtn" type="button" data-v="profile" title="Sign in">👤</button>
+</div>
 
         <div class="subCard" style="margin-top:16px;">
           <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;">
@@ -2008,69 +2016,109 @@ function mode2SeeMaxForSubject(s){
   return (cr===1) ? ((parseInt(s.seeOutOf||'50',10)===100)?100:50) : 100;
 }
 function mode2BoostForSubject(s, sem){
-  // Returns the cheapest next milestone: PASS if failing, else next GP step.
+  // Suggest the smallest improvement: PASS if failing, else next GP step.
   if(!s) return null;
   const cr = (s.kind==='activity') ? 1 : clamp(parseInt(s.credits||3,10),1,4);
 
-  // Activity subject
+  const scaled = (raw, seeMax) => (seeMax===50 ? raw : raw/2);
+
+  // Activity
   if(s.kind==='activity'){
     const final = clamp(parseFloat(s.final||NaN),0,100);
     if(!Number.isFinite(final)) return null;
     const pass = passActivity(final);
-    const curGp = pass ? gradeFromMarks(final).gp : 0;
+    const curTotal = final;
+    const curGp = pass ? gradeFromMarks(curTotal).gp : 0;
 
-    // Next milestone
-    const targetGp = (pass ? Math.min(10, curGp+1) : 4);
-    const needTotal = (pass ? minMarksForGP(targetGp) : 40);
-    const needFinal = Math.max(needTotal, 40); // pass requires 40
-    const delta = Math.max(0, Math.ceil(needFinal - final));
-    if(delta<=0) return null;
+    const desiredGp = pass ? Math.min(10, curGp+1) : 4;
+    const targetTotal = Math.max(40, pass ? minMarksForGP(desiredGp) : 40);
+    const deltaFinal = Math.max(0, Math.ceil(targetTotal - final));
+    if(deltaFinal<=0) return null;
 
-    const newGp = gradeFromMarks(needFinal).gp;
+    const newGp = gradeFromMarks(targetTotal).gp;
     const newSgpa = (sem && sem.credits>0) ? round2((sem.points + cr*(newGp - curGp)) / sem.credits) : null;
-    return { kind:'activity', subject:s, credits:cr, curGp, targetGp:newGp, needFinal:Math.round(needFinal), deltaFinal:delta, newSgpa };
+
+    return {
+      kind:'activity', credits:cr,
+      curGp, newGp,
+      curFinal: Math.round(final), targetFinal: Math.round(targetTotal), deltaFinal,
+      curTotal: round2(curTotal), targetTotal: round2(targetTotal),
+      newSgpa
+    };
   }
 
-  // Normal subject
+  // Normal
   const seeMax = mode2SeeMaxForSubject(s);
   const cie = clamp(parseFloat(s.cie||0),0,50);
   const see = clamp(parseFloat(s.see||NaN),0,seeMax);
 
-  // Current
-  const total = mode2ComputeTotal(cie, Number.isFinite(see)?see:0, seeMax);
-  const pass = passNormal(cie, Number.isFinite(see)?see:0, total, seeMax);
-  const curGp = pass ? gradeFromMarks(total).gp : 0;
+  const curTotal = mode2ComputeTotal(cie, Number.isFinite(see)?see:0, seeMax);
+  const pass = passNormal(cie, Number.isFinite(see)?see:0, curTotal, seeMax);
+  const curGp = pass ? gradeFromMarks(curTotal).gp : 0;
 
-  // Pick milestone
-  let desiredGp = pass ? Math.min(10, curGp+1) : 4;
-  let milestoneTotal = pass ? minMarksForGP(desiredGp) : 40;
-  // Ensure at least pass total
-  milestoneTotal = Math.max(milestoneTotal, 40);
+  const desiredGp = pass ? Math.min(10, curGp+1) : 4;
+  let targetTotal = pass ? minMarksForGP(desiredGp) : 40;
+  targetTotal = Math.max(40, targetTotal);
 
-  // Required SEE for that milestone
-  let reqSee = (seeMax===50) ? (milestoneTotal - cie) : (milestoneTotal - cie) * 2;
+  // Raw SEE needed for that targetTotal
+  let reqSee = (seeMax===50) ? (targetTotal - cie) : (targetTotal - cie) * 2;
   if(reqSee < 0) reqSee = 0;
-  const seePass = (seeMax === 50) ? 18 : 35;
-  const totalPassNeed = (seeMax === 50) ? Math.max(0, 40 - cie) : Math.max(0, (40 - cie) * 2);
-  const needSee = Math.max(reqSee, seePass, totalPassNeed);
 
+  // Pass constraints
+  const seePass = (seeMax===50) ? 18 : 35;
+  const totalPassNeed = (seeMax===50) ? Math.max(0, 40 - cie) : Math.max(0, (40 - cie) * 2);
+  let needSee = Math.max(reqSee, seePass, totalPassNeed);
+  if(needSee > seeMax) return null;
+
+  const needScaled = scaled(needSee, seeMax);
+  const finalTargetTotal = mode2ComputeTotal(cie, needSee, seeMax);
+
+  // If SEE not entered, still show requirement
   if(!Number.isFinite(see)){
-    // If SEE not entered, still show what is needed.
-    if(needSee > seeMax) return null;
-    return { kind:'normal', subject:s, credits:cr, seeMax, curGp, targetGp:desiredGp, needSee:Math.round(needSee), deltaSee:null, newSgpa:null, milestoneTotal:Math.round(milestoneTotal) };
+    return {
+      kind:'normal', credits:cr, seeMax,
+      cie,
+      curGp,
+      desiredGp,
+      curSee:null,
+      curScaled:null,
+      needSee: Math.round(needSee),
+      needScaled: round2(needScaled),
+      curTotal: round2(curTotal),
+      targetTotal: round2(finalTargetTotal),
+      deltaSee:null,
+      deltaScaled:null,
+      newGp: desiredGp,
+      newSgpa:null
+    };
   }
 
   const deltaSee = Math.max(0, Math.ceil(needSee - see));
   if(deltaSee<=0) return null;
-  if(needSee > seeMax) return null;
 
-  // New GP & SGPA
+  const curScaled = scaled(see, seeMax);
+  const deltaScaled = round2(needScaled - curScaled);
+
   const newTotal = mode2ComputeTotal(cie, needSee, seeMax);
   const newGp = gradeFromMarks(newTotal).gp;
   const newSgpa = (sem && sem.credits>0) ? round2((sem.points + cr*(newGp - curGp)) / sem.credits) : null;
 
-  return { kind:'normal', subject:s, credits:cr, seeMax, cie, see, curGp, targetGp:newGp, needSee:Math.round(needSee), deltaSee, newSgpa, milestoneTotal:Math.round(newTotal) };
+  return {
+    kind:'normal', credits:cr, seeMax,
+    cie,
+    curGp, newGp,
+    curSee: Math.round(see),
+    needSee: Math.round(needSee),
+    deltaSee,
+    curScaled: round2(curScaled),
+    needScaled: round2(needScaled),
+    deltaScaled,
+    curTotal: round2(curTotal),
+    targetTotal: round2(newTotal),
+    newSgpa
+  };
 }
+
 
   function renderHistoryDOM(){
     if (state.mode !== "m3") return;
@@ -2471,13 +2519,13 @@ barEl.style.width = clamp((showReq/seeMax)*100,0,100) + "%";
     const b = mode2BoostForSubject(s, sem);
     if(b){
       if(b.kind==='activity'){
-        html += `<div class="hint" style="margin-top:6px;">📈 Boost: <b>+${b.deltaFinal}</b> marks in Final → GP <b>${b.targetGp}</b> • New SGPA ≈ <b>${b.newSgpa==null?'—':fmt(b.newSgpa,2)}</b></div>`;
+        html += `<div class="hint" style="margin-top:6px;">📈 Boost: +<b>${b.deltaFinal}</b> Final (${b.curFinal}→${b.targetFinal}) • Total ${b.curTotal}→${b.targetTotal} • GP <b>${b.curGp}→${b.newGp}</b> • New SGPA ≈ <b>${b.newSgpa==null?'—':fmt(b.newSgpa,2)}</b></div>`;
         if(!best || b.deltaFinal < best.delta){ best = {delta:b.deltaFinal, name:(s.name||'Activity'), newSgpa:b.newSgpa}; }
       } else {
         if(b.deltaSee==null){
-          html += `<div class="hint" style="margin-top:6px;">📌 To improve: need SEE ≈ <b>${b.needSee}</b>/${b.seeMax} for next step.</div>`;
+          html += `<div class="hint" style="margin-top:6px;">📌 To improve: need SEE ≈ <b>${b.needSee}</b>/${b.seeMax} ⇒ scaled <b>${b.needScaled}</b> • Total ≈ <b>${b.targetTotal}</b>/100 • Next GP ≈ <b>${b.desiredGp}</b>.</div>`;
         } else {
-          html += `<div class="hint" style="margin-top:6px;">📈 Boost: score <b>+${b.deltaSee}</b> more in SEE → GP <b>${b.targetGp}</b> • New SGPA ≈ <b>${b.newSgpa==null?'—':fmt(b.newSgpa,2)}</b></div>`;
+          html += `<div class="hint" style="margin-top:6px;">📈 Boost: +<b>${b.deltaSee}</b> SEE (${b.curSee}→${b.needSee}) ⇒ +<b>${b.deltaScaled}</b> scaled (${b.curScaled}→${b.needScaled}) • Total ${b.curTotal}→${b.targetTotal} • GP <b>${b.curGp}→${b.newGp}</b> • New SGPA ≈ <b>${b.newSgpa==null?'—':fmt(b.newSgpa,2)}</b></div>`;
           if(!best || b.deltaSee < best.delta){ best = {delta:b.deltaSee, name:(s.name||'Subject'), newSgpa:b.newSgpa}; }
         }
       }
@@ -2493,7 +2541,7 @@ barEl.style.width = clamp((showReq/seeMax)*100,0,100) + "%";
     const tip = document.getElementById('boostTip');
     if(tip){
       if(best){
-        tip.innerHTML = `💡 Fastest improvement: <b>+${best.delta}</b> marks in <b>${esc(best.name)}</b> → SGPA ≈ <b>${best.newSgpa==null?'—':fmt(best.newSgpa,2)}</b>`;
+        tip.innerHTML = `💡 Fastest improvement: <b>+${best.delta}</b> more in <b>${esc(best.name)}</b> → SGPA ≈ <b>${best.newSgpa==null?'—':fmt(best.newSgpa,2)}</b>`;
         tip.style.display = 'block';
       } else {
         tip.style.display = 'none';
@@ -3405,7 +3453,33 @@ async function deleteAllUserPlans(uid){
     body = headerHTML('Export not available') + infoBlock('Mode 3 — SGPA → CGPA') + `<div style="padding:18px;">Switch to Mode 1 or Mode 2 to export.</div>`;
   }
 
-  const html = `<html><head><meta charset="utf-8"><title>GRADEO Document</title><style>${css}</style></head><body><div class="watermark"><span>GRADEO</span></div><div class="page"><div class="sheet">${body}<div class="printRow"><button class="btn primary" onclick="window.print()">Print / Save as PDF</button><button class="btn" onclick="window.close()">Close</button></div></div></div></body></html>`;
+  const html = `<html><head><meta charset="utf-8"><title>GRADEO Document</title><style>${css}
+
+/* ===== Viral grid: extra highlight + attention (phone + laptop) ===== */
+.viralBtn{position:relative}
+.viralBtn::after{content:""; position:absolute; inset:-2px; border-radius:16px; pointer-events:none; opacity:0;
+  background: conic-gradient(from 180deg, rgba(255,255,255,.0), rgba(255,255,255,.55), rgba(255,255,255,0) 35%, rgba(255,255,255,.45), rgba(255,255,255,0));
+  filter: blur(8px);
+  transition: opacity 220ms var(--spring);
+}
+.viralBtn.spotlight::after{opacity:.55; animation:spotSpin 1.8s linear infinite;}
+@keyframes spotSpin{to{transform:rotate(360deg)}}
+.viralBtn.spotlight{border-color: color-mix(in oklab, var(--accent) 55%, var(--stroke)) !important; transform: translateY(-4px) scale(1.10) !important;}
+
+/* Mobile: show a compact “Features” strip under Summary */
+#viralStrip{display:none;}
+@media (max-width: 1099px){
+  #viralStrip{display:flex; gap:10px; overflow:auto; -webkit-overflow-scrolling:touch; padding:10px; border-top:1px solid var(--stroke);
+    background: color-mix(in oklab, var(--panel) 86%, transparent);
+    position:sticky; top:calc(var(--summaryTop) + 0px);
+  }
+  #viralStrip::-webkit-scrollbar{height:0}
+  .vStripBtn{min-width:54px; height:46px; border-radius:16px; border:1px solid var(--stroke); background:var(--card); color:var(--text);
+    display:grid; place-items:center; font-size:18px; font-weight:900; cursor:pointer;}
+  .vStripBtn.hot{background:linear-gradient(135deg,var(--accent),var(--accent2)); color:#fff; border-color:transparent;}
+}
+
+</style></head><body><div class="watermark"><span>GRADEO</span></div><div class="page"><div class="sheet">${body}<div class="printRow"><button class="btn primary" onclick="window.print()">Print / Save as PDF</button><button class="btn" onclick="window.close()">Close</button></div></div></div></body></html>`;
 
   const w = window.open('', '_blank');
   if(!w){ toast('Popup blocked'); return; }
@@ -3676,6 +3750,34 @@ function openAttendanceModal(){
   };
   ['attC','attA','attR','attF'].forEach(id=> document.getElementById(id).addEventListener('input', calc, {passive:true}));
   calc();
+}
+
+
+// ===== Viral grid spotlight (makes it less boring) =====
+function startViralSpotlight(){
+  const btns = Array.from(document.querySelectorAll('.viralBtn'));
+  if(!btns.length) return;
+  let idx = 0;
+  setInterval(()=>{
+    try{ btns.forEach(b=>b.classList.remove('spotlight')); }catch(_e){}
+    const b = btns[idx % btns.length];
+    if(b) b.classList.add('spotlight');
+    idx++;
+  }, 2200);
+}
+function wireQuickFeatureStrip(){
+  document.querySelectorAll('#viralStrip [data-v]').forEach(b=>{
+    b.addEventListener('click', ()=>{
+      const v = b.getAttribute('data-v');
+      // Reuse the same routing as viral rail
+      if(v==='sharePlan') { try{ createShareDoc('plan'); }catch(_e){ toast('Sign in to share'); } }
+      else if(v==='exportPdf') { try{ exportGradeCardPDF(); }catch(_e){} }
+      else if(v==='roast') { try{ roastNow(); }catch(_e){} }
+      else if(v==='study') { try{ openStudy(); }catch(_e){} }
+      else if(v==='att') { try{ openAttendanceModal(); }catch(_e){} }
+      else if(v==='profile') { try{ openProfile(); }catch(_e){} }
+    }, {passive:true});
+  });
 }
 
 function wireEvents(){
@@ -4123,6 +4225,8 @@ if (changelogBtn){
   document.addEventListener("DOMContentLoaded", ()=>{
     initFirebase();
     wireEvents();
+    try{ wireQuickFeatureStrip(); }catch(_e){}
+    try{ startViralSpotlight(); }catch(_e){}
     // Load locally saved guest data (if any) before auth resolves
     loadLocal();
     // Default to light theme on first visit (user can still switch)
