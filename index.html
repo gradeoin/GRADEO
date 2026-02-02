@@ -5266,24 +5266,161 @@ const prefersReduce = window.matchMedia && window.matchMedia('(prefers-reduced-m
 
 
 
-  // ===== Patch: Landing page Google button uses same sign-in flow as main app =====
-  (function wireLandingGoogleButton(){
-    try{
-      const btn = document.getElementById('landingGoogleBtn');
-      if(!btn) return;
-      // Use the existing sign-in UX (modal) that your main site uses
-      btn.addEventListener('click', function(){
-        try{
-          if (typeof openSignInModal === 'function') {
-            openSignInModal();
-          } else {
-            // fallback: click the main sign-in button if present
-            const p = document.getElementById('profileBtn');
-            if(p) p.click();
+  // ===== Landing Google Sign-in (direct) + verification animation + profile chip =====
+  // Goal: Clicking "Continue with Google" on landing should sign in immediately,
+  // show the ✓ verification overlay, then update the landing UI to show profile.
+  (function landingAuthPatch(){
+    function showVerifyOverlay(){
+      try{
+        const ov = document.getElementById('verifyOverlay');
+        if(!ov) return;
+        ov.classList.add('show');
+        setTimeout(()=>ov.classList.remove('show'), 900);
+      }catch(_e){}
+    }
+
+    function updateLandingUI(){
+      try{
+        const ctas = document.getElementById('landingCtas');
+        const prof = document.getElementById('landingProfile');
+        const nameEl = document.getElementById('landingUserName');
+        const avEl = document.getElementById('landingAvatar');
+        if(!ctas || !prof) return;
+
+        const u = (typeof auth !== 'undefined' && auth && auth.currentUser) ? auth.currentUser : null;
+        if(u){
+          ctas.style.display = 'none';
+          prof.style.display = 'flex';
+          if(nameEl) nameEl.textContent = u.displayName || u.email || 'Signed in';
+          if(avEl){
+            // Avatar: photoURL if available, else first letter
+            if(u.photoURL){
+              avEl.style.backgroundImage = `url(${u.photoURL})`;
+              avEl.style.backgroundSize = 'cover';
+              avEl.style.backgroundPosition = 'center';
+              avEl.textContent = '';
+            } else {
+              avEl.style.backgroundImage = '';
+              const letter = (u.displayName || u.email || 'G').trim().slice(0,1).toUpperCase();
+              avEl.textContent = letter;
+            }
           }
-        } catch(e){ console.error(e); }
-      });
-    }catch(e){ console.error(e); }
+        } else {
+          ctas.style.display = 'flex';
+          prof.style.display = 'none';
+          if(avEl){ avEl.style.backgroundImage=''; }
+        }
+      }catch(e){ console.error(e); }
+    }
+
+    async function landingGoogleSignIn(){
+      // Uses popup on desktop; redirect fallback on iOS/in-app browsers and popup failures.
+      try{
+        if(!auth || !provider){
+          try{ toast('Sign-in not ready'); }catch(_e){}
+          return;
+        }
+        try{ provider.setCustomParameters({ prompt: 'select_account' }); }catch(_e){}
+
+        const ua = navigator.userAgent || '';
+        const isIOS = /iPhone|iPad|iPod/i.test(ua);
+        const isInApp = /FBAN|FBAV|Instagram|Line|Twitter|Snapchat|wv;/i.test(ua);
+
+        const doRedirect = async()=>{
+          await auth.signInWithRedirect(provider);
+        };
+
+        if(isIOS || isInApp){
+          await doRedirect();
+          return;
+        }
+
+        try{
+          const result = await auth.signInWithPopup(provider);
+          if(result && result.user){
+            try{ await sendWelcomeEmailOnce(result.user); }catch(_e){}
+          }
+          showVerifyOverlay();
+          updateLandingUI();
+        }catch(err){
+          const code = err && err.code ? String(err.code) : '';
+          if(code.includes('popup-blocked') || code.includes('popup-closed-by-user') || code.includes('cancelled-popup-request')){
+            await doRedirect();
+            return;
+          }
+          console.error('Landing sign-in failed:', err);
+          try{ toast('Sign-in failed'); }catch(_e){}
+        }
+      }catch(e){
+        console.error(e);
+        try{ toast('Sign-in failed'); }catch(_e){}
+      }
+    }
+
+    function wireLandingButtons(){
+      try{
+        const btn = document.getElementById('landingGoogleBtn');
+        if(btn){
+          btn.addEventListener('click', ()=> landingGoogleSignIn());
+        }
+        const out = document.getElementById('landingSignOutBtn');
+        if(out){
+          out.addEventListener('click', async()=>{
+            try{ if(auth) await auth.signOut(); }catch(e){ console.error(e); }
+            updateLandingUI();
+          });
+        }
+      }catch(e){ console.error(e); }
+    }
+
+    function whenAuthReady(cb){
+      let tries = 0;
+      const t = setInterval(()=>{
+        tries++;
+        if(typeof auth !== 'undefined' && auth && typeof provider !== 'undefined' && provider){
+          clearInterval(t);
+          cb();
+        }
+        if(tries > 80) clearInterval(t); // ~4s
+      }, 50);
+    }
+
+    // Run after DOM is ready; then wait until Firebase auth/provider exist.
+    if(document.readyState === 'loading'){
+      document.addEventListener('DOMContentLoaded', ()=> whenAuthReady(init));
+    } else {
+      whenAuthReady(init);
+    }
+
+    function init(){
+      // Handle redirect result (mobile/in-app)
+      try{
+        if(auth && typeof auth.getRedirectResult === 'function'){
+          auth.getRedirectResult().then((res)=>{
+            if(res && res.user){
+              try{ sendWelcomeEmailOnce(res.user); }catch(_e){}
+              showVerifyOverlay();
+            }
+            updateLandingUI();
+          }).catch((e)=>{
+            // ignore if no redirect pending, log otherwise
+            console.warn('Redirect result:', e);
+            updateLandingUI();
+          });
+        } else {
+          updateLandingUI();
+        }
+      }catch(_e){ updateLandingUI(); }
+
+      // Keep landing UI in sync with auth state.
+      try{
+        if(auth && typeof auth.onAuthStateChanged === 'function'){
+          auth.onAuthStateChanged(()=> updateLandingUI());
+        }
+      }catch(_e){}
+
+      wireLandingButtons();
+    }
   })();
 
 })();
