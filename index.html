@@ -958,58 +958,37 @@ body[data-theme-variant="neon"] .panel, body[data-theme-variant="neon"] .subCard
 .bIsBtn.active::after{ opacity:.55; }
 
 
+/* ===== Ultra clean app (Google-ish) ===== */
+body.appOpen[data-mode="m1"]{background:linear-gradient(180deg,#fff,#fff7f0) !important;}
+body.appOpen[data-mode="m2"]{background:linear-gradient(180deg,#fff,#f3fbff) !important;}
+body.appOpen[data-mode="m3"]{background:linear-gradient(180deg,#fff,#f7f5ff) !important;}
+body.appOpen #bg3d, body.appOpen .cursorGlow, body.appOpen #viralTip{display:none !important;}
+body.appOpen::after{display:none !important;}
 
+/* reduce text clutter */
+body.appOpen .panelHead p, body.appOpen .hint, body.appOpen #heroSub, body.appOpen #workDesc, body.appOpen #summaryDesc, body.appOpen #eduNotice{display:none !important;}
+body.appOpen #notesAcc, body.appOpen #accountAcc, body.appOpen #viralPanel, body.appOpen #viralStrip{display:none !important;}
 
-/* ===== Ultra clean (less text) ===== */
-/* Remove most helper paragraphs */
-.panelHead p, .sub, .subMeta .pill:not(:first-child){display:none !important;}
-/* Keep only one pill (type) to reduce clutter */
-.subMeta .pill{display:none !important;}
-.subMeta .pill:first-child{display:inline-flex !important;}
-/* Hide toolbar hint lines */
-.toolbar .hint{display:none !important;}
-/* Hide notes accordion entirely (optional clutter) */
-#notesAcc{display:none !important;}
-/* Hide account accordion in summary (advanced) */
-#accountAcc{display:none !important;}
-/* Summary: show only first two stat cards */
-#summaryBox .stat:nth-child(n+3){display:none !important;}
-/* ===== App mode tints ===== */
-body.appOpen[data-mode="m1"]{ background: linear-gradient(180deg,#fff,#fff7f0) !important; }
-body.appOpen[data-mode="m2"]{ background: linear-gradient(180deg,#fff,#f3fbff) !important; }
-body.appOpen[data-mode="m3"]{ background: linear-gradient(180deg,#fff,#f7f5ff) !important; }
+/* show fewer summary stats */
+body.appOpen #summaryBox .stat:nth-child(n+3){display:none !important;}
 
-/* Mode strip in Summary */
-.modeStrip{height:6px;border-top-left-radius:18px;border-top-right-radius:18px;background:linear-gradient(135deg,#FF6A00,#FF9F1C);}
-body.appOpen[data-mode="m2"] .modeStrip{background:linear-gradient(135deg,#0EA5E9,#FF9F1C);} 
-body.appOpen[data-mode="m3"] .modeStrip{background:linear-gradient(135deg,#7C3AED,#FF9F1C);} 
-
-/* Active subject tag */
-.activeTag{margin-top:8px;display:flex;align-items:center;gap:8px;font-weight:900;color:#334155;font-size:12.5px;}
-.activeDot{width:10px;height:10px;border-radius:999px;background:var(--subAccent,#FF6A00);box-shadow:0 0 0 3px color-mix(in oklab, var(--subAccent,#FF6A00) 12%, transparent);} 
-
-/* Steps chips */
-.stepChips{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px;}
-.stepChip{font-size:12px;font-weight:900;padding:6px 10px;border-radius:999px;border:1px solid #e5e7eb;background:#fff;color:#334155;}
-.stepChip.on{border-color:rgba(255,106,0,.28);background:rgba(255,106,0,.06);color:#9a3500;}
-
-/* Subject identity: unique accent + light gradient */
-.subCard{position:relative;}
-.subCard::before{content:"";position:absolute;left:0;top:0;bottom:0;width:6px;border-top-left-radius:inherit;border-bottom-left-radius:inherit;background:var(--subAccent, #FF6A00);}
-.subCard{background:linear-gradient(135deg, color-mix(in oklab, var(--subAccent,#FF6A00) 12%, white), white 60%) !important;}
-.subName{display:flex;align-items:center;gap:10px;}
-.subName .input{flex:1;}
-.subName::before{content:"";width:10px;height:10px;border-radius:999px;background:var(--subAccent, #FF6A00);box-shadow:0 0 0 3px color-mix(in oklab, var(--subAccent,#FF6A00) 12%, transparent);flex:0 0 auto;}
-
-/* Summary follow smooth */
-@media (min-width:981px){ #summaryPanel{position:sticky; transition: top 160ms ease; will-change: top;} }
-
-/* Quick Add Subject (desktop) */
+/* quick actions bottom-right */
 .quickAdd{display:none; flex-direction:column; gap:10px;}
 @media (min-width:981px){
   .quickAdd{display:inline-flex;position:fixed;right:18px;bottom:18px;z-index:8000;}
-  .quickAdd .btn{box-shadow:0 10px 24px rgba(15,23,42,.14);}
+  .quickAdd .btn{box-shadow:0 10px 24px rgba(15,23,42,.14);} 
 }
+
+/* Subject identity: unique accent + light gradient */
+.subCard{position:relative;}
+.subCard::before{content:"";position:absolute;left:0;top:0;bottom:0;width:6px;border-top-left-radius:inherit;border-bottom-left-radius:inherit;background:var(--subAccent,#FF6A00);} 
+.subCard{background:linear-gradient(135deg, color-mix(in oklab, var(--subAccent,#FF6A00) 12%, white), white 60%) !important;}
+.subName{display:flex;align-items:center;gap:10px;}
+.subName .input{flex:1;}
+.subName::before{content:"";width:10px;height:10px;border-radius:999px;background:var(--subAccent,#FF6A00);box-shadow:0 0 0 3px color-mix(in oklab, var(--subAccent,#FF6A00) 12%, transparent);} 
+
+/* summary follow smooth */
+@media (min-width:981px){ #summaryPanel{position:sticky; transition: top 160ms ease; will-change: top;} }
 </style>
 </head>
 
@@ -1083,32 +1062,27 @@ body.appOpen[data-mode="m3"] .modeStrip{background:linear-gradient(135deg,#7C3AE
 
 
 
-<!-- ===== MATERIAL CLEAN LAUNCH V7 (Orange Gradient) ===== -->
+<!-- ===== GOOGLE-LIKE LANDING (Minimal) ===== -->
 <style>
 #appMain{display:none;}
 #nav{display:none;}
-:root{
-  --o1:#FF6A00; --o2:#FF9F1C;
-  --stroke:#e5e7eb;
-  --ink:#0f172a;
-  --mut:#475569;
-  --mut2:#64748b;
-  --shadow:0 10px 30px rgba(15,23,42,.08);
-  --shadow2:0 6px 16px rgba(15,23,42,.06);
-  --r:18px;
-}
+:root{--o1:#FF6A00;--o2:#FF9F1C;--stroke:#e5e7eb;--ink:#0f172a;--mut:#475569;--mut2:#64748b;--shadow:0 10px 30px rgba(15,23,42,.08);--shadow2:0 6px 16px rgba(15,23,42,.06);--r:18px;}
 #landingHero{min-height:100svh;display:flex;align-items:center;justify-content:center;padding:22px;background:linear-gradient(180deg,#fff,#fff7f0);}
 .launchWrap{width:min(1060px,100%);}
 .launchLogo{width:58px;height:58px;border-radius:16px;background:#fff;border:1px solid var(--stroke);box-shadow:var(--shadow2);overflow:hidden;margin:0 auto;}
 .launchLogo img{width:100%;height:100%;object-fit:cover;}
 .launchTitle{margin:14px 0 0;text-align:center;font-weight:1000;letter-spacing:-.03em;color:var(--ink);font-size:40px;}
 .launchSub{margin:10px auto 0;text-align:center;color:var(--mut);font-weight:800;max-width:70ch;line-height:1.45;font-size:15px;}
-.trustRow{margin:12px auto 0;display:flex;gap:10px;justify-content:center;flex-wrap:wrap;}
-.trust{font-size:12px;font-weight:900;padding:6px 10px;border-radius:999px;border:1px solid var(--stroke);background:#fff;color:#334155;}
-.ctaRow{margin-top:16px;display:flex;gap:10px;justify-content:center;flex-wrap:wrap;}
+
+.ctaRow{margin-top:14px;display:flex;gap:10px;justify-content:center;flex-wrap:wrap;}
 .cta{border-radius:999px;border:1px solid var(--stroke);background:#fff;color:var(--ink);padding:12px 16px;font-weight:950;cursor:pointer;display:inline-flex;align-items:center;gap:10px;}
 .cta.primary{border-color:transparent;color:#fff;background:linear-gradient(135deg,var(--o1),var(--o2));box-shadow:0 14px 32px rgba(255,106,0,.18);}
-.cta.google{background:#fff;border:1px solid var(--stroke);}
+
+.landingProfile{display:none;gap:10px;align-items:center;justify-content:center;flex-wrap:wrap;}
+.userChip{display:inline-flex;align-items:center;gap:10px;padding:10px 12px;border-radius:999px;border:1px solid var(--stroke);background:#fff;font-weight:900;color:var(--ink);}
+.userAvatar{width:28px;height:28px;border-radius:999px;display:grid;place-items:center;background:linear-gradient(135deg,var(--o1),var(--o2));color:#fff;font-weight:1000;font-size:12px;overflow:hidden;}
+.userName{max-width:240px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-weight:900;color:var(--ink);}
+
 .cards{margin-top:18px;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;}
 @media(max-width:900px){.cards{grid-template-columns:1fr;}}
 .card{text-align:left;border:1px solid var(--stroke);border-radius:var(--r);background:#fff;box-shadow:var(--shadow2);padding:16px;cursor:pointer;transition:transform 160ms ease, box-shadow 160ms ease, border-color 160ms ease;}
@@ -1118,34 +1092,52 @@ body.appOpen[data-mode="m3"] .modeStrip{background:linear-gradient(135deg,#7C3AE
 .icon svg{width:22px;height:22px;}
 .cardTitle{margin-top:10px;font-weight:1000;color:var(--ink);font-size:16px;}
 .cardDesc{margin-top:6px;color:var(--mut2);font-weight:850;font-size:13px;line-height:1.35;}
-.badges{margin-top:10px;display:flex;gap:8px;flex-wrap:wrap;}
-.badge{font-size:12px;font-weight:900;padding:6px 10px;border-radius:999px;border:1px solid rgba(255,106,0,.22);background:#fff;color:#9a3500;}
-.footerMini{margin:16px auto 0;text-align:center;color:var(--mut2);font-weight:800;font-size:12.5px;max-width:72ch;line-height:1.45;}
+
+/* verification overlay */
+.verifyOverlay{position:fixed;inset:0;display:none;align-items:center;justify-content:center;background:rgba(15,23,42,.35);z-index:12000;}
+.verifyOverlay.show{display:flex;}
+.verifyCard{background:#fff;border:1px solid var(--stroke);border-radius:18px;box-shadow:0 18px 60px rgba(15,23,42,.18);padding:18px 20px;display:flex;flex-direction:column;align-items:center;gap:8px;min-width:220px;}
+.verifyCard .check{width:56px;height:56px;border-radius:999px;display:grid;place-items:center;background:linear-gradient(135deg,var(--o1),var(--o2));color:#fff;font-size:28px;font-weight:1000;animation:pop 240ms cubic-bezier(.16,1,.3,1) both;}
+.verifyCard .verifyText{font-weight:1000;color:var(--ink);letter-spacing:-.01em;}
+@keyframes pop{from{transform:scale(.85);opacity:.2}to{transform:scale(1);opacity:1}}
+
 body.appOpen #nav{display:block;} body.appOpen #appMain{display:block;} body.appOpen #landingHero{display:none;}
 </style>
+
+<div id="verifyOverlay" class="verifyOverlay" aria-hidden="true">
+  <div class="verifyCard"><div class="check">✓</div><div class="verifyText">Verified</div></div>
+</div>
+
 <section id="landingHero" aria-label="Start">
   <div class="launchWrap">
     <div class="launchLogo"><img src="https://res.cloudinary.com/djy3mjtsz/image/upload/v1769939761/Untitled_1_vtehdh.png" alt="GRADEO"/></div>
     <h1 class="launchTitle">GRADEO</h1>
     <p class="launchSub">SGPA • CGPA • Minimum SEE</p>
+
     <div class="ctaRow">
-      <button class="cta primary" type="button" id="startPlanner">Start Planner</button>
-      <button class="cta google" type="button" id="landingGoogleBtn"><svg aria-hidden='true' viewBox='0 0 48 48' style='width:18px;height:18px;display:block'>
+      <button class="cta primary" type="button" id="landingGoogleBtn"><svg aria-hidden='true' viewBox='0 0 48 48' style='width:18px;height:18px;display:block'>
   <path fill='#EA4335' d='M24 9.5c3.54 0 6.32 1.54 7.77 2.83l5.66-5.66C34.1 3.6 29.55 1.5 24 1.5 14.64 1.5 6.58 6.88 2.8 14.72l6.56 5.09C11.1 14.07 17.08 9.5 24 9.5z'/>
   <path fill='#4285F4' d='M46.5 24c0-1.64-.15-3.22-.43-4.75H24v9h12.6c-.54 2.9-2.18 5.36-4.64 7.02l7.1 5.5C43.3 36.9 46.5 30.95 46.5 24z'/>
   <path fill='#FBBC05' d='M9.36 28.19A14.5 14.5 0 0 1 8.6 24c0-1.46.25-2.88.7-4.19L2.75 14.7A23.94 23.94 0 0 0 1.5 24c0 3.86.93 7.52 2.6 10.78l5.26-6.59z'/>
   <path fill='#34A853' d='M24 46.5c5.55 0 10.2-1.83 13.6-4.97l-7.1-5.5c-1.97 1.32-4.5 2.1-6.5 2.1-6.89 0-12.74-4.65-14.82-10.94l-6.6 5.1C6.33 40.12 14.45 46.5 24 46.5z'/>
 </svg><span>Continue with Google</span></button>
+      <div id="landingProfile" class="landingProfile">
+        <div class="userChip">
+          <span class="userAvatar" id="landingAvatar">G</span>
+          <span class="userName" id="landingUserName">Signed in</span>
+        </div>
+        <button class="cta" type="button" id="landingSignOutBtn">Sign out</button>
+      </div>
     </div>
+
     <div class="cards">
-      <button class="card" type="button" data-mode="m1"><div class="icon"><svg viewBox='0 0 24 24' aria-hidden='true'><path fill='currentColor' d='M7 2h10a2 2 0 0 1 2 2v16a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2Zm0 2v16h10V4H7Zm2 3h6v2H9V7Zm0 4h6v2H9v-2Zm0 4h4v2H9v-2Z'/></svg></div><div class="cardTitle">Planner</div><div class="cardDesc">Target → SEE</div><div class="badges"><span class="badge">Default</span></div></button>
-      <button class="card" type="button" data-mode="m2"><div class="icon"><svg viewBox='0 0 24 24' aria-hidden='true'><path fill='currentColor' d='M4 19h16v2H4v-2Zm2-2V3h2v14H6Zm5 0V7h2v10h-2Zm5 0V10h2v7h-2Z'/></svg></div><div class="cardTitle">SGPA</div><div class="cardDesc">Marks → SGPA</div><div class="badges"><span class="badge">Instant</span></div></button>
-      <button class="card" type="button" data-mode="m3"><div class="icon"><svg viewBox='0 0 24 24' aria-hidden='true'><path fill='currentColor' d='M12 2a10 10 0 1 1 0 20 10 10 0 0 1 0-20Zm1 5h-2v6l5 3 1-1.7-4-2.3V7Z'/></svg></div><div class="cardTitle">CGPA</div><div class="cardDesc">SGPA → CGPA</div><div class="badges"><span class="badge">Converter</span></div></button>
+      <button class="card" type="button" data-mode="m1"><div class="icon"><svg viewBox='0 0 24 24' aria-hidden='true'><path fill='currentColor' d='M7 2h10a2 2 0 0 1 2 2v16a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2Zm0 2v16h10V4H7Zm2 3h6v2H9V7Zm0 4h6v2H9v-2Zm0 4h4v2H9v-2Z'/></svg></div><div class="cardTitle">Planner</div><div class="cardDesc">Target → SEE</div></button>
+      <button class="card" type="button" data-mode="m2"><div class="icon"><svg viewBox='0 0 24 24' aria-hidden='true'><path fill='currentColor' d='M4 19h16v2H4v-2Zm2-2V3h2v14H6Zm5 0V7h2v10h-2Zm5 0V10h2v7h-2Z'/></svg></div><div class="cardTitle">SGPA</div><div class="cardDesc">Marks → SGPA</div></button>
+      <button class="card" type="button" data-mode="m3"><div class="icon"><svg viewBox='0 0 24 24' aria-hidden='true'><path fill='currentColor' d='M12 2a10 10 0 1 1 0 20 10 10 0 0 1 0-20Zm1 5h-2v6l5 3 1-1.7-4-2.3V7Z'/></svg></div><div class="cardTitle">CGPA</div><div class="cardDesc">SGPA → CGPA</div></button>
     </div>
-    <div class="footerMini">Use as Guest • Sign in to sync</div>
   </div>
 </section>
-<!-- ===== END MATERIAL CLEAN LAUNCH V7 ===== -->
+<!-- ===== END GOOGLE-LIKE LANDING ===== -->
 
 
 
@@ -1157,7 +1149,6 @@ body.appOpen #nav{display:block;} body.appOpen #appMain{display:block;} body.app
   <section class="hero heroCompact">
     <div>
       <h1 id="heroTitle">Target CGPA → Minimum SEE Needed</h1>
-<div id="stepChips" class="stepChips" aria-label="Steps"></div>
       <p id="heroSub">Step 1: Enter current CGPA & credits • Step 2: Add subjects • Step 3: Enter CIE • We show minimum SEE.</p>
 
 <div class="hint" id="eduNotice" style="margin-top:10px;">
@@ -1193,11 +1184,11 @@ body.appOpen #nav{display:block;} body.appOpen #appMain{display:block;} body.app
           <div class="row">
             <div>
               <label class="label">Current CGPA</label>
-              <input class="input" id="currentCgpa" type="text" inputmode="decimal" placeholder="e.g., 7.80" autocomplete="off">
+              <input class="input" id="currentCgpa" type="text" inputmode="decimal" placeholder="7.8" autocomplete="off">
             </div>
             <div>
               <label class="label">Completed credits</label>
-              <input class="input" id="completedCredits" type="number" step="1" min="0" max="500" placeholder="e.g., 68">
+              <input class="input" id="completedCredits" type="number" step="1" min="0" max="500" placeholder="24">
             </div>
             <div>
               <label class="label">Target CGPA</label>
@@ -1238,20 +1229,20 @@ body.appOpen #nav{display:block;} body.appOpen #appMain{display:block;} body.app
 
         <!-- Mode 2 -->
         <div id="mode2" style="display:none;">
-          <div class="hint" style="margin-bottom:10px;">Enter CIE & SEE for normal subjects. Activity subjects use Final/100 only.</div>
+          
 
           <div class="row">
             <div>
-              <label class="label">Semester name (optional)</label>
-              <input class="input" id="semesterName" placeholder="e.g., Sem 4 Results">
+              <label class="label">Semester</label>
+              <input class="input" id="semesterName" placeholder="Sem 4">
             </div>
             <div>
-              <label class="label">Current CGPA (optional)</label>
-              <input class="input" id="curCgpa2" type="text" inputmode="decimal" placeholder="e.g., 7.80" autocomplete="off">
+              <label class="label">CGPA</label>
+              <input class="input" id="curCgpa2" type="text" inputmode="decimal" placeholder="7.8" autocomplete="off">
             </div>
             <div>
-              <label class="label">Completed credits (optional)</label>
-              <input class="input" id="doneCredits2" type="number" step="1" min="0" max="500" placeholder="e.g., 68">
+              <label class="label">Credits</label>
+              <input class="input" id="doneCredits2" type="number" step="1" min="0" max="500" placeholder="24">
             </div>
             <div style="display:flex; gap:10px; flex-wrap:wrap; align-items:end;">
               <button class="btn primary" id="addNormalBtn2">+ Subject</button>
@@ -1306,11 +1297,10 @@ body.appOpen #nav{display:block;} body.appOpen #appMain{display:block;} body.app
     </section>
 
     <!-- Summary -->
-    <aside class="panel" id="summaryPanel"><div id="modeStrip" class="modeStrip" aria-hidden="true"></div>
+    <aside class="panel" id="summaryPanel">
       <div class="panelHead">
         <div>
           <h2>Summary</h2>
-<div id="activeTag" class="activeTag" style="display:none;"><span class="activeDot" aria-hidden="true"></span><span id="activeTagText">—</span></div>
           <p id="summaryDesc">Updates after you stop typing (smooth).</p>
         </div>
       </div>
@@ -1422,11 +1412,11 @@ body.appOpen #nav{display:block;} body.appOpen #appMain{display:block;} body.app
   </div>
 </main>
 
-<button class="btn" id="backToTop" aria-label="Back to top" style="display:none; position:fixed; left:16px; bottom:16px; z-index:60; border-radius:999px; padding:12px 14px;">⬆︎ Top</button>
 <div class="quickAdd" aria-label="Quick actions">
-  <button class="btn" id="quickActivityBtn" type="button" title="Add Activity">+ Activity</button>
-  <button class="btn primary" id="quickAddBtn" type="button" title="Add Subject">+ Subject</button>
+  <button class="btn" id="quickActivityBtn" type="button">+ Activity</button>
+  <button class="btn primary" id="quickAddBtn" type="button">+ Subject</button>
 </div>
+<button class="btn" id="backToTop" aria-label="Back to top" style="display:none; position:fixed; left:16px; bottom:16px; z-index:60; border-radius:999px; padding:12px 14px;">⬆︎ Top</button>
 <!-- Modal -->
 <div class="overlay" id="overlay">
   <div class="modal">
@@ -1541,7 +1531,6 @@ body.appOpen #nav{display:block;} body.appOpen #appMain{display:block;} body.app
   const round2=n=>Math.round((n+Number.EPSILON)*100)/100;
   
 
-  // ===== Subject accent: unique HSL from subject id (scales to many subjects) =====
   function accentForIdHsl(id){
     id = String(id||'');
     let h = 2166136261;
@@ -1550,9 +1539,7 @@ body.appOpen #nav{display:block;} body.appOpen #appMain{display:block;} body.app
       h = Math.imul(h, 16777619);
     }
     const hue = (h >>> 0) % 360;
-    const sat = 82;
-    const lit = 44;
-    return `hsl(${hue} ${sat}% ${lit}%)`;
+    return `hsl(${hue} 82% 44%)`;
   }
 const fmt=(n,d=2)=>Number.isFinite(+n)?(+n).toFixed(d):"—";
   const esc=str=>String(str).replace(/[&<>"']/g, s=>({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;" }[s]));
@@ -5170,244 +5157,129 @@ const prefersReduce = window.matchMedia && window.matchMedia('(prefers-reduced-m
   }catch(_e){}
 
 
-  /* ===== GRADEO_V7_ALL: Upgrades (A+B+C) + Sign-in fix + Active tag + Summary follow ===== */
-  function openFromLanding(mode){
-    const m = (mode==='m2'||mode==='m3') ? mode : 'm1';
-    try{ document.body.classList.add('appOpen'); }catch(_e){}
-    try{ if(typeof setMode==='function') setMode(m, {push:false}); }catch(_e){}
-    try{ localStorage.setItem('gradeo_last_mode', m); }catch(_e){}
-    try{ window.scrollTo(0,0); }catch(_e){}
+  /* ===== Landing Google sign-in + profile (no auto-open mode) ===== */
+  function showVerify(){
+    const ov=document.getElementById('verifyOverlay');
+    if(!ov) return;
+    ov.classList.add('show');
+    setTimeout(()=>ov.classList.remove('show'), 1100);
   }
-  try{ document.querySelectorAll('#landingHero [data-mode]').forEach(btn=> btn.addEventListener('click', ()=> openFromLanding(btn.getAttribute('data-mode')))); }catch(_e){}
-  try{ const cta=document.getElementById('startPlanner'); if(cta) cta.addEventListener('click', ()=> openFromLanding('m1')); }catch(_e){}
-
-  // --- Mode strip update ---
-  function setModeStrip(mode){
-    const strip = document.getElementById('modeStrip');
-    if(!strip) return;
-    // CSS handles gradients via body[data-mode], nothing needed
-  }
-
-  // --- Active Subject Tag in Summary ---
-  function setActiveTag(name, accent){
-    const tag = document.getElementById('activeTag');
-    const txt = document.getElementById('activeTagText');
-    if(!tag || !txt) return;
-    if(!name){ tag.style.display='none'; return; }
-    tag.style.display='flex';
-    txt.textContent = name;
-    try{ tag.style.setProperty('--subAccent', accent || '#FF6A00'); }catch(_e){}
-  }
-
-  // --- Steps ---
-  function setSteps(mode){
-    const el = document.getElementById('stepChips');
-    if(!el) return;
-    let steps=[];
-    if(mode==='m1') steps=[['1','Enter CGPA'],['2','Add subjects'],['3','Enter CIE']];
-    else if(mode==='m2') steps=[['1','Add subjects'],['2','Enter marks'],['3','Get SGPA']];
-    else steps=[['1','Semesters'],['2','Enter SGPA'],['3','Get CGPA']];
-    el.innerHTML = steps.map(s=>`<span class="stepChip on">${s[0]} • ${s[1]}</span>`).join('');
-  }
-
-  // --- Sign-in: Popup + Redirect fallback + actionable error modal ---
-  function showSignInHelp(err){
-    const origin = (location && location.origin) ? location.origin : '';
-    const code = err && err.code ? String(err.code) : '';
-    const msg = err && err.message ? String(err.message) : '';
-    openModal({
-      title: 'Google sign-in',
-      desc: 'Fix in Firebase settings.',
-      bodyHTML: `
-        <div class="subCard">
-          <div style="font-weight:990">Most common fixes</div>
-          <ul style="margin:10px 0 0 18px; padding:0; font-weight:850; color: var(--mut2)">
-            <li><b>Authorized domains</b>: add <code>${origin}</code> in Firebase → Auth → Settings.</li>
-            <li><b>Enable Google provider</b>: Firebase → Auth → Sign-in method → Google → Enable.</li>
-            <li><b>Popups blocked</b>: allow popups or we’ll use redirect automatically.</li>
-          </ul>
-        </div>
-        <div class="subCard" style="margin-top:10px;">
-          <div style="font-weight:990">Error details</div>
-          <div class="hint" style="display:block;">${esc(code || 'unknown')}<br/>${esc(msg || '')}</div>
-        </div>
-      `,
-      footHTML: `<button class="btn" id="closeSignHelp">Close</button>`
-    });
-    safeOn('closeSignHelp','click', closeModal);
-  }
-
-  async function googleSignInSmart(){
-    try{
-      if(typeof initFirebase === 'function' && (!auth || !db || !provider)){
-        try{ initFirebase(); }catch(_e){}
+  function updateLandingAuthUI(){
+    const gbtn=document.getElementById('landingGoogleBtn');
+    const prof=document.getElementById('landingProfile');
+    const av=document.getElementById('landingAvatar');
+    const nm=document.getElementById('landingUserName');
+    const u = auth && auth.currentUser ? auth.currentUser : null;
+    if(!gbtn || !prof) return;
+    if(u){
+      gbtn.style.display='none';
+      prof.style.display='flex';
+      const label = (u.displayName || u.email || 'Signed in');
+      if(nm) nm.textContent = label;
+      const initial = (label.trim()[0]||'G').toUpperCase();
+      if(av){
+        if(u.photoURL){
+          av.innerHTML = `<img src="${u.photoURL}" alt="" style="width:28px;height:28px;border-radius:999px;object-fit:cover;"/>`;
+          av.style.background='transparent';
+        } else {
+          av.textContent = initial;
+        }
       }
-      if(!auth || !provider){ toast('Sign-in not ready. Refresh once.'); return; }
+    } else {
+      gbtn.style.display='inline-flex';
+      prof.style.display='none';
+    }
+  }
 
-      // Prefer redirect for iOS / in-app browsers
-      const ua = navigator.userAgent || '';
-      const isIOS = /iPhone|iPad|iPod/i.test(ua);
-      const isInApp = /FBAN|FBAV|Instagram|Line|Twitter|Snapchat|wv\)|; wv;/i.test(ua);
+  async function googleSignInLanding(){
+    try{
+      // Firebase should already init on DOMContentLoaded in original app
+      if(!auth || !provider){ toast('Sign-in not ready'); return; }
+      const ua=navigator.userAgent||'';
+      const isIOS=/iPhone|iPad|iPod/i.test(ua);
+      const isInApp=/FBAN|FBAV|Instagram|Line|Twitter|Snapchat|wv\)|; wv;/i.test(ua);
       if(isIOS || isInApp){
-        toast('Opening Google sign-in…');
         await auth.signInWithRedirect(provider);
         return;
       }
-
       try{
         await auth.signInWithPopup(provider);
-        toast('Signed in');
-        openFromLanding('m1');
       }catch(err){
-        const code = (err && err.code) ? String(err.code) : '';
-        if(code.includes('popup-blocked') || code.includes('popup-closed-by-user')){
-          toast('Opening Google sign-in…');
+        const code = err && err.code ? String(err.code):'';
+        if(code.includes('popup-blocked')||code.includes('popup-closed-by-user')){
           await auth.signInWithRedirect(provider);
-        }else{
-          throw err;
-        }
+        } else throw err;
       }
+      toast('Signed in');
+      showVerify();
+      updateLandingAuthUI();
     }catch(err){
       console.error(err);
-      const code = (err && err.code) ? String(err.code) : '';
-      if(code.includes('unauthorized-domain') || code.includes('operation-not-allowed')){
-        showSignInHelp(err);
-      }else{
-        toast('Sign-in failed. Check console.');
-      }
+      const code = err && err.code ? String(err.code):'';
+      if(code.includes('unauthorized-domain')) toast('Add domain in Firebase Authorized domains');
+      else if(code.includes('operation-not-allowed')) toast('Enable Google sign-in in Firebase');
+      else toast('Sign-in failed');
     }
   }
+  try{ const g=document.getElementById('landingGoogleBtn'); if(g) g.addEventListener('click', googleSignInLanding); }catch(_e){}
 
-  try{ const g=document.getElementById('landingGoogleBtn'); if(g) g.addEventListener('click', googleSignInSmart); }catch(_e){}
-
-  // Handle redirect result
+  // redirect result
   (async function(){
-    try{
-      if(typeof initFirebase === 'function' && (!auth || !db || !provider)){
-        try{ initFirebase(); }catch(_e){}
-      }
-      if(!auth) return;
-      const res = await auth.getRedirectResult();
-      if(res && res.user){
-        toast('Signed in');
-        openFromLanding('m1');
-      }
-    }catch(err){
-      console.error(err);
-    }
+    try{ if(!auth) return; const res = await auth.getRedirectResult(); if(res && res.user){ toast('Signed in'); showVerify(); updateLandingAuthUI(); } }catch(e){ console.error(e); }
   })();
 
-  // Quick Add Subject always visible
+  try{ const so=document.getElementById('landingSignOutBtn'); if(so) so.addEventListener('click', async ()=>{ try{ await auth.signOut(); toast('Signed out'); }catch(_e){}; updateLandingAuthUI(); }); }catch(_e){}
+  try{ if(auth) auth.onAuthStateChanged(()=> updateLandingAuthUI()); }catch(_e){}
+
+  // user chooses mode manually
+  function openFromLanding(mode){
+    const m = (mode==='m2'||mode==='m3') ? mode : 'm1';
+    document.body.classList.add('appOpen');
+    try{ setMode(m, {push:false}); }catch(_e){}
+    window.scrollTo(0,0);
+  }
+  try{ document.querySelectorAll('#landingHero [data-mode]').forEach(b=> b.addEventListener('click', ()=> openFromLanding(b.getAttribute('data-mode')))); }catch(_e){}
+
+  // Quick actions: +Subject / +Activity
   try{ const qb=document.getElementById('quickAddBtn'); if(qb) qb.addEventListener('click', ()=>{ const b=document.getElementById(state.mode==='m2'?'addNormalBtn2':'addNormalBtn'); if(b) b.click(); }); }catch(_e){}
+  try{ const ab=document.getElementById('quickActivityBtn'); if(ab) ab.addEventListener('click', ()=>{ const b=document.getElementById(state.mode==='m2'?'addActivityBtn2':'addActivityBtn'); if(b) b.click(); }); }catch(_e){}
 
-  // Summary follow next to active subject and mode box
-  let _activeSubjectDomId = null;
-  let _io=null;
-  function setActiveByCard(card){
-    if(!card) return;
-    _activeSubjectDomId = card.id;
-    try{
-      const sid = String(card.id||'').replace('subjectCard-','');
-      const accent = accentForIdHsl(sid);
-      const nameInput = card.querySelector('input[data-field="name"]');
-      const nm = nameInput ? nameInput.value : 'Subject';
-      setActiveTag(nm, accent);
-    }catch(_e){}
-    requestFollowTick();
-  }
-
-  function bindFocusTracking(){
-    const wrap1=document.getElementById('subjectsWrap');
-    const wrap2=document.getElementById('subjectsWrap2');
-    [wrap1,wrap2].forEach(w=>{
-      if(!w) return;
-      w.addEventListener('focusin', (ev)=>{
-        const card = ev.target && ev.target.closest ? ev.target.closest('[id^="subjectCard-"]') : null;
-        if(card) setActiveByCard(card);
-      });
-    });
-  }
-
-  function setupSubjectObserver(){
-    try{ if(_io){ _io.disconnect(); _io=null; } }catch(_e){}
-    const cards=Array.from(document.querySelectorAll('[id^="subjectCard-"]'));
-    if(!cards.length) return;
-    _io = new IntersectionObserver((entries)=>{
-      let top=null;
-      for(const e of entries){
-        if(!e.isIntersecting) continue;
-        if(!top || e.intersectionRatio > top.intersectionRatio) top=e;
-      }
-      if(top && top.target) setActiveByCard(top.target);
-    }, {root:null, threshold:[0.15,0.25,0.35,0.5,0.65]});
-    cards.forEach(c=>_io.observe(c));
-  }
-
-  let _followRAF=null;
-  function requestFollowTick(){
-    if(_followRAF) return;
-    _followRAF = requestAnimationFrame(()=>{ _followRAF=null; followSummary(); });
-  }
-
+  // Summary follow next to active subject
+  let _activeCardId=null; let _io=null; let _raf=null;
+  function requestFollow(){ if(_raf) return; _raf=requestAnimationFrame(()=>{_raf=null; followSummary();}); }
   function followSummary(){
     const sp=document.getElementById('summaryPanel');
     if(!sp) return;
-    if(!(window.matchMedia && window.matchMedia('(min-width:981px)').matches)){
-      sp.style.top='';
-      return;
-    }
+    if(!(window.matchMedia && window.matchMedia('(min-width:981px)').matches)) { sp.style.top=''; return; }
     const nav=document.getElementById('nav');
     const navH=nav?nav.getBoundingClientRect().height:56;
     const baseTop=Math.round(navH+12);
     const hero=document.querySelector('.hero');
     const heroRect=hero?hero.getBoundingClientRect():null;
-    const card=_activeSubjectDomId?document.getElementById(_activeSubjectDomId):null;
+    const card=_activeCardId?document.getElementById(_activeCardId):null;
     const spH=sp.getBoundingClientRect().height;
-    const maxTop=Math.max(baseTop, Math.round(window.innerHeight - spH - 12));
-    const targetTop = card ? Math.round(card.getBoundingClientRect().top) : (heroRect ? Math.round(heroRect.bottom + 12) : baseTop);
+    const maxTop=Math.max(baseTop, Math.round(window.innerHeight-spH-12));
+    const targetTop = card ? Math.round(card.getBoundingClientRect().top) : (heroRect ? Math.round(heroRect.bottom+12) : baseTop);
     sp.style.top = Math.min(Math.max(targetTop, baseTop), maxTop) + 'px';
   }
+  function setActive(card){ if(!card) return; _activeCardId=card.id; requestFollow(); }
+  function bindFocus(){ ['subjectsWrap','subjectsWrap2'].forEach(id=>{ const w=document.getElementById(id); if(!w) return; w.addEventListener('focusin', ev=>{ const c=ev.target.closest && ev.target.closest('[id^="subjectCard-"]'); if(c) setActive(c); }); }); }
+  function bindObserver(){
+    try{ if(_io){_io.disconnect();_io=null;} }catch(_e){}
+    const cards=[...document.querySelectorAll('[id^="subjectCard-"]')];
+    if(!cards.length) return;
+    _io=new IntersectionObserver(entries=>{ let best=null; for(const e of entries){ if(!e.isIntersecting) continue; if(!best||e.intersectionRatio>best.intersectionRatio) best=e; } if(best&&best.target) setActive(best.target); }, {threshold:[0.2,0.35,0.5,0.65]});
+    cards.forEach(c=>_io.observe(c));
+  }
+  try{ const _r=renderSubjectsDOM; renderSubjectsDOM=function(){ _r(); try{bindFocus();bindObserver();requestFollow();}catch(_e){}; }; }catch(_e){}
+  window.addEventListener('scroll', requestFollow, {passive:true});
+  window.addEventListener('resize', requestFollow);
 
-  // Patch renderSubjectsDOM to rebind after add/remove
-  try{ const _renderSubjectsDOM = renderSubjectsDOM; renderSubjectsDOM = function(){ _renderSubjectsDOM(); try{ bindFocusTracking(); }catch(_e){}; try{ setupSubjectObserver(); }catch(_e){}; try{ requestFollowTick(); }catch(_e){}; }; }catch(_e){}
-
-  // Patch setMode to keep steps + mode strip + follow
-  try{ const _setMode = setMode; setMode = function(mode, opts){ _setMode(mode, opts); try{ setSteps(mode); }catch(_e){}; try{ setModeStrip(mode); }catch(_e){}; try{ requestFollowTick(); }catch(_e){}; }; }catch(_e){}
-
-  // init steps now
-  try{ setSteps(state && state.mode ? state.mode : 'm1'); }catch(_e){ setSteps('m1'); }
-
-  window.addEventListener('scroll', requestFollowTick, {passive:true});
-  window.addEventListener('resize', requestFollowTick);
+  // Keep titles short
+  try{ const _ra=renderAllStatic; renderAllStatic=function(){ _ra(); const ht=document.getElementById('heroTitle'); if(ht){ ht.textContent = (state.mode==='m1')?'Planner':(state.mode==='m2')?'SGPA':'CGPA'; } }; }catch(_e){}
 
   // default: landing
-  try{ document.body.classList.remove('appOpen'); }catch(_e){}
-
-
-  /* ===== GRADEO_ULTRA_TEXT_PATCH ===== */
-  try{
-    const _r = renderAllStatic;
-    renderAllStatic = function(){
-      _r();
-      // Short titles
-      const ht = document.getElementById('heroTitle');
-      if(ht){
-        if(state.mode==='m1') ht.textContent = 'Planner';
-        else if(state.mode==='m2') ht.textContent = 'SGPA Calculator';
-        else ht.textContent = 'CGPA Calculator';
-      }
-      const wt = document.getElementById('workTitle');
-      if(wt){
-        if(state.mode==='m1') wt.textContent='Planner';
-        else if(state.mode==='m2') wt.textContent='Marks → SGPA';
-        else wt.textContent='SGPA → CGPA';
-      }
-    };
-  }catch(_e){}
-
-  // Quick action buttons
-  try{ const qb=document.getElementById('quickAddBtn'); if(qb) qb.addEventListener('click', ()=>{ const b=document.getElementById(state.mode==='m2'?'addNormalBtn2':'addNormalBtn'); if(b) b.click(); }); }catch(_e){}
-  try{ const ab=document.getElementById('quickActivityBtn'); if(ab) ab.addEventListener('click', ()=>{ const b=document.getElementById(state.mode==='m2'?'addActivityBtn2':'addActivityBtn'); if(b) b.click(); }); }catch(_e){}
+  document.body.classList.remove('appOpen');
 
 })();
 </script>
