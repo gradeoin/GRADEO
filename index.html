@@ -851,6 +851,25 @@ body[data-theme-variant="neon"] .panel, body[data-theme-variant="neon"] .subCard
 
 /* Tooltip smoother */
 #viralTip{backdrop-filter: blur(10px) saturate(1.2);} 
+
+/* ===== Layout: keep Viral rail next to Summary (wide screens) ===== */
+@media (min-width: 1100px){
+  .grid{ grid-template-columns: 1.15fr .58fr .14fr !important; }
+  #viralPanel{ display:block !important; }
+  #summaryPanel{ position: sticky !important; top: var(--summaryTop); align-self: start; }
+}
+@media (min-width: 860px) and (max-width: 1099px){
+  .grid{ grid-template-columns: 1.25fr .75fr !important; }
+  #viralPanel{ display:none !important; }
+  #summaryPanel{ position: sticky !important; top: var(--summaryTop); align-self: start; }
+}
+/* ===== UI polish ===== */
+@media (min-width: 860px){
+  #summaryPanel{ box-shadow: 0 10px 26px rgba(17,24,39,.10); }
+}
+.stat{ transition: transform 180ms cubic-bezier(.2,.8,.2,1); }
+.stat:hover{ transform: translateY(-2px); }
+
 </style>
 </head>
 
@@ -898,6 +917,7 @@ body[data-theme-variant="neon"] .panel, body[data-theme-variant="neon"] .subCard
 <button class="menuItem" id="exportGradePdfBtn" role="menuitem">🖨️ Export grade card PDF</button>
 <div class="menuSep"></div>
 <button class="menuItem" id="studyModeBtn" role="menuitem">🎧 Study Mode (Pomodoro)</button>
+<button class="menuItem" id="attendanceBtn" role="menuitem">📅 Attendance planner</button>
 <button class="menuItem" id="roastBtn" role="menuitem">🔥 Roast my SGPA (friendly)</button>
 <button class="menuItem" id="badgesBtn" role="menuitem">🏅 Achievements</button>
 <button class="menuItem" id="leaderBtn" role="menuitem">🏆 Leaderboard (anonymous)</button>
@@ -1164,7 +1184,8 @@ body[data-theme-variant="neon"] .panel, body[data-theme-variant="neon"] .subCard
           <button class="viralBtn" type="button" data-v="uni" data-title="University settings"><span class="vi">🎓</span></button>
           <button class="viralBtn" type="button" data-v="how" data-title="How it works"><span class="vi">ℹ️</span></button>
           <button class="viralBtn" type="button" data-v="faq" data-title="FAQ"><span class="vi">❓</span></button>
-          <button class="viralBtn" type="button" data-v="contact" data-title="Contact / Feedback"><span class="vi">✉️</span></button>
+          <button class="viralBtn" type="button" data-v="att" data-title="Attendance planner"><span class="vi">📅</span></button>
+<button class="viralBtn" type="button" data-v="contact" data-title="Contact / Feedback"><span class="vi">✉️</span></button>
           <button class="viralBtn" type="button" data-v="terms" data-title="Terms"><span class="vi">📄</span></button>
           <button class="viralBtn" type="button" data-v="privacy" data-title="Privacy"><span class="vi">🔒</span></button>
           <button class="viralBtn" type="button" data-v="disclaimer" data-title="Disclaimer"><span class="vi">⚠️</span></button>
@@ -3144,265 +3165,151 @@ async function deleteAllUserPlans(uid){
   }
 
   function exportGradeCardPDF(){
-  // Professional grade card for Mode 1 (Target→SEE) and Mode 2 (Marks→SGPA)
-  const semName = (document.getElementById('semesterName')?.value || '').trim();
+  // Institutional-style print page (Mode 2 = grade card, Mode 1 = planner statement)
   const prof = state.profile || {};
   const u = auth?.currentUser || null;
-  const displayName = (prof.nickname || u?.displayName || 'Student');
+  const studentName = (prof.nickname || u?.displayName || 'Student');
   const email = (u?.email || '');
   const photo = (u?.photoURL || '');
-
-  const initials = String(displayName || 'S').trim().split(/\s+/).slice(0,2).map(x=>x[0]?.toUpperCase()||'').join('') || 'S';
-
-  const baseCSS = `
-  :root{ --ink:#111827; --muted:#6b7280; --line:#e5e7eb; --soft:#f9fafb; --brand:#0b57d0; --brand2:#7c3aed; --good:#16a34a; --warn:#f59e0b; --bad:#ef4444; }
-  *{box-sizing:border-box}
-  body{font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial; margin:0; color:var(--ink); background:#fff;}
-  .page{padding:26px; max-width:980px; margin:0 auto;}
-  .header{display:flex; justify-content:space-between; gap:18px; align-items:flex-start; border:1px solid var(--line); border-radius:18px; padding:18px; background:linear-gradient(135deg,#eef7ff,#fff);}
-  .brand{display:flex; gap:12px; align-items:center;}
-  .logo{width:44px;height:44px;border-radius:14px; overflow:hidden; border:1px solid var(--line); background:#fff; display:grid; place-items:center;}
-  .logo img{width:100%;height:100%;object-fit:cover}
-  .brand h1{margin:0; font-size:16px; letter-spacing:.08em; text-transform:uppercase; font-weight:900; color:var(--brand)}
-  .brand .sub{margin-top:4px; color:var(--muted); font-size:12px; font-weight:700; line-height:1.25}
-  .profile{display:flex; gap:12px; align-items:center;}
-  .avatar{width:52px;height:52px;border-radius:16px; border:1px solid var(--line); background:var(--soft); overflow:hidden; display:grid; place-items:center; font-weight:900; color:var(--brand)}
-  .avatar img{width:100%;height:100%;object-fit:cover}
-  .pname{font-weight:900}
-  .pmail{color:var(--muted); font-size:12px; font-weight:700}
-
-  .metaRow{display:flex; flex-wrap:wrap; gap:8px; margin-top:12px;}
-  .pill{display:inline-flex; align-items:center; gap:6px; padding:6px 10px; border-radius:999px; border:1px solid var(--line); background:#fff; font-weight:800; font-size:12px; color:#1f2937}
-  .pill b{font-weight:900}
-  .pill.good{border-color:rgba(22,163,74,.25); background:rgba(22,163,74,.08);}
-  .pill.warn{border-color:rgba(245,158,11,.25); background:rgba(245,158,11,.10);}
-  .pill.bad{border-color:rgba(239,68,68,.25); background:rgba(239,68,68,.08);}
-
-  .section{margin-top:18px; border:1px solid var(--line); border-radius:18px; overflow:hidden;}
-  .sectionHead{padding:14px 16px; background:linear-gradient(135deg,#fafafa,#fff); border-bottom:1px solid var(--line); display:flex; justify-content:space-between; gap:12px; flex-wrap:wrap;}
-  .sectionHead .t{font-weight:900}
-  .sectionHead .d{color:var(--muted); font-size:12px; font-weight:700}
-
-  table{width:100%; border-collapse:collapse;}
-  th,td{border-bottom:1px solid var(--line); padding:12px 12px; font-size:12.5px; text-align:left; vertical-align:top;}
-  th{background:#f8fafc; font-size:12px; letter-spacing:.02em; text-transform:uppercase; color:#334155}
-  tr:last-child td{border-bottom:none}
-  .num{text-align:right; font-variant-numeric: tabular-nums;}
-  .right{text-align:right;}
-  .small{font-size:11px; color:var(--muted); font-weight:700}
-  .badge{display:inline-flex; align-items:center; padding:4px 8px; border-radius:999px; font-size:11px; font-weight:900; border:1px solid var(--line); background:#fff;}
-  .badge.good{border-color:rgba(22,163,74,.28); background:rgba(22,163,74,.08)}
-  .badge.warn{border-color:rgba(245,158,11,.28); background:rgba(245,158,11,.10)}
-  .badge.bad{border-color:rgba(239,68,68,.28); background:rgba(239,68,68,.08)}
-
-  .totals{display:grid; grid-template-columns:repeat(3, minmax(0,1fr)); gap:10px; padding:14px; background:#fff;}
-  .card{border:1px solid var(--line); border-radius:16px; padding:12px; background:linear-gradient(135deg,#ffffff,#fbfdff);}
-  .card .k{font-size:12px; color:var(--muted); font-weight:800}
-  .card .v{margin-top:6px; font-size:20px; font-weight:950}
-  .foot{margin-top:14px; color:var(--muted); font-size:11px; font-weight:700; line-height:1.35; padding:0 16px 16px;}
-  .printRow{margin-top:16px; display:flex; gap:10px; flex-wrap:wrap;}
-  .btn{padding:10px 12px; border-radius:12px; border:1px solid var(--line); font-weight:900; cursor:pointer; background:#fff;}
-  .btn.primary{background:linear-gradient(135deg,var(--brand),var(--brand2)); color:#fff; border-color:transparent;}
-  @media print{ .printRow{display:none} body{background:#fff} .page{padding:0} }
-  `;
+  const usn = (prof.usn || '').trim();
+  const uni = (prof.university || '').trim();
+  const branch = (prof.branch || '').trim();
+  const sem = (prof.semester || '').trim();
+  const scheme = (prof.regulation || '').trim();
+  const semName = (document.getElementById('semesterName')?.value || '').trim();
 
   const logoUrl = 'https://res.cloudinary.com/djy3mjtsz/image/upload/v1769939761/Untitled_1_vtehdh.png';
-  const nowStr = new Date().toLocaleString();
+  const today = new Date();
+  const issued = today.toLocaleDateString();
+  const issuedFull = today.toLocaleString();
+  const docId = 'GRD-' + String(Math.random()).slice(2,10);
 
-  function escHTML(s){
-    return String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[c]));
-  }
+  const initials = String(studentName||'S').trim().split(/\s+/).slice(0,2).map(x=>x[0]?.toUpperCase()||'').join('') || 'S';
+  const escHTML = (s)=> String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[c]));
 
-  function mode2GradeCardHTML(){
-    const rows = state.plan.subjects.map(s => {
+  const css = `
+  :root{--ink:#0f172a;--muted:#475569;--line:#cbd5e1;--soft:#f8fafc;--soft2:#eef2ff;--seal:#1d4ed8;--good:#16a34a;--bad:#dc2626;}
+  *{box-sizing:border-box}
+  body{margin:0;background:#fff;color:var(--ink);font-family:ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Arial;}
+  .page{max-width:1020px;margin:0 auto;padding:28px;}
+  .watermark{position:fixed;inset:0;pointer-events:none;z-index:0;opacity:.05;display:grid;place-items:center;}
+  .watermark span{font-size:120px;font-weight:900;letter-spacing:.18em;transform:rotate(-18deg);}
+  .sheet{position:relative;z-index:1;border:1.5px solid var(--line);border-radius:14px;overflow:hidden;}
+  .top{padding:16px 18px;border-bottom:1px solid var(--line);background:linear-gradient(135deg,var(--soft2),#fff);display:flex;gap:16px;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;}
+  .brand{display:flex;gap:12px;align-items:center;}
+  .logo{width:52px;height:52px;border-radius:12px;border:1px solid var(--line);background:#fff;overflow:hidden;display:grid;place-items:center;}
+  .logo img{width:100%;height:100%;object-fit:cover}
+  .headText .h1{margin:0;font-weight:900;font-size:16px;letter-spacing:.08em;text-transform:uppercase;}
+  .headText .h2{margin-top:4px;color:var(--muted);font-weight:700;font-size:12px;line-height:1.25;}
+  .headText .h3{margin-top:6px;color:#334155;font-weight:800;font-size:11px;letter-spacing:.06em;text-transform:uppercase;}
+  .seal{display:flex;gap:10px;align-items:center;}
+  .avatar{width:54px;height:54px;border-radius:12px;border:1px solid var(--line);background:var(--soft);overflow:hidden;display:grid;place-items:center;font-weight:900;color:var(--seal)}
+  .avatar img{width:100%;height:100%;object-fit:cover}
+  .info{padding:14px 18px;background:#fff;border-bottom:1px solid var(--line);display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;}
+  .kv{border:1px solid var(--line);border-radius:12px;padding:10px 12px;background:var(--soft);}
+  .k{font-size:11px;color:var(--muted);font-weight:800;text-transform:uppercase;letter-spacing:.06em}
+  .v{margin-top:6px;font-weight:900;font-size:13px}
+  table{width:100%;border-collapse:collapse;background:#fff;}
+  th,td{border-bottom:1px solid var(--line);padding:10px 12px;font-size:12.5px;vertical-align:top;}
+  th{background:var(--soft);text-transform:uppercase;letter-spacing:.05em;font-size:11px;color:#334155;}
+  .num{text-align:right;font-variant-numeric:tabular-nums;}
+  .center{text-align:center;}
+  .badge{display:inline-flex;align-items:center;border:1px solid var(--line);border-radius:999px;padding:4px 8px;font-size:11px;font-weight:900;background:#fff;}
+  .badge.good{border-color:rgba(22,163,74,.25);background:rgba(22,163,74,.08);color:#065f46;}
+  .badge.bad{border-color:rgba(220,38,38,.25);background:rgba(220,38,38,.08);color:#7f1d1d;}
+  .summary{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;padding:14px 18px;background:linear-gradient(180deg,#fff,var(--soft));border-top:1px solid var(--line);}
+  .box{border:1px solid var(--line);border-radius:12px;padding:10px 12px;background:#fff;}
+  .box .k{font-size:11px;color:var(--muted);font-weight:800;text-transform:uppercase;letter-spacing:.06em}
+  .box .v{margin-top:6px;font-weight:950;font-size:18px}
+  .foot{padding:14px 18px;color:var(--muted);font-size:11px;font-weight:700;line-height:1.35;border-top:1px dashed var(--line);}
+  .printRow{padding:14px 18px;display:flex;gap:10px;flex-wrap:wrap;justify-content:flex-end;background:#fff;border-top:1px solid var(--line);}
+  .btn{padding:10px 12px;border-radius:12px;border:1px solid var(--line);font-weight:900;cursor:pointer;background:#fff;}
+  .btn.primary{background:var(--seal);border-color:var(--seal);color:#fff;}
+  @media (max-width:720px){.info{grid-template-columns:1fr;}.summary{grid-template-columns:1fr 1fr;}}
+  @media print{.printRow{display:none}.page{padding:0}.sheet{border:none;border-radius:0}.watermark{opacity:.04}}
+  `;
+
+  const headerHTML = (title)=>`<div class="top"><div class="brand"><div class="logo"><img src="${logoUrl}" alt="Logo"></div><div class="headText"><div class="h1">${escHTML(uni||'Institution / University')}</div><div class="h2">${escHTML(title)} • Issued: ${escHTML(issued)} • Doc ID: ${escHTML(docId)}</div><div class="h3">${escHTML([branch, sem, scheme].filter(Boolean).join(' • ')||' ')}</div></div></div><div class="seal"><div class="avatar">${photo?`<img src="${escHTML(photo)}" alt="Avatar">`:escHTML(initials)}</div><div><div style="font-weight:900">${escHTML(studentName)}</div><div style="font-size:12px;font-weight:700;color:var(--muted)">${escHTML(usn||email||'Guest')}</div><div style="font-size:12px;font-weight:700;color:var(--muted)">${escHTML(semName?('Label: '+semName):'')}</div></div></div></div>`;
+  const infoBlock = (modeLabel)=>`<div class="info"><div class="kv"><div class="k">Student Name</div><div class="v">${escHTML(studentName)}</div></div><div class="kv"><div class="k">USN / Roll No</div><div class="v">${escHTML(usn||'—')}</div></div><div class="kv"><div class="k">Programme</div><div class="v">${escHTML(branch||'—')}</div></div><div class="kv"><div class="k">Semester</div><div class="v">${escHTML(sem||'—')}</div></div><div class="kv"><div class="k">Scheme</div><div class="v">${escHTML(scheme||'—')}</div></div><div class="kv"><div class="k">Issued At</div><div class="v">${escHTML(issuedFull)}</div></div></div>`;
+
+  function mode2Table(){
+    const subjects = Array.isArray(state.plan.subjects) ? state.plan.subjects : [];
+    let totalCredits=0, totalPoints=0;
+    const rows = subjects.map((s, idx)=>{
       const cr = (s.kind==='activity') ? 1 : clamp(parseInt(s.credits||3,10),1,4);
       const seeMax = (cr===1) ? ((parseInt(s.seeOutOf||'50',10)===100)?100:50) : 100;
-      const r = calcSubjectMode2(s);
-      const type = (s.kind==='activity') ? 'Activity' : 'Normal';
-      const marks = (s.kind==='activity')
-        ? `<div class="small">Final</div>${escHTML(s.final||'')} /100`
-        : `<div class="small">CIE</div>${escHTML(s.cie||'')} /50<br><div class="small">SEE</div>${escHTML(s.see||'')} /${seeMax}`;
-      const passTone = r.tone === 'good' ? 'good' : 'bad';
-      const passBadge = `<span class="badge ${passTone}">${escHTML(r.badge)}</span>`;
-      return `
-        <tr>
-          <td><b>${escHTML(s.name||'Subject')}</b><div class="small">${type}</div></td>
-          <td class="num">${cr}</td>
-          <td>${marks}</td>
-          <td class="right"><b>${escHTML((r.pct ?? 0).toFixed(1))}</b><div class="small">/100 total</div></td>
-          <td class="right">${passBadge}<div class="small">GP: <b>${escHTML(r.gp)}</b></div></td>
-        </tr>
-      `;
+      const cie = (s.kind==='activity') ? null : clamp(parseFloat(s.cie||0),0,50);
+      const see = (s.kind==='activity') ? null : clamp(parseFloat(s.see||0),0,seeMax);
+      const total = (s.kind==='activity') ? clamp(parseFloat(s.final||0),0,100) : ((seeMax===50)?(cie+see):(cie+see/2));
+      const pass = (s.kind==='activity') ? passActivity(total) : passNormal(cie, see, total, seeMax);
+      const g = pass ? gradeFromMarks(total) : {grade:'F', gp:0};
+      totalCredits += cr; totalPoints += cr*g.gp;
+      const status = pass ? `<span class="badge good">PASS</span>` : `<span class="badge bad">FAIL</span>`;
+      return `<tr><td class="center">${idx+1}</td><td><b>${escHTML(s.name||'Subject')}</b></td><td class="center">${cr}</td><td class="num">${s.kind==='activity'?'—':escHTML((cie??0).toFixed(1))}</td><td class="num">${s.kind==='activity'?escHTML((total||0).toFixed(1)):escHTML((see??0).toFixed(1))} <span style="color:var(--muted);font-weight:800;">/${s.kind==='activity'?'100':seeMax}</span></td><td class="num">${escHTML(total.toFixed(1))}</td><td class="center"><b>${escHTML(g.grade)}</b></td><td class="center">${escHTML(g.gp)}</td><td class="center">${status}</td></tr>`;
     }).join('');
-
-    const sem = computeSGPA();
-
-    return `
-      <div class="section">
-        <div class="sectionHead">
-          <div>
-            <div class="t">Mode 2 — Official‑style Grade Card</div>
-            <div class="d">Marks → SGPA • Total = CIE + SEE/2 (for /100 SEE) • Generated: ${escHTML(nowStr)}</div>
-          </div>
-          <div class="pill good"><b>SGPA:</b> ${escHTML(fmt(sem.sgpa,2))}</div>
-        </div>
-        <table>
-          <thead>
-            <tr>
-              <th>Subject</th>
-              <th class="num">Cr</th>
-              <th>Marks</th>
-              <th class="right">Total</th>
-              <th class="right">Status</th>
-            </tr>
-          </thead>
-          <tbody>${rows || ''}</tbody>
-        </table>
-        <div class="totals">
-          <div class="card"><div class="k">SGPA</div><div class="v">${escHTML(fmt(sem.sgpa,2))}</div></div>
-          <div class="card"><div class="k">Credits</div><div class="v">${escHTML(sem.credits)}</div></div>
-          <div class="card"><div class="k">Points</div><div class="v">${escHTML(fmt(sem.points,2))} / ${escHTML(sem.maxPoints)}</div></div>
-        </div>
-      </div>
-    `;
+    const sgpa = totalCredits>0 ? round2(totalPoints/totalCredits) : 0;
+    return {table:`<table><thead><tr><th class="center">Sl</th><th>Course Title</th><th class="center">Cr</th><th class="num">CIE</th><th class="num">SEE</th><th class="num">Total</th><th class="center">Grade</th><th class="center">GP</th><th class="center">Result</th></tr></thead><tbody>${rows||''}</tbody></table>`, totalCredits, totalPoints:round2(totalPoints), sgpa};
   }
 
-  function mode1PlanCardHTML(){
+  function mode1Table(){
+    const cur = parseFloat(state.plan.mode1.currentCgpa);
+    const done = parseFloat(state.plan.mode1.completedCredits);
+    const tgt = parseFloat(state.plan.mode1.targetCgpa);
     const req = requiredSemesterSGPA();
     const gp = Number.isFinite(req) ? gpFromSgpa(req) : null;
     const minTotal = (gp==null) ? null : minMarksForGP(gp);
-    const semCr = semCredits(state.plan.subjects);
-
-    const rows = state.plan.subjects.map(s => {
+    const subjects = Array.isArray(state.plan.subjects) ? state.plan.subjects : [];
+    const rows = subjects.map((s, idx)=>{
       const cr = (s.kind==='activity') ? 1 : clamp(parseInt(s.credits||3,10),1,4);
       const seeMax = (cr===1) ? ((parseInt(s.seeOutOf||'50',10)===100)?100:50) : 100;
-      const cie = clamp(parseFloat(s.cie||0),0,50);
-
-      let badge='—', tone='warn', detail='Enter CGPA + credits + target';
-      if(gp!=null){
-        const needTotal = minTotal;
-        if(s.kind==='activity'){
-          const final = parseFloat(s.final);
-          if(Number.isFinite(final)){
-            const meets = final >= needTotal;
-            tone = meets ? 'good' : 'bad';
-            badge = 'Fixed';
-            detail = `Final: ${final.toFixed(1)}/100 (need ≥ ${needTotal}/100)`;
-          } else {
-            const d = difficulty(needTotal);
-            tone = d.tone; badge=d.label;
-            detail = `Minimum Final needed: ${Math.round(needTotal)}/100`;
-          }
-        } else {
-          let reqSee = (seeMax===50) ? (needTotal - cie) : (needTotal - cie) * 2;
-          if(reqSee < 0) reqSee = 0;
-          const seePass = (seeMax===50) ? 18 : 35;
-          const totalPassNeed = (seeMax===50) ? Math.max(0, 40 - cie) : Math.max(0, (40 - cie) * 2);
-          const showReq = Math.max(reqSee, seePass, totalPassNeed);
-          const d = difficulty(showReq);
-          tone = d.tone; badge=d.label;
-          detail = `Required SEE: ${Math.round(showReq)}/${seeMax} (CIE: ${cie.toFixed(1)}/50)`;
-        }
+      const cie = (s.kind==='activity') ? null : clamp(parseFloat(s.cie||0),0,50);
+      let need='—', tone='good';
+      if(gp==null){ need='Enter Current/Target CGPA and credits.'; tone='bad'; }
+      else if(s.kind==='activity'){
+        const final = parseFloat(s.final);
+        if(Number.isFinite(final)){ need=`Final fixed: ${final.toFixed(1)}/100 (need ≥ ${minTotal}/100)`; tone=(final>=minTotal)?'good':'bad'; }
+        else { need=`Minimum Final needed: ${Math.round(minTotal)}/100`; tone=difficulty(minTotal).tone; }
+      } else {
+        let reqSee = (seeMax===50) ? (minTotal - cie) : (minTotal - cie) * 2; if(reqSee<0) reqSee=0;
+        const seePass = (seeMax===50)?18:35;
+        const totalPassNeed = (seeMax===50)?Math.max(0,40-cie):Math.max(0,(40-cie)*2);
+        const showReq = Math.max(reqSee, seePass, totalPassNeed);
+        need=`Required SEE: ${Math.round(showReq)}/${seeMax} (CIE ${cie.toFixed(1)}/50)`;
+        tone=difficulty(showReq).tone;
       }
-
-      return `
-        <tr>
-          <td><b>${escHTML(s.name||'Subject')}</b><div class="small">${s.kind==='activity'?'Activity':'Normal'}</div></td>
-          <td class="num">${cr}</td>
-          <td class="right">${escHTML(cie.toFixed(1))}<div class="small">/50 CIE</div></td>
-          <td class="right"><span class="badge ${tone}">${escHTML(badge)}</span></td>
-          <td>${escHTML(detail)}</td>
-        </tr>
-      `;
+      const badge = tone==='good'?`<span class="badge good">OK</span>`:tone==='bad'?`<span class="badge bad">HIGH</span>`:`<span class="badge">MOD</span>`;
+      return `<tr><td class="center">${idx+1}</td><td><b>${escHTML(s.name||'Subject')}</b></td><td class="center">${cr}</td><td class="num">${s.kind==='activity'?'—':escHTML((cie??0).toFixed(1))}</td><td>${escHTML(need)}</td><td class="center">${badge}</td></tr>`;
     }).join('');
-
-    const reqText = Number.isFinite(req) ? fmt(req,2) : '—';
-    const gpText = (gp==null) ? '—' : String(gp);
-
-    return `
-      <div class="section">
-        <div class="sectionHead">
-          <div>
-            <div class="t">Mode 1 — Target Plan / Required SEE Card</div>
-            <div class="d">Target CGPA → Minimum SEE needed • Generated: ${escHTML(nowStr)}</div>
-          </div>
-          <div class="pill warn"><b>Target GP:</b> ${escHTML(gpText)}</div>
-        </div>
-
-        <div class="totals">
-          <div class="card"><div class="k">Required SGPA (this sem)</div><div class="v">${escHTML(reqText)}</div></div>
-          <div class="card"><div class="k">Semester Credits</div><div class="v">${escHTML(semCr || '—')}</div></div>
-          <div class="card"><div class="k">Min Total for Target GP</div><div class="v">${escHTML(minTotal==null?'—':(minTotal+'/100'))}</div></div>
-        </div>
-
-        <table>
-          <thead>
-            <tr>
-              <th>Subject</th>
-              <th class="num">Cr</th>
-              <th class="right">CIE</th>
-              <th class="right">Difficulty</th>
-              <th>Required outcome</th>
-            </tr>
-          </thead>
-          <tbody>${rows || ''}</tbody>
-        </table>
-
-        <div class="foot">
-          Note: This is an educational estimate. Pass rules enforced: Total ≥ 40 and SEE minimum (≥35 for /100, ≥18 for /50). Verify with official evaluation rules.
-        </div>
-      </div>
-    `;
+    return {table:`<table><thead><tr><th class="center">Sl</th><th>Subject</th><th class="center">Cr</th><th class="num">CIE</th><th>Required outcome</th><th class="center">Risk</th></tr></thead><tbody>${rows||''}</tbody></table>`, cur, done, tgt, req};
   }
 
-  const header = `
-    <div class="header">
-      <div>
-        <div class="brand">
-          <div class="logo"><img src="${logoUrl}" alt="Gradeo"></div>
-          <div>
-            <h1>GRADEO • Grade Card</h1>
-            <div class="sub">${escHTML([prof.university, prof.branch, prof.semester].filter(Boolean).join(' • '))}</div>
-            <div class="sub">${escHTML(semName ? ('Semester: '+semName) : ' ')}</div>
-          </div>
-        </div>
-        <div class="metaRow">
-          <span class="pill"><b>Date:</b> ${escHTML(nowStr)}</span>
-          <span class="pill"><b>Mode:</b> ${escHTML(state.mode==='m1'?'Target → SEE': state.mode==='m2'?'Marks → SGPA':'SGPA → CGPA')}</span>
-        </div>
-      </div>
-      <div class="profile">
-        <div class="avatar">${photo ? `<img src="${escHTML(photo)}" alt="Avatar">` : escHTML(initials)}</div>
-        <div>
-          <div class="pname">${escHTML(displayName)}</div>
-          ${email ? `<div class="pmail">${escHTML(email)}</div>` : `<div class="pmail">Guest</div>`}
-        </div>
-      </div>
-    </div>
-  `;
+  let body='';
+  if(state.mode==='m2'){
+    const t = mode2Table();
+    body = headerHTML('Semester Grade Card (Unofficial)') + infoBlock('Mode 2 — Marks → SGPA') + t.table + `<div class="summary"><div class="box"><div class="k">SGPA</div><div class="v">${fmt(t.sgpa,2)}</div></div><div class="box"><div class="k">Credits</div><div class="v">${t.totalCredits}</div></div><div class="box"><div class="k">Total Points</div><div class="v">${fmt(t.totalPoints,2)}</div></div><div class="box"><div class="k">Max Points</div><div class="v">${t.totalCredits*10}</div></div></div><div class="foot">Generated via GRADEO for educational use only. Verify with official marks card.</div>`;
+  } else if(state.mode==='m1'){
+    const t = mode1Table();
+    body = headerHTML('Target Planner Statement (Unofficial)') + infoBlock('Mode 1 — Target → Minimum SEE') + t.table + `<div class="summary"><div class="box"><div class="k">Current CGPA</div><div class="v">${Number.isFinite(t.cur)?fmt(t.cur,2):'—'}</div></div><div class="box"><div class="k">Completed Credits</div><div class="v">${Number.isFinite(t.done)?t.done:'—'}</div></div><div class="box"><div class="k">Target CGPA</div><div class="v">${Number.isFinite(t.tgt)?fmt(t.tgt,2):'—'}</div></div><div class="box"><div class="k">Required SGPA</div><div class="v">${Number.isFinite(t.req)?fmt(t.req,2):'—'}</div></div></div><div class="foot">Planner statement only. Verify with official evaluation rules.</div>`;
+  } else {
+    body = headerHTML('Export not available') + infoBlock('Mode 3 — SGPA → CGPA') + `<div style="padding:18px;">Switch to Mode 1 or Mode 2 to export.</div>`;
+  }
 
-  const body = (state.mode==='m1') ? mode1PlanCardHTML() : (state.mode==='m2') ? mode2GradeCardHTML() : `
-    <div class="section">
-      <div class="sectionHead"><div><div class="t">Grade card not available for Mode 3</div><div class="d">Switch to Mode 1 or Mode 2, then export.</div></div></div>
-      <div style="padding:16px;" class="small">Tip: Mode 3 is SGPA → CGPA converter. Use Mode 2 for marks card export.</div>
-    </div>`;
-
-  const html = `
-  <html><head><meta charset="utf-8"><title>GRADEO Grade Card</title><style>${baseCSS}</style></head>
-  <body>
-    <div class="page">${header}${body}
-      <div class="printRow">
-        <button class="btn primary" onclick="window.print()">Print / Save as PDF</button>
-        <button class="btn" onclick="window.close()">Close</button>
-      </div>
-    </div>
-  </body></html>`;
+  const html = `<html><head><meta charset="utf-8"><title>GRADEO Document</title><style>${css}</style></head><body><div class="watermark"><span>GRADEO</span></div><div class="page"><div class="sheet">${body}<div class="printRow"><button class="btn primary" onclick="window.print()">Print / Save as PDF</button><button class="btn" onclick="window.close()">Close</button></div></div></div></body></html>`;
 
   const w = window.open('', '_blank');
   if(!w){ toast('Popup blocked'); return; }
   w.document.open(); w.document.write(html); w.document.close();
+
+  // Auto print on phones (best-effort; some browsers may block)
+  try{
+    const isPhone = window.matchMedia && window.matchMedia('(max-width: 640px)').matches;
+    if(isPhone){
+      setTimeout(()=>{ try{ w.focus(); w.print(); }catch(e){} }, 550);
+    }
+  }catch(_e){}
+
   awardBadge('first_pdf');
-  toast('Grade card ready 🖨️');
+  toast('Document ready 🖨️');
 }
 
 
@@ -3620,6 +3527,46 @@ function bindCgpaInput(id){
   el.addEventListener('change', finalize);
 }
 
+
+/* ========= Attendance planner (Quick) ========= */
+function openAttendanceModal(){
+  const bodyHTML = `
+    <div class="hint">Enter classes conducted and attended. Set required % (e.g., 75). Optionally enter remaining future classes to know how many you can bunk.</div>
+    <div class="row" style="grid-template-columns:repeat(4,minmax(0,1fr)); margin-top:10px;">
+      <div><label class="label">Classes conducted</label><input class="input" id="attC" type="number" min="0" step="1" placeholder="e.g., 42"></div>
+      <div><label class="label">Classes attended</label><input class="input" id="attA" type="number" min="0" step="1" placeholder="e.g., 34"></div>
+      <div><label class="label">Required %</label><input class="input" id="attR" type="number" min="0" max="100" step="0.1" value="75"></div>
+      <div><label class="label">Future classes</label><input class="input" id="attF" type="number" min="0" step="1" placeholder="optional"></div>
+    </div>
+    <div class="subCard" style="margin-top:12px;" id="attOut">Enter values to see results.</div>
+  `;
+  openModal({ title:'Attendance Planner', desc:'Attendance % • Must attend • Can bunk', bodyHTML, footHTML:`<button class="btn" id="attClose">Close</button>` });
+  document.getElementById('attClose').onclick = closeModal;
+
+  const calc = ()=>{
+    const C = parseInt(document.getElementById('attC').value||'0',10);
+    const A = parseInt(document.getElementById('attA').value||'0',10);
+    const reqPct = parseFloat(document.getElementById('attR').value||'75');
+    const R = reqPct/100;
+    const F = document.getElementById('attF').value==='' ? null : parseInt(document.getElementById('attF').value||'0',10);
+    const out = document.getElementById('attOut');
+    if(C<=0){ out.innerHTML = '<div style="font-weight:990">Enter classes conducted.</div>'; return; }
+    const pct = (A/C)*100;
+    const absent = Math.max(0, C-A);
+    let extra='';
+    if(F!=null){
+      const total = C + F;
+      const needAttend = Math.max(0, Math.ceil(R*total - A));
+      const canBunk = Math.max(0, F - needAttend);
+      extra = `<div class="hint" style="margin-top:8px;">If <b>${F}</b> more classes happen: attend <b>${needAttend}</b>, bunk <b>${canBunk}</b>.</div>`;
+    }
+    const ok = pct >= reqPct;
+    out.innerHTML = `<div style="display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;align-items:center;"><div><div class="k">Attendance</div><div style="font-size:28px;font-weight:1000;">${pct.toFixed(2)}%</div><div class="hint">Attended ${A} / Conducted ${C} • Absent ${absent}</div></div><span class="pill ${ok?'good':'bad'}">${ok?'✅ Meets requirement':'⚠️ Below requirement'}</span></div>${extra}`;
+  };
+  ['attC','attA','attR','attF'].forEach(id=> document.getElementById(id).addEventListener('input', calc, {passive:true}));
+  calc();
+}
+
 function wireEvents(){
   // Enable decimal CGPA entry in Mode 1 & Mode 2
   bindCgpaInput("currentCgpa");
@@ -3709,6 +3656,11 @@ function wireEvents(){
   if (cInp) cInp.addEventListener('keydown', (e)=>{ if (e.key==='Enter') sendChat(); });
 
     $("#helpBtn").onclick = showHelp;
+  // Attendance planner
+  const attMenuBtn = document.getElementById('attendanceBtn');
+  if(attMenuBtn) attMenuBtn.addEventListener('click', ()=>{ try{ closeMenu(); }catch(_e){} openAttendanceModal(); });
+  document.querySelectorAll('[data-v="att"]').forEach(b=> b.addEventListener('click', ()=> openAttendanceModal()));
+
   const heroInfoBtn = document.getElementById('heroInfoBtn');
   if(heroInfoBtn) heroInfoBtn.onclick = showHeroInfo;
 
