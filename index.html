@@ -941,83 +941,106 @@ body[data-theme-variant="neon"] .panel, body[data-theme-variant="neon"] .subCard
 
 
 
-<!-- ===== LIGHT UNIVERSITY LANDING PAGE ===== -->
+
+
+
+
+<!-- ===== CLEAN MOBILE-FIRST LANDING ===== -->
 <style>
 #landingHero{
-  min-height:100vh;
+  min-height:100svh;
   display:flex;
   align-items:center;
   justify-content:center;
-  padding:40px 20px;
-  background:#f4f7fb;
+  padding:16px;
+  background:
+    radial-gradient(circle at 20% 20%, #c7d2fe, transparent 40%),
+    radial-gradient(circle at 80% 30%, #fde68a, transparent 40%),
+    radial-gradient(circle at 50% 90%, #bfdbfe, transparent 45%),
+    linear-gradient(180deg,#f9fbff,#eef3ff);
 }
 #appMain{display:none;}
-.lwrap{max-width:1100px;width:100%;display:grid;grid-template-columns:1.2fr 1fr;gap:32px}
-@media(max-width:900px){.lwrap{grid-template-columns:1fr;text-align:center}}
-.lcard{
+
+.heroCard{
+  max-width:520px;
+  width:100%;
   background:#ffffff;
-  border:1px solid #e5e7eb;
-  border-radius:18px;
-  padding:32px;
-  box-shadow:0 10px 30px rgba(0,0,0,.08)
+  border-radius:26px;
+  padding:34px 22px;
+  box-shadow:0 20px 50px rgba(0,0,0,.12);
+  text-align:center;
+  animation:fadeUp .7s ease both;
 }
-.ltitle{font-size:40px;line-height:1.15;font-weight:900;margin:0;color:#0f172a}
-@media(max-width:900px){.ltitle{font-size:30px}}
-.lsub{color:#475569;margin:14px 0 22px;font-size:16px}
-.lbtns{display:flex;gap:12px;flex-wrap:wrap}
-@media(max-width:900px){.lbtns{justify-content:center}}
-.featureGrid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
-.feature{
-  background:#f8fafc;
-  border:1px solid #e5e7eb;
-  border-radius:12px;
-  padding:14px;
-  font-weight:700;
-  color:#0f172a
+
+@keyframes fadeUp{
+  from{opacity:0;transform:translateY(24px)}
+  to{opacity:1;transform:none}
 }
-.startBtn{font-size:17px;padding:12px 22px}
+
 .uniBadge{
   display:inline-block;
-  background:#e0ecff;
-  color:#1d4ed8;
-  padding:6px 12px;
+  background:#eef2ff;
+  color:#4f46e5;
+  padding:6px 14px;
   border-radius:999px;
-  font-weight:700;
+  font-weight:800;
+  font-size:12px;
   margin-bottom:10px;
+}
+
+.ltitle{
+  font-size:34px;
+  font-weight:1000;
+  margin:6px 0;
+  color:#0f172a;
+}
+
+.lsub{
+  color:#475569;
+  font-size:15px;
+  margin:10px 0 22px;
+}
+
+.startBtn{
+  font-size:17px;
+  padding:14px 34px;
+  border-radius:999px;
+  background:linear-gradient(135deg,#4f46e5,#2563eb);
+  color:white;
+  border:none;
+  animation:pulse 2.4s ease-in-out infinite;
+}
+
+@keyframes pulse{
+  0%,100%{box-shadow:0 0 0 0 rgba(79,70,229,.4)}
+  50%{box-shadow:0 0 0 16px rgba(79,70,229,0)}
+}
+
+/* desktop slight scale */
+@media(min-width:900px){
+  .heroCard{transform:scale(1.03)}
 }
 </style>
 
 <section id="landingHero">
-  <div class="lwrap">
-    <div class="lcard">
-      <span class="uniBadge">Student Grade Assistant</span>
-      <h1 class="ltitle">GRADEO</h1>
-      <p class="lsub">
-        A simple university-style tool to calculate SGPA, CGPA, and minimum SEE marks.
-        Designed for students — clean, easy, and practical.
-      </p>
-      <div class="lbtns">
-        <button class="btn primary startBtn"
-          onclick="document.getElementById('landingHero').style.display='none';document.getElementById('appMain').style.display='block';window.scrollTo(0,0);">
-          ▶ Start Calculator
-        </button>
-        <button class="btn" onclick="showFAQ()">FAQ</button>
-      </div>
-    </div>
+  <div class="heroCard">
+    <div class="uniBadge">Student Grade Assistant</div>
+    <h1 class="ltitle">GRADEO</h1>
+    <p class="lsub">
+      Calculate SGPA, CGPA and minimum SEE marks — fast, simple, made for students.
+    </p>
 
-    <div class="lcard">
-      <div class="featureGrid">
-        <div class="feature">🎯 Target CGPA → SEE</div>
-        <div class="feature">🧮 Marks → SGPA</div>
-        <div class="feature">🔁 SGPA → CGPA</div>
-        <div class="feature">📄 PDF Export</div>
-        <div class="feature">☁️ Cloud Autosave</div>
-        <div class="feature">📱 Mobile Friendly</div>
-      </div>
-    </div>
+    <button class="startBtn"
+      onclick="document.getElementById('landingHero').style.display='none';document.getElementById('appMain').style.display='block';window.scrollTo(0,0);">
+      🚀 Start
+    </button>
   </div>
 </section>
-<!-- ===== END LIGHT LANDING PAGE ===== -->
+<!-- ===== END CLEAN MOBILE-FIRST LANDING ===== -->
+
+
+
+
 
 
 <div id="appMain">
