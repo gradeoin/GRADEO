@@ -958,37 +958,9 @@ body[data-theme-variant="neon"] .panel, body[data-theme-variant="neon"] .subCard
 .bIsBtn.active::after{ opacity:.55; }
 
 
-/* ===== Ultra clean app (Google-ish) ===== */
-body.appOpen[data-mode="m1"]{background:linear-gradient(180deg,#fff,#fff7f0) !important;}
-body.appOpen[data-mode="m2"]{background:linear-gradient(180deg,#fff,#f3fbff) !important;}
-body.appOpen[data-mode="m3"]{background:linear-gradient(180deg,#fff,#f7f5ff) !important;}
-body.appOpen #bg3d, body.appOpen .cursorGlow, body.appOpen #viralTip{display:none !important;}
-body.appOpen::after{display:none !important;}
-
-/* reduce text clutter */
-body.appOpen .panelHead p, body.appOpen .hint, body.appOpen #heroSub, body.appOpen #workDesc, body.appOpen #summaryDesc, body.appOpen #eduNotice{display:none !important;}
-body.appOpen #notesAcc, body.appOpen #accountAcc, body.appOpen #viralPanel, body.appOpen #viralStrip{display:none !important;}
-
-/* show fewer summary stats */
-body.appOpen #summaryBox .stat:nth-child(n+3){display:none !important;}
-
-/* quick actions bottom-right */
-.quickAdd{display:none; flex-direction:column; gap:10px;}
-@media (min-width:981px){
-  .quickAdd{display:inline-flex;position:fixed;right:18px;bottom:18px;z-index:8000;}
-  .quickAdd .btn{box-shadow:0 10px 24px rgba(15,23,42,.14);} 
-}
-
-/* Subject identity: unique accent + light gradient */
-.subCard{position:relative;}
-.subCard::before{content:"";position:absolute;left:0;top:0;bottom:0;width:6px;border-top-left-radius:inherit;border-bottom-left-radius:inherit;background:var(--subAccent,#FF6A00);} 
-.subCard{background:linear-gradient(135deg, color-mix(in oklab, var(--subAccent,#FF6A00) 12%, white), white 60%) !important;}
-.subName{display:flex;align-items:center;gap:10px;}
-.subName .input{flex:1;}
-.subName::before{content:"";width:10px;height:10px;border-radius:999px;background:var(--subAccent,#FF6A00);box-shadow:0 0 0 3px color-mix(in oklab, var(--subAccent,#FF6A00) 12%, transparent);} 
-
-/* summary follow smooth */
-@media (min-width:981px){ #summaryPanel{position:sticky; transition: top 160ms ease; will-change: top;} }
+/* ===== App: reduce text ===== */
+body.appOpen .hint, body.appOpen #heroSub, body.appOpen #workDesc, body.appOpen #summaryDesc, body.appOpen #eduNotice{display:none !important;}
+body.appOpen #notesAcc, body.appOpen #accountAcc{display:none !important;}
 </style>
 </head>
 
@@ -1062,78 +1034,122 @@ body.appOpen #summaryBox .stat:nth-child(n+3){display:none !important;}
 
 
 
-<!-- ===== GOOGLE-LIKE LANDING (Minimal) ===== -->
+<!-- ===== GOOGLE-LIKE LANDING (Doodles + Minimal) ===== -->
 <style>
-#appMain{display:none;}
-#nav{display:none;}
-:root{--o1:#FF6A00;--o2:#FF9F1C;--stroke:#e5e7eb;--ink:#0f172a;--mut:#475569;--mut2:#64748b;--shadow:0 10px 30px rgba(15,23,42,.08);--shadow2:0 6px 16px rgba(15,23,42,.06);--r:18px;}
-#landingHero{min-height:100svh;display:flex;align-items:center;justify-content:center;padding:22px;background:linear-gradient(180deg,#fff,#fff7f0);}
-.launchWrap{width:min(1060px,100%);}
-.launchLogo{width:58px;height:58px;border-radius:16px;background:#fff;border:1px solid var(--stroke);box-shadow:var(--shadow2);overflow:hidden;margin:0 auto;}
-.launchLogo img{width:100%;height:100%;object-fit:cover;}
-.launchTitle{margin:14px 0 0;text-align:center;font-weight:1000;letter-spacing:-.03em;color:var(--ink);font-size:40px;}
-.launchSub{margin:10px auto 0;text-align:center;color:var(--mut);font-weight:800;max-width:70ch;line-height:1.45;font-size:15px;}
+  /* Landing controls visibility */
+  #landingHero{
+    min-height:100svh;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:22px;
+    background:linear-gradient(180deg,#fff,#fff7f0);
+    position:relative;
+    overflow:hidden;
+  }
+  #landingHero::before{
+    content:"";
+    position:absolute; inset:0;
+    background-image:url('data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A//www.w3.org/2000/svg%27%20width%3D%27520%27%20height%3D%27520%27%20viewBox%3D%270%200%20520%20520%27%3E%0A%20%20%3Cg%20fill%3D%27none%27%20stroke%3D%27%23111827%27%20stroke-opacity%3D%270.16%27%20stroke-width%3D%272%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%3E%0A%20%20%20%20%3Cpath%20d%3D%27M70%20110c40-32%2086-30%20122%206%27%20/%3E%0A%20%20%20%20%3Cpath%20d%3D%27M74%20150h130%27%20/%3E%0A%20%20%20%20%3Crect%20x%3D%2752%27%20y%3D%2766%27%20width%3D%27170%27%20height%3D%27120%27%20rx%3D%2718%27/%3E%0A%20%20%20%20%3Cpath%20d%3D%27M86%20104h102M86%20132h70%27%20/%3E%0A%20%20%20%20%3Cpath%20d%3D%27M318%2092h94M318%20120h66M318%20148h42%27/%3E%0A%20%20%20%20%3Crect%20x%3D%27290%27%20y%3D%2770%27%20width%3D%27150%27%20height%3D%27110%27%20rx%3D%2718%27/%3E%0A%20%20%20%20%3Cpath%20d%3D%27M292%20248c45-44%20116-44%20160%200%27%20/%3E%0A%20%20%20%20%3Cpath%20d%3D%27M312%20268c34-33%2086-33%20120%200%27%20/%3E%0A%20%20%20%20%3Cpath%20d%3D%27M336%20294c18-17%2046-17%2064%200%27%20/%3E%0A%20%20%20%20%3Ccircle%20cx%3D%27368%27%20cy%3D%27320%27%20r%3D%2714%27/%3E%0A%20%20%20%20%3Cpath%20d%3D%27M70%20330l60-44%2042%2058%2066-86%2060%2072%27%20/%3E%0A%20%20%20%20%3Cpath%20d%3D%27M84%20402h172%27%20/%3E%0A%20%20%20%20%3Cpath%20d%3D%27M420%20240l30%2012-18%2026%27%20/%3E%0A%20%20%20%20%3Cpath%20d%3D%27M260%20410c12%2018%2030%2028%2054%2030%27%20/%3E%0A%20%20%3C/g%3E%0A%3C/svg%3E');
+    background-size:520px 520px;
+    background-repeat:repeat;
+    opacity:.22;
+    pointer-events:none;
+  }
+  #landingHero::after{
+    content:"";
+    position:absolute; inset:0;
+    background:
+      radial-gradient(circle at 20% 15%, rgba(255,106,0,.10), transparent 44%),
+      radial-gradient(circle at 82% 18%, rgba(255,159,28,.10), transparent 50%);
+    pointer-events:none;
+  }
+  #landingHero .wrap{position:relative; z-index:1; width:min(1060px,100%);}
+  .brandLogo{width:58px;height:58px;border-radius:16px;background:#fff;border:1px solid #e5e7eb;box-shadow:0 6px 16px rgba(15,23,42,.06);overflow:hidden;margin:0 auto;}
+  .brandLogo img{width:100%;height:100%;object-fit:cover;}
+  .brandTitle{margin:14px 0 0;text-align:center;font-weight:1000;letter-spacing:-.03em;color:#0f172a;font-size:40px;}
+  .brandSub{margin:10px auto 0;text-align:center;color:#475569;font-weight:800;max-width:60ch;line-height:1.45;font-size:15px;}
 
-.ctaRow{margin-top:14px;display:flex;gap:10px;justify-content:center;flex-wrap:wrap;}
-.cta{border-radius:999px;border:1px solid var(--stroke);background:#fff;color:var(--ink);padding:12px 16px;font-weight:950;cursor:pointer;display:inline-flex;align-items:center;gap:10px;}
-.cta.primary{border-color:transparent;color:#fff;background:linear-gradient(135deg,var(--o1),var(--o2));box-shadow:0 14px 32px rgba(255,106,0,.18);}
+  .ctaRow{margin-top:14px;display:flex;gap:10px;justify-content:center;flex-wrap:wrap;}
+  .ctaBtn{border-radius:999px;border:1px solid #e5e7eb;background:#fff;color:#0f172a;padding:12px 16px;font-weight:950;cursor:pointer;display:inline-flex;align-items:center;gap:10px;}
+  .ctaBtn.primary{border-color:transparent;color:#fff;background:linear-gradient(135deg,#FF6A00,#FF9F1C);box-shadow:0 14px 32px rgba(255,106,0,.18);}
+  .gIcon{width:18px;height:18px;display:block;}
 
-.landingProfile{display:none;gap:10px;align-items:center;justify-content:center;flex-wrap:wrap;}
-.userChip{display:inline-flex;align-items:center;gap:10px;padding:10px 12px;border-radius:999px;border:1px solid var(--stroke);background:#fff;font-weight:900;color:var(--ink);}
-.userAvatar{width:28px;height:28px;border-radius:999px;display:grid;place-items:center;background:linear-gradient(135deg,var(--o1),var(--o2));color:#fff;font-weight:1000;font-size:12px;overflow:hidden;}
-.userName{max-width:240px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-weight:900;color:var(--ink);}
+  .profileWrap{display:none;gap:10px;align-items:center;justify-content:center;flex-wrap:wrap;}
+  .userChip{display:inline-flex;align-items:center;gap:10px;padding:10px 12px;border-radius:999px;border:1px solid #e5e7eb;background:#fff;font-weight:900;color:#0f172a;}
+  .userAvatar{width:28px;height:28px;border-radius:999px;display:grid;place-items:center;background:linear-gradient(135deg,#FF6A00,#FF9F1C);color:#fff;font-weight:1000;font-size:12px;overflow:hidden;}
+  .userName{max-width:240px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-weight:900;}
 
-.cards{margin-top:18px;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;}
-@media(max-width:900px){.cards{grid-template-columns:1fr;}}
-.card{text-align:left;border:1px solid var(--stroke);border-radius:var(--r);background:#fff;box-shadow:var(--shadow2);padding:16px;cursor:pointer;transition:transform 160ms ease, box-shadow 160ms ease, border-color 160ms ease;}
-.card:hover{transform:translateY(-2px);box-shadow:var(--shadow);border-color:rgba(255,106,0,.25);}
-.card:active{transform:translateY(-1px);}
-.icon{width:44px;height:44px;border-radius:14px;display:grid;place-items:center;border:1px solid rgba(255,106,0,.22);background:rgba(255,106,0,.08);color:#b84300;}
-.icon svg{width:22px;height:22px;}
-.cardTitle{margin-top:10px;font-weight:1000;color:var(--ink);font-size:16px;}
-.cardDesc{margin-top:6px;color:var(--mut2);font-weight:850;font-size:13px;line-height:1.35;}
+  .tiles{margin-top:18px;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;}
+  @media(max-width:900px){.tiles{grid-template-columns:1fr;}}
+  .tile{text-align:left;border:1px solid #e5e7eb;border-radius:18px;background:#fff;box-shadow:0 6px 16px rgba(15,23,42,.06);padding:16px;cursor:pointer;transition:transform 160ms ease, box-shadow 160ms ease, border-color 160ms ease;}
+  .tile:hover{transform:translateY(-2px);box-shadow:0 10px 30px rgba(15,23,42,.08);border-color:rgba(255,106,0,.25);}
+  .tile:active{transform:translateY(-1px);}
+  .tileI{width:44px;height:44px;border-radius:14px;display:grid;place-items:center;border:1px solid rgba(255,106,0,.22);background:rgba(255,106,0,.08);color:#b84300;}
+  .tileI svg{width:22px;height:22px;}
+  .tileT{margin-top:10px;font-weight:1000;color:#0f172a;font-size:16px;}
+  .tileS{margin-top:6px;color:#64748b;font-weight:850;font-size:13px;line-height:1.35;}
 
-/* verification overlay */
-.verifyOverlay{position:fixed;inset:0;display:none;align-items:center;justify-content:center;background:rgba(15,23,42,.35);z-index:12000;}
-.verifyOverlay.show{display:flex;}
-.verifyCard{background:#fff;border:1px solid var(--stroke);border-radius:18px;box-shadow:0 18px 60px rgba(15,23,42,.18);padding:18px 20px;display:flex;flex-direction:column;align-items:center;gap:8px;min-width:220px;}
-.verifyCard .check{width:56px;height:56px;border-radius:999px;display:grid;place-items:center;background:linear-gradient(135deg,var(--o1),var(--o2));color:#fff;font-size:28px;font-weight:1000;animation:pop 240ms cubic-bezier(.16,1,.3,1) both;}
-.verifyCard .verifyText{font-weight:1000;color:var(--ink);letter-spacing:-.01em;}
-@keyframes pop{from{transform:scale(.85);opacity:.2}to{transform:scale(1);opacity:1}}
+  /* Verified overlay */
+  #verifyOverlay{position:fixed;inset:0;display:none;align-items:center;justify-content:center;background:rgba(15,23,42,.35);z-index:12000;}
+  #verifyOverlay.show{display:flex;}
+  .verifyCard{background:#fff;border:1px solid #e5e7eb;border-radius:18px;box-shadow:0 18px 60px rgba(15,23,42,.18);padding:18px 20px;display:flex;flex-direction:column;align-items:center;gap:8px;min-width:220px;}
+  .verifyCheck{width:56px;height:56px;border-radius:999px;display:grid;place-items:center;background:linear-gradient(135deg,#FF6A00,#FF9F1C);color:#fff;font-size:28px;font-weight:1000;animation:pop 240ms cubic-bezier(.16,1,.3,1) both;}
+  .verifyTxt{font-weight:1000;color:#0f172a;letter-spacing:-.01em;}
+  @keyframes pop{from{transform:scale(.85);opacity:.2}to{transform:scale(1);opacity:1}}
 
-body.appOpen #nav{display:block;} body.appOpen #appMain{display:block;} body.appOpen #landingHero{display:none;}
+  /* Hide app until user picks a tile */
+  #appMain{display:none;}
+  #nav{display:none;}
+  body.appOpen #landingHero{display:none;}
+  body.appOpen #appMain{display:block;}
+  body.appOpen #nav{display:block;}
 </style>
 
-<div id="verifyOverlay" class="verifyOverlay" aria-hidden="true">
-  <div class="verifyCard"><div class="check">✓</div><div class="verifyText">Verified</div></div>
-</div>
+<div id="verifyOverlay" aria-hidden="true"><div class="verifyCard"><div class="verifyCheck">✓</div><div class="verifyTxt">Verified</div></div></div>
 
 <section id="landingHero" aria-label="Start">
-  <div class="launchWrap">
-    <div class="launchLogo"><img src="https://res.cloudinary.com/djy3mjtsz/image/upload/v1769939761/Untitled_1_vtehdh.png" alt="GRADEO"/></div>
-    <h1 class="launchTitle">GRADEO</h1>
-    <p class="launchSub">SGPA • CGPA • Minimum SEE</p>
+  <div class="wrap">
+    <div class="brandLogo"><img src="https://res.cloudinary.com/djy3mjtsz/image/upload/v1769939761/Untitled_1_vtehdh.png" alt="GRADEO"/></div>
+    <h1 class="brandTitle">GRADEO</h1>
+    <p class="brandSub">SGPA • CGPA • Minimum SEE</p>
 
-    <div class="ctaRow">
-      <button class="cta primary" type="button" id="landingGoogleBtn"><svg aria-hidden='true' viewBox='0 0 48 48' style='width:18px;height:18px;display:block'>
-  <path fill='#EA4335' d='M24 9.5c3.54 0 6.32 1.54 7.77 2.83l5.66-5.66C34.1 3.6 29.55 1.5 24 1.5 14.64 1.5 6.58 6.88 2.8 14.72l6.56 5.09C11.1 14.07 17.08 9.5 24 9.5z'/>
-  <path fill='#4285F4' d='M46.5 24c0-1.64-.15-3.22-.43-4.75H24v9h12.6c-.54 2.9-2.18 5.36-4.64 7.02l7.1 5.5C43.3 36.9 46.5 30.95 46.5 24z'/>
-  <path fill='#FBBC05' d='M9.36 28.19A14.5 14.5 0 0 1 8.6 24c0-1.46.25-2.88.7-4.19L2.75 14.7A23.94 23.94 0 0 0 1.5 24c0 3.86.93 7.52 2.6 10.78l5.26-6.59z'/>
-  <path fill='#34A853' d='M24 46.5c5.55 0 10.2-1.83 13.6-4.97l-7.1-5.5c-1.97 1.32-4.5 2.1-6.5 2.1-6.89 0-12.74-4.65-14.82-10.94l-6.6 5.1C6.33 40.12 14.45 46.5 24 46.5z'/>
-</svg><span>Continue with Google</span></button>
-      <div id="landingProfile" class="landingProfile">
+    <div class="ctaRow" id="landingCtas">
+      <button class="ctaBtn primary" type="button" id="landingGoogleBtn">
+        <svg class="gIcon" viewBox="0 0 48 48" aria-hidden="true">
+          <path fill="#EA4335" d="M24 9.5c3.54 0 6.32 1.54 7.77 2.83l5.66-5.66C34.1 3.6 29.55 1.5 24 1.5 14.64 1.5 6.58 6.88 2.8 14.72l6.56 5.09C11.1 14.07 17.08 9.5 24 9.5z"/>
+          <path fill="#4285F4" d="M46.5 24c0-1.64-.15-3.22-.43-4.75H24v9h12.6c-.54 2.9-2.18 5.36-4.64 7.02l7.1 5.5C43.3 36.9 46.5 30.95 46.5 24z"/>
+          <path fill="#FBBC05" d="M9.36 28.19A14.5 14.5 0 0 1 8.6 24c0-1.46.25-2.88.7-4.19L2.75 14.7A23.94 23.94 0 0 0 1.5 24c0 3.86.93 7.52 2.6 10.78l5.26-6.59z"/>
+          <path fill="#34A853" d="M24 46.5c5.55 0 10.2-1.83 13.6-4.97l-7.1-5.5c-1.97 1.32-4.5 2.1-6.5 2.1-6.89 0-12.74-4.65-14.82-10.94l-6.6 5.1C6.33 40.12 14.45 46.5 24 46.5z"/>
+        </svg>
+        <span>Continue with Google</span>
+      </button>
+
+      <div class="profileWrap" id="landingProfile">
         <div class="userChip">
           <span class="userAvatar" id="landingAvatar">G</span>
           <span class="userName" id="landingUserName">Signed in</span>
         </div>
-        <button class="cta" type="button" id="landingSignOutBtn">Sign out</button>
+        <button class="ctaBtn" type="button" id="landingSignOutBtn">Sign out</button>
       </div>
     </div>
 
-    <div class="cards">
-      <button class="card" type="button" data-mode="m1"><div class="icon"><svg viewBox='0 0 24 24' aria-hidden='true'><path fill='currentColor' d='M7 2h10a2 2 0 0 1 2 2v16a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2Zm0 2v16h10V4H7Zm2 3h6v2H9V7Zm0 4h6v2H9v-2Zm0 4h4v2H9v-2Z'/></svg></div><div class="cardTitle">Planner</div><div class="cardDesc">Target → SEE</div></button>
-      <button class="card" type="button" data-mode="m2"><div class="icon"><svg viewBox='0 0 24 24' aria-hidden='true'><path fill='currentColor' d='M4 19h16v2H4v-2Zm2-2V3h2v14H6Zm5 0V7h2v10h-2Zm5 0V10h2v7h-2Z'/></svg></div><div class="cardTitle">SGPA</div><div class="cardDesc">Marks → SGPA</div></button>
-      <button class="card" type="button" data-mode="m3"><div class="icon"><svg viewBox='0 0 24 24' aria-hidden='true'><path fill='currentColor' d='M12 2a10 10 0 1 1 0 20 10 10 0 0 1 0-20Zm1 5h-2v6l5 3 1-1.7-4-2.3V7Z'/></svg></div><div class="cardTitle">CGPA</div><div class="cardDesc">SGPA → CGPA</div></button>
+    <div class="tiles" aria-label="Calculators">
+      <button class="tile" type="button" data-open-mode="m1">
+        <div class="tileI"><svg viewBox='0 0 24 24' aria-hidden='true'><path fill='currentColor' d='M7 2h10a2 2 0 0 1 2 2v16a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2Zm0 2v16h10V4H7Zm2 3h6v2H9V7Zm0 4h6v2H9v-2Zm0 4h4v2H9v-2Z'/></svg></div>
+        <div class="tileT">Planner</div>
+        <div class="tileS">Target → SEE</div>
+      </button>
+      <button class="tile" type="button" data-open-mode="m2">
+        <div class="tileI"><svg viewBox='0 0 24 24' aria-hidden='true'><path fill='currentColor' d='M4 19h16v2H4v-2Zm2-2V3h2v14H6Zm5 0V7h2v10h-2Zm5 0V10h2v7h-2Z'/></svg></div>
+        <div class="tileT">SGPA</div>
+        <div class="tileS">Marks → SGPA</div>
+      </button>
+      <button class="tile" type="button" data-open-mode="m3">
+        <div class="tileI"><svg viewBox='0 0 24 24' aria-hidden='true'><path fill='currentColor' d='M12 2a10 10 0 1 1 0 20 10 10 0 0 1 0-20Zm1 5h-2v6l5 3 1-1.7-4-2.3V7Z'/></svg></div>
+        <div class="tileT">CGPA</div>
+        <div class="tileS">SGPA → CGPA</div>
+      </button>
     </div>
   </div>
 </section>
@@ -1412,11 +1428,12 @@ body.appOpen #nav{display:block;} body.appOpen #appMain{display:block;} body.app
   </div>
 </main>
 
-<div class="quickAdd" aria-label="Quick actions">
-  <button class="btn" id="quickActivityBtn" type="button">+ Activity</button>
-  <button class="btn primary" id="quickAddBtn" type="button">+ Subject</button>
-</div>
 <button class="btn" id="backToTop" aria-label="Back to top" style="display:none; position:fixed; left:16px; bottom:16px; z-index:60; border-radius:999px; padding:12px 14px;">⬆︎ Top</button>
+<div class="fab noPrint">
+  <button class="btn primary" id="fabAdd">+ Subject</button>
+  <button class="btn" id="fabActivity">+ Activity</button>
+</div>
+
 <!-- Modal -->
 <div class="overlay" id="overlay">
   <div class="modal">
@@ -1529,19 +1546,7 @@ body.appOpen #nav{display:block;} body.appOpen #appMain{display:block;} body.app
   const $$ = s => Array.from(document.querySelectorAll(s));
   const clamp=(n,a,b)=>Math.min(b,Math.max(a, Number.isFinite(+n)?+n:a));
   const round2=n=>Math.round((n+Number.EPSILON)*100)/100;
-  
-
-  function accentForIdHsl(id){
-    id = String(id||'');
-    let h = 2166136261;
-    for(let i=0;i<id.length;i++){
-      h ^= id.charCodeAt(i);
-      h = Math.imul(h, 16777619);
-    }
-    const hue = (h >>> 0) % 360;
-    return `hsl(${hue} 82% 44%)`;
-  }
-const fmt=(n,d=2)=>Number.isFinite(+n)?(+n).toFixed(d):"—";
+  const fmt=(n,d=2)=>Number.isFinite(+n)?(+n).toFixed(d):"—";
   const esc=str=>String(str).replace(/[&<>"']/g, s=>({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;" }[s]));
   const now = () => new Date();
 
@@ -2128,7 +2133,6 @@ const fmt=(n,d=2)=>Number.isFinite(+n)?(+n).toFixed(d):"—";
       const card = document.createElement("div");
       card.className = "subCard";
       card.id = `subjectCard-${s.id}`;
-    try{ card.style.setProperty('--subAccent', accentForIdHsl(s.id)); }catch(_e){}
       card.innerHTML = `
         <div class="subTop">
           <div>
@@ -5157,20 +5161,20 @@ const prefersReduce = window.matchMedia && window.matchMedia('(prefers-reduced-m
   }catch(_e){}
 
 
-  /* ===== Landing Google sign-in + profile (no auto-open mode) ===== */
-  function showVerify(){
-    const ov=document.getElementById('verifyOverlay');
+  /* ===== Landing wiring (robust) ===== */
+  function showVerifyOverlay(){
+    const ov = document.getElementById('verifyOverlay');
     if(!ov) return;
     ov.classList.add('show');
-    setTimeout(()=>ov.classList.remove('show'), 1100);
+    setTimeout(()=>ov.classList.remove('show'), 1000);
   }
-  function updateLandingAuthUI(){
-    const gbtn=document.getElementById('landingGoogleBtn');
-    const prof=document.getElementById('landingProfile');
-    const av=document.getElementById('landingAvatar');
-    const nm=document.getElementById('landingUserName');
-    const u = auth && auth.currentUser ? auth.currentUser : null;
+  function updateLandingUI(){
+    const gbtn = document.getElementById('landingGoogleBtn');
+    const prof = document.getElementById('landingProfile');
+    const av = document.getElementById('landingAvatar');
+    const nm = document.getElementById('landingUserName');
     if(!gbtn || !prof) return;
+    const u = auth && auth.currentUser ? auth.currentUser : null;
     if(u){
       gbtn.style.display='none';
       prof.style.display='flex';
@@ -5181,105 +5185,84 @@ const prefersReduce = window.matchMedia && window.matchMedia('(prefers-reduced-m
         if(u.photoURL){
           av.innerHTML = `<img src="${u.photoURL}" alt="" style="width:28px;height:28px;border-radius:999px;object-fit:cover;"/>`;
           av.style.background='transparent';
-        } else {
-          av.textContent = initial;
-        }
+        }else av.textContent = initial;
       }
-    } else {
+    }else{
       gbtn.style.display='inline-flex';
       prof.style.display='none';
     }
   }
 
-  async function googleSignInLanding(){
+  async function landingGoogleSignIn(){
     try{
-      // Firebase should already init on DOMContentLoaded in original app
+      // Firebase is initialized on DOMContentLoaded, but guard anyway
+      if(typeof initFirebase==='function' && (!auth || !provider)){
+        try{ initFirebase(); }catch(_e){}
+      }
       if(!auth || !provider){ toast('Sign-in not ready'); return; }
-      const ua=navigator.userAgent||'';
-      const isIOS=/iPhone|iPad|iPod/i.test(ua);
-      const isInApp=/FBAN|FBAV|Instagram|Line|Twitter|Snapchat|wv\)|; wv;/i.test(ua);
+      try{ provider.setCustomParameters({prompt:'select_account'}); }catch(_e){}
+
+      const ua = navigator.userAgent || '';
+      const isIOS = /iPhone|iPad|iPod/i.test(ua);
+      const isInApp = /FBAN|FBAV|Instagram|Line|Twitter|Snapchat|wv\)|; wv;/i.test(ua);
+      const doRedirect = async ()=>{ await auth.signInWithRedirect(provider); };
+
       if(isIOS || isInApp){
-        await auth.signInWithRedirect(provider);
+        await doRedirect();
         return;
       }
       try{
         await auth.signInWithPopup(provider);
       }catch(err){
-        const code = err && err.code ? String(err.code):'';
-        if(code.includes('popup-blocked')||code.includes('popup-closed-by-user')){
-          await auth.signInWithRedirect(provider);
-        } else throw err;
+        const code = err && err.code ? String(err.code) : '';
+        if(code.includes('popup-blocked') || code.includes('popup-closed-by-user')){
+          await doRedirect();
+          return;
+        }
+        throw err;
       }
       toast('Signed in');
-      showVerify();
-      updateLandingAuthUI();
+      showVerifyOverlay();
+      updateLandingUI();
     }catch(err){
       console.error(err);
-      const code = err && err.code ? String(err.code):'';
-      if(code.includes('unauthorized-domain')) toast('Add domain in Firebase Authorized domains');
-      else if(code.includes('operation-not-allowed')) toast('Enable Google sign-in in Firebase');
+      const code = err && err.code ? String(err.code) : '';
+      if(code.includes('unauthorized-domain')) toast('Firebase: add domain to Authorized domains');
+      else if(code.includes('operation-not-allowed')) toast('Firebase: enable Google provider');
       else toast('Sign-in failed');
     }
   }
-  try{ const g=document.getElementById('landingGoogleBtn'); if(g) g.addEventListener('click', googleSignInLanding); }catch(_e){}
 
-  // redirect result
-  (async function(){
-    try{ if(!auth) return; const res = await auth.getRedirectResult(); if(res && res.user){ toast('Signed in'); showVerify(); updateLandingAuthUI(); } }catch(e){ console.error(e); }
-  })();
-
-  try{ const so=document.getElementById('landingSignOutBtn'); if(so) so.addEventListener('click', async ()=>{ try{ await auth.signOut(); toast('Signed out'); }catch(_e){}; updateLandingAuthUI(); }); }catch(_e){}
-  try{ if(auth) auth.onAuthStateChanged(()=> updateLandingAuthUI()); }catch(_e){}
-
-  // user chooses mode manually
-  function openFromLanding(mode){
+  function openAppFromLanding(mode){
     const m = (mode==='m2'||mode==='m3') ? mode : 'm1';
     document.body.classList.add('appOpen');
     try{ setMode(m, {push:false}); }catch(_e){}
-    window.scrollTo(0,0);
+    try{ window.scrollTo(0,0); }catch(_e){}
   }
-  try{ document.querySelectorAll('#landingHero [data-mode]').forEach(b=> b.addEventListener('click', ()=> openFromLanding(b.getAttribute('data-mode')))); }catch(_e){}
 
-  // Quick actions: +Subject / +Activity
-  try{ const qb=document.getElementById('quickAddBtn'); if(qb) qb.addEventListener('click', ()=>{ const b=document.getElementById(state.mode==='m2'?'addNormalBtn2':'addNormalBtn'); if(b) b.click(); }); }catch(_e){}
-  try{ const ab=document.getElementById('quickActivityBtn'); if(ab) ab.addEventListener('click', ()=>{ const b=document.getElementById(state.mode==='m2'?'addActivityBtn2':'addActivityBtn'); if(b) b.click(); }); }catch(_e){}
+  document.addEventListener('DOMContentLoaded', ()=>{
+    // wire tiles
+    document.querySelectorAll('[data-open-mode]').forEach(btn=>{
+      btn.addEventListener('click', ()=> openAppFromLanding(btn.getAttribute('data-open-mode')));
+    });
+    // wire google
+    const g = document.getElementById('landingGoogleBtn');
+    if(g) g.addEventListener('click', landingGoogleSignIn);
 
-  // Summary follow next to active subject
-  let _activeCardId=null; let _io=null; let _raf=null;
-  function requestFollow(){ if(_raf) return; _raf=requestAnimationFrame(()=>{_raf=null; followSummary();}); }
-  function followSummary(){
-    const sp=document.getElementById('summaryPanel');
-    if(!sp) return;
-    if(!(window.matchMedia && window.matchMedia('(min-width:981px)').matches)) { sp.style.top=''; return; }
-    const nav=document.getElementById('nav');
-    const navH=nav?nav.getBoundingClientRect().height:56;
-    const baseTop=Math.round(navH+12);
-    const hero=document.querySelector('.hero');
-    const heroRect=hero?hero.getBoundingClientRect():null;
-    const card=_activeCardId?document.getElementById(_activeCardId):null;
-    const spH=sp.getBoundingClientRect().height;
-    const maxTop=Math.max(baseTop, Math.round(window.innerHeight-spH-12));
-    const targetTop = card ? Math.round(card.getBoundingClientRect().top) : (heroRect ? Math.round(heroRect.bottom+12) : baseTop);
-    sp.style.top = Math.min(Math.max(targetTop, baseTop), maxTop) + 'px';
-  }
-  function setActive(card){ if(!card) return; _activeCardId=card.id; requestFollow(); }
-  function bindFocus(){ ['subjectsWrap','subjectsWrap2'].forEach(id=>{ const w=document.getElementById(id); if(!w) return; w.addEventListener('focusin', ev=>{ const c=ev.target.closest && ev.target.closest('[id^="subjectCard-"]'); if(c) setActive(c); }); }); }
-  function bindObserver(){
-    try{ if(_io){_io.disconnect();_io=null;} }catch(_e){}
-    const cards=[...document.querySelectorAll('[id^="subjectCard-"]')];
-    if(!cards.length) return;
-    _io=new IntersectionObserver(entries=>{ let best=null; for(const e of entries){ if(!e.isIntersecting) continue; if(!best||e.intersectionRatio>best.intersectionRatio) best=e; } if(best&&best.target) setActive(best.target); }, {threshold:[0.2,0.35,0.5,0.65]});
-    cards.forEach(c=>_io.observe(c));
-  }
-  try{ const _r=renderSubjectsDOM; renderSubjectsDOM=function(){ _r(); try{bindFocus();bindObserver();requestFollow();}catch(_e){}; }; }catch(_e){}
-  window.addEventListener('scroll', requestFollow, {passive:true});
-  window.addEventListener('resize', requestFollow);
+    const so = document.getElementById('landingSignOutBtn');
+    if(so) so.addEventListener('click', async ()=>{ try{ await auth.signOut(); toast('Signed out'); }catch(_e){}; updateLandingUI(); });
 
-  // Keep titles short
-  try{ const _ra=renderAllStatic; renderAllStatic=function(){ _ra(); const ht=document.getElementById('heroTitle'); if(ht){ ht.textContent = (state.mode==='m1')?'Planner':(state.mode==='m2')?'SGPA':'CGPA'; } }; }catch(_e){}
+    // redirect result
+    (async ()=>{
+      try{
+        const res = await auth.getRedirectResult();
+        if(res && res.user){ toast('Signed in'); showVerifyOverlay(); updateLandingUI(); }
+      }catch(e){ console.error(e); }
+    })();
 
-  // default: landing
-  document.body.classList.remove('appOpen');
+    try{ if(auth) auth.onAuthStateChanged(()=> updateLandingUI()); }catch(_e){}
+    updateLandingUI();
+  });
 
 })();
 </script>
