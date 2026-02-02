@@ -1547,6 +1547,25 @@ body.appOpen #notesAcc, body.appOpen #accountAcc{display:none !important;}
   const clamp=(n,a,b)=>Math.min(b,Math.max(a, Number.isFinite(+n)?+n:a));
   const round2=n=>Math.round((n+Number.EPSILON)*100)/100;
   const fmt=(n,d=2)=>Number.isFinite(+n)?(+n).toFixed(d):"—";
+  // ===== Subject card gradients (visual differentiation) =====
+  const SUBJECT_GRADIENTS = [
+    ['rgba(255,106,0,.10)','rgba(255,159,28,.16)'],
+    ['rgba(14,165,233,.10)','rgba(37,99,235,.16)'],
+    ['rgba(124,58,237,.10)','rgba(168,85,247,.16)'],
+    ['rgba(20,184,166,.10)','rgba(34,197,94,.16)'],
+    ['rgba(244,63,94,.10)','rgba(251,113,133,.16)'],
+    ['rgba(245,158,11,.10)','rgba(239,68,68,.14)'],
+    ['rgba(132,204,22,.10)','rgba(34,197,94,.14)'],
+    ['rgba(6,182,212,.10)','rgba(59,130,246,.14)'],
+  ];
+  function subjectGradFor(id){
+    const s = String(id||'');
+    let h = 0;
+    for(let i=0;i<s.length;i++) h = (h*31 + s.charCodeAt(i)) >>> 0;
+    const p = SUBJECT_GRADIENTS[h % SUBJECT_GRADIENTS.length];
+    return `linear-gradient(135deg, ${p[0]}, ${p[1]})`;
+  }
+
   const esc=str=>String(str).replace(/[&<>"']/g, s=>({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;" }[s]));
   const now = () => new Date();
 
@@ -2132,7 +2151,10 @@ body.appOpen #notesAcc, body.appOpen #accountAcc{display:none !important;}
 
       const card = document.createElement("div");
       card.className = "subCard";
-      card.id = `subjectCard-${s.id}`;
+    card.id = `subjectCard-${s.id}`;
+    // Visual differentiation
+    try{ card.style.background = subjectGradFor(s.id); }catch(_e){}
+    try{ card.style.borderColor = 'color-mix(in oklab, var(--accent) 20%, var(--stroke))'; }catch(_e){}
       card.innerHTML = `
         <div class="subTop">
           <div>
@@ -4470,7 +4492,6 @@ if (changelogBtn){
       prof.style.display = 'flex';
       if(nameEl) nameEl.textContent = u.displayName || u.email || 'Signed in';
       if(avEl){
-        // Use photo if available, else initial.
         if(u.photoURL){
           avEl.style.backgroundImage = `url(${u.photoURL})`;
           avEl.style.backgroundSize = 'cover';
@@ -4498,7 +4519,6 @@ if (changelogBtn){
 
     const doRedirect = async()=> auth.signInWithRedirect(provider);
 
-    // iOS / in-app browsers: redirect is more reliable.
     if(isIOS || isInApp){
       await doRedirect();
       return;
@@ -4543,7 +4563,6 @@ if (changelogBtn){
 
     // Landing auth: direct Google sign-in + verify animation + profile chip
     try{ wireLandingAuthButtons(); }catch(_e){}
-    try{ updateLandingAuthUI(); }catch(_e){}
 
     // If redirect sign-in was used (mobile/in-app), finalize here
     try{
@@ -4554,13 +4573,11 @@ if (changelogBtn){
             showLandingVerify();
           }
           updateLandingAuthUI();
-        }).catch((e)=>{
-          // No redirect pending is normal; still update UI
-          console.warn('redirectResult', e);
-          updateLandingAuthUI();
-        });
+        }).catch((_e)=>{ updateLandingAuthUI(); });
+      } else {
+        updateLandingAuthUI();
       }
-    }catch(_e){}
+    }catch(_e){ try{ updateLandingAuthUI(); }catch(__e){} }
 
     // Keep landing UI in sync
     try{ if(auth) auth.onAuthStateChanged(()=> updateLandingAuthUI()); }catch(_e){}
