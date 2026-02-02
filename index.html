@@ -16,6 +16,8 @@
 
 
 
+
+
 <!doctype html>
 <html lang="en">
 <head>
@@ -872,6 +874,88 @@ body[data-theme-variant="neon"] .panel, body[data-theme-variant="neon"] .subCard
 .stat{ transition: transform 180ms cubic-bezier(.2,.8,.2,1); }
 .stat:hover{ transform: translateY(-2px); }
 
+
+
+/* ===== Minimal status icons (profile signal + sync wifi) ===== */
+#profileBtn{position:relative;}
+#profileBtn::before{
+  content:"";
+  width:18px;height:18px;display:inline-block;
+  margin-right:8px;
+  background:linear-gradient(180deg,#60a5fa,#2563eb);
+  -webkit-mask: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><rect x="3" y="16" width="3" height="5" rx="1"/><rect x="7" y="13" width="3" height="8" rx="1"/><rect x="11" y="10" width="3" height="11" rx="1"/><rect x="15" y="7" width="3" height="14" rx="1"/></svg>') center/contain no-repeat;
+  mask: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><rect x="3" y="16" width="3" height="5" rx="1"/><rect x="7" y="13" width="3" height="8" rx="1"/><rect x="11" y="10" width="3" height="11" rx="1"/><rect x="15" y="7" width="3" height="14" rx="1"/></svg>') center/contain no-repeat;
+  filter: drop-shadow(0 2px 2px rgba(0,0,0,.14));
+}
+/* Status pills show only icons */
+#savePill::before{
+  content:"";
+  width:18px;height:18px;display:inline-block;
+  background:linear-gradient(180deg,#34d399,#16a34a);
+  -webkit-mask: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M2.5 9.5C7.3 4.7 16.7 4.7 21.5 9.5" fill="none" stroke="black" stroke-width="3" stroke-linecap="round"/><path d="M5.8 12.8c3-3 9.4-3 12.4 0" fill="none" stroke="black" stroke-width="3" stroke-linecap="round"/><path d="M9.3 16.3c1.2-1.2 4.2-1.2 5.4 0" fill="none" stroke="black" stroke-width="3" stroke-linecap="round"/><circle cx="12" cy="19" r="2"/></svg>') center/contain no-repeat;
+  mask: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M2.5 9.5C7.3 4.7 16.7 4.7 21.5 9.5" fill="none" stroke="black" stroke-width="3" stroke-linecap="round"/><path d="M5.8 12.8c3-3 9.4-3 12.4 0" fill="none" stroke="black" stroke-width="3" stroke-linecap="round"/><path d="M9.3 16.3c1.2-1.2 4.2-1.2 5.4 0" fill="none" stroke="black" stroke-width="3" stroke-linecap="round"/><circle cx="12" cy="19" r="2"/></svg>') center/contain no-repeat;
+  filter: drop-shadow(0 2px 2px rgba(0,0,0,.14));
+}
+
+/* Hide removed feature rails/widgets but keep main app intact */
+#viralPanel,#viralStrip,.chatFab,.chatPanel,.studyOverlay,#studyOverlay{display:none !important;}
+
+/* Phone: keep top-right buttons in a clean row */
+@media (max-width: 640px){
+  .right{grid-template-columns:repeat(4,minmax(0,1fr)) !important;}
+  #profileBtn::before{margin-right:6px;}
+  #profileBtn{justify-content:center;}
+}
+
+
+/* ===== Modern Mode Switch (text pills) ===== */
+.modeSwitch{gap:6px; padding:6px; border-radius:16px;}
+.modeBtn{position:relative; border-radius:12px; font-size:12.5px; font-weight:950; letter-spacing:.02em; color:var(--muted2);} 
+.modeBtn::after{content:""; position:absolute; inset:-60% -40%; background:conic-gradient(from 180deg, transparent, rgba(255,255,255,.30), transparent 35%); opacity:0; filter:blur(6px); transition:opacity 220ms cubic-bezier(.16,1,.3,1);} 
+.modeBtn:hover::after{opacity:.55;} 
+.modeBtn.active{background: linear-gradient(135deg, var(--accent), var(--accent2)) !important; color:#fff !important; border-bottom:none !important;}
+
+/* ===== Modern Bottom Island (text pills) ===== */
+.bottomIsland{
+  background: rgba(255,255,255,.88) !important;
+  border: 1px solid color-mix(in oklab, var(--stroke) 70%, transparent) !important;
+  box-shadow: 0 18px 55px rgba(17,24,39,.14) !important;
+  padding:8px !important;
+  height:60px !important;
+  border-radius:24px !important;
+}
+.bIsBtn{
+  font-size:12.5px !important;
+  font-weight:950 !important;
+  letter-spacing:.02em !important;
+  height:44px !important;
+  border-radius:18px !important;
+  border:1px solid transparent !important;
+  background: transparent !important;
+  color: color-mix(in oklab, var(--titleText) 88%, #111) !important;
+  display:flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  position:relative;
+  overflow:hidden;
+}
+.bIsBtn::after{
+  content:"";
+  position:absolute;
+  inset:-60% -40%;
+  background: conic-gradient(from 180deg, transparent, rgba(255,255,255,.32), transparent 35%);
+  opacity:0;
+  transform: translateX(-20%) rotate(-12deg);
+  transition: opacity 220ms cubic-bezier(.16,1,.3,1);
+}
+.bIsBtn:active{ transform: scale(.985); }
+.bIsBtn.active{
+  background: linear-gradient(135deg, var(--accent), var(--accent2)) !important;
+  color:#fff !important;
+  border-color: rgba(255,255,255,.25) !important;
+  box-shadow: 0 12px 26px color-mix(in oklab, var(--accent) 25%, transparent);
+}
+.bIsBtn.active::after{ opacity:.55; }
 </style>
 </head>
 
@@ -887,15 +971,15 @@ body[data-theme-variant="neon"] .panel, body[data-theme-variant="neon"] .subCard
 </div>
       <div>
         <div class="title">GRADEO</div>
-        <div class="sub" id="subLine">Made for you, Guest • Guest mode</div>
+        <div class="sub" id="subLine">Made for you,</div>
       </div>
     </div>
 
     <div class="right">
       <div class="modeSwitch" aria-label="Modes">
-        <button class="modeBtn active" id="m1Btn">🎯 Target → SEE</button>
-        <button class="modeBtn" id="m2Btn">🧮 Marks → SGPA</button>
-        <button class="modeBtn" id="m3Btn">📈 SGPA → CGPA</button>
+        <button class="modeBtn active" id="m1Btn" title="Target → Minimum SEE">Target</button>
+        <button class="modeBtn" id="m2Btn" title="Marks → SGPA">Marks</button>
+        <button class="modeBtn" id="m3Btn" title="SGPA → CGPA">CGPA</button>
       </div>
 
 <button class="btn ghost" id="menuBtn" aria-label="Menu" aria-expanded="false" aria-controls="menuPanel"><svg viewBox="0 0 24 24" aria-hidden="true" style="width:18px;height:18px;display:block;"><path fill="currentColor" d="M4 6.5h16a1 1 0 0 0 0-2H4a1 1 0 0 0 0 2Zm16 5H4a1 1 0 0 0 0 2h16a1 1 0 0 0 0-2Zm0 7H4a1 1 0 0 0 0 2h16a1 1 0 0 0 0-2Z"/></svg></button>
@@ -915,24 +999,24 @@ body[data-theme-variant="neon"] .panel, body[data-theme-variant="neon"] .subCard
     <button class="btn small" id="menuCloseBtn" aria-label="Close menu">Close</button>
   </div>
   <button class="menuItem sharePrimary" id="sharePlanBtn" role="menuitem">🔗 Share plan <span class="tag">HOT</span></button>
-<button class="menuItem" id="shareGradeBtn" role="menuitem">📄 Share grade card</button>
-<button class="menuItem" id="exportGradePdfBtn" role="menuitem">🖨️ Export grade card PDF</button>
+<button class="menuItem" id="shareGradeBtn" role="menuitem" style="display:none">📄 Share grade card</button>
+<button class="menuItem" id="exportGradePdfBtn" role="menuitem">🖨️ Print & Share grade card</button>
 <div class="menuSep"></div>
-<button class="menuItem" id="studyModeBtn" role="menuitem">🎧 Study Mode (Pomodoro)</button>
-<button class="menuItem" id="attendanceBtn" role="menuitem">📅 Attendance planner</button>
-<button class="menuItem" id="roastBtn" role="menuitem">🔥 Roast my SGPA (friendly)</button>
-<button class="menuItem" id="badgesBtn" role="menuitem">🏅 Achievements</button>
-<button class="menuItem" id="leaderBtn" role="menuitem">🏆 Leaderboard (anonymous)</button>
-<button class="menuItem" id="themeNeonBtn" role="menuitem">🌗 Toggle Neon Mode</button>
+<button class="menuItem" id="studyModeBtn" role="menuitem" style="display:none">🎧 Study Mode (Pomodoro)</button>
+<button class="menuItem" id="attendanceBtn" role="menuitem" style="display:none">📅 Attendance planner</button>
+<button class="menuItem" id="roastBtn" role="menuitem" style="display:none">🔥 Roast my SGPA (friendly)</button>
+<button class="menuItem" id="badgesBtn" role="menuitem" style="display:none">🏅 Achievements</button>
+<button class="menuItem" id="leaderBtn" role="menuitem" style="display:none">🏆 Leaderboard (anonymous)</button>
+<button class="menuItem" id="themeNeonBtn" role="menuitem" style="display:none">🌗 Toggle Neon Mode</button>
 <div class="menuSep"></div>
 <button class="menuItem" id="uniSettingsBtn" role="menuitem">🎓 University settings</button>
   <button class="menuItem" id="howItWorksBtn" role="menuitem">ℹ️ How it works</button>
   <button class="menuItem" id="faqBtn" role="menuitem">❓ FAQ</button>
   <div class="menuSep"></div>
-  <button class="menuItem" id="termsBtn" role="menuitem">📄 Terms & Conditions</button>
-  <button class="menuItem" id="privacyBtn" role="menuitem">🔒 Privacy Policy</button>
-  <button class="menuItem" id="disclaimerBtn" role="menuitem">⚠️ Disclaimer</button>
-  <button class="menuItem" id="changelogBtn" role="menuitem">🧾 Changelog</button>
+  <button class="menuItem" id="termsBtn" role="menuitem">📄 T&C</button>
+  <button class="menuItem" id="privacyBtn" role="menuitem" style="display:none">🔒 Privacy Policy</button>
+  <button class="menuItem" id="disclaimerBtn" role="menuitem" style="display:none">⚠️ Disclaimer</button>
+  <button class="menuItem" id="changelogBtn" role="menuitem" style="display:none">🧾 Changelog</button>
   <div class="menuSep"></div>
   <button class="menuItem" id="contactBtn" role="menuitem">✉️ Contact / Feedback</button>
   <button class="menuItem menuDanger" id="accountManageBtn" role="menuitem">🗑️ Manage account</button>
@@ -1058,8 +1142,8 @@ body[data-theme-variant="neon"] .panel, body[data-theme-variant="neon"] .subCard
     <div class="pills heroTools">
   <button class="btn small" id="heroInfoBtn">ℹ️ Info</button>
  <button class="btn small primary heroShare" id="heroSharePlanBtn"><span class="dot" aria-hidden="true"></span>Share plan</button>
-      <span class="pill" id="statusPill">Guest</span>
-      <span class="pill good" id="savePill" style="display:none;">Saved</span>
+  <button class="btn small" id="heroExportBtn">Export / Print grade card</button>
+<span class="pill good" id="savePill" style="display:none;"></span>
     </div>
   </section>
 
@@ -1894,8 +1978,8 @@ body[data-theme-variant="neon"] .panel, body[data-theme-variant="neon"] .subCard
  const acad = state.profile.university ? (` • ${state.profile.university}${state.profile.semester ? (" • " + state.profile.semester) : ""}`) : "";
     $("#subLine").textContent = `Made for you, ${name} • ${cloud}${acad}`;
     $("#profileBtn").textContent = auth.currentUser ? "Profile" : "Sign in";
-    $("#statusPill").textContent = auth.currentUser ? "Cloud" : "Guest";
-    $("#statusPill").className = auth.currentUser ? "pill good" : "pill";
+    (function(){var sp=document.getElementById("statusPill"); if(sp) sp.textContent = auth.currentUser ? "Cloud" : "Guest";})();
+    (function(){var sp=document.getElementById("statusPill"); if(sp) sp.className = auth.currentUser ? "pill good" : "pill";})();
     $("#lockBar").style.display = auth.currentUser ? "none" : "block";
 
     // show account panel only after sign-in
@@ -4894,9 +4978,9 @@ const prefersReduce = window.matchMedia && window.matchMedia('(prefers-reduced-m
 </script>
 <script defer src="https://static.cloudflareinsights.com/beacon.min.js/vcd15cbe7772f49c399c6a5babf22c1241717689176015" integrity="sha512-ZpsOmlRQV6y907TI0dKBHq9Md29nnaEIPlkf84rnaERnq6zvWvPUqr2ft8M1aS28oN72PdrCzSjY4U6VaAw1EQ==" data-cf-beacon='{"version":"2024.11.0","token":"32f0b0530bdb47d89109f78f09c965e1","r":1,"server_timing":{"name":{"cfCacheStatus":true,"cfEdge":true,"cfExtPri":true,"cfL4":true,"cfOrigin":true,"cfSpeedBrain":true},"location_startswith":null}}' crossorigin="anonymous"></script>
 <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9c711f0dcc345f7c',t:'MTc2OTk0NTQ3NA=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script><div class="bottomIsland noPrint" id="bottomIsland" aria-label="Mode switch">
-  <button class="bIsBtn" type="button" data-mode="m1" aria-label="Target to SEE"><span class="mi">🎯</span></button>
-  <button class="bIsBtn" type="button" data-mode="m2" aria-label="Marks to SGPA"><span class="mi">🧮</span></button>
-  <button class="bIsBtn" type="button" data-mode="m3" aria-label="SGPA to CGPA"><span class="mi">📈</span></button>
+  <button class="bIsBtn" type="button" data-mode="m1" aria-label="Target">Target</button>
+  <button class="bIsBtn" type="button" data-mode="m2" aria-label="Marks">Marks</button>
+  <button class="bIsBtn" type="button" data-mode="m3" aria-label="CGPA">CGPA</button>
 </div>
 <script>
 (()=>{
@@ -4969,77 +5053,86 @@ const prefersReduce = window.matchMedia && window.matchMedia('(prefers-reduced-m
   // Apply only to CGPA fields
 
 
+
+
+  /* ===== Patch: keep buttons working even if some features are hidden ===== */
+  function safeOn(id, evt, fn){
+    const el = document.getElementById(id);
+    if(el) el.addEventListener(evt, fn);
+  }
+
+  function openGradeCardActions(){
+    openModal({
+      title: 'Grade card',
+      desc: 'Print (PDF) or share your grade card link.',
+      bodyHTML: `<div class="hint">Tip: For best results, use <b>Marks → SGPA</b> mode and fill CIE & SEE.</div>`,
+      footHTML: `
+        <button class="btn primary" id="doShareGrade">📄 Share grade card</button>
+        <button class="btn" id="doExportPdf">🖨️ Export / Print PDF</button>
+        <button class="btn" id="closeGC">Close</button>
+      `
+    });
+    safeOn('doShareGrade','click', ()=> createShareDoc('grade'));
+    safeOn('doExportPdf','click', ()=> { try{ exportGradeCardPDF(); } catch(e){ console.error(e); toast('PDF export failed'); } });
+    safeOn('closeGC','click', closeModal);
+  }
+
+  // Keep the two main features in the SAME menu location
+  safeOn('sharePlanBtn','click', ()=> createShareDoc('plan'));
+  safeOn('heroSharePlanBtn','click', ()=> createShareDoc('plan'));
+  // Reuse exportGradePdfBtn as the combined Grade card action
+  safeOn('exportGradePdfBtn','click', openGradeCardActions);
+
+  // Consolidated T&C
+  safeOn('termsBtn','click', ()=> {
+    openModal({
+      title:'T&C',
+      desc:'Terms • Privacy • Disclaimer',
+      bodyHTML:`<div class="legal">
+        <h4>Terms & Conditions</h4><div class="hint">Educational estimates only.</div>
+        <h4 style="margin-top:14px;">Privacy</h4><div class="hint">If you sign in, plans are stored in your Firebase account for autosave and sharing.</div>
+        <h4 style="margin-top:14px;">Disclaimer</h4><div class="hint">Verify with official marks card; results may differ by university rules.</div>
+      </div>`,
+      footHTML:`<button class="btn" id="closeTnC">Close</button>`
+    });
+    safeOn('closeTnC','click', closeModal);
+  });
+
+  // Remove Guest word from subline each render
+  try{
+    const _r = renderAllStatic;
+    renderAllStatic = function(){
+      _r();
+      const sub = document.getElementById('subLine');
+      if(sub) sub.textContent = sub.textContent.replace(/Guest\s*•\s*Guest mode/i,'').replace(/Guest mode/i,'').replace(/Guest\s*•\s*Cloud autosave/i,'').replace(/Guest/i,'').trim();
+    };
+  }catch(e){}
+
+
+
+  // ===== Ribbon Export button: reuse the SAME action as dropdown Export / Print grade card =====
+  try{
+    const heroEx = document.getElementById('heroExportBtn');
+    if(heroEx){
+      heroEx.addEventListener('click', (e)=>{
+        e.preventDefault();
+        e.stopPropagation();
+        const menuExport = document.getElementById('exportGradePdfBtn');
+        if(menuExport){
+          menuExport.click();
+        }else{
+          try{ exportGradeCardPDF(); }catch(_e){ try{ window.print(); }catch(__){} }
+        }
+      });
+    }
+  }catch(_e){}
+
 })();
 </script>
 
 
 
-<!-- Student Pack Widgets -->
-<div class="chatFab noPrint">
-  <button class="btn primary" id="chatOpenBtn" aria-label="Chat">💬</button>
-</div>
-<div class="chatPanel" id="chatPanel" aria-label="GRADEO Chat">
-  <div class="chatHead">
-    <div>
-      <div class="t">GRADEO Bot 🤖</div>
-      <div class="hint" style="margin-top:2px;">Ask: “can I get 8 sgpa?” • “roast me” • “study plan”</div>
-    </div>
-    <button class="btn small" id="chatCloseBtn">Close</button>
-  </div>
-  <div class="chatMsgs" id="chatMsgs"></div>
-  <div class="chatFoot">
-    <input class="input" id="chatInput" placeholder="Type..." />
-    <button class="btn primary" id="chatSendBtn">Send</button>
-  </div>
-</div>
 
-<div class="studyOverlay" id="studyOverlay" aria-hidden="true">
-  <div class="studyBox">
-    <div class="h">
-      <div style="font-weight:990">🎧 Study Mode</div>
-      <button class="btn small" id="studyCloseBtn">Close</button>
-    </div>
-    <div class="c">
-      <div class="subCard">
-        <div class="hint">Pomodoro • Focus 25m → Break 5m. (You can change.)</div>
-        <div class="timerBig" id="pomoTimer">25:00</div>
-        <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:10px;">
-          <button class="btn primary" id="pomoStartBtn">Start</button>
-          <button class="btn" id="pomoPauseBtn">Pause</button>
-          <button class="btn" id="pomoResetBtn">Reset</button>
-          <button class="btn" id="pomoSkipBtn">Skip</button>
-        </div>
-        <div class="row" style="margin-top:10px;">
-          <div>
-            <label class="label">Focus (min)</label>
-            <input class="input" id="focusMin" type="number" min="5" max="90" step="1" value="25" />
-          </div>
-          <div>
-            <label class="label">Break (min)</label>
-            <input class="input" id="breakMin" type="number" min="3" max="30" step="1" value="5" />
-          </div>
-        </div>
-      </div>
-      <div class="subCard">
-        <div style="font-weight:990">📌 Today’s micro-plan</div>
-        <div class="hint" id="microPlan">Add subjects and your marks; I’ll suggest priorities.</div>
-        <button class="btn" id="makePlanBtn" style="margin-top:10px;">Generate plan</button>
-      </div>
-      <div class="subCard">
-        <div style="font-weight:990">🎵 Quick playlists</div>
-        <div class="hint">Open in a new tab:</div>
-        <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:8px;">
-          <a class="btn" href="https://www.youtube.com/results?search_query=lofi+study" target="_blank" rel="noopener">Lo‑fi</a>
-          <a class="btn" href="https://www.youtube.com/results?search_query=white+noise" target="_blank" rel="noopener">White noise</a>
-          <a class="btn" href="https://www.youtube.com/results?search_query=focus+music" target="_blank" rel="noopener">Focus</a>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-<!-- Cloudflare Pages Analytics --><script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "41889a7158c94832951b776ca74d5f82"}'></script><!-- Cloudflare Pages Analytics --><script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9c77227c9eb5a90e',t:'MTc3MDAwODUyOQ=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script><script defer src="https://static.cloudflareinsights.com/beacon.min.js/vcd15cbe7772f49c399c6a5babf22c1241717689176015" integrity="sha512-ZpsOmlRQV6y907TI0dKBHq9Md29nnaEIPlkf84rnaERnq6zvWvPUqr2ft8M1aS28oN72PdrCzSjY4U6VaAw1EQ==" data-cf-beacon='{"version":"2024.11.0","token":"32f0b0530bdb47d89109f78f09c965e1","r":1,"server_timing":{"name":{"cfCacheStatus":true,"cfEdge":true,"cfExtPri":true,"cfL4":true,"cfOrigin":true,"cfSpeedBrain":true},"location_startswith":null}}' crossorigin="anonymous"></script>
-
-</div>
 </body>
 </html>
 
