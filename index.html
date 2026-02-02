@@ -956,6 +956,62 @@ body[data-theme-variant="neon"] .panel, body[data-theme-variant="neon"] .subCard
   box-shadow: 0 12px 26px color-mix(in oklab, var(--accent) 25%, transparent);
 }
 .bIsBtn.active::after{ opacity:.55; }
+
+
+/* ===== Material clean app + subtle mode tints ===== */
+body.appOpen{ background: linear-gradient(180deg,#fff,#fff7f0) !important; }
+body.appOpen[data-mode="m1"]{ background: linear-gradient(180deg,#fff,#fff7f0) !important; }
+body.appOpen[data-mode="m2"]{ background: linear-gradient(180deg,#fff,#f3fbff) !important; }
+body.appOpen[data-mode="m3"]{ background: linear-gradient(180deg,#fff,#f7f5ff) !important; }
+
+body.appOpen #bg3d, body.appOpen .cursorGlow, body.appOpen #viralTip{display:none !important;}
+body.appOpen::after{display:none !important;}
+
+body.appOpen .container{max-width:1360px !important; padding:16px 16px 120px !important;}
+body.appOpen .panel{background:#fff !important;border:1px solid #e5e7eb !important;border-radius:18px !important;box-shadow:0 6px 16px rgba(15,23,42,.06) !important;}
+body.appOpen .subCard, body.appOpen .stat{background:#fff !important;border:1px solid #e5e7eb !important;border-radius:16px !important;box-shadow:none !important;}
+
+body.appOpen .nav{background:rgba(255,255,255,.94) !important;border-bottom:1px solid #e5e7eb !important;backdrop-filter:saturate(1.1) blur(10px) !important;}
+
+/* Hide noisy top buttons for new users (still in menu) */
+body.appOpen #shareSiteBtn, body.appOpen #pdfBtn{display:none !important;}
+
+/* Mode tabs */
+body.appOpen .modeSwitch{background:#fff !important;border:1px solid #e5e7eb !important;padding:4px !important;border-radius:14px !important;gap:4px !important;}
+body.appOpen .modeBtn{border-radius:10px !important;color:#475569 !important;}
+body.appOpen .modeBtn.active{background:linear-gradient(135deg,#FF6A00,#FF9F1C) !important;color:#fff !important;}
+
+body.appOpen .btn{box-shadow:none !important;border-radius:12px !important;border:1px solid #e5e7eb !important;background:#fff !important;}
+body.appOpen .btn.primary{border-color:transparent !important;background:linear-gradient(135deg,#FF6A00,#FF9F1C) !important;color:#fff !important;}
+
+body.appOpen .input, body.appOpen .select, body.appOpen .textarea{background:#fff !important;border:1px solid #e5e7eb !important;}
+body.appOpen .input:focus, body.appOpen .select:focus, body.appOpen .textarea:focus{border-color:rgba(255,106,0,.55) !important;}
+
+/* Steps chips */
+.stepChips{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px;}
+.stepChip{font-size:12px;font-weight:900;padding:6px 10px;border-radius:999px;border:1px solid #e5e7eb;background:#fff;color:#334155;}
+.stepChip.on{border-color:rgba(255,106,0,.28);background:rgba(255,106,0,.06);color:#9a3500;}
+
+/* Reduce clutter (keep logic intact) */
+body.appOpen #heroSub, body.appOpen #workDesc, body.appOpen #summaryDesc, body.appOpen #eduNotice{display:none !important;}
+body.appOpen .hint{display:none !important;}
+body.appOpen .modal .hint{display:block !important;}
+body.appOpen #viralPanel, body.appOpen #viralStrip{display:none !important;}
+
+/* ===== Subject identity colors (best: stable by ID hash) ===== */
+.subCard{position:relative;}
+.subCard::before{content:"";position:absolute;left:0;top:0;bottom:0;width:6px;border-top-left-radius:inherit;border-bottom-left-radius:inherit;background:var(--subAccent, #FF6A00);}
+.subName{display:flex;align-items:center;gap:10px;}
+.subName .input{flex:1;}
+.subName::before{content:"";width:10px;height:10px;border-radius:999px;background:var(--subAccent, #FF6A00);box-shadow:0 0 0 3px color-mix(in oklab, var(--subAccent,#FF6A00) 12%, transparent);flex:0 0 auto;}
+
+/* Also color the active subject card in Summary */
+#activeSubjectCard::before{content:"";position:absolute;left:0;top:0;bottom:0;width:6px;border-top-left-radius:inherit;border-bottom-left-radius:inherit;background:var(--subAccent, #FF6A00);}
+
+/* ===== Summary follows active subject (desktop) ===== */
+@media (min-width:981px){
+  #summaryPanel{position:sticky; top:calc(var(--navH,56px) + 12px);}
+}
 </style>
 </head>
 
@@ -977,8 +1033,8 @@ body[data-theme-variant="neon"] .panel, body[data-theme-variant="neon"] .subCard
 
     <div class="right">
       <div class="modeSwitch" aria-label="Modes">
-        <button class="modeBtn active" id="m1Btn" title="Target → Minimum SEE">Target</button>
-        <button class="modeBtn" id="m2Btn" title="Marks → SGPA">Marks</button>
+        <button class="modeBtn active" id="m1Btn" title="Target → Minimum SEE">Planner</button>
+        <button class="modeBtn" id="m2Btn" title="Marks → SGPA">SGPA</button>
         <button class="modeBtn" id="m3Btn" title="SGPA → CGPA">CGPA</button>
       </div>
 
@@ -1029,136 +1085,101 @@ body[data-theme-variant="neon"] .panel, body[data-theme-variant="neon"] .subCard
 
 
 
-<!-- ===== SIMPLE CARD LAUNCH (Option C) ===== -->
+<!-- ===== MATERIAL CLEAN LAUNCH V3 (Orange Gradient) ===== -->
 <style>
-/* Hide app until a calculator is picked */
 #appMain{display:none;}
 #nav{display:none;}
+
+:root{
+  --o1:#FF6A00; --o2:#FF9F1C;
+  --stroke:#e5e7eb;
+  --ink:#0f172a;
+  --mut:#475569;
+  --mut2:#64748b;
+  --shadow:0 10px 30px rgba(15,23,42,.08);
+  --shadow2:0 6px 16px rgba(15,23,42,.06);
+  --r:18px;
+}
 
 #landingHero{
   min-height:100svh;
   display:flex;
   align-items:center;
   justify-content:center;
-  padding:18px;
-  background:
-    radial-gradient(circle at 15% 20%, rgba(99,102,241,.18), transparent 42%),
-    radial-gradient(circle at 85% 18%, rgba(14,165,233,.16), transparent 44%),
-    radial-gradient(circle at 50% 95%, rgba(34,197,94,.14), transparent 45%),
-    linear-gradient(180deg,#fbfdff,#f3f7ff);
+  padding:20px;
+  background:linear-gradient(180deg,#fff,#fff7f0);
 }
-.launch{
-  width:min(980px,100%);
-}
-.launchTop{
-  text-align:center;
-  margin-bottom:16px;
-}
-.launchLogo{
-  width:52px;height:52px;border-radius:18px;
-  margin:0 auto 10px;
-  border:1px solid rgba(148,163,184,.35);
-  box-shadow:0 18px 46px rgba(15,23,42,.10);
-  overflow:hidden;
-  background:#fff;
-}
+.launchWrap{width:min(1040px,100%);}
+.launchLogo{width:56px;height:56px;border-radius:16px;background:#fff;border:1px solid var(--stroke);box-shadow:var(--shadow2);overflow:hidden;margin:0 auto;}
 .launchLogo img{width:100%;height:100%;object-fit:cover;}
-.launchTitle{margin:0;font-size:34px;font-weight:1000;letter-spacing:-.03em;color:#0f172a;}
-.launchSub{margin:8px 0 0;color:#475569;font-size:14px;font-weight:800;}
+.launchTitle{margin:12px 0 0;text-align:center;font-weight:1000;letter-spacing:-.03em;color:var(--ink);font-size:38px;}
+.launchSub{margin:10px auto 0;text-align:center;color:var(--mut);font-weight:800;max-width:62ch;line-height:1.45;font-size:14.5px;}
 
-.cardGrid{
-  display:grid;
-  grid-template-columns:repeat(3,minmax(0,1fr));
-  gap:12px;
-}
-@media(max-width:900px){.cardGrid{grid-template-columns:1fr;}}
+.ctaRow{margin-top:16px;display:flex;gap:10px;justify-content:center;flex-wrap:wrap;}
+.cta{border-radius:999px;border:1px solid var(--stroke);background:#fff;color:var(--ink);padding:12px 16px;font-weight:950;cursor:pointer;display:inline-flex;align-items:center;gap:10px;}
+.cta.primary{border-color:transparent;color:#fff;background:linear-gradient(135deg,var(--o1),var(--o2));box-shadow:0 14px 32px rgba(255,106,0,.18);}
+.cta.google{background:#fff;border:1px solid var(--stroke);}
 
-.pickCard{
-  text-align:left;
-  border-radius:20px;
-  border:1px solid rgba(148,163,184,.40);
-  background:rgba(255,255,255,.82);
-  backdrop-filter:saturate(1.15) blur(10px);
-  box-shadow:0 18px 55px rgba(15,23,42,.10);
-  padding:16px;
-  cursor:pointer;
-  transition:transform 180ms cubic-bezier(.2,.8,.2,1), box-shadow 180ms, border-color 180ms;
-}
-.pickCard:hover{transform:translateY(-3px);border-color:rgba(37,99,235,.30);box-shadow:0 22px 70px rgba(15,23,42,.12);}
-.pickCard:active{transform:translateY(-1px) scale(.995);}
-.pickIcon{
-  width:46px;height:46px;border-radius:16px;
-  display:grid;place-items:center;
-  border:1px solid rgba(148,163,184,.35);
-  background:linear-gradient(135deg,#eef2ff,#ffffff);
-  font-size:20px;
-}
-.pickTitle{margin-top:10px;font-weight:1000;color:#0f172a;font-size:15px;}
-.pickDesc{margin-top:6px;color:#64748b;font-weight:850;font-size:13px;line-height:1.35;}
-.pillsRow{margin-top:10px;display:flex;gap:8px;flex-wrap:wrap;}
-.pillMini{font-size:12px;font-weight:900;padding:5px 10px;border-radius:999px;border:1px solid rgba(148,163,184,.40);background:#fff;color:#334155;}
+.cards{margin-top:18px;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;}
+@media(max-width:900px){.cards{grid-template-columns:1fr;}}
 
-.launchActions{
-  margin-top:14px;
-  display:flex;
-  gap:10px;
-  justify-content:center;
-  flex-wrap:wrap;
-}
-.launchBtn{
-  border:1px solid rgba(148,163,184,.55);
-  background:rgba(255,255,255,.80);
-  border-radius:999px;
-  padding:10px 14px;
-  font-weight:950;
-  cursor:pointer;
-}
-.launchBtn.primary{background:linear-gradient(135deg,#4f46e5,#2563eb);border-color:transparent;color:#fff;}
+.card{text-align:left;border:1px solid var(--stroke);border-radius:var(--r);background:#fff;box-shadow:var(--shadow2);padding:16px;cursor:pointer;transition:transform 160ms ease, box-shadow 160ms ease, border-color 160ms ease;}
+.card:hover{transform:translateY(-2px);box-shadow:var(--shadow);border-color:rgba(255,106,0,.25);}
+.card:active{transform:translateY(-1px);}
+.icon{width:44px;height:44px;border-radius:14px;display:grid;place-items:center;border:1px solid rgba(255,106,0,.22);background:rgba(255,106,0,.08);color:#b84300;}
+.icon svg{width:22px;height:22px;}
+.cardTitle{margin-top:10px;font-weight:1000;color:var(--ink);font-size:16px;}
+.cardDesc{margin-top:6px;color:var(--mut2);font-weight:850;font-size:13px;line-height:1.35;}
+.badges{margin-top:10px;display:flex;gap:8px;flex-wrap:wrap;}
+.badge{font-size:12px;font-weight:900;padding:6px 10px;border-radius:999px;border:1px solid rgba(255,106,0,.22);background:#fff;color:#9a3500;}
+.tip{margin:14px 0 0;text-align:center;color:var(--mut2);font-weight:850;font-size:12.5px;}
 
-/* When app is shown */
 body.appOpen #nav{display:block;}
 body.appOpen #appMain{display:block;}
 body.appOpen #landingHero{display:none;}
 </style>
 
-<section id="landingHero" aria-label="Choose calculator">
-  <div class="launch">
-    <div class="launchTop">
-      <div class="launchLogo"><img src="https://res.cloudinary.com/djy3mjtsz/image/upload/v1769939761/Untitled_1_vtehdh.png" alt="Gradeo"/></div>
-      <h1 class="launchTitle">GRADEO</h1>
-      <p class="launchSub">Choose what you want to calculate.</p>
+<section id="landingHero" aria-label="Start">
+  <div class="launchWrap">
+    <div class="launchLogo"><img src="https://res.cloudinary.com/djy3mjtsz/image/upload/v1769939761/Untitled_1_vtehdh.png" alt="GRADEO"/></div>
+    <h1 class="launchTitle">GRADEO</h1>
+    <p class="launchSub">Planner, SGPA, CGPA — clean, fast tools made for students.</p>
+
+    <div class="ctaRow">
+      <button class="cta primary" type="button" id="startPlanner">Start Planner</button>
+      <button class="cta google" type="button" id="landingGoogleBtn"><svg aria-hidden='true' viewBox='0 0 48 48' style='width:18px;height:18px;display:block'>
+  <path fill='#EA4335' d='M24 9.5c3.54 0 6.32 1.54 7.77 2.83l5.66-5.66C34.1 3.6 29.55 1.5 24 1.5 14.64 1.5 6.58 6.88 2.8 14.72l6.56 5.09C11.1 14.07 17.08 9.5 24 9.5z'/>
+  <path fill='#4285F4' d='M46.5 24c0-1.64-.15-3.22-.43-4.75H24v9h12.6c-.54 2.9-2.18 5.36-4.64 7.02l7.1 5.5C43.3 36.9 46.5 30.95 46.5 24z'/>
+  <path fill='#FBBC05' d='M9.36 28.19A14.5 14.5 0 0 1 8.6 24c0-1.46.25-2.88.7-4.19L2.75 14.7A23.94 23.94 0 0 0 1.5 24c0 3.86.93 7.52 2.6 10.78l5.26-6.59z'/>
+  <path fill='#34A853' d='M24 46.5c5.55 0 10.2-1.83 13.6-4.97l-7.1-5.5c-1.97 1.32-4.5 2.1-6.5 2.1-6.89 0-12.74-4.65-14.82-10.94l-6.6 5.1C6.33 40.12 14.45 46.5 24 46.5z'/>
+</svg><span>Continue with Google</span></button>
     </div>
 
-    <div class="cardGrid">
-      <button class="pickCard" type="button" data-mode="m1">
-        <div class="pickIcon">🎯</div>
-        <div class="pickTitle">Target → Minimum SEE</div>
-        <div class="pickDesc">Plan your semester and see the minimum SEE needed.</div>
-        <div class="pillsRow"><span class="pillMini">Planner</span><span class="pillMini">Minimum</span></div>
+    <div class="cards">
+      <button class="card" type="button" data-mode="m1" aria-label="Planner: Target CGPA to minimum SEE">
+        <div class="icon"><svg viewBox='0 0 24 24' aria-hidden='true'><path fill='currentColor' d='M7 2h10a2 2 0 0 1 2 2v16a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2Zm0 2v16h10V4H7Zm2 3h6v2H9V7Zm0 4h6v2H9v-2Zm0 4h4v2H9v-2Z'/></svg></div>
+        <div class="cardTitle">Planner — Target CGPA → Minimum SEE</div>
+        <div class="cardDesc">Enter current CGPA + credits + CIE. See the minimum SEE required.</div>
+        <div class="badges"><span class="badge">Recommended</span><span class="badge">Default</span></div>
       </button>
-
-      <button class="pickCard" type="button" data-mode="m2">
-        <div class="pickIcon">🧮</div>
-        <div class="pickTitle">Marks → SGPA</div>
-        <div class="pickDesc">Enter marks and get SGPA instantly.</div>
-        <div class="pillsRow"><span class="pillMini">SGPA</span><span class="pillMini">Results</span></div>
+      <button class="card" type="button" data-mode="m2" aria-label="SGPA calculator from marks">
+        <div class="icon"><svg viewBox='0 0 24 24' aria-hidden='true'><path fill='currentColor' d='M4 19h16v2H4v-2Zm2-2V3h2v14H6Zm5 0V7h2v10h-2Zm5 0V10h2v7h-2Z'/></svg></div>
+        <div class="cardTitle">SGPA Calculator — Marks → SGPA</div>
+        <div class="cardDesc">Enter CIE & SEE marks. Get SGPA instantly.</div>
+        <div class="badges"><span class="badge">Fast</span><span class="badge">Results</span></div>
       </button>
-
-      <button class="pickCard" type="button" data-mode="m3">
-        <div class="pickIcon">📈</div>
-        <div class="pickTitle">SGPA → CGPA</div>
-        <div class="pickDesc">Convert multiple semesters into CGPA.</div>
-        <div class="pillsRow"><span class="pillMini">CGPA</span><span class="pillMini">Converter</span></div>
+      <button class="card" type="button" data-mode="m3" aria-label="CGPA calculator from SGPA">
+        <div class="icon"><svg viewBox='0 0 24 24' aria-hidden='true'><path fill='currentColor' d='M12 2a10 10 0 1 1 0 20 10 10 0 0 1 0-20Zm1 5h-2v6l5 3 1-1.7-4-2.3V7Z'/></svg></div>
+        <div class="cardTitle">CGPA Calculator — SGPA → CGPA</div>
+        <div class="cardDesc">Enter semester SGPA values. Get CGPA.</div>
+        <div class="badges"><span class="badge">Converter</span><span class="badge">Simple</span></div>
       </button>
     </div>
 
-    <div class="launchActions">
-      <button class="launchBtn" type="button" id="quickSignIn">Sign in</button>
-      <button class="launchBtn primary" type="button" id="openLast">Open last used</button>
-    </div>
+    <div class="tip">Tip: Start with <b>Planner</b> if you’re targeting a CGPA.</div>
   </div>
 </section>
-<!-- ===== END SIMPLE CARD LAUNCH ===== -->
+<!-- ===== END MATERIAL CLEAN LAUNCH V3 ===== -->
 
 
 
@@ -1170,9 +1191,12 @@ body.appOpen #landingHero{display:none;}
   <section class="hero heroCompact">
     <div>
       <h1 id="heroTitle">Target CGPA → Minimum SEE Needed</h1>
-      
+<div id="stepChips" class="stepChips" aria-label="Steps"></div>
+      <p id="heroSub">Step 1: Enter current CGPA & credits • Step 2: Add subjects • Step 3: Enter CIE • We show minimum SEE.</p>
 
-
+<div class="hint" id="eduNotice" style="margin-top:10px;">
+  ⚠️ <b>Educational estimate only:</b> results may differ from your university’s official evaluation rules. Always verify with your official marks card.
+</div>
 
     </div>
     <div class="pills heroTools">
@@ -1189,7 +1213,7 @@ body.appOpen #landingHero{display:none;}
       <div class="panelHead">
         <div>
           <h2 id="workTitle">Mode 1 — Target → Minimum SEE</h2>
-          
+          <p id="workDesc">Type normally — results update after you pause (no refreshing inputs).</p>
         </div>
         <div style="display:flex; gap:10px; flex-wrap:wrap;">
           <button class="btn small" id="helpBtn">Help</button>
@@ -1225,8 +1249,8 @@ body.appOpen #landingHero{display:none;}
 
           <div class="toolbar">
             <div style="display:flex; gap:10px; flex-wrap:wrap;">
-              <button class="btn primary" id="addNormalBtn">+ Subject</button>
-              <button class="btn" id="addActivityBtn">+ Activity (NSS)</button>
+              <button class="btn primary" id="addNormalBtn" title="Add a theory subject">Add Subject</button>
+              <button class="btn" id="addActivityBtn" title="Add an activity / internal subject">Add Activity</button>
               <button class="btn danger" id="clearSubjectsBtn">Clear</button>
             </div>
             <div class="hint">Activity = only Final/100 (no CIE/SEE). Credits fixed 1.</div>
@@ -1264,8 +1288,8 @@ body.appOpen #landingHero{display:none;}
               <input class="input" id="doneCredits2" type="number" step="1" min="0" max="500" placeholder="e.g., 68">
             </div>
             <div style="display:flex; gap:10px; flex-wrap:wrap; align-items:end;">
-              <button class="btn primary" id="addNormalBtn2">+ Subject</button>
-              <button class="btn" id="addActivityBtn2">+ Activity</button>
+              <button class="btn primary" id="addNormalBtn2" title="Add a theory subject">Add Subject</button>
+              <button class="btn" id="addActivityBtn2" title="Add an activity / internal subject">Add Activity</button>
             </div>
           </div>
 
@@ -1320,7 +1344,7 @@ body.appOpen #landingHero{display:none;}
       <div class="panelHead">
         <div>
           <h2>Summary</h2>
-          
+          <p id="summaryDesc">Updates after you stop typing (smooth).</p>
         </div>
       </div>
       <div class="panelBody">
@@ -1549,7 +1573,21 @@ body.appOpen #landingHero{display:none;}
   const $$ = s => Array.from(document.querySelectorAll(s));
   const clamp=(n,a,b)=>Math.min(b,Math.max(a, Number.isFinite(+n)?+n:a));
   const round2=n=>Math.round((n+Number.EPSILON)*100)/100;
-  const fmt=(n,d=2)=>Number.isFinite(+n)?(+n).toFixed(d):"—";
+  
+
+  // ===== Subject accent colors (stable & reliable: based on subject id) =====
+  const SUBJECT_ACCENTS = [
+    '#FF6A00','#FF9F1C','#0EA5E9','#2563EB',
+    '#22C55E','#14B8A6','#7C3AED','#A855F7',
+    '#F43F5E','#FB7185','#84CC16','#F59E0B'
+  ];
+  function accentForId(id){
+    id = String(id||'');
+    let h = 0;
+    for(let i=0;i<id.length;i++) h = (h*31 + id.charCodeAt(i)) >>> 0;
+    return SUBJECT_ACCENTS[h % SUBJECT_ACCENTS.length];
+  }
+const fmt=(n,d=2)=>Number.isFinite(+n)?(+n).toFixed(d):"—";
   const esc=str=>String(str).replace(/[&<>"']/g, s=>({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;" }[s]));
   const now = () => new Date();
 
@@ -2136,6 +2174,7 @@ body.appOpen #landingHero{display:none;}
       const card = document.createElement("div");
       card.className = "subCard";
       card.id = `subjectCard-${s.id}`;
+    try{ card.style.setProperty('--subAccent', accentForId(s.id)); }catch(_e){}
       card.innerHTML = `
         <div class="subTop">
           <div>
@@ -5014,8 +5053,8 @@ const prefersReduce = window.matchMedia && window.matchMedia('(prefers-reduced-m
 </script>
 <script defer src="https://static.cloudflareinsights.com/beacon.min.js/vcd15cbe7772f49c399c6a5babf22c1241717689176015" integrity="sha512-ZpsOmlRQV6y907TI0dKBHq9Md29nnaEIPlkf84rnaERnq6zvWvPUqr2ft8M1aS28oN72PdrCzSjY4U6VaAw1EQ==" data-cf-beacon='{"version":"2024.11.0","token":"32f0b0530bdb47d89109f78f09c965e1","r":1,"server_timing":{"name":{"cfCacheStatus":true,"cfEdge":true,"cfExtPri":true,"cfL4":true,"cfOrigin":true,"cfSpeedBrain":true},"location_startswith":null}}' crossorigin="anonymous"></script>
 <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9c711f0dcc345f7c',t:'MTc2OTk0NTQ3NA=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script><div class="bottomIsland noPrint" id="bottomIsland" aria-label="Mode switch">
-  <button class="bIsBtn" type="button" data-mode="m1" aria-label="Target">Target</button>
-  <button class="bIsBtn" type="button" data-mode="m2" aria-label="Marks">Marks</button>
+  <button class="bIsBtn" type="button" data-mode="m1" aria-label="Target">Planner</button>
+  <button class="bIsBtn" type="button" data-mode="m2" aria-label="Marks">SGPA</button>
   <button class="bIsBtn" type="button" data-mode="m3" aria-label="CGPA">CGPA</button>
 </div>
 <script>
@@ -5164,43 +5203,120 @@ const prefersReduce = window.matchMedia && window.matchMedia('(prefers-reduced-m
   }catch(_e){}
 
 
-  /* ===== Card Launch wiring (Option C) ===== */
-  function openApp(mode){
+  /* ===== Landing wiring (default Mode 1) ===== */
+  function openFromLanding(mode){
+    const m = (mode==='m2'||mode==='m3') ? mode : 'm1';
     try{ document.body.classList.add('appOpen'); }catch(_e){}
-    // Ensure nav height calc updates
-    try{ document.documentElement.style.setProperty('--navH', (document.getElementById('nav')?.offsetHeight||56)+'px'); }catch(_e){}
-    try{ if(typeof setMode === 'function' && mode) setMode(mode, {push:false}); }catch(_e){}
-    try{ localStorage.setItem('gradeo_last_mode', mode||'m1'); }catch(_e){}
+    try{ if(typeof setMode==='function') setMode(m, {push:false}); }catch(_e){}
+    try{ localStorage.setItem('gradeo_last_mode', m); }catch(_e){}
     try{ window.scrollTo(0,0); }catch(_e){}
   }
+  try{ document.querySelectorAll('#landingHero [data-mode]').forEach(btn=> btn.addEventListener('click', ()=> openFromLanding(btn.getAttribute('data-mode')))); }catch(_e){}
+  try{ const cta=document.getElementById('startPlanner'); if(cta) cta.addEventListener('click', ()=> openFromLanding('m1')); }catch(_e){}
+  try{ const g=document.getElementById('landingGoogleBtn'); if(g) g.addEventListener('click', ()=>{ try{ openSignInModal(); }catch(_e){} }); }catch(_e){}
 
-  // Pick card -> open corresponding mode
-  try{
-    document.querySelectorAll('.pickCard[data-mode]').forEach((b)=>{
-      b.addEventListener('click', ()=> openApp(b.getAttribute('data-mode') || 'm1'));
-    });
-  }catch(_e){}
+  /* ===== Steps (UI only) ===== */
+  function setSteps(mode){
+    const el = document.getElementById('stepChips');
+    if(!el) return;
+    let steps=[];
+    if(mode==='m1') steps=[['1','Enter CGPA'],['2','Add subjects'],['3','Enter CIE']];
+    else if(mode==='m2') steps=[['1','Add subjects'],['2','Enter marks'],['3','Get SGPA']];
+    else steps=[['1','Semesters'],['2','Enter SGPA'],['3','Get CGPA']];
+    el.innerHTML = steps.map(s=>`<span class="stepChip on">${s[0]} • ${s[1]}</span>`).join('');
+  }
+  try{ setSteps(state && state.mode ? state.mode : 'm1'); }catch(_e){ setSteps('m1'); }
+  try{ const _setMode = setMode; setMode = function(mode, opts){ _setMode(mode, opts); try{ setSteps(mode); }catch(_e){}; try{ requestFollowTick(); }catch(_e){}; }; }catch(_e){}
 
-  // Open last used
-  try{
-    const btn = document.getElementById('openLast');
-    if(btn){
-      btn.addEventListener('click', ()=>{
-        let m='m1';
-        try{ m = localStorage.getItem('gradeo_last_mode')||'m1'; }catch(_e){}
-        if(!(m==='m1'||m==='m2'||m==='m3')) m='m1';
-        openApp(m);
+  /* ===== Active subject tracking + Summary follow ===== */
+  let _activeSubjectDomId = null;
+  let _io = null;
+  function setActiveByCard(card){
+    if(!card) return;
+    _activeSubjectDomId = card.id;
+    // Apply accent to active subject summary card (if it is shown)
+    try{
+      const sid = String(card.id||'').replace('subjectCard-','');
+      const ac = accentForId(sid);
+      const asc = document.getElementById('activeSubjectCard');
+      if(asc) asc.style.setProperty('--subAccent', ac);
+    }catch(_e){}
+    requestFollowTick();
+  }
+  function setupSubjectObserver(){
+    try{ if(_io){ _io.disconnect(); _io=null; } }catch(_e){}
+    const cards = Array.from(document.querySelectorAll('[id^="subjectCard-"]'));
+    if(!cards.length) return;
+    let best = null;
+    _io = new IntersectionObserver((entries)=>{
+      // pick the most visible card
+      let top = null;
+      for(const e of entries){
+        if(!e.isIntersecting) continue;
+        if(!top || e.intersectionRatio > top.intersectionRatio) top = e;
+      }
+      if(top && top.target) setActiveByCard(top.target);
+    }, {root:null, threshold:[0.15,0.25,0.35,0.5,0.65]});
+    cards.forEach(c=>_io.observe(c));
+  }
+
+  // Focus-based (most reliable while typing)
+  function bindFocusTracking(){
+    const wrap1 = document.getElementById('subjectsWrap');
+    const wrap2 = document.getElementById('subjectsWrap2');
+    [wrap1, wrap2].forEach(w=>{
+      if(!w) return;
+      w.addEventListener('focusin', (ev)=>{
+        const card = ev.target && ev.target.closest ? ev.target.closest('[id^="subjectCard-"]') : null;
+        if(card) setActiveByCard(card);
       });
+    });
+  }
+
+  // Summary follow: move sticky top down to align with active subject in viewport
+  let _followRAF = null;
+  function requestFollowTick(){
+    if(_followRAF) return;
+    _followRAF = requestAnimationFrame(()=>{ _followRAF=null; followSummary(); });
+  }
+  function followSummary(){
+    const sp = document.getElementById('summaryPanel');
+    if(!sp) return;
+    // Desktop only
+    if(!(window.matchMedia && window.matchMedia('(min-width:981px)').matches)){
+      sp.style.top = '';
+      return;
     }
-  }catch(_e){}
+    const nav = document.getElementById('nav');
+    const navH = nav ? nav.getBoundingClientRect().height : 56;
+    const baseTop = Math.round(navH + 12);
+    const card = _activeSubjectDomId ? document.getElementById(_activeSubjectDomId) : null;
+    if(!card){
+      sp.style.top = baseTop + 'px';
+      return;
+    }
+    const r = card.getBoundingClientRect();
+    const spH = sp.getBoundingClientRect().height;
+    const maxTop = Math.max(baseTop, Math.round(window.innerHeight - spH - 12));
+    const desired = Math.min(Math.max(Math.round(r.top), baseTop), maxTop);
+    sp.style.top = desired + 'px';
+  }
 
-  // Quick sign-in from landing
+  // Ensure observer rebind after subject list renders
   try{
-    const s = document.getElementById('quickSignIn');
-    if(s) s.addEventListener('click', ()=>{ try{ openSignInModal(); }catch(_e){} });
+    const _renderSubjectsDOM = renderSubjectsDOM;
+    renderSubjectsDOM = function(){
+      _renderSubjectsDOM();
+      try{ bindFocusTracking(); }catch(_e){}
+      try{ setupSubjectObserver(); }catch(_e){}
+      try{ requestFollowTick(); }catch(_e){}
+    };
   }catch(_e){}
 
-  // Stay on landing until user picks
+  window.addEventListener('scroll', requestFollowTick, {passive:true});
+  window.addEventListener('resize', requestFollowTick);
+
+  // default start state: landing
   try{ document.body.classList.remove('appOpen'); }catch(_e){}
 
 })();
