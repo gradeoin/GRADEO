@@ -13,6 +13,7 @@
 
 
 
+
 <!doctype html>
 <html lang="en">
 <head>
@@ -955,7 +956,7 @@ body[data-theme-variant="neon"] .panel, body[data-theme-variant="neon"] .subCard
           <div class="row">
             <div>
               <label class="label">Current CGPA</label>
-              <input class="input" id="currentCgpa" type="number" inputmode="decimal" pattern="[0-9]*[\.,]?[0-9]*" min="0" max="10" placeholder="e.g., 7.80" step="0.01">
+              <input class="input" id="currentCgpa" type="text" inputmode="decimal" placeholder="e.g., 7.80" autocomplete="off">
             </div>
             <div>
               <label class="label">Completed credits</label>
@@ -963,7 +964,7 @@ body[data-theme-variant="neon"] .panel, body[data-theme-variant="neon"] .subCard
             </div>
             <div>
               <label class="label">Target CGPA</label>
-              <input class="input" id="targetCgpa" type="number" inputmode="decimal" pattern="[0-9]*[\.,]?[0-9]*" min="0" max="10" placeholder="e.g., 8.20" step="0.01">
+              <input class="input" id="targetCgpa" type="text" inputmode="decimal" placeholder="e.g., 8.20" autocomplete="off">
             </div>
             <div>
               <label class="label">Rounding</label>
@@ -1009,7 +1010,7 @@ body[data-theme-variant="neon"] .panel, body[data-theme-variant="neon"] .subCard
             </div>
             <div>
               <label class="label">Current CGPA (optional)</label>
-              <input class="input" id="curCgpa2" type="number" inputmode="decimal" pattern="[0-9]*[\.,]?[0-9]*" min="0" max="10" placeholder="e.g., 7.80" step="0.01">
+              <input class="input" id="curCgpa2" type="text" inputmode="decimal" placeholder="e.g., 7.80" autocomplete="off">
             </div>
             <div>
               <label class="label">Completed credits (optional)</label>
@@ -3392,32 +3393,40 @@ function showContact(){
   
 
 /* ===== Decimal-friendly CGPA inputs (Mode 1 & 2) ===== */
-function bindCgpaDecimal(id, decimals = 2){
+function bindCgpaInput(id){
   const el = document.getElementById(id);
   if(!el) return;
-  // While typing: allow partial values like '.' or '7.' (don't fight the user)
+
+  // While typing: keep digits and at most one dot. Don't clamp while typing.
   el.addEventListener('input', () => {
-    el.value = (el.value || '').replace(',', '.');
+    let v = (el.value || '').replace(',', '.');
+    v = v.replace(/[^0-9.]/g, '');
+    const parts = v.split('.');
+    if(parts.length > 2) v = parts[0] + '.' + parts.slice(1).join('');
+    el.value = v;
   }, {passive:true});
 
+  // When user finishes: clamp to 0–10 and normalize trailing zeros.
   const finalize = () => {
     const raw = (el.value || '').trim().replace(',', '.');
     if(!raw || raw === '.' || raw.endsWith('.')) return;
-    let v = parseFloat(raw);
-    if(!Number.isFinite(v)) return;
-    v = Math.min(10, Math.max(0, v));
-    el.value = v.toFixed(decimals)
-      .replace(/\.00$/, '')
-      .replace(/(\.\d)0$/, '$1');
+    let num = parseFloat(raw);
+    if(!Number.isFinite(num)) return;
+    num = Math.max(0, Math.min(10, num));
+    let out = String(num);
+    if(out.includes('.')) out = out.replace(/0+$/, '').replace(/\.$/, '');
+    el.value = out;
   };
+
   el.addEventListener('blur', finalize);
   el.addEventListener('change', finalize);
 }
+
 function wireEvents(){
   // Enable decimal CGPA entry in Mode 1 & Mode 2
-  bindCgpaDecimal("currentCgpa", 2);
-  bindCgpaDecimal("targetCgpa", 2);
-  bindCgpaDecimal("curCgpa2", 2);
+  bindCgpaInput("currentCgpa");
+  bindCgpaInput("targetCgpa");
+  bindCgpaInput("curCgpa2");
 
     $("#modalClose").onclick = closeModal;
     $("#overlay").addEventListener("click", (e)=>{ if (e.target.id==="overlay") closeModal(); });
@@ -4484,9 +4493,8 @@ const prefersReduce = window.matchMedia && window.matchMedia('(prefers-reduced-m
   }
 
   // Apply only to CGPA fields
-  bindCgpaClamp("currentCgpa");
-  bindCgpaClamp("targetCgpa");
-  bindCgpaClamp("curCgpa2");
+
+
 })();
 </script>
 
