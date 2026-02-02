@@ -1029,98 +1029,136 @@ body[data-theme-variant="neon"] .panel, body[data-theme-variant="neon"] .subCard
 
 
 
-<!-- ===== CLEAN MOBILE-FIRST LANDING ===== -->
+<!-- ===== SIMPLE CARD LAUNCH (Option C) ===== -->
 <style>
+/* Hide app until a calculator is picked */
+#appMain{display:none;}
+#nav{display:none;}
+
 #landingHero{
   min-height:100svh;
   display:flex;
   align-items:center;
   justify-content:center;
-  padding:16px;
+  padding:18px;
   background:
-    radial-gradient(circle at 20% 20%, #c7d2fe, transparent 40%),
-    radial-gradient(circle at 80% 30%, #fde68a, transparent 40%),
-    radial-gradient(circle at 50% 90%, #bfdbfe, transparent 45%),
-    linear-gradient(180deg,#f9fbff,#eef3ff);
+    radial-gradient(circle at 15% 20%, rgba(99,102,241,.18), transparent 42%),
+    radial-gradient(circle at 85% 18%, rgba(14,165,233,.16), transparent 44%),
+    radial-gradient(circle at 50% 95%, rgba(34,197,94,.14), transparent 45%),
+    linear-gradient(180deg,#fbfdff,#f3f7ff);
 }
-#appMain{display:none;}
-
-.heroCard{
-  max-width:520px;
-  width:100%;
-  background:#ffffff;
-  border-radius:26px;
-  padding:34px 22px;
-  box-shadow:0 20px 50px rgba(0,0,0,.12);
+.launch{
+  width:min(980px,100%);
+}
+.launchTop{
   text-align:center;
-  animation:fadeUp .7s ease both;
+  margin-bottom:16px;
 }
-
-@keyframes fadeUp{
-  from{opacity:0;transform:translateY(24px)}
-  to{opacity:1;transform:none}
+.launchLogo{
+  width:52px;height:52px;border-radius:18px;
+  margin:0 auto 10px;
+  border:1px solid rgba(148,163,184,.35);
+  box-shadow:0 18px 46px rgba(15,23,42,.10);
+  overflow:hidden;
+  background:#fff;
 }
+.launchLogo img{width:100%;height:100%;object-fit:cover;}
+.launchTitle{margin:0;font-size:34px;font-weight:1000;letter-spacing:-.03em;color:#0f172a;}
+.launchSub{margin:8px 0 0;color:#475569;font-size:14px;font-weight:800;}
 
-.uniBadge{
-  display:inline-block;
-  background:#eef2ff;
-  color:#4f46e5;
-  padding:6px 14px;
+.cardGrid{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:12px;
+}
+@media(max-width:900px){.cardGrid{grid-template-columns:1fr;}}
+
+.pickCard{
+  text-align:left;
+  border-radius:20px;
+  border:1px solid rgba(148,163,184,.40);
+  background:rgba(255,255,255,.82);
+  backdrop-filter:saturate(1.15) blur(10px);
+  box-shadow:0 18px 55px rgba(15,23,42,.10);
+  padding:16px;
+  cursor:pointer;
+  transition:transform 180ms cubic-bezier(.2,.8,.2,1), box-shadow 180ms, border-color 180ms;
+}
+.pickCard:hover{transform:translateY(-3px);border-color:rgba(37,99,235,.30);box-shadow:0 22px 70px rgba(15,23,42,.12);}
+.pickCard:active{transform:translateY(-1px) scale(.995);}
+.pickIcon{
+  width:46px;height:46px;border-radius:16px;
+  display:grid;place-items:center;
+  border:1px solid rgba(148,163,184,.35);
+  background:linear-gradient(135deg,#eef2ff,#ffffff);
+  font-size:20px;
+}
+.pickTitle{margin-top:10px;font-weight:1000;color:#0f172a;font-size:15px;}
+.pickDesc{margin-top:6px;color:#64748b;font-weight:850;font-size:13px;line-height:1.35;}
+.pillsRow{margin-top:10px;display:flex;gap:8px;flex-wrap:wrap;}
+.pillMini{font-size:12px;font-weight:900;padding:5px 10px;border-radius:999px;border:1px solid rgba(148,163,184,.40);background:#fff;color:#334155;}
+
+.launchActions{
+  margin-top:14px;
+  display:flex;
+  gap:10px;
+  justify-content:center;
+  flex-wrap:wrap;
+}
+.launchBtn{
+  border:1px solid rgba(148,163,184,.55);
+  background:rgba(255,255,255,.80);
   border-radius:999px;
-  font-weight:800;
-  font-size:12px;
-  margin-bottom:10px;
+  padding:10px 14px;
+  font-weight:950;
+  cursor:pointer;
 }
+.launchBtn.primary{background:linear-gradient(135deg,#4f46e5,#2563eb);border-color:transparent;color:#fff;}
 
-.ltitle{
-  font-size:34px;
-  font-weight:1000;
-  margin:6px 0;
-  color:#0f172a;
-}
-
-.lsub{
-  color:#475569;
-  font-size:15px;
-  margin:10px 0 22px;
-}
-
-.startBtn{
-  font-size:17px;
-  padding:14px 34px;
-  border-radius:999px;
-  background:linear-gradient(135deg,#4f46e5,#2563eb);
-  color:white;
-  border:none;
-  animation:pulse 2.4s ease-in-out infinite;
-}
-
-@keyframes pulse{
-  0%,100%{box-shadow:0 0 0 0 rgba(79,70,229,.4)}
-  50%{box-shadow:0 0 0 16px rgba(79,70,229,0)}
-}
-
-/* desktop slight scale */
-@media(min-width:900px){
-  .heroCard{transform:scale(1.03)}
-}
+/* When app is shown */
+body.appOpen #nav{display:block;}
+body.appOpen #appMain{display:block;}
+body.appOpen #landingHero{display:none;}
 </style>
 
-<section id="landingHero">
-  <div class="heroCard">
-    <div class="uniBadge">Student Grade Assistant</div>
-    <h1 class="ltitle">GRADEO</h1>
-    <p class="lsub">
-      Calculate SGPA, CGPA and minimum SEE marks — fast, simple, made for students.
-    </p>
+<section id="landingHero" aria-label="Choose calculator">
+  <div class="launch">
+    <div class="launchTop">
+      <div class="launchLogo"><img src="https://res.cloudinary.com/djy3mjtsz/image/upload/v1769939761/Untitled_1_vtehdh.png" alt="Gradeo"/></div>
+      <h1 class="launchTitle">GRADEO</h1>
+      <p class="launchSub">Choose what you want to calculate.</p>
+    </div>
 
-    <button class="startBtn"
-      onclick="document.getElementById('landingHero').style.display='none';document.getElementById('appMain').style.display='block';window.scrollTo(0,0);">
-      🚀 Start
-    </button>
+    <div class="cardGrid">
+      <button class="pickCard" type="button" data-mode="m1">
+        <div class="pickIcon">🎯</div>
+        <div class="pickTitle">Target → Minimum SEE</div>
+        <div class="pickDesc">Plan your semester and see the minimum SEE needed.</div>
+        <div class="pillsRow"><span class="pillMini">Planner</span><span class="pillMini">Minimum</span></div>
+      </button>
+
+      <button class="pickCard" type="button" data-mode="m2">
+        <div class="pickIcon">🧮</div>
+        <div class="pickTitle">Marks → SGPA</div>
+        <div class="pickDesc">Enter marks and get SGPA instantly.</div>
+        <div class="pillsRow"><span class="pillMini">SGPA</span><span class="pillMini">Results</span></div>
+      </button>
+
+      <button class="pickCard" type="button" data-mode="m3">
+        <div class="pickIcon">📈</div>
+        <div class="pickTitle">SGPA → CGPA</div>
+        <div class="pickDesc">Convert multiple semesters into CGPA.</div>
+        <div class="pillsRow"><span class="pillMini">CGPA</span><span class="pillMini">Converter</span></div>
+      </button>
+    </div>
+
+    <div class="launchActions">
+      <button class="launchBtn" type="button" id="quickSignIn">Sign in</button>
+      <button class="launchBtn primary" type="button" id="openLast">Open last used</button>
+    </div>
   </div>
 </section>
-<!-- ===== END CLEAN MOBILE-FIRST LANDING ===== -->
+<!-- ===== END SIMPLE CARD LAUNCH ===== -->
 
 
 
@@ -1191,7 +1229,7 @@ body[data-theme-variant="neon"] .panel, body[data-theme-variant="neon"] .subCard
               <button class="btn" id="addActivityBtn">+ Activity (NSS)</button>
               <button class="btn danger" id="clearSubjectsBtn">Clear</button>
             </div>
-            
+            <div class="hint">Activity = only Final/100 (no CIE/SEE). Credits fixed 1.</div>
           </div>
 
           <div id="subjectsWrap" class="subjects"></div>
@@ -1203,14 +1241,14 @@ body[data-theme-variant="neon"] .panel, body[data-theme-variant="neon"] .subCard
             </div>
             <div class="accBody">
               <textarea class="textarea" id="notes" placeholder="Write reminders: topics, units, strategy…"></textarea>
-              
+              <div class="hint">Autosaved after sign-in (every ~15s if changed).</div>
             </div>
           </div>
         </div>
 
         <!-- Mode 2 -->
         <div id="mode2" style="display:none;">
-          
+          <div class="hint" style="margin-bottom:10px;">Enter CIE & SEE for normal subjects. Activity subjects use Final/100 only.</div>
 
           <div class="row">
             <div>
@@ -1268,7 +1306,7 @@ body[data-theme-variant="neon"] .panel, body[data-theme-variant="neon"] .subCard
           <div style="display:flex; justify-content:space-between; gap:10px; flex-wrap:wrap; align-items:center;">
             <div>
               <div style="font-weight:990">View‑only mode</div>
-              
+              <div class="hint">Sign in to edit and autosave to your account.</div>
             </div>
             <button class="btn primary" id="lockSignInBtn">Sign in</button>
           </div>
@@ -1282,7 +1320,7 @@ body[data-theme-variant="neon"] .panel, body[data-theme-variant="neon"] .subCard
       <div class="panelHead">
         <div>
           <h2>Summary</h2>
-          <p id="summaryDesc">Updates after you stop typing (smooth).</p>
+          
         </div>
       </div>
       <div class="panelBody">
@@ -1316,7 +1354,7 @@ body[data-theme-variant="neon"] .panel, body[data-theme-variant="neon"] .subCard
             <div style="font-weight:990;">📊 Interactive Charts</div>
             <div class="pill" style="opacity:.9;">Click a color → jump</div>
           </div>
-          
+          <div class="hint" id="chartLockedMsg" style="margin-top:8px; display:none;">Sign in to unlock charts.</div>
           <div class="chartGrid" style="margin-top:10px;">
             <div class="chartCard">
               <div class="k">Graph</div>
@@ -1352,7 +1390,7 @@ body[data-theme-variant="neon"] .panel, body[data-theme-variant="neon"] .subCard
               </div>
               <div>
                 <label class="label">Autosave</label>
-                
+                <div class="hint">Every ~15 seconds after changes.</div>
               </div>
             </div>
           </div>
@@ -1387,7 +1425,7 @@ body[data-theme-variant="neon"] .panel, body[data-theme-variant="neon"] .subCard
           <button class="viralBtn" type="button" data-v="privacy" data-title="Privacy"><span class="vi">🔒</span></button>
           <button class="viralBtn" type="button" data-v="disclaimer" data-title="Disclaimer"><span class="vi">⚠️</span></button>
         </div>
-        
+        <div class="hint" style="margin-top:10px;">Made to look fun & fast for students ✨</div>
       </div>
     </aside>
   </div>
@@ -2038,7 +2076,7 @@ body[data-theme-variant="neon"] .panel, body[data-theme-variant="neon"] .subCard
     wrap.innerHTML = "";
 
     if (!state.plan.subjects.length){
-      wrap.innerHTML = `<div class="subCard"><div style="font-weight:990">No subjects yet</div></div>`;
+      wrap.innerHTML = `<div class="subCard"><div style="font-weight:990">No subjects yet</div><div class="hint">Click “+ Subject” to add one.</div></div>`;
       return;
     }
 
@@ -2708,13 +2746,13 @@ barEl.style.width = clamp((showReq/seeMax)*100,0,100) + "%";
     const b = mode2BoostForSubject(s, sem);
     if(b){
       if(b.kind==='activity'){
-        html += ``;
+        html += `<div class="hint" style="margin-top:6px;">📈 Boost: +<b>${b.deltaFinal}</b> Final (${b.curFinal}→${b.targetFinal}) • Total ${b.curTotal}→${b.targetTotal} • GP <b>${b.curGp}→${b.newGp}</b> • New SGPA ≈ <b>${b.newSgpa==null?'—':fmt(b.newSgpa,2)}</b></div>`;
         if(!best || b.deltaFinal < best.delta){ best = {delta:b.deltaFinal, name:(s.name||'Activity'), newSgpa:b.newSgpa}; }
       } else {
         if(b.deltaSee==null){
-          html += ``;
+          html += `<div class="hint" style="margin-top:6px;">📌 To improve: need SEE ≈ <b>${b.needSee}</b>/${b.seeMax} ⇒ scaled <b>${b.needScaled}</b> • Total ≈ <b>${b.targetTotal}</b>/100 • Next GP ≈ <b>${b.desiredGp}</b>.</div>`;
         } else {
-          html += ``;
+          html += `<div class="hint" style="margin-top:6px;">📈 Boost: +<b>${b.deltaSee}</b> SEE (${b.curSee}→${b.needSee}) ⇒ +<b>${b.deltaScaled}</b> scaled (${b.curScaled}→${b.needScaled}) • Total ${b.curTotal}→${b.targetTotal} • GP <b>${b.curGp}→${b.newGp}</b> • New SGPA ≈ <b>${b.newSgpa==null?'—':fmt(b.newSgpa,2)}</b></div>`;
           if(!best || b.deltaSee < best.delta){ best = {delta:b.deltaSee, name:(s.name||'Subject'), newSgpa:b.newSgpa}; }
         }
       }
@@ -2831,7 +2869,7 @@ function setMode(mode, opts={push:true}){
     openModal({
       title:"Sign in to edit & autosave",
       desc:"Sign in to calculate results and sync your locally saved plan to the cloud.",
-      bodyHTML:``,
+      bodyHTML:`<div class="hint">You can fill everything in guest mode. When you sign in, we'll import your locally saved data to your cloud account.</div>`,
       footHTML:`<button class="btn primary" id="doSignin">Continue with Google</button>
                 <button class="btn" id="cancel">Cancel</button>`
     });
@@ -2867,13 +2905,13 @@ function setMode(mode, opts={push:true}){
           </div>
           <div>
             <div style="font-weight:990">${esc(u.email || 'Signed in')}</div>
-            
+            <div class="hint">Provider: ${esc(providerName)} • <span class="badgeMini">${verified}</span></div>
           </div>
         </div>
 
         <label class="label">Nickname (in-app)</label>
         <input class="input" id="nickInput" value="${esc(state.profile.nickname || '')}" placeholder="e.g., Student">
-        
+        <div class="hint">Used only inside GRADEO.</div>
 
         <div class="kv" style="margin-top:10px;">
           <div>
@@ -2885,7 +2923,7 @@ function setMode(mode, opts={push:true}){
             <input class="input" id="photoUrlInput" value="${esc(u.photoURL || '')}" placeholder="https://...">
           </div>
         </div>
-        
+        <div class="hint">Google sign-in: name/photo may revert to your Google profile on next login.</div>
 
         <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:10px;">
           <button class="btn" id="saveAuthProfileBtn">Update auth profile</button>
@@ -2894,7 +2932,7 @@ function setMode(mode, opts={push:true}){
       </div>
 
       <div class="tabPane" id="tAcademic" role="tabpanel">
-        
+        <div class="hint">Save academic details to personalize your experience.</div>
         <div class="kv" style="margin-top:10px;">
           <div>
             <label class="label">University</label>
@@ -2922,7 +2960,7 @@ function setMode(mode, opts={push:true}){
       <div class="tabPane" id="tSecurity" role="tabpanel">
         <div class="subCard">
           <div style="font-weight:990">Email verification</div>
-          
+          <div class="hint">Status: ${verified}</div>
           <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:10px;">
             <button class="btn" id="sendVerifyBtn" ${u.emailVerified ? 'disabled' : ''}>Send verification email</button>
             <button class="btn" id="reauthBtn">Re-authenticate</button>
@@ -2935,7 +2973,7 @@ function setMode(mode, opts={push:true}){
           <button class="btn" id="exportDataBtn">Export my data</button>
           <button class="btn" id="syncNowBtn">Sync now</button>
         </div>
-        
+        <div class="hint">Export downloads a JSON file with your plans and profile settings.</div>
 
         <div class="subCard" style="margin-top:12px; border-color:rgba(239,68,68,.35); background:rgba(239,68,68,.08);">
           <div style="font-weight:990;">Danger zone</div>
@@ -3077,7 +3115,7 @@ async function confirmAndDeleteAccount(){
         <div style="font-weight:990">Type DELETE ACCOUNT to confirm</div>
         <input class="input" id="delAccConfirm" placeholder="DELETE ACCOUNT" style="margin-top:10px;">
       </div>
-      
+      <div class="hint">If deletion fails, you may need to sign in again (recent login required).</div>
     `,
     footHTML: `
       <button class="btn danger" id="doDelAccBtn">Delete account</button>
@@ -3250,11 +3288,11 @@ async function deleteAllUserPlans(uid){
   }
   function openLeaderboard(){
     const rows=getLB();
-    const list = rows.length? rows.map((r,i)=>`<div class="subCard" style="display:flex;justify-content:space-between;align-items:center;"><div style="font-weight:990">#${i+1} ${esc(r.nick)}</div><div class="pill good">${r.score}</div></div>`).join('') : `<div class="subCard"><div style="font-weight:990">No entries yet</div></div>`;
+    const list = rows.length? rows.map((r,i)=>`<div class="subCard" style="display:flex;justify-content:space-between;align-items:center;"><div style="font-weight:990">#${i+1} ${esc(r.nick)}</div><div class="pill good">${r.score}</div></div>`).join('') : `<div class="subCard"><div style="font-weight:990">No entries yet</div><div class="hint">Calculate SGPA then opt-in.</div></div>`;
     openModal({
       title:'Leaderboard (Anonymous)',
       desc:'Local to your device • Opt-in only',
-      bodyHTML:`${list}`,
+      bodyHTML:`${list}<div class="hint" style="margin-top:10px;">Tip: this leaderboard is stored only on your device.</div>`,
       footHTML:`<button class="btn" id="lbClose">Close</button>`
     });
     document.getElementById('lbClose').onclick = closeModal;
@@ -3455,12 +3493,12 @@ async function deleteAllUserPlans(uid){
         <div class="subCard">
           <div style="font-weight:990">Share link</div>
           <input class="input" id="shareLinkBox" value="${esc(link)}" readonly style="margin-top:10px">
-          
+          <div class="hint">Tip: Drop it in your class WhatsApp group 👀</div>
         </div>
         <div class="subCard" style="display:flex; gap:14px; flex-wrap:wrap; align-items:center; justify-content:space-between;">
           <div>
             <div style="font-weight:990">QR code</div>
-            
+            <div class="hint">Scan = instant open.</div>
           </div>
           <img alt="QR" id="qrImg" src="${qrLink}" style="width:140px;height:140px;border-radius:14px;border:1px solid var(--stroke);background:#fff;object-fit:cover;">
         </div>
@@ -3705,7 +3743,7 @@ async function shareSite(){
       desc:"Total/100 → Grade → GP",
       bodyHTML: GRADE_SCALE.map(r=>`
         <div class="subCard" style="display:flex; justify-content:space-between; align-items:center;">
-          
+          <div class="hint">≥ ${r.min}</div>
           <div style="font-weight:990">Grade ${r.grade} • GP ${r.gp}</div>
         </div>
       `).join(""),
@@ -3716,8 +3754,17 @@ async function shareSite(){
 
   function showHelp(){
     const msg = (state.mode==="m1")
-      ? `<div class="subCard"><div style="font-weight:990">Mode 1</div></div>`
-      : `<div class="subCard"><div style="font-weight:990">Mode 3</div></div>`;
+      ? `<div class="subCard"><div style="font-weight:990">Mode 1</div><div class="hint">
+           Enter Current CGPA + Completed credits + Target CGPA.<br>
+           Then enter CIE for each subject.<br>
+          iv>`
+      : (state.mode==="m2")
+      ? `<div class="subCard"><div style="font-weight:990">Mode 2</div><div class="hint">
+           Enter CIE/50 and SEE/100. Total = CIE + SEE/2. SGPA is computed from grade points.
+         </div></div>`
+      : `<div class="subCard"><div style="font-weight:990">Mode 3</div><div class="hint">
+           Enter SGPA for semesters (3–8). Choose equal or credit-weighted CGPA.
+         </div></div>`;
 
     openModal({ title:"Help", desc:"Quick guide", bodyHTML:msg, footHTML:`<button class="btn" id="okHelp">OK</button>` });
     $("#okHelp").onclick = closeModal;
@@ -3735,11 +3782,11 @@ function showHeroInfo(){
   const body = `
     <div class="subCard">
       <div style="font-weight:990; margin-bottom:6px;">${esc(title)}</div>
-      
+      <div class="hint">${esc(steps)}</div>
     </div>
     <div class="subCard">
       <div style="font-weight:990; margin-bottom:6px;">Important</div>
-      
+      <div class="hint">${notice}</div>
     </div>
   `;
 
@@ -3778,7 +3825,7 @@ function showUniversitySettings(){
         <div class="span2">
           <label class="label">USN / Roll No (optional)</label>
           <input class="input" id="uniUsn" placeholder="Your ID" value="${esc(state.profile.usn||'')}">
-          
+          <div class="hint">Optional. Stored in your account only.</div>
         </div>
       </div>
     `,
@@ -3806,13 +3853,13 @@ function showUniversitySettings(){
 function showFAQ(){
   const body = `
   <div class="subCard"><div style="font-weight:990">What is GRADEO?</div>
-    
+    <div class="hint">A planner to estimate SGPA/CGPA and minimum SEE required. Results are educational estimates.</div>
   </div>
   <div class="subCard"><div style="font-weight:990">How are marks calculated?</div>
-    
+    <div class="hint">Normal subjects: Total/100 = CIE/50 + SEE/2 (if SEE is out of 100). Pass rules used are shown in the app.</div>
   </div>
   <div class="subCard"><div style="font-weight:990">Can I use this for different universities?</div>
-    
+    <div class="hint">Yes—save your university details in University settings. Calculations are based on the app’s selected rules, so always verify with your official scheme.</div>
   </div>`;
   openModal({ title:'FAQ', desc:'Quick answers', bodyHTML: body, footHTML:`<button class="btn" id="faqClose">Close</button>` });
   document.getElementById('faqClose').onclick = closeModal;
@@ -3827,7 +3874,7 @@ function showContact(){
       <textarea class="textarea" id="contactMsg" placeholder="Feature request / bug report…"></textarea>
       <label class="label">Your email (optional)</label>
       <input class="input" id="contactEmail" placeholder="you@example.com" value="${esc(auth?.currentUser?.email || '')}">
-      
+      <div class="hint">Don’t share passwords or sensitive info.</div>
     `,
     footHTML:`
       <button class="btn primary" id="sendContactBtn">Send</button>
@@ -3898,7 +3945,7 @@ function bindCgpaInput(id){
 /* ========= Attendance planner (Quick) ========= */
 function openAttendanceModal(){
   const bodyHTML = `
-    
+    <div class="hint">Enter classes conducted and attended. Set required % (e.g., 75). Optionally enter remaining future classes to know how many you can bunk.</div>
     <div class="row" style="grid-template-columns:repeat(4,minmax(0,1fr)); margin-top:10px;">
       <div><label class="label">Classes conducted</label><input class="input" id="attC" type="number" min="0" step="1" placeholder="e.g., 42"></div>
       <div><label class="label">Classes attended</label><input class="input" id="attA" type="number" min="0" step="1" placeholder="e.g., 34"></div>
@@ -3925,10 +3972,10 @@ function openAttendanceModal(){
       const total = C + F;
       const needAttend = Math.max(0, Math.ceil(R*total - A));
       const canBunk = Math.max(0, F - needAttend);
-      extra = ``;
+      extra = `<div class="hint" style="margin-top:8px;">If <b>${F}</b> more classes happen: attend <b>${needAttend}</b>, bunk <b>${canBunk}</b>.</div>`;
     }
     const ok = pct >= reqPct;
-    out.innerHTML = `<div style="display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;align-items:center;"><div><div class="k">Attendance</div><div style="font-size:28px;font-weight:1000;">${pct.toFixed(2)}%</div></div><span class="pill ${ok?'good':'bad'}">${ok?'✅ Meets requirement':'⚠️ Below requirement'}</span></div>${extra}`;
+    out.innerHTML = `<div style="display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;align-items:center;"><div><div class="k">Attendance</div><div style="font-size:28px;font-weight:1000;">${pct.toFixed(2)}%</div><div class="hint">Attended ${A} / Conducted ${C} • Absent ${absent}</div></div><span class="pill ${ok?'good':'bad'}">${ok?'✅ Meets requirement':'⚠️ Below requirement'}</span></div>${extra}`;
   };
   ['attC','attA','attR','attF'].forEach(id=> document.getElementById(id).addEventListener('input', calc, {passive:true}));
   calc();
@@ -4098,15 +4145,15 @@ if (disclaimerBtn){
     openLegal('Disclaimer', `
       <div class="subCard">
         <h4>Educational purpose only</h4>
-        
+        <div class="hint">This tool is provided for learning and estimation. It is <b>not</b> an official marks statement and is <b>not affiliated</b> with any university.</div>
       </div>
       <div class="subCard">
         <h4>No guarantee of results</h4>
-        
+        <div class="hint">Calculated SGPA/CGPA and required marks are estimates. Actual results can differ due to university rules, moderation/grace marks, rounding, revaluation, or policy changes.</div>
       </div>
       <div class="subCard">
         <h4>Responsibility</h4>
-        
+        <div class="hint">You are responsible for verifying final results using official university communications/marks cards.</div>
       </div>
     `);
     wireCloseLegal();
@@ -4119,27 +4166,27 @@ if (termsBtn){
     openLegal('Terms & Conditions', `
       <div class="subCard">
         <h4>1) Educational use</h4>
-        
+        <div class="hint">This website helps students understand typical SGPA/CGPA calculations. It does not represent any university.</div>
       </div>
       <div class="subCard">
         <h4>2) Accuracy</h4>
-        
+        <div class="hint">We aim for correctness, but outputs may vary based on your university’s official evaluation rules and updates. Treat results as estimates.</div>
       </div>
       <div class="subCard">
         <h4>3) User responsibility</h4>
-        
+        <div class="hint">You must verify outcomes with official sources. Do not rely solely on this tool for academic decisions.</div>
       </div>
       <div class="subCard">
         <h4>4) Limitation of liability</h4>
-        
+        <div class="hint">The creators are not liable for academic outcomes, lost marks, or decisions made using estimated outputs.</div>
       </div>
       <div class="subCard">
         <h4>5) Acceptable use</h4>
-        
+        <div class="hint">Do not misuse the service, attempt unauthorized access, or upload sensitive personal data. Access may be restricted in case of abuse.</div>
       </div>
       <div class="subCard">
         <h4>6) Changes</h4>
-        
+        <div class="hint">Terms may be updated over time. Continued use means you accept the updated terms.</div>
       </div>
     `);
     wireCloseLegal();
@@ -4160,15 +4207,15 @@ if (privacyBtn){
       </div>
       <div class="subCard">
         <h4>What we do not collect</h4>
-        
+        <div class="hint">No passwords. No university login data. No selling of your data.</div>
       </div>
       <div class="subCard">
         <h4>Third-party services</h4>
-        
+        <div class="hint">This app uses Google Firebase for authentication and storage. Your data is not shared with advertisers.</div>
       </div>
       <div class="subCard">
         <h4>Data removal</h4>
-        
+        <div class="hint">You can delete your cloud plans in the app. Guest data can be removed by clearing browser storage for this site.</div>
       </div>
     `);
     wireCloseLegal();
@@ -4181,7 +4228,7 @@ if (changelogBtn){
     openLegal('Changelog', `
       <div class="subCard">
         <h4>v1.0</h4>
-        
+        <div class="hint">Launch-ready UI polish, 3D background, autosave, sharing, PDF export, and onboarding/shortcuts improvements.</div>
       </div>
     `);
     wireCloseLegal();
@@ -4368,7 +4415,7 @@ if (changelogBtn){
           openModal({
             title: "Import your guest data?",
             desc: "We found data you entered before signing in.",
-            bodyHTML: ``,
+            bodyHTML: `<div class="hint">Importing will create a new cloud plan from your locally saved inputs.</div>`,
             footHTML: `
               <button class="btn primary" id="importLocalBtn">Import to cloud</button>
               <button class="btn" id="skipImportBtn">Skip</button>`
@@ -5054,7 +5101,7 @@ const prefersReduce = window.matchMedia && window.matchMedia('(prefers-reduced-m
     openModal({
       title: 'Grade card',
       desc: 'Print (PDF) or share your grade card link.',
-      bodyHTML: ``,
+      bodyHTML: `<div class="hint">Tip: For best results, use <b>Marks → SGPA</b> mode and fill CIE & SEE.</div>`,
       footHTML: `
         <button class="btn primary" id="doShareGrade">📄 Share grade card</button>
         <button class="btn" id="doExportPdf">🖨️ Export / Print PDF</button>
@@ -5078,9 +5125,9 @@ const prefersReduce = window.matchMedia && window.matchMedia('(prefers-reduced-m
       title:'T&C',
       desc:'Terms • Privacy • Disclaimer',
       bodyHTML:`<div class="legal">
-        <h4>Terms & Conditions</h4>
-        <h4 style="margin-top:14px;">Privacy</h4>
-        <h4 style="margin-top:14px;">Disclaimer</h4>
+        <h4>Terms & Conditions</h4><div class="hint">Educational estimates only.</div>
+        <h4 style="margin-top:14px;">Privacy</h4><div class="hint">If you sign in, plans are stored in your Firebase account for autosave and sharing.</div>
+        <h4 style="margin-top:14px;">Disclaimer</h4><div class="hint">Verify with official marks card; results may differ by university rules.</div>
       </div>`,
       footHTML:`<button class="btn" id="closeTnC">Close</button>`
     });
@@ -5115,6 +5162,46 @@ const prefersReduce = window.matchMedia && window.matchMedia('(prefers-reduced-m
       });
     }
   }catch(_e){}
+
+
+  /* ===== Card Launch wiring (Option C) ===== */
+  function openApp(mode){
+    try{ document.body.classList.add('appOpen'); }catch(_e){}
+    // Ensure nav height calc updates
+    try{ document.documentElement.style.setProperty('--navH', (document.getElementById('nav')?.offsetHeight||56)+'px'); }catch(_e){}
+    try{ if(typeof setMode === 'function' && mode) setMode(mode, {push:false}); }catch(_e){}
+    try{ localStorage.setItem('gradeo_last_mode', mode||'m1'); }catch(_e){}
+    try{ window.scrollTo(0,0); }catch(_e){}
+  }
+
+  // Pick card -> open corresponding mode
+  try{
+    document.querySelectorAll('.pickCard[data-mode]').forEach((b)=>{
+      b.addEventListener('click', ()=> openApp(b.getAttribute('data-mode') || 'm1'));
+    });
+  }catch(_e){}
+
+  // Open last used
+  try{
+    const btn = document.getElementById('openLast');
+    if(btn){
+      btn.addEventListener('click', ()=>{
+        let m='m1';
+        try{ m = localStorage.getItem('gradeo_last_mode')||'m1'; }catch(_e){}
+        if(!(m==='m1'||m==='m2'||m==='m3')) m='m1';
+        openApp(m);
+      });
+    }
+  }catch(_e){}
+
+  // Quick sign-in from landing
+  try{
+    const s = document.getElementById('quickSignIn');
+    if(s) s.addEventListener('click', ()=>{ try{ openSignInModal(); }catch(_e){} });
+  }catch(_e){}
+
+  // Stay on landing until user picks
+  try{ document.body.classList.remove('appOpen'); }catch(_e){}
 
 })();
 </script>
