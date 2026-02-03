@@ -106,7 +106,11 @@
 }
 </script>
 
-  <style>
+  
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700;900&family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet">
+<style>
     :root{
       --bg:#0b1020; --panel:#101a33; --card:#15244a; --stroke:#273a6a;
       --text:#eef4ff; --muted:#b7c7ee; --muted2:#94a7d6;
@@ -1177,6 +1181,7 @@ body.appOpen #notesAcc, body.appOpen #accountAcc{display:none !important;}
     <div class="pills heroTools">
   <button class="btn small" id="heroInfoBtn">ℹ️ Info</button>
  <button class="btn small primary heroShare" id="heroSharePlanBtn"><span class="dot" aria-hidden="true"></span>Share plan</button>
+  <button class="btn small" id="heroPlansBtn"><span class="msr" aria-hidden="true">folder</span>Plans</button>
   <button class="btn small" id="heroExportBtn">Export / Print grade card</button>
 <span class="pill good" id="savePill" style="display:none;"></span>
     </div>
@@ -2037,7 +2042,7 @@ body.appOpen #notesAcc, body.appOpen #accountAcc{display:none !important;}
     $("#lockBar").style.display = auth.currentUser ? "none" : "block";
 
     // show account panel only after sign-in
-    $("#accountAcc").style.display = (state.user || (auth && auth.currentUser)) ? "block" : "none";
+    $("#accountAcc").style.display = auth.currentUser ? "block" : "none";
 
     // inputs
     $("#currentCgpa").value = state.plan.mode1.currentCgpa;
@@ -3728,176 +3733,25 @@ async function deleteAllUserPlans(uid){
 }
 
 </style>
-<style id="materialTonal">
-  /* ================= Material-like Tonal Surfaces (M3-ish) =================
-     Drop-in overrides to make the UI feel like Google Material:
-     - Tonal surface containers
-     - Subtle elevation levels
-     - Softer borders (outline-variant)
-     - Smooth state layers on hover/press
-  */
-
-  :root{
-    /* Neutral surfaces (light) */
-    --md-surface: #ffffff;
-    --md-surface-dim: #fafafa;
-    --md-surface-bright: #ffffff;
-    --md-surface-container-lowest: #ffffff;
-    --md-surface-container-low: #f7f7f8;
-    --md-surface-container: #f3f4f6;
-    --md-surface-container-high: #eef0f4;
-    --md-surface-container-highest: #e9ecf2;
-
-    --md-outline: rgba(15,23,42,.18);
-    --md-outline-variant: rgba(15,23,42,.12);
-
-    /* Elevation (very soft) */
-    --md-e0: 0 0 0 rgba(0,0,0,0);
-    --md-e1: 0 1px 2px rgba(15,23,42,.08), 0 1px 1px rgba(15,23,42,.06);
-    --md-e2: 0 2px 6px rgba(15,23,42,.10), 0 1px 2px rgba(15,23,42,.06);
-    --md-e3: 0 6px 14px rgba(15,23,42,.12), 0 2px 6px rgba(15,23,42,.06);
-
-    /* State layers */
-    --md-state-hover: rgba(2,6,23,.06);
-    --md-state-press: rgba(2,6,23,.10);
-
-    /* Roundedness closer to Material */
-    --md-r-lg: 20px;
-    --md-r-md: 16px;
-    --md-r-sm: 14px;
-
-    /* Text */
-    --md-on-surface: #0f172a;
-    --md-on-surface-variant: #334155;
+<style id="plansRibbonM3">
+  .msr{
+    font-family: 'Material Symbols Rounded';
+    font-weight: 500;
+    font-style: normal;
+    font-size: 18px;
+    line-height: 1;
+    display: inline-block;
+    vertical-align: middle;
+    -webkit-font-smoothing: antialiased;
+    font-variation-settings:
+      'FILL' var(--ms-fill, 0),
+      'wght' var(--ms-wght, 500),
+      'GRAD' var(--ms-grad, 0),
+      'opsz' var(--ms-opsz, 24);
+    margin-right: 6px;
   }
-
-  /* Dark theme support if you ever toggle back */
-  [data-theme="dark"], [data-theme="system"]{
-    --md-surface: #0b1020;
-    --md-surface-dim: #0a0f1d;
-    --md-surface-container-lowest: #0b1020;
-    --md-surface-container-low: #0f1730;
-    --md-surface-container: #121d3a;
-    --md-surface-container-high: #162348;
-    --md-surface-container-highest: #1a2a55;
-
-    --md-outline: rgba(226,232,240,.22);
-    --md-outline-variant: rgba(226,232,240,.14);
-
-    --md-e1: 0 1px 2px rgba(0,0,0,.40), 0 1px 1px rgba(0,0,0,.28);
-    --md-e2: 0 2px 8px rgba(0,0,0,.46), 0 1px 2px rgba(0,0,0,.26);
-    --md-e3: 0 8px 18px rgba(0,0,0,.52), 0 2px 6px rgba(0,0,0,.30);
-
-    --md-state-hover: rgba(255,255,255,.08);
-    --md-state-press: rgba(255,255,255,.12);
-
-    --md-on-surface: #eef4ff;
-    --md-on-surface-variant: #b7c7ee;
-  }
-
-  /* Page background: a very soft Material-style wash */
-  body{
-    background: radial-gradient(900px 600px at 12% -10%, color-mix(in oklab, var(--accent) 18%, transparent), transparent 62%),
-                radial-gradient(900px 600px at 90% 0%, color-mix(in oklab, var(--accent2) 12%, transparent), transparent 60%),
-                linear-gradient(180deg, var(--md-surface), var(--md-surface-container-low));
-    color: var(--md-on-surface);
-  }
-
-  /* Nav = elevated tonal surface */
-  .nav{
-    background: color-mix(in oklab, var(--md-surface) 86%, transparent) !important;
-    border-bottom: 1px solid var(--md-outline-variant) !important;
-    box-shadow: var(--md-e1) !important;
-  }
-
-  /* Panels + cards: tonal surfaces & gentle outlines */
-  .panel{
-    background: var(--md-surface-container-low) !important;
-    border: 1px solid var(--md-outline-variant) !important;
-    border-radius: var(--md-r-lg) !important;
-    box-shadow: var(--md-e1) !important;
-  }
-
-  .panelHead{
-    border-bottom: 1px solid var(--md-outline-variant) !important;
-  }
-
-  .subCard, .stat, .accordion, .modal{
-    background: var(--md-surface-container) !important;
-    border: 1px solid var(--md-outline-variant) !important;
-    border-radius: var(--md-r-md) !important;
-    box-shadow: var(--md-e1) !important;
-  }
-
-  /* Slightly higher surface for interactive cards */
-  .subCard:hover, .stat:hover{
-    box-shadow: var(--md-e2) !important;
-  }
-
-  /* Buttons: Material filled / tonal / outlined feel */
-  .btn{
-    background: var(--md-surface-container-high) !important;
-    border: 1px solid var(--md-outline-variant) !important;
-    box-shadow: var(--md-e1) !important;
-    border-radius: 999px !important; /* Material pill */
-  }
-  .btn:hover{ filter:none !important; box-shadow: var(--md-e2) !important; }
-  .btn:active{ box-shadow: var(--md-e1) !important; }
-
-  .btn.primary{
-    background: color-mix(in oklab, var(--accent) 92%, #0000) !important;
-    color: #fff !important;
-    border-color: transparent !important;
-    box-shadow: var(--md-e2) !important;
-  }
-  .btn.primary:hover{ box-shadow: var(--md-e3) !important; }
-
-  .btn.ghost{
-    background: transparent !important;
-    border: 1px solid var(--md-outline-variant) !important;
-    box-shadow: var(--md-e0) !important;
-  }
-
-  .btn.danger{
-    background: color-mix(in oklab, #ef4444 12%, var(--md-surface-container)) !important;
-    border-color: color-mix(in oklab, #ef4444 28%, var(--md-outline-variant)) !important;
-    box-shadow: var(--md-e0) !important;
-  }
-
-  /* Inputs: surface with outline variant */
-  .input, .select, .textarea{
-    background: var(--md-surface) !important;
-    border: 1px solid var(--md-outline-variant) !important;
-    border-radius: var(--md-r-sm) !important;
-    box-shadow: none !important;
-  }
-  .input:focus, .select:focus, .textarea:focus{
-    border-color: color-mix(in oklab, var(--accent) 55%, var(--md-outline)) !important;
-  }
-
-  /* Pills: tonal chips */
-  .pill{
-    background: color-mix(in oklab, var(--md-surface) 70%, var(--md-surface-container)) !important;
-    border: 1px solid var(--md-outline-variant) !important;
-    box-shadow: var(--md-e0) !important;
-  }
-
-  /* Modal overlay more Material */
-  .overlay{ background: rgba(2,6,23,.45) !important; }
-
-  /* Bottom island = Material nav bar */
-  .bottomIsland{
-    background: color-mix(in oklab, var(--md-surface) 86%, transparent) !important;
-    border: 1px solid var(--md-outline-variant) !important;
-    box-shadow: var(--md-e2) !important;
-  }
-
-  /* Active elements use tonal accent */
-  .modeBtn.active, .bIsBtn.active{
-    background: color-mix(in oklab, var(--accent) 80%, var(--accent2)) !important;
-    color: #fff !important;
-    border-color: transparent !important;
-  }
+  /* Keep your existing theme, just make ribbon buttons feel like Material chips */
+  .heroTools .btn.small{ border-radius: 999px; }
 </style>
 </head><body><div class="watermark"><span>GRADEO</span></div><div class="page"><div class="sheet">${body}<div class="printRow"><button class="btn primary" onclick="window.print()">Print / Save as PDF</button><button class="btn" onclick="window.close()">Close</button></div></div></div>
 </div>
@@ -4603,11 +4457,6 @@ if (changelogBtn){
         $("#accountAcc").style.display="block";
         startAutosaveLoop();
 
-        // Refresh UI now that auth is ready (shows Account & Plans)
-        renderAllStatic();
-        scheduleRecalc(0);
-
-
         // If there is locally saved guest data, offer to import it to cloud
         if (hasLocal()){
           openModal({
@@ -4922,6 +4771,255 @@ if (changelogBtn){
     renderAllStatic();
     scheduleRecalc(0);
   });
+
+
+
+  /* ================= Plans Ribbon + Guest Multi-Plans (Safe Patch) =================
+     This patch is appended at the end of the main app IIFE to avoid breaking existing code.
+     - Adds a working Plans button in the hero ribbon.
+     - Enables Guest multi-plans (new/duplicate/delete/rename) stored in localStorage.
+     - Uses event delegation so re-renders won't break the button.
+  */
+
+  const GUEST_PLANS_KEY = 'gradeo_guest_plans_v1';
+  const guestUUID = () => (window.crypto && crypto.randomUUID)
+    ? crypto.randomUUID()
+    : ('g_' + Math.random().toString(16).slice(2) + Date.now().toString(16));
+
+  function guestStoreDefault(){
+    const id = guestUUID();
+    return {
+      v: 1,
+      activeId: id,
+      plans: [
+        {
+          id,
+          name: (state.plan && state.plan.name) ? state.plan.name : 'My Plan',
+          plan: state.plan || defaultGuestPlan(),
+          history: state.history,
+          mode: state.mode || 'm1',
+          updatedAt: Date.now()
+        }
+      ]
+    };
+  }
+
+  function guestStoreLoad(){
+    try{
+      const raw = localStorage.getItem(GUEST_PLANS_KEY);
+      if(!raw) return guestStoreDefault();
+      const s = JSON.parse(raw);
+      if(!s || !Array.isArray(s.plans) || !s.plans.length) return guestStoreDefault();
+      if(!s.activeId || !s.plans.find(p=>p.id===s.activeId)) s.activeId = s.plans[0].id;
+      return s;
+    }catch(e){
+      return guestStoreDefault();
+    }
+  }
+
+  function guestStoreSave(store){
+    try{ localStorage.setItem(GUEST_PLANS_KEY, JSON.stringify(store)); }catch(e){}
+  }
+
+  function guestSyncActiveFromState(){
+    const store = guestStoreLoad();
+    const id = store.activeId || guestUUID();
+    store.activeId = id;
+    const row = {
+      id,
+      name: (state.plan && state.plan.name) ? state.plan.name : 'My Plan',
+      plan: state.plan,
+      history: state.history,
+      mode: state.mode || 'm1',
+      updatedAt: Date.now()
+    };
+    const i = store.plans.findIndex(p=>p.id===id);
+    if(i>=0) store.plans[i] = row; else store.plans.unshift(row);
+    guestStoreSave(store);
+    return store;
+  }
+
+  function guestOpenPlan(id){
+    const store = guestStoreLoad();
+    const p = store.plans.find(x=>x.id===id);
+    if(!p) return;
+    store.activeId = id;
+    guestStoreSave(store);
+
+    state.planId = id;
+    state.plan = p.plan || defaultGuestPlan();
+    state.history = p.history || state.history;
+    state.mode = p.mode || state.mode;
+
+    renderAllStatic();
+    scheduleRecalc(0);
+  }
+
+  function guestNewPlan(){
+    const store = guestStoreLoad();
+    const id = guestUUID();
+    const plan = defaultGuestPlan();
+    plan.name = 'New Plan';
+    store.plans.unshift({
+      id,
+      name: plan.name,
+      plan,
+      history: JSON.parse(JSON.stringify(state.history)),
+      mode: state.mode || 'm1',
+      updatedAt: Date.now()
+    });
+    store.activeId = id;
+    guestStoreSave(store);
+    guestOpenPlan(id);
+    toast('New plan created');
+  }
+
+  function guestDuplicatePlan(){
+    const store = guestStoreLoad();
+    const cur = store.plans.find(p=>p.id===store.activeId);
+    if(!cur) return;
+    const id = guestUUID();
+    const plan = JSON.parse(JSON.stringify(state.plan));
+    plan.name = (plan.name || 'Plan') + ' (Copy)';
+    store.plans.unshift({
+      id,
+      name: plan.name,
+      plan,
+      history: JSON.parse(JSON.stringify(state.history)),
+      mode: state.mode || 'm1',
+      updatedAt: Date.now()
+    });
+    store.activeId = id;
+    guestStoreSave(store);
+    guestOpenPlan(id);
+    toast('Plan duplicated');
+  }
+
+  function guestDeletePlan(){
+    const store = guestStoreLoad();
+    if(store.plans.length <= 1){ toast('Keep at least 1 plan'); return; }
+    if(!confirm('Delete this plan from this browser?')) return;
+    const delId = store.activeId;
+    store.plans = store.plans.filter(p=>p.id !== delId);
+    store.activeId = store.plans[0].id;
+    guestStoreSave(store);
+    guestOpenPlan(store.activeId);
+    toast('Plan deleted');
+  }
+
+  function guestRenameActive(name){
+    const store = guestStoreLoad();
+    const p = store.plans.find(x=>x.id===store.activeId);
+    if(!p) return;
+    p.name = name;
+    if(p.plan) p.plan.name = name;
+    guestStoreSave(store);
+  }
+
+  // Override guest local save/load so guest plans persist properly (without touching cloud)
+  const __origSaveLocalNow = saveLocalNow;
+  saveLocalNow = function(){
+    try{
+      if(auth && auth.currentUser) return;
+      guestSyncActiveFromState();
+      __origSaveLocalNow();
+    }catch(e){}
+  };
+
+  const __origLoadLocal = loadLocal;
+  loadLocal = function(){
+    try{
+      const store = guestStoreLoad();
+      if(store && store.plans && store.plans.length){
+        state.planId = store.activeId;
+        const p = store.plans.find(x=>x.id===store.activeId) || store.plans[0];
+        state.plan = p.plan || defaultGuestPlan();
+        state.history = p.history || state.history;
+        state.mode = p.mode || state.mode;
+        return true;
+      }
+    }catch(e){}
+    return __origLoadLocal();
+  };
+
+  const __origHasLocal = hasLocal;
+  hasLocal = function(){
+    try{ return !!(localStorage.getItem(GUEST_PLANS_KEY) || localStorage.getItem(LS_KEY)); }
+    catch(e){ return __origHasLocal(); }
+  };
+
+  // Plans modal
+  function openPlansModal(){
+    const signed = !!(auth && auth.currentUser);
+    const store = signed ? null : guestStoreLoad();
+
+    const options = signed
+      ? (state.plansList||[]).map(p=>`<option value="${esc(p.id)}">${esc(p.name||'Plan')}</option>`).join('')
+      : store.plans.map(p=>`<option value="${esc(p.id)}">${esc(p.name||'Plan')}</option>`).join('');
+
+    const activeId = signed ? (state.planId || '') : (store.activeId || '');
+    const activeName = (state.plan && state.plan.name) ? state.plan.name : 'My Plan';
+
+    openModal({
+      title: 'Plans',
+      desc: signed ? 'Cloud plans (autosaved)' : 'Guest plans (saved on this device)',
+      bodyHTML: `
+        <div class="subCard">
+          <label class="label">Your plans</label>
+          <select class="select" id="pmSelect">${options || '<option value="">No plans</option>'}</select>
+        </div>
+        <div class="subCard">
+          <label class="label">Rename</label>
+          <input class="input" id="pmName" value="${esc(activeName)}" placeholder="Plan name" />
+          <div class="hint" style="margin-top:8px;">Rename updates instantly. Guest plans are stored in this browser.</div>
+        </div>
+      `,
+      footHTML: `
+        <button class="btn" id="pmNew"><span class="msr" aria-hidden="true">add</span>New</button>
+        <button class="btn" id="pmDup"><span class="msr" aria-hidden="true">content_copy</span>Duplicate</button>
+        <button class="btn danger" id="pmDel"><span class="msr" aria-hidden="true">delete</span>Delete</button>
+        <button class="btn primary" id="pmClose">Close</button>
+      `
+    });
+
+    const sel = document.getElementById('pmSelect');
+    const nameInp = document.getElementById('pmName');
+    if(sel) sel.value = activeId;
+
+    if(sel){
+      sel.addEventListener('change', async ()=>{
+        const id = sel.value;
+        if(signed) await openPlan(id);
+        else guestOpenPlan(id);
+        if(nameInp) nameInp.value = (state.plan && state.plan.name) ? state.plan.name : '';
+      });
+    }
+
+    if(nameInp){
+      nameInp.addEventListener('input', ()=>{
+        const nm = (nameInp.value||'').trim() || 'My Plan';
+        state.plan.name = nm;
+        const sidebar = document.getElementById('planName');
+        if(sidebar) sidebar.value = nm;
+        if(signed) markDirty();
+        else guestRenameActive(nm);
+        renderPlansSelect();
+      }, {passive:true});
+    }
+
+    document.getElementById('pmNew').onclick = async()=>{ if(signed) await createNewPlan(); else guestNewPlan(); closeModal(); };
+    document.getElementById('pmDup').onclick = async()=>{ if(signed) await duplicatePlan(); else guestDuplicatePlan(); closeModal(); };
+    document.getElementById('pmDel').onclick = async()=>{ if(signed) await deletePlan(); else guestDeletePlan(); closeModal(); };
+    document.getElementById('pmClose').onclick = closeModal;
+  }
+
+  // Delegated click: survives re-renders (THIS makes the button always work)
+  document.addEventListener('click', (ev)=>{
+    const btn = ev.target && ev.target.closest ? ev.target.closest('#heroPlansBtn') : null;
+    if(!btn) return;
+    ev.preventDefault();
+    try{ openPlansModal(); }catch(e){ console.error(e); toast('Plans error'); }
+  }, true);
 
 })();
 </script>
