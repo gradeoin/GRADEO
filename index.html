@@ -18,6 +18,8 @@
 
 
 
+
+
 <!doctype html>
 <html lang="en">
 <head>
@@ -2035,7 +2037,7 @@ body.appOpen #notesAcc, body.appOpen #accountAcc{display:none !important;}
     $("#lockBar").style.display = auth.currentUser ? "none" : "block";
 
     // show account panel only after sign-in
-    $("#accountAcc").style.display = auth.currentUser ? "block" : "none";
+    $("#accountAcc").style.display = (state.user || (auth && auth.currentUser)) ? "block" : "none";
 
     // inputs
     $("#currentCgpa").value = state.plan.mode1.currentCgpa;
@@ -3725,7 +3727,179 @@ async function deleteAllUserPlans(uid){
   .vStripBtn.hot{background:linear-gradient(135deg,var(--accent),var(--accent2)); color:#fff; border-color:transparent;}
 }
 
-</style></head><body><div class="watermark"><span>GRADEO</span></div><div class="page"><div class="sheet">${body}<div class="printRow"><button class="btn primary" onclick="window.print()">Print / Save as PDF</button><button class="btn" onclick="window.close()">Close</button></div></div></div>
+</style>
+<style id="materialTonal">
+  /* ================= Material-like Tonal Surfaces (M3-ish) =================
+     Drop-in overrides to make the UI feel like Google Material:
+     - Tonal surface containers
+     - Subtle elevation levels
+     - Softer borders (outline-variant)
+     - Smooth state layers on hover/press
+  */
+
+  :root{
+    /* Neutral surfaces (light) */
+    --md-surface: #ffffff;
+    --md-surface-dim: #fafafa;
+    --md-surface-bright: #ffffff;
+    --md-surface-container-lowest: #ffffff;
+    --md-surface-container-low: #f7f7f8;
+    --md-surface-container: #f3f4f6;
+    --md-surface-container-high: #eef0f4;
+    --md-surface-container-highest: #e9ecf2;
+
+    --md-outline: rgba(15,23,42,.18);
+    --md-outline-variant: rgba(15,23,42,.12);
+
+    /* Elevation (very soft) */
+    --md-e0: 0 0 0 rgba(0,0,0,0);
+    --md-e1: 0 1px 2px rgba(15,23,42,.08), 0 1px 1px rgba(15,23,42,.06);
+    --md-e2: 0 2px 6px rgba(15,23,42,.10), 0 1px 2px rgba(15,23,42,.06);
+    --md-e3: 0 6px 14px rgba(15,23,42,.12), 0 2px 6px rgba(15,23,42,.06);
+
+    /* State layers */
+    --md-state-hover: rgba(2,6,23,.06);
+    --md-state-press: rgba(2,6,23,.10);
+
+    /* Roundedness closer to Material */
+    --md-r-lg: 20px;
+    --md-r-md: 16px;
+    --md-r-sm: 14px;
+
+    /* Text */
+    --md-on-surface: #0f172a;
+    --md-on-surface-variant: #334155;
+  }
+
+  /* Dark theme support if you ever toggle back */
+  [data-theme="dark"], [data-theme="system"]{
+    --md-surface: #0b1020;
+    --md-surface-dim: #0a0f1d;
+    --md-surface-container-lowest: #0b1020;
+    --md-surface-container-low: #0f1730;
+    --md-surface-container: #121d3a;
+    --md-surface-container-high: #162348;
+    --md-surface-container-highest: #1a2a55;
+
+    --md-outline: rgba(226,232,240,.22);
+    --md-outline-variant: rgba(226,232,240,.14);
+
+    --md-e1: 0 1px 2px rgba(0,0,0,.40), 0 1px 1px rgba(0,0,0,.28);
+    --md-e2: 0 2px 8px rgba(0,0,0,.46), 0 1px 2px rgba(0,0,0,.26);
+    --md-e3: 0 8px 18px rgba(0,0,0,.52), 0 2px 6px rgba(0,0,0,.30);
+
+    --md-state-hover: rgba(255,255,255,.08);
+    --md-state-press: rgba(255,255,255,.12);
+
+    --md-on-surface: #eef4ff;
+    --md-on-surface-variant: #b7c7ee;
+  }
+
+  /* Page background: a very soft Material-style wash */
+  body{
+    background: radial-gradient(900px 600px at 12% -10%, color-mix(in oklab, var(--accent) 18%, transparent), transparent 62%),
+                radial-gradient(900px 600px at 90% 0%, color-mix(in oklab, var(--accent2) 12%, transparent), transparent 60%),
+                linear-gradient(180deg, var(--md-surface), var(--md-surface-container-low));
+    color: var(--md-on-surface);
+  }
+
+  /* Nav = elevated tonal surface */
+  .nav{
+    background: color-mix(in oklab, var(--md-surface) 86%, transparent) !important;
+    border-bottom: 1px solid var(--md-outline-variant) !important;
+    box-shadow: var(--md-e1) !important;
+  }
+
+  /* Panels + cards: tonal surfaces & gentle outlines */
+  .panel{
+    background: var(--md-surface-container-low) !important;
+    border: 1px solid var(--md-outline-variant) !important;
+    border-radius: var(--md-r-lg) !important;
+    box-shadow: var(--md-e1) !important;
+  }
+
+  .panelHead{
+    border-bottom: 1px solid var(--md-outline-variant) !important;
+  }
+
+  .subCard, .stat, .accordion, .modal{
+    background: var(--md-surface-container) !important;
+    border: 1px solid var(--md-outline-variant) !important;
+    border-radius: var(--md-r-md) !important;
+    box-shadow: var(--md-e1) !important;
+  }
+
+  /* Slightly higher surface for interactive cards */
+  .subCard:hover, .stat:hover{
+    box-shadow: var(--md-e2) !important;
+  }
+
+  /* Buttons: Material filled / tonal / outlined feel */
+  .btn{
+    background: var(--md-surface-container-high) !important;
+    border: 1px solid var(--md-outline-variant) !important;
+    box-shadow: var(--md-e1) !important;
+    border-radius: 999px !important; /* Material pill */
+  }
+  .btn:hover{ filter:none !important; box-shadow: var(--md-e2) !important; }
+  .btn:active{ box-shadow: var(--md-e1) !important; }
+
+  .btn.primary{
+    background: color-mix(in oklab, var(--accent) 92%, #0000) !important;
+    color: #fff !important;
+    border-color: transparent !important;
+    box-shadow: var(--md-e2) !important;
+  }
+  .btn.primary:hover{ box-shadow: var(--md-e3) !important; }
+
+  .btn.ghost{
+    background: transparent !important;
+    border: 1px solid var(--md-outline-variant) !important;
+    box-shadow: var(--md-e0) !important;
+  }
+
+  .btn.danger{
+    background: color-mix(in oklab, #ef4444 12%, var(--md-surface-container)) !important;
+    border-color: color-mix(in oklab, #ef4444 28%, var(--md-outline-variant)) !important;
+    box-shadow: var(--md-e0) !important;
+  }
+
+  /* Inputs: surface with outline variant */
+  .input, .select, .textarea{
+    background: var(--md-surface) !important;
+    border: 1px solid var(--md-outline-variant) !important;
+    border-radius: var(--md-r-sm) !important;
+    box-shadow: none !important;
+  }
+  .input:focus, .select:focus, .textarea:focus{
+    border-color: color-mix(in oklab, var(--accent) 55%, var(--md-outline)) !important;
+  }
+
+  /* Pills: tonal chips */
+  .pill{
+    background: color-mix(in oklab, var(--md-surface) 70%, var(--md-surface-container)) !important;
+    border: 1px solid var(--md-outline-variant) !important;
+    box-shadow: var(--md-e0) !important;
+  }
+
+  /* Modal overlay more Material */
+  .overlay{ background: rgba(2,6,23,.45) !important; }
+
+  /* Bottom island = Material nav bar */
+  .bottomIsland{
+    background: color-mix(in oklab, var(--md-surface) 86%, transparent) !important;
+    border: 1px solid var(--md-outline-variant) !important;
+    box-shadow: var(--md-e2) !important;
+  }
+
+  /* Active elements use tonal accent */
+  .modeBtn.active, .bIsBtn.active{
+    background: color-mix(in oklab, var(--accent) 80%, var(--accent2)) !important;
+    color: #fff !important;
+    border-color: transparent !important;
+  }
+</style>
+</head><body><div class="watermark"><span>GRADEO</span></div><div class="page"><div class="sheet">${body}<div class="printRow"><button class="btn primary" onclick="window.print()">Print / Save as PDF</button><button class="btn" onclick="window.close()">Close</button></div></div></div>
 </div>
 </body></html>`;
 
@@ -4428,6 +4602,11 @@ if (changelogBtn){
 
         $("#accountAcc").style.display="block";
         startAutosaveLoop();
+
+        // Refresh UI now that auth is ready (shows Account & Plans)
+        renderAllStatic();
+        scheduleRecalc(0);
+
 
         // If there is locally saved guest data, offer to import it to cloud
         if (hasLocal()){
@@ -5401,6 +5580,7 @@ const prefersReduce = window.matchMedia && window.matchMedia('(prefers-reduced-m
 
 
 
+<!-- Cloudflare Pages Analytics --><script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "41889a7158c94832951b776ca74d5f82"}'></script><!-- Cloudflare Pages Analytics --><script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9c7f75032ae62224',t:'MTc3MDA5NTc5NQ=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script><script defer src="https://static.cloudflareinsights.com/beacon.min.js/vcd15cbe7772f49c399c6a5babf22c1241717689176015" integrity="sha512-ZpsOmlRQV6y907TI0dKBHq9Md29nnaEIPlkf84rnaERnq6zvWvPUqr2ft8M1aS28oN72PdrCzSjY4U6VaAw1EQ==" data-cf-beacon='{"version":"2024.11.0","token":"32f0b0530bdb47d89109f78f09c965e1","r":1,"server_timing":{"name":{"cfCacheStatus":true,"cfEdge":true,"cfExtPri":true,"cfL4":true,"cfOrigin":true,"cfSpeedBrain":true},"location_startswith":null}}' crossorigin="anonymous"></script>
 </body>
 </html>
 
