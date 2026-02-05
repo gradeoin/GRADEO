@@ -1497,6 +1497,15 @@ body.appOpen #notesAcc, body.appOpen #accountAcc{display:none !important;}
       const key = "welcome_sent_" + user.uid;
       if (localStorage.getItem(key)) return;
 
+      // Prevent double-send in same session/tab (auth listener can fire more than once)
+      window.__welcomeSending = window.__welcomeSending || {};
+      if (window.__welcomeSending[user.uid]) return;
+      window.__welcomeSending[user.uid] = true;
+
+      // Acquire local lock immediately to avoid race conditions
+      try { localStorage.setItem(key, 'pending'); } catch(_e) {}
+
+
       // Cloud (per-account) guard: if already sent on any device, skip
       try{
         if (typeof profileRef === 'function' && db){
@@ -1533,6 +1542,8 @@ body.appOpen #notesAcc, body.appOpen #accountAcc{display:none !important;}
       console.log("✅ Welcome email sent to:", user.email);
     }catch(err){
       console.error("❌ Welcome email failed:", err);
+      try { localStorage.removeItem(key); } catch(_e) {}
+      try { if (window.__welcomeSending) delete window.__welcomeSending[user.uid]; } catch(_e) {}
     }
   }
 
@@ -1780,6 +1791,35 @@ body.appOpen #notesAcc, body.appOpen #accountAcc{display:none !important;}
     auth = firebase.auth();
     db = firebase.firestore();
     provider = new firebase.auth.GoogleAuthProvider();
+
+  // ✅ Catch users who arrive already signed-in (e.g., from /offer → /success redirect)
+  // Sends welcome email ONLY for truly new users (first sign-in), and only once per user.
+  if (!window.__welcomeAuthListenerAdded) {
+    window.__welcomeAuthListenerAdded = true;
+    auth.onAuthStateChanged(async (user) => {
+      if (!user) return;
+      try {
+        // One-time hint set by sign-in flows
+        let hinted = false;
+        try {
+          const hk = 'welcome_hint_' + user.uid;
+          hinted = sessionStorage.getItem(hk) === '1';
+          if (hinted) sessionStorage.removeItem(hk);
+        } catch (e) {}
+
+        const created = new Date(user.metadata && user.metadata.creationTime ? user.metadata.creationTime : 0).getTime();
+        const last = new Date(user.metadata && user.metadata.lastSignInTime ? user.metadata.lastSignInTime : 0).getTime();
+        const isNewUser = Number.isFinite(created) && Number.isFinite(last) && Math.abs(last - created) < 60 * 1000;
+
+        if (hinted || isNewUser) {
+          await sendWelcomeEmailOnce(user);
+        }
+      } catch (e) {
+        console.warn('Welcome email (offer-flow) check failed:', e);
+      }
+    });
+  }
+
     // no offline persistence
   }
 
@@ -2912,7 +2952,12 @@ function setMode(mode, opts={push:true}){
     });
     $("#doSignin").onclick = async()=>{ 
    const result = await auth.signInWithPopup(provider);
-   try { if (result && result.additionalUserInfo && result.additionalUserInfo.isNewUser && result.user && result.user.uid) { sessionStorage.setItem('welcome_hint_' + result.user.uid, '1'); } } catch (e) {}
+      // ✅ Mark new user; welcome email is sent via auth.onAuthStateChanged to avoid duplicates
+      try {
+        if (result && result.additionalUserInfo && result.additionalUserInfo.isNewUser && result.user && result.user.uid) {
+          sessionStorage.setItem('welcome_hint_' + result.user.uid, '1');
+        }
+      } catch (e) {}
    closeModal(); 
  };
     $("#cancel").onclick = closeModal;
@@ -4565,12 +4610,13 @@ if (changelogBtn){
 
     try{
       const res = await auth.signInWithPopup(provider);
-      // ✅ Mark new user; welcome email is sent via auth.onAuthStateChanged to avoid duplicates
-      try {
-        if (res && res.additionalUserInfo && res.additionalUserInfo.isNewUser && res.user && res.user.uid) {
-          sessionStorage.setItem('welcome_hint_' + res.user.uid, '1');
+      if(res && res.user){
+        try {
+          if (res.additionalUserInfo && res.additionalUserInfo.isNewUser && res.user && res.user.uid) {
+            sessionStorage.setItem('welcome_hint_' + res.user.uid, '1');
+          }
+        } catch(_e) {}
         }
-      } catch (_e) {}
       showLandingVerify();
       updateLandingAuthUI();
     }catch(err){
@@ -4611,12 +4657,11 @@ if (changelogBtn){
       if(auth && typeof auth.getRedirectResult === 'function'){
         auth.getRedirectResult().then((res)=>{
           if(res && res.user){
-            // ✅ Mark new user; welcome email is sent via auth.onAuthStateChanged to avoid duplicates
             try {
               if (res.additionalUserInfo && res.additionalUserInfo.isNewUser && res.user && res.user.uid) {
                 sessionStorage.setItem('welcome_hint_' + res.user.uid, '1');
               }
-            } catch (_e) {}
+            } catch(_e) {}
             showLandingVerify();
           }
           updateLandingAuthUI();
