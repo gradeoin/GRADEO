@@ -24,19 +24,26 @@
       --r:24px; --r2:18px;
       --focus:0 0 0 5px rgba(255,122,0,.18);
     }
-    @media (prefers-color-scheme: dark){
-      :root{
-        --bg:#0B0B10;
-        --ink:#F2F2F2;
-        --muted:#B7B7C2;
-        --card:rgba(18,18,26,.92);
-        --panel:rgba(16,16,24,.55);
-        --stroke:rgba(255,122,0,.30);
-        --hair:rgba(255,255,255,.10);
-        --shadow:0 24px 70px rgba(0,0,0,.50);
-        --focus:0 0 0 5px rgba(255,122,0,.22);
-      }
-    }
+   @media (prefers-color-scheme: dark){
+  :root{
+    /* Background + text */
+    --bg:#0B0B10;
+    --ink:#F5F5F7;          /* brighter text */
+    --muted:#C9CAD4;        /* readable secondary text */
+
+    /* Surfaces */
+    --card:rgba(20,20,30,.94);    /* less transparent to avoid blending */
+    --panel:rgba(28,28,42,.78);   /* panel stands out from card */
+    
+    /* Borders + shadows */
+    --stroke:rgba(255,122,0,.38); /* stronger border */
+    --hair:rgba(255,255,255,.14); /* visible separators */
+    --shadow:0 28px 80px rgba(0,0,0,.55);
+
+    /* Focus ring */
+    --focus:0 0 0 5px rgba(255,122,0,.28);
+  }
+}
     *{box-sizing:border-box}
     body{
       margin:0;
