@@ -1,0 +1,202 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Gradeo — Feedback</title>
+
+  <meta name="description" content="Share your Gradeo feedback. Rate your experience and send suggestions." />
+  <meta name="theme-color" content="#FF7A00" />
+  <meta name="color-scheme" content="light dark" />
+
+  <style>
+    :root{
+      --orange:#FF7A00;
+      --orange2:#FFB26A;
+      --bg:#FFF7F1;
+      --ink:#121212;
+      --muted:#5B5B5B;
+      --card:rgba(255,255,255,.92);
+      --panel:rgba(255,255,255,.60);
+      --stroke:rgba(255,122,0,.22);
+      --hair:rgba(0,0,0,.07);
+      --shadow:0 16px 40px rgba(255,122,0,.14), 0 2px 12px rgba(0,0,0,.08);
+      --r:24px; --r2:18px;
+      --focus:0 0 0 5px rgba(255,122,0,.18);
+    }
+    @media (prefers-color-scheme: dark){
+      :root{
+        --bg:#0B0B10;
+        --ink:#F2F2F2;
+        --muted:#B7B7C2;
+        --card:rgba(18,18,26,.92);
+        --panel:rgba(16,16,24,.55);
+        --stroke:rgba(255,122,0,.30);
+        --hair:rgba(255,255,255,.10);
+        --shadow:0 24px 70px rgba(0,0,0,.50);
+        --focus:0 0 0 5px rgba(255,122,0,.22);
+      }
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+      color:var(--ink);
+      background:
+        radial-gradient(900px 520px at 18% 8%, rgba(255,122,0,.16), transparent 70%),
+        radial-gradient(900px 520px at 82% 12%, rgba(255,178,106,.12), transparent 68%),
+        linear-gradient(180deg, var(--bg) 0%, var(--bg) 100%);
+    }
+    .wrap{max-width:920px;margin:0 auto;padding:28px 14px 56px;}
+    .card{background:var(--card);border:1px solid var(--stroke);border-radius:var(--r);box-shadow:var(--shadow);overflow:hidden;}
+    header{padding:22px 22px 14px;border-bottom:1px solid var(--hair);background:linear-gradient(135deg, rgba(255,122,0,.10), transparent 55%, rgba(255,178,106,.10));}
+    .brand{display:flex;align-items:center;justify-content:space-between;gap:12px;}
+    .logo{height:46px;width:auto;display:block;}
+    .badge{font-size:12px;font-weight:850;letter-spacing:.35px;color:var(--muted);padding:8px 10px;border-radius:999px;border:1px solid var(--hair);background:rgba(255,255,255,.42);}
+    @media (prefers-color-scheme: dark){.badge{background:rgba(0,0,0,.20);}}
+    h1{margin:16px 0 6px;font-size:30px;font-weight:950;letter-spacing:-.35px;line-height:1.12;}
+    p{margin:0;color:var(--muted);line-height:1.75;font-size:14px;max-width:75ch;}
+    .content{padding:16px 22px 22px;}
+    .panel{background:var(--panel);border:1px solid var(--hair);border-radius:var(--r2);padding:16px;}
+    label{display:block;margin:14px 0 6px;font-size:12px;color:var(--muted);font-weight:850;}
+    input,textarea{width:100%;padding:12px;border-radius:14px;border:1px solid rgba(0,0,0,.14);background:rgba(255,255,255,.94);color:var(--ink);font-size:14px;outline:none;transition: box-shadow .18s ease, border-color .18s ease;}
+    @media (prefers-color-scheme: dark){input,textarea{background:#0F0F16;border-color:rgba(255,255,255,.16);}}
+    input:focus,textarea:focus{border-color:var(--orange);box-shadow:var(--focus);}
+    textarea{min-height:160px;resize:vertical;}
+    .grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+    @media (max-width:640px){.grid{grid-template-columns:1fr;}}
+    .chips{display:flex;flex-wrap:wrap;gap:10px;margin-top:8px;}
+    .chip{display:inline-flex;align-items:center;gap:8px;padding:10px 14px;border-radius:999px;border:1px solid rgba(255,122,0,.35);background:rgba(255,247,241,.92);font-weight:950;cursor:pointer;user-select:none;transition: transform .15s ease, box-shadow .15s ease;}
+    @media (prefers-color-scheme: dark){.chip{background:rgba(26,26,38,.86);border-color:rgba(255,122,0,.45);}}
+    .chip:hover{transform:translateY(-1px);box-shadow:0 16px 28px rgba(255,122,0,.16);}
+    .chip input{accent-color:var(--orange);}
+    .actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px;align-items:center;}
+    .btn{border:0;border-radius:14px;padding:12px 16px;font-weight:950;font-size:14px;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;justify-content:center;transition: transform .15s ease, box-shadow .15s ease, opacity .15s ease;}
+    .btn:hover{transform:translateY(-1px);box-shadow:0 16px 28px rgba(255,122,0,.18);}
+    .primary{color:#fff;background:linear-gradient(135deg,#FF8A1F 0%, #FF7A00 55%, #FFB26A 120%);}
+    .outline{color:var(--orange);background:transparent;border:1px solid rgba(255,122,0,.55);}
+    .status{font-size:12px;color:var(--muted);margin-left:auto;}
+    footer{padding:14px 22px 18px;border-top:1px solid var(--hair);color:var(--muted);font-size:12px;line-height:1.6;}
+    .hidden{display:none;}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="card">
+      <header>
+        <div class="brand">
+          <img class="logo" src="https://res.cloudinary.com/djy3mjtsz/image/upload/v1769939762/Untitled_1_xht9gh.gif" alt="Gradeo" />
+          <div class="badge">GRADEO • FEEDBACK</div>
+        </div>
+        <h1>Share your feedback</h1>
+        <p>Rate your experience and tell us what we should improve. Your message goes directly to the Gradeo team.</p>
+      </header>
+
+      <div class="content">
+        <div class="panel">
+
+          <form id="feedbackForm" action="/api/feedback" method="POST" novalidate>
+            <input type="hidden" name="page_url" id="page_url" />
+            <input type="hidden" name="source" value="gradeo_feedback_page" />
+            <input class="hidden" type="text" name="_gotcha" tabindex="-1" autocomplete="off" />
+
+            <div class="grid">
+              <div>
+                <label for="name">Name (optional)</label>
+                <input id="name" name="name" type="text" placeholder="Your name" autocomplete="name" />
+              </div>
+              <div>
+                <label for="email">Email (optional)</label>
+                <input id="email" name="email" type="email" placeholder="you@example.com" autocomplete="email" />
+              </div>
+            </div>
+
+            <label>Rating</label>
+            <div class="chips" role="radiogroup" aria-label="Rating">
+              <label class="chip"><input type="radio" name="rating" value="1" required> 1</label>
+              <label class="chip"><input type="radio" name="rating" value="2" required> 2</label>
+              <label class="chip"><input type="radio" name="rating" value="3" required> 3</label>
+              <label class="chip"><input type="radio" name="rating" value="4" required> 4</label>
+              <label class="chip"><input type="radio" name="rating" value="5" required> 5</label>
+            </div>
+
+            <label for="title">Quick feedback (1 line)</label>
+            <input id="title" name="title" maxlength="80" placeholder="Example: Clean UI, would love faster loading" />
+
+            <label for="message">Tell us more</label>
+            <textarea id="message" name="message" required placeholder="What did you like? What was confusing? What should we build next?"></textarea>
+
+            <div class="actions">
+              <button class="btn primary" type="submit" id="submitBtn">Send feedback</button>
+              <a class="btn outline" href="https://share.google/b5xqwIVxCnE7hwWnd" target="_blank" rel="noopener">Google review</a>
+              <div class="status" id="statusText" aria-live="polite"></div>
+            </div>
+          </form>
+
+        </div>
+      </div>
+
+      <footer>Gradeo • <a href="https://gradeo.in/" style="color:inherit;text-decoration:none;">gradeo.in</a></footer>
+    </div>
+  </div>
+
+  <script>
+    document.getElementById('page_url').value = location.href;
+
+    // Prefill rating via URL: /feedback?rating=4
+    const params = new URLSearchParams(location.search);
+    const rating = params.get('rating');
+    if (rating) {
+      const el = document.querySelector(`input[name="rating"][value="${rating}"]`);
+      if (el) el.checked = true;
+      setTimeout(() => document.getElementById('message').focus(), 50);
+    }
+
+    const form = document.getElementById('feedbackForm');
+    const btn = document.getElementById('submitBtn');
+    const status = document.getElementById('statusText');
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      // Simple client-side validation
+      const ratingChecked = form.querySelector('input[name="rating"]:checked');
+      const message = document.getElementById('message').value.trim();
+      if (!ratingChecked) {
+        status.textContent = 'Please select a rating.';
+        return;
+      }
+      if (!message) {
+        status.textContent = 'Please write your feedback.';
+        document.getElementById('message').focus();
+        return;
+      }
+
+      btn.disabled = true;
+      btn.style.opacity = '0.85';
+      status.textContent = 'Sending…';
+
+      try {
+        const res = await fetch(form.action, {
+          method: 'POST',
+          body: new FormData(form),
+          headers: { 'Accept': 'application/json' }
+        });
+
+        if (res.ok) {
+          status.textContent = 'Sent ✅ Redirecting…';
+          setTimeout(() => location.href = 'https://gradeo.in/thanks', 600);
+        } else {
+          status.textContent = 'Could not send. Please try again.';
+          btn.disabled = false;
+          btn.style.opacity = '1';
+        }
+      } catch {
+        status.textContent = 'Network issue. Please try again.';
+        btn.disabled = false;
+        btn.style.opacity = '1';
+      }
+    });
+  </script>
+</body>
+</html>
