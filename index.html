@@ -1547,7 +1547,7 @@ body.appOpen #notesAcc, body.appOpen #accountAcc{display:none !important;}
 
       // Local (per-browser) guard
       const key = "welcome_sent_" + user.uid;
-      if (localStorage.getItem(key)) return;
+      if (localStorage.getItem(key)) { console.log("[OfferEmail] skipped (localStorage)"); return; }
 
       // Prevent double-send in same session/tab (auth listener can fire more than once)
       window.__welcomeSending = window.__welcomeSending || {};
@@ -1568,6 +1568,8 @@ body.appOpen #notesAcc, body.appOpen #accountAcc{display:none !important;}
           }
         }
       }catch(_e){ /* ignore cloud-check errors */ }
+
+      console.log("[OfferEmail] sending", user.email);
 
       await emailjs.send(
         "service_h64ayo1",
@@ -1603,14 +1605,11 @@ body.appOpen #notesAcc, body.appOpen #accountAcc{display:none !important;}
     try {
       if (!user || !user.uid || !user.email) return;
       if (!isOfferFlowNow()) return;
-      // Only on /success
       if (!(window.location.pathname || "").includes("/success")) return;
 
-      // Per-browser guard
       const key = "offer_sent_" + user.uid;
-      if (localStorage.getItem(key)) return;
+      if (localStorage.getItem(key)) { console.log("[OfferEmail] skipped (localStorage)"); return; }
 
-      // Cloud guard (if profileRef exists)
       try {
         if (typeof profileRef === "function" && db) {
           const snap = await profileRef(user.uid).get();
@@ -1630,7 +1629,8 @@ body.appOpen #notesAcc, body.appOpen #accountAcc{display:none !important;}
       const promo = (()=>{ try { return JSON.parse(sessionStorage.getItem("promoParams")||"{}"); } catch(e){ return {}; } })();
       const offer_code = promo.offer || "FREE1YEAR";
 
-      // EmailJS send
+      console.log("[OfferEmail] sending", user.email);
+
       await emailjs.send(
         "service_wsd8g2w",
         "template_sgha506",
@@ -1646,8 +1646,7 @@ body.appOpen #notesAcc, body.appOpen #accountAcc{display:none !important;}
           plan_name: "Gradeo Premium — 1 Year",
           price_original: "₹150",
           price_paid: "₹0"
-        },
-        "jBp2SNoQciWnlU2Fo"
+        }
       );
 
       localStorage.setItem(key, "1");
@@ -4121,6 +4120,8 @@ function showContact(){
       if(!msg){ toast('Write a message first'); return; }
       const email = (document.getElementById('contactEmail').value || '').trim();
       // You can switch to a dedicated EmailJS template for feedback.
+      console.log("[OfferEmail] sending", user.email);
+
       await emailjs.send('service_h64ayo1','template_ty5v5nz',{
         name: state.profile.nickname || 'User',
         email: email || (auth?.currentUser?.email || 'not_provided'),
