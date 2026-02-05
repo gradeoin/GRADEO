@@ -78,3 +78,10 @@ onAuthStateChanged(auth, async (user) => {
     }
   }, 1000);
 });
+window.addEventListener("load", async () => {
+  const user = firebase.auth().currentUser;
+
+  if (user && window.location.pathname.includes("/success")) {
+    await sendOfferEmailOnce(user);
+  }
+});
