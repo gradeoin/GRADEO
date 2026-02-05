@@ -8,13 +8,13 @@ import {
 } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
 // ====== CONFIG ======
-const NEXT_URL = "https://gradeo.in/"; // ✅ main website [2](https://rnsit-my.sharepoint.com/personal/parichay_rnsit_onmicrosoft_com/Documents/Microsoft%20Copilot%20Chat%20Files/success.js)
-const BACK_URL = "/offer";             // [2](https://rnsit-my.sharepoint.com/personal/parichay_rnsit_onmicrosoft_com/Documents/Microsoft%20Copilot%20Chat%20Files/success.js)
+const NEXT_URL = "https://gradeo.in/"; // main website
+const BACK_URL = "/offer";
 
-// ✅ Fill these from EmailJS dashboard:
-const EMAILJS_PUBLIC_KEY = "YOUR_PUBLIC_KEY";
-const EMAILJS_SERVICE_ID = "YOUR_SERVICE_ID";
-const EMAILJS_TEMPLATE_ID = "YOUR_TEMPLATE_ID";
+// ✅ EmailJS (provided by you)
+const EMAILJS_PUBLIC_KEY = "jBp2SNoQciWnlU2Fo";
+const EMAILJS_SERVICE_ID = "service_wsd8g2w";
+const EMAILJS_TEMPLATE_ID = "template_sgha506";
 // =====================
 
 const countEl = document.getElementById("count");
@@ -92,7 +92,7 @@ async function sendOfferClaimEmail({ user, promo, now }) {
   const intent = sessionStorage.getItem("offer_claim_intent");
   if (intent !== "1") return;
 
-  // Extra safety: avoid duplicates in same session
+  // Avoid duplicates in the same session for this user+offer
   const sentKey = `offer_email_sent_${user.uid}_${(promo.offer || "FREE1YEAR")}`;
   if (sessionStorage.getItem(sentKey) === "1") return;
 
@@ -103,14 +103,12 @@ async function sendOfferClaimEmail({ user, promo, now }) {
     name: user.displayName || "Student",
     email: user.email,
 
-    // receipt values
     invoice_id: makeInvoiceId(),
     order_id: makeOrderId(),
     order_date: formatDateIN(now),
     expiry_date: formatDateIN(addOneYear(now)),
     year: String(now.getFullYear()),
 
-    // offer values
     offer_code: promo.offer || "FREE1YEAR",
     plan_name: "Gradeo Premium — 1 Year",
     price_original: "₹150",
@@ -119,15 +117,11 @@ async function sendOfferClaimEmail({ user, promo, now }) {
 
   await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, templateParams);
 
-  // Mark as sent for this session
   sessionStorage.setItem(sentKey, "1");
-
-  // Clear intent so it won't send again later
   sessionStorage.removeItem("offer_claim_intent");
 }
 // -----------------------------------
 
-// ===== Main flow =====
 const promo = getPromo();
 if (promo.offer && offerEl) offerEl.textContent = promo.offer;
 
@@ -141,19 +135,19 @@ onAuthStateChanged(auth, async (user) => {
     helloEl.textContent = `Welcome, ${user.displayName || "Student"}! Activating your access…`;
   }
 
-  // Firestore claim write (idempotent) [2](https://rnsit-my.sharepoint.com/personal/parichay_rnsit_onmicrosoft_com/Documents/Microsoft%20Copilot%20Chat%20Files/success.js)
+  // Firestore claim write (idempotent)
   const offerKey = (promo.offer || "FREE1YEAR").replace(/\s+/g, "_").toLowerCase();
   const claimId = `${offerKey}_${user.uid}`;
   const ref = doc(db, "offerClaims", claimId);
 
-  let isNewClaim = false;
+  let shouldSendEmail = false;
 
   try {
     const snap = await getDoc(ref);
     if (snap.exists()) {
       if (noteEl) noteEl.textContent = "✅ Offer already active for this Google account.";
+      // do not send email again
     } else {
-      isNewClaim = true;
       await setDoc(ref, {
         uid: user.uid,
         email: user.email,
@@ -164,24 +158,23 @@ onAuthStateChanged(auth, async (user) => {
         claimedAt: serverTimestamp()
       });
       if (noteEl) noteEl.textContent = "✅ Access activated for your Google account.";
+      shouldSendEmail = true;
     }
   } catch (e) {
-    // Still continue even if Firestore fails
+    // If Firestore fails, still allow email once per session (best-effort)
     if (noteEl) noteEl.textContent = "✅ Signed in successfully. Redirecting…";
+    shouldSendEmail = true;
   }
 
-  // ✅ Send EmailJS only if this was a NEW claim
-  if (isNewClaim) {
+  if (shouldSendEmail) {
     try {
       await sendOfferClaimEmail({ user, promo, now: new Date() });
     } catch (err) {
       console.error("EmailJS send failed:", err);
-      // Optional UI hint:
-      // noteEl.textContent = "✅ Access activated. Email sending failed (temporary).";
     }
   }
 
-  // Countdown + progress (same behavior) [2](https://rnsit-my.sharepoint.com/personal/parichay_rnsit_onmicrosoft_com/Documents/Microsoft%20Copilot%20Chat%20Files/success.js)
+  // Countdown + progress
   let seconds = 6;
   if (countEl) countEl.textContent = seconds;
   setProgress(seconds);
