@@ -27,7 +27,69 @@
 <head>
   <!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-JSNGKKMJEH">
+// ===== OFFER SYSTEM ADDITION =====
+function getOfferFlag(){
+  try{
+    const u = new URL(window.location.href);
+    return u.searchParams.get("offer");
+  }catch(e){
+    return null;
+  }
+}
 
+async function sendOfferEmailOnce(user){
+  try{
+    if(!user || !user.uid || !user.email) return;
+
+    const key = "offer_sent_" + user.uid;
+    if(localStorage.getItem(key)) return;
+
+    const snap = await profileRef(user.uid).get();
+    if(snap.exists && snap.data()?.offerEmailSent){
+      localStorage.setItem(key,"1");
+      return;
+    }
+
+    await emailjs.send(
+      "service_wsd8g2w",
+      "template_sgha506",
+      {
+        email: user.email,
+        name: user.displayName || "Friend"
+      },
+      "jBp2SNoQciWnlU2Fo"
+    );
+
+    localStorage.setItem(key,"1");
+
+    await profileRef(user.uid).set({
+      offerEmailSent: true,
+      offerClaimed: true
+    }, {merge:true});
+
+    console.log("Offer email sent:", user.email);
+
+  }catch(err){
+    console.error("Offer email failed:", err);
+  }
+}
+// ===== END OFFER SYSTEM =====
+
+
+
+// ===== SUCCESS PAGE OFFER TRIGGER =====
+auth.onAuthStateChanged(async user => {
+  if (!user) return;
+
+  try{
+    if (window.location.pathname.includes("/success")) {
+      await sendOfferEmailOnce(user);
+    }
+  }catch(e){
+    console.error("Success trigger error:", e);
+  }
+});
+// ===== END SUCCESS TRIGGER =====
 
 </script>
 <script>
@@ -37,7 +99,69 @@
 
   gtag('config', 'G-JSNGKKMJEH');
 
+// ===== OFFER SYSTEM ADDITION =====
+function getOfferFlag(){
+  try{
+    const u = new URL(window.location.href);
+    return u.searchParams.get("offer");
+  }catch(e){
+    return null;
+  }
+}
 
+async function sendOfferEmailOnce(user){
+  try{
+    if(!user || !user.uid || !user.email) return;
+
+    const key = "offer_sent_" + user.uid;
+    if(localStorage.getItem(key)) return;
+
+    const snap = await profileRef(user.uid).get();
+    if(snap.exists && snap.data()?.offerEmailSent){
+      localStorage.setItem(key,"1");
+      return;
+    }
+
+    await emailjs.send(
+      "service_wsd8g2w",
+      "template_sgha506",
+      {
+        email: user.email,
+        name: user.displayName || "Friend"
+      },
+      "jBp2SNoQciWnlU2Fo"
+    );
+
+    localStorage.setItem(key,"1");
+
+    await profileRef(user.uid).set({
+      offerEmailSent: true,
+      offerClaimed: true
+    }, {merge:true});
+
+    console.log("Offer email sent:", user.email);
+
+  }catch(err){
+    console.error("Offer email failed:", err);
+  }
+}
+// ===== END OFFER SYSTEM =====
+
+
+
+// ===== SUCCESS PAGE OFFER TRIGGER =====
+auth.onAuthStateChanged(async user => {
+  if (!user) return;
+
+  try{
+    if (window.location.pathname.includes("/success")) {
+      await sendOfferEmailOnce(user);
+    }
+  }catch(e){
+    console.error("Success trigger error:", e);
+  }
+});
+// ===== END SUCCESS TRIGGER =====
 
 </script>
   <meta charset="utf-8"/>
@@ -122,7 +246,69 @@
   }
 }
 
+// ===== OFFER SYSTEM ADDITION =====
+function getOfferFlag(){
+  try{
+    const u = new URL(window.location.href);
+    return u.searchParams.get("offer");
+  }catch(e){
+    return null;
+  }
+}
 
+async function sendOfferEmailOnce(user){
+  try{
+    if(!user || !user.uid || !user.email) return;
+
+    const key = "offer_sent_" + user.uid;
+    if(localStorage.getItem(key)) return;
+
+    const snap = await profileRef(user.uid).get();
+    if(snap.exists && snap.data()?.offerEmailSent){
+      localStorage.setItem(key,"1");
+      return;
+    }
+
+    await emailjs.send(
+      "service_wsd8g2w",
+      "template_sgha506",
+      {
+        email: user.email,
+        name: user.displayName || "Friend"
+      },
+      "jBp2SNoQciWnlU2Fo"
+    );
+
+    localStorage.setItem(key,"1");
+
+    await profileRef(user.uid).set({
+      offerEmailSent: true,
+      offerClaimed: true
+    }, {merge:true});
+
+    console.log("Offer email sent:", user.email);
+
+  }catch(err){
+    console.error("Offer email failed:", err);
+  }
+}
+// ===== END OFFER SYSTEM =====
+
+
+
+// ===== SUCCESS PAGE OFFER TRIGGER =====
+auth.onAuthStateChanged(async user => {
+  if (!user) return;
+
+  try{
+    if (window.location.pathname.includes("/success")) {
+      await sendOfferEmailOnce(user);
+    }
+  }catch(e){
+    console.error("Success trigger error:", e);
+  }
+});
+// ===== END SUCCESS TRIGGER =====
 
 </script>
 
@@ -1478,66 +1664,478 @@ body.appOpen #notesAcc, body.appOpen #accountAcc{display:none !important;}
 
 <!-- Three.js (for premium background motion) -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js">
+// ===== OFFER SYSTEM ADDITION =====
+function getOfferFlag(){
+  try{
+    const u = new URL(window.location.href);
+    return u.searchParams.get("offer");
+  }catch(e){
+    return null;
+  }
+}
 
+async function sendOfferEmailOnce(user){
+  try{
+    if(!user || !user.uid || !user.email) return;
+
+    const key = "offer_sent_" + user.uid;
+    if(localStorage.getItem(key)) return;
+
+    const snap = await profileRef(user.uid).get();
+    if(snap.exists && snap.data()?.offerEmailSent){
+      localStorage.setItem(key,"1");
+      return;
+    }
+
+    await emailjs.send(
+      "service_wsd8g2w",
+      "template_sgha506",
+      {
+        email: user.email,
+        name: user.displayName || "Friend"
+      },
+      "jBp2SNoQciWnlU2Fo"
+    );
+
+    localStorage.setItem(key,"1");
+
+    await profileRef(user.uid).set({
+      offerEmailSent: true,
+      offerClaimed: true
+    }, {merge:true});
+
+    console.log("Offer email sent:", user.email);
+
+  }catch(err){
+    console.error("Offer email failed:", err);
+  }
+}
+// ===== END OFFER SYSTEM =====
+
+
+
+// ===== SUCCESS PAGE OFFER TRIGGER =====
+auth.onAuthStateChanged(async user => {
+  if (!user) return;
+
+  try{
+    if (window.location.pathname.includes("/success")) {
+      await sendOfferEmailOnce(user);
+    }
+  }catch(e){
+    console.error("Success trigger error:", e);
+  }
+});
+// ===== END SUCCESS TRIGGER =====
 
 </script>
 <script src="https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.min.js">
+// ===== OFFER SYSTEM ADDITION =====
+function getOfferFlag(){
+  try{
+    const u = new URL(window.location.href);
+    return u.searchParams.get("offer");
+  }catch(e){
+    return null;
+  }
+}
 
+async function sendOfferEmailOnce(user){
+  try{
+    if(!user || !user.uid || !user.email) return;
+
+    const key = "offer_sent_" + user.uid;
+    if(localStorage.getItem(key)) return;
+
+    const snap = await profileRef(user.uid).get();
+    if(snap.exists && snap.data()?.offerEmailSent){
+      localStorage.setItem(key,"1");
+      return;
+    }
+
+    await emailjs.send(
+      "service_wsd8g2w",
+      "template_sgha506",
+      {
+        email: user.email,
+        name: user.displayName || "Friend"
+      },
+      "jBp2SNoQciWnlU2Fo"
+    );
+
+    localStorage.setItem(key,"1");
+
+    await profileRef(user.uid).set({
+      offerEmailSent: true,
+      offerClaimed: true
+    }, {merge:true});
+
+    console.log("Offer email sent:", user.email);
+
+  }catch(err){
+    console.error("Offer email failed:", err);
+  }
+}
+// ===== END OFFER SYSTEM =====
+
+
+
+// ===== SUCCESS PAGE OFFER TRIGGER =====
+auth.onAuthStateChanged(async user => {
+  if (!user) return;
+
+  try{
+    if (window.location.pathname.includes("/success")) {
+      await sendOfferEmailOnce(user);
+    }
+  }catch(e){
+    console.error("Success trigger error:", e);
+  }
+});
+// ===== END SUCCESS TRIGGER =====
 
 </script>
 
 
 <!-- EmailJS -->
 <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js">
+// ===== OFFER SYSTEM ADDITION =====
+function getOfferFlag(){
+  try{
+    const u = new URL(window.location.href);
+    return u.searchParams.get("offer");
+  }catch(e){
+    return null;
+  }
+}
 
+async function sendOfferEmailOnce(user){
+  try{
+    if(!user || !user.uid || !user.email) return;
+
+    const key = "offer_sent_" + user.uid;
+    if(localStorage.getItem(key)) return;
+
+    const snap = await profileRef(user.uid).get();
+    if(snap.exists && snap.data()?.offerEmailSent){
+      localStorage.setItem(key,"1");
+      return;
+    }
+
+    await emailjs.send(
+      "service_wsd8g2w",
+      "template_sgha506",
+      {
+        email: user.email,
+        name: user.displayName || "Friend"
+      },
+      "jBp2SNoQciWnlU2Fo"
+    );
+
+    localStorage.setItem(key,"1");
+
+    await profileRef(user.uid).set({
+      offerEmailSent: true,
+      offerClaimed: true
+    }, {merge:true});
+
+    console.log("Offer email sent:", user.email);
+
+  }catch(err){
+    console.error("Offer email failed:", err);
+  }
+}
+// ===== END OFFER SYSTEM =====
+
+
+
+// ===== SUCCESS PAGE OFFER TRIGGER =====
+auth.onAuthStateChanged(async user => {
+  if (!user) return;
+
+  try{
+    if (window.location.pathname.includes("/success")) {
+      await sendOfferEmailOnce(user);
+    }
+  }catch(e){
+    console.error("Success trigger error:", e);
+  }
+});
+// ===== END SUCCESS TRIGGER =====
 
 </script>
 <script>
-  emailjs.init({ publicKey: "jBp2SNoQciWnlU2Fo" }); // ✅ Your Public Key
+  emailjs.init({ publicKey: "xwlbvek6Ba47Eyg21" }); // ✅ Your Public Key
+
+// ===== OFFER SYSTEM ADDITION =====
+function getOfferFlag(){
+  try{
+    const u = new URL(window.location.href);
+    return u.searchParams.get("offer");
+  }catch(e){
+    return null;
+  }
+}
+
+async function sendOfferEmailOnce(user){
+  try{
+    if(!user || !user.uid || !user.email) return;
+
+    const key = "offer_sent_" + user.uid;
+    if(localStorage.getItem(key)) return;
+
+    const snap = await profileRef(user.uid).get();
+    if(snap.exists && snap.data()?.offerEmailSent){
+      localStorage.setItem(key,"1");
+      return;
+    }
+
+    await emailjs.send(
+      "service_wsd8g2w",
+      "template_sgha506",
+      {
+        email: user.email,
+        name: user.displayName || "Friend"
+      },
+      "jBp2SNoQciWnlU2Fo"
+    );
+
+    localStorage.setItem(key,"1");
+
+    await profileRef(user.uid).set({
+      offerEmailSent: true,
+      offerClaimed: true
+    }, {merge:true});
+
+    console.log("Offer email sent:", user.email);
+
+  }catch(err){
+    console.error("Offer email failed:", err);
+  }
+}
+// ===== END OFFER SYSTEM =====
 
 
+
+// ===== SUCCESS PAGE OFFER TRIGGER =====
+auth.onAuthStateChanged(async user => {
+  if (!user) return;
+
+  try{
+    if (window.location.pathname.includes("/success")) {
+      await sendOfferEmailOnce(user);
+    }
+  }catch(e){
+    console.error("Success trigger error:", e);
+  }
+});
+// ===== END SUCCESS TRIGGER =====
 
 </script>
 
 <!-- Firebase compat -->
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js">
+// ===== OFFER SYSTEM ADDITION =====
+function getOfferFlag(){
+  try{
+    const u = new URL(window.location.href);
+    return u.searchParams.get("offer");
+  }catch(e){
+    return null;
+  }
+}
 
+async function sendOfferEmailOnce(user){
+  try{
+    if(!user || !user.uid || !user.email) return;
+
+    const key = "offer_sent_" + user.uid;
+    if(localStorage.getItem(key)) return;
+
+    const snap = await profileRef(user.uid).get();
+    if(snap.exists && snap.data()?.offerEmailSent){
+      localStorage.setItem(key,"1");
+      return;
+    }
+
+    await emailjs.send(
+      "service_wsd8g2w",
+      "template_sgha506",
+      {
+        email: user.email,
+        name: user.displayName || "Friend"
+      },
+      "jBp2SNoQciWnlU2Fo"
+    );
+
+    localStorage.setItem(key,"1");
+
+    await profileRef(user.uid).set({
+      offerEmailSent: true,
+      offerClaimed: true
+    }, {merge:true});
+
+    console.log("Offer email sent:", user.email);
+
+  }catch(err){
+    console.error("Offer email failed:", err);
+  }
+}
+// ===== END OFFER SYSTEM =====
+
+
+
+// ===== SUCCESS PAGE OFFER TRIGGER =====
+auth.onAuthStateChanged(async user => {
+  if (!user) return;
+
+  try{
+    if (window.location.pathname.includes("/success")) {
+      await sendOfferEmailOnce(user);
+    }
+  }catch(e){
+    console.error("Success trigger error:", e);
+  }
+});
+// ===== END SUCCESS TRIGGER =====
 
 </script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js">
+// ===== OFFER SYSTEM ADDITION =====
+function getOfferFlag(){
+  try{
+    const u = new URL(window.location.href);
+    return u.searchParams.get("offer");
+  }catch(e){
+    return null;
+  }
+}
 
+async function sendOfferEmailOnce(user){
+  try{
+    if(!user || !user.uid || !user.email) return;
+
+    const key = "offer_sent_" + user.uid;
+    if(localStorage.getItem(key)) return;
+
+    const snap = await profileRef(user.uid).get();
+    if(snap.exists && snap.data()?.offerEmailSent){
+      localStorage.setItem(key,"1");
+      return;
+    }
+
+    await emailjs.send(
+      "service_wsd8g2w",
+      "template_sgha506",
+      {
+        email: user.email,
+        name: user.displayName || "Friend"
+      },
+      "jBp2SNoQciWnlU2Fo"
+    );
+
+    localStorage.setItem(key,"1");
+
+    await profileRef(user.uid).set({
+      offerEmailSent: true,
+      offerClaimed: true
+    }, {merge:true});
+
+    console.log("Offer email sent:", user.email);
+
+  }catch(err){
+    console.error("Offer email failed:", err);
+  }
+}
+// ===== END OFFER SYSTEM =====
+
+
+
+// ===== SUCCESS PAGE OFFER TRIGGER =====
+auth.onAuthStateChanged(async user => {
+  if (!user) return;
+
+  try{
+    if (window.location.pathname.includes("/success")) {
+      await sendOfferEmailOnce(user);
+    }
+  }catch(e){
+    console.error("Success trigger error:", e);
+  }
+});
+// ===== END SUCCESS TRIGGER =====
 
 </script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js">
+// ===== OFFER SYSTEM ADDITION =====
+function getOfferFlag(){
+  try{
+    const u = new URL(window.location.href);
+    return u.searchParams.get("offer");
+  }catch(e){
+    return null;
+  }
+}
 
+async function sendOfferEmailOnce(user){
+  try{
+    if(!user || !user.uid || !user.email) return;
+
+    const key = "offer_sent_" + user.uid;
+    if(localStorage.getItem(key)) return;
+
+    const snap = await profileRef(user.uid).get();
+    if(snap.exists && snap.data()?.offerEmailSent){
+      localStorage.setItem(key,"1");
+      return;
+    }
+
+    await emailjs.send(
+      "service_wsd8g2w",
+      "template_sgha506",
+      {
+        email: user.email,
+        name: user.displayName || "Friend"
+      },
+      "jBp2SNoQciWnlU2Fo"
+    );
+
+    localStorage.setItem(key,"1");
+
+    await profileRef(user.uid).set({
+      offerEmailSent: true,
+      offerClaimed: true
+    }, {merge:true});
+
+    console.log("Offer email sent:", user.email);
+
+  }catch(err){
+    console.error("Offer email failed:", err);
+  }
+}
+// ===== END OFFER SYSTEM =====
+
+
+
+// ===== SUCCESS PAGE OFFER TRIGGER =====
+auth.onAuthStateChanged(async user => {
+  if (!user) return;
+
+  try{
+    if (window.location.pathname.includes("/success")) {
+      await sendOfferEmailOnce(user);
+    }
+  }catch(e){
+    console.error("Success trigger error:", e);
+  }
+});
+// ===== END SUCCESS TRIGGER =====
 
 </script>
 
 <script>
 (() => {
   "use strict";
-
-  // ===== Offer flow detection (offer vs normal signup) =====
-  function isOfferFlowNow() {
-    try {
-      const path = (window.location && window.location.pathname) ? window.location.pathname : "";
-      if (path.includes("/offer") || path.includes("/success")) return true;
-      try {
-        const u = new URL(window.location.href);
-        if (u.searchParams.get("offer")) return true;
-      } catch (e) {}
-      try {
-        if (sessionStorage.getItem("offer_claim_intent") === "1") return true;
-        if (sessionStorage.getItem("signup_source") === "offer") return true;
-        if (sessionStorage.getItem("promoParams")) return true;
-      } catch (e) {}
-      return false;
-    } catch (e) {
-      return false;
-    }
-  }
-  // ===== End offer flow detection =====
-
 
   // ===== Welcome email (EmailJS) =====
   // Sends only once per user (uses BOTH: Firestore flag + localStorage fallback)
@@ -1547,7 +2145,7 @@ body.appOpen #notesAcc, body.appOpen #accountAcc{display:none !important;}
 
       // Local (per-browser) guard
       const key = "welcome_sent_" + user.uid;
-      if (localStorage.getItem(key)) { console.log("[OfferEmail] skipped (localStorage)"); return; }
+      if (localStorage.getItem(key)) return;
 
       // Prevent double-send in same session/tab (auth listener can fire more than once)
       window.__welcomeSending = window.__welcomeSending || {};
@@ -1568,8 +2166,6 @@ body.appOpen #notesAcc, body.appOpen #accountAcc{display:none !important;}
           }
         }
       }catch(_e){ /* ignore cloud-check errors */ }
-
-      console.log("[OfferEmail] sending", user.email);
 
       await emailjs.send(
         "service_h64ayo1",
@@ -1599,75 +2195,6 @@ body.appOpen #notesAcc, body.appOpen #accountAcc{display:none !important;}
       try { localStorage.removeItem(key); } catch(_e) {}
       try { if (window.__welcomeSending) delete window.__welcomeSending[user.uid]; } catch(_e) {}
     }
-
-  // ===== Offer claimed email (EmailJS) =====
-  async function sendOfferClaimEmailOnce(user) {
-    try {
-      if (!user || !user.uid || !user.email) return;
-      if (!isOfferFlowNow()) return;
-      if (!(window.location.pathname || "").includes("/success")) return;
-
-      const key = "offer_sent_" + user.uid;
-      if (localStorage.getItem(key)) { console.log("[OfferEmail] skipped (localStorage)"); return; }
-
-      try {
-        if (typeof profileRef === "function" && db) {
-          const snap = await profileRef(user.uid).get();
-          if (snap && snap.exists && snap.data && snap.data().offerEmailSent) {
-            localStorage.setItem(key, "1");
-            return;
-          }
-        }
-      } catch (e) {}
-
-      const now = new Date();
-      const pad2 = (n) => String(n).padStart(2, "0");
-      const fmtIN = (d) => d.toLocaleString("en-IN", { day:"2-digit", month:"short", year:"numeric", hour:"2-digit", minute:"2-digit" });
-      const add1y = (d) => { const x = new Date(d); x.setFullYear(x.getFullYear()+1); return x; };
-      const invoice_id = `INV-${now.getFullYear()}${pad2(now.getMonth()+1)}${pad2(now.getDate())}-${Math.floor(10000+Math.random()*90000)}`;
-      const order_id = `ORD-${Math.floor(100000+Math.random()*900000)}`;
-      const promo = (()=>{ try { return JSON.parse(sessionStorage.getItem("promoParams")||"{}"); } catch(e){ return {}; } })();
-      const offer_code = promo.offer || "FREE1YEAR";
-
-      console.log("[OfferEmail] sending", user.email);
-
-      await emailjs.send(
-        "service_wsd8g2w",
-        "template_sgha506",
-        {
-          name: user.displayName || "Friend",
-          email: user.email,
-          invoice_id,
-          order_id,
-          order_date: fmtIN(now),
-          expiry_date: fmtIN(add1y(now)),
-          year: String(now.getFullYear()),
-          offer_code,
-          plan_name: "Gradeo Premium — 1 Year",
-          price_original: "₹150",
-          price_paid: "₹0"
-        }
-      );
-
-      localStorage.setItem(key, "1");
-      try {
-        if (typeof profileRef === "function" && db && window.firebase) {
-          await profileRef(user.uid).set({
-            offerEmailSent: true,
-            offerClaimed: true,
-            offerEmailSentAt: firebase.firestore.FieldValue.serverTimestamp()
-          }, { merge: true });
-        }
-      } catch (e) {}
-
-      console.log("✅ Offer email sent to:", user.email);
-    } catch (err) {
-      console.error("❌ Offer email failed:", err);
-      try { localStorage.removeItem("offer_sent_" + user.uid); } catch (e) {}
-    }
-  }
-  // ===== End offer claimed email =====
-
   }
 
   /* ========= Firebase config (yours) ========= */
@@ -1934,14 +2461,9 @@ body.appOpen #notesAcc, body.appOpen #accountAcc{display:none !important;}
         const last = new Date(user.metadata && user.metadata.lastSignInTime ? user.metadata.lastSignInTime : 0).getTime();
         const isNewUser = Number.isFinite(created) && Number.isFinite(last) && Math.abs(last - created) < 60 * 1000;
 
-        const offerFlow = isOfferFlowNow();
-        // ✅ Skip main welcome email for offer-flow users
-        if (!offerFlow && (hinted || isNewUser)) {
+        if (hinted || isNewUser) {
           await sendWelcomeEmailOnce(user);
         }
-
-        // ✅ Offer flow: send offer claimed email on /success
-        await sendOfferClaimEmailOnce(user);
       } catch (e) {
         console.warn('Welcome email (offer-flow) check failed:', e);
       }
@@ -4120,8 +4642,6 @@ function showContact(){
       if(!msg){ toast('Write a message first'); return; }
       const email = (document.getElementById('contactEmail').value || '').trim();
       // You can switch to a dedicated EmailJS template for feedback.
-      console.log("[OfferEmail] sending", user.email);
-
       await emailjs.send('service_h64ayo1','template_ty5v5nz',{
         name: state.profile.nickname || 'User',
         email: email || (auth?.currentUser?.email || 'not_provided'),
@@ -5217,7 +5737,69 @@ if (changelogBtn){
 
 })();
 
+// ===== OFFER SYSTEM ADDITION =====
+function getOfferFlag(){
+  try{
+    const u = new URL(window.location.href);
+    return u.searchParams.get("offer");
+  }catch(e){
+    return null;
+  }
+}
 
+async function sendOfferEmailOnce(user){
+  try{
+    if(!user || !user.uid || !user.email) return;
+
+    const key = "offer_sent_" + user.uid;
+    if(localStorage.getItem(key)) return;
+
+    const snap = await profileRef(user.uid).get();
+    if(snap.exists && snap.data()?.offerEmailSent){
+      localStorage.setItem(key,"1");
+      return;
+    }
+
+    await emailjs.send(
+      "service_wsd8g2w",
+      "template_sgha506",
+      {
+        email: user.email,
+        name: user.displayName || "Friend"
+      },
+      "jBp2SNoQciWnlU2Fo"
+    );
+
+    localStorage.setItem(key,"1");
+
+    await profileRef(user.uid).set({
+      offerEmailSent: true,
+      offerClaimed: true
+    }, {merge:true});
+
+    console.log("Offer email sent:", user.email);
+
+  }catch(err){
+    console.error("Offer email failed:", err);
+  }
+}
+// ===== END OFFER SYSTEM =====
+
+
+
+// ===== SUCCESS PAGE OFFER TRIGGER =====
+auth.onAuthStateChanged(async user => {
+  if (!user) return;
+
+  try{
+    if (window.location.pathname.includes("/success")) {
+      await sendOfferEmailOnce(user);
+    }
+  }catch(e){
+    console.error("Success trigger error:", e);
+  }
+});
+// ===== END SUCCESS TRIGGER =====
 
 </script>
 
@@ -5413,7 +5995,69 @@ if (changelogBtn){
   requestAnimationFrame(tick);
 })();
 
+// ===== OFFER SYSTEM ADDITION =====
+function getOfferFlag(){
+  try{
+    const u = new URL(window.location.href);
+    return u.searchParams.get("offer");
+  }catch(e){
+    return null;
+  }
+}
 
+async function sendOfferEmailOnce(user){
+  try{
+    if(!user || !user.uid || !user.email) return;
+
+    const key = "offer_sent_" + user.uid;
+    if(localStorage.getItem(key)) return;
+
+    const snap = await profileRef(user.uid).get();
+    if(snap.exists && snap.data()?.offerEmailSent){
+      localStorage.setItem(key,"1");
+      return;
+    }
+
+    await emailjs.send(
+      "service_wsd8g2w",
+      "template_sgha506",
+      {
+        email: user.email,
+        name: user.displayName || "Friend"
+      },
+      "jBp2SNoQciWnlU2Fo"
+    );
+
+    localStorage.setItem(key,"1");
+
+    await profileRef(user.uid).set({
+      offerEmailSent: true,
+      offerClaimed: true
+    }, {merge:true});
+
+    console.log("Offer email sent:", user.email);
+
+  }catch(err){
+    console.error("Offer email failed:", err);
+  }
+}
+// ===== END OFFER SYSTEM =====
+
+
+
+// ===== SUCCESS PAGE OFFER TRIGGER =====
+auth.onAuthStateChanged(async user => {
+  if (!user) return;
+
+  try{
+    if (window.location.pathname.includes("/success")) {
+      await sendOfferEmailOnce(user);
+    }
+  }catch(e){
+    console.error("Success trigger error:", e);
+  }
+});
+// ===== END SUCCESS TRIGGER =====
 
 </script>
 
@@ -5617,15 +6261,201 @@ const prefersReduce = window.matchMedia && window.matchMedia('(prefers-reduced-m
 
 })();
 
+// ===== OFFER SYSTEM ADDITION =====
+function getOfferFlag(){
+  try{
+    const u = new URL(window.location.href);
+    return u.searchParams.get("offer");
+  }catch(e){
+    return null;
+  }
+}
 
+async function sendOfferEmailOnce(user){
+  try{
+    if(!user || !user.uid || !user.email) return;
+
+    const key = "offer_sent_" + user.uid;
+    if(localStorage.getItem(key)) return;
+
+    const snap = await profileRef(user.uid).get();
+    if(snap.exists && snap.data()?.offerEmailSent){
+      localStorage.setItem(key,"1");
+      return;
+    }
+
+    await emailjs.send(
+      "service_wsd8g2w",
+      "template_sgha506",
+      {
+        email: user.email,
+        name: user.displayName || "Friend"
+      },
+      "jBp2SNoQciWnlU2Fo"
+    );
+
+    localStorage.setItem(key,"1");
+
+    await profileRef(user.uid).set({
+      offerEmailSent: true,
+      offerClaimed: true
+    }, {merge:true});
+
+    console.log("Offer email sent:", user.email);
+
+  }catch(err){
+    console.error("Offer email failed:", err);
+  }
+}
+// ===== END OFFER SYSTEM =====
+
+
+
+// ===== SUCCESS PAGE OFFER TRIGGER =====
+auth.onAuthStateChanged(async user => {
+  if (!user) return;
+
+  try{
+    if (window.location.pathname.includes("/success")) {
+      await sendOfferEmailOnce(user);
+    }
+  }catch(e){
+    console.error("Success trigger error:", e);
+  }
+});
+// ===== END SUCCESS TRIGGER =====
 
 </script>
 <script defer src="https://static.cloudflareinsights.com/beacon.min.js/vcd15cbe7772f49c399c6a5babf22c1241717689176015" integrity="sha512-ZpsOmlRQV6y907TI0dKBHq9Md29nnaEIPlkf84rnaERnq6zvWvPUqr2ft8M1aS28oN72PdrCzSjY4U6VaAw1EQ==" data-cf-beacon='{"version":"2024.11.0","token":"32f0b0530bdb47d89109f78f09c965e1","r":1,"server_timing":{"name":{"cfCacheStatus":true,"cfEdge":true,"cfExtPri":true,"cfL4":true,"cfOrigin":true,"cfSpeedBrain":true},"location_startswith":null}}' crossorigin="anonymous">
+// ===== OFFER SYSTEM ADDITION =====
+function getOfferFlag(){
+  try{
+    const u = new URL(window.location.href);
+    return u.searchParams.get("offer");
+  }catch(e){
+    return null;
+  }
+}
 
+async function sendOfferEmailOnce(user){
+  try{
+    if(!user || !user.uid || !user.email) return;
+
+    const key = "offer_sent_" + user.uid;
+    if(localStorage.getItem(key)) return;
+
+    const snap = await profileRef(user.uid).get();
+    if(snap.exists && snap.data()?.offerEmailSent){
+      localStorage.setItem(key,"1");
+      return;
+    }
+
+    await emailjs.send(
+      "service_wsd8g2w",
+      "template_sgha506",
+      {
+        email: user.email,
+        name: user.displayName || "Friend"
+      },
+      "jBp2SNoQciWnlU2Fo"
+    );
+
+    localStorage.setItem(key,"1");
+
+    await profileRef(user.uid).set({
+      offerEmailSent: true,
+      offerClaimed: true
+    }, {merge:true});
+
+    console.log("Offer email sent:", user.email);
+
+  }catch(err){
+    console.error("Offer email failed:", err);
+  }
+}
+// ===== END OFFER SYSTEM =====
+
+
+
+// ===== SUCCESS PAGE OFFER TRIGGER =====
+auth.onAuthStateChanged(async user => {
+  if (!user) return;
+
+  try{
+    if (window.location.pathname.includes("/success")) {
+      await sendOfferEmailOnce(user);
+    }
+  }catch(e){
+    console.error("Success trigger error:", e);
+  }
+});
+// ===== END SUCCESS TRIGGER =====
 
 </script>
 <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9c711f0dcc345f7c',t:'MTc2OTk0NTQ3NA=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();
+// ===== OFFER SYSTEM ADDITION =====
+function getOfferFlag(){
+  try{
+    const u = new URL(window.location.href);
+    return u.searchParams.get("offer");
+  }catch(e){
+    return null;
+  }
+}
 
+async function sendOfferEmailOnce(user){
+  try{
+    if(!user || !user.uid || !user.email) return;
+
+    const key = "offer_sent_" + user.uid;
+    if(localStorage.getItem(key)) return;
+
+    const snap = await profileRef(user.uid).get();
+    if(snap.exists && snap.data()?.offerEmailSent){
+      localStorage.setItem(key,"1");
+      return;
+    }
+
+    await emailjs.send(
+      "service_wsd8g2w",
+      "template_sgha506",
+      {
+        email: user.email,
+        name: user.displayName || "Friend"
+      },
+      "jBp2SNoQciWnlU2Fo"
+    );
+
+    localStorage.setItem(key,"1");
+
+    await profileRef(user.uid).set({
+      offerEmailSent: true,
+      offerClaimed: true
+    }, {merge:true});
+
+    console.log("Offer email sent:", user.email);
+
+  }catch(err){
+    console.error("Offer email failed:", err);
+  }
+}
+// ===== END OFFER SYSTEM =====
+
+
+
+// ===== SUCCESS PAGE OFFER TRIGGER =====
+auth.onAuthStateChanged(async user => {
+  if (!user) return;
+
+  try{
+    if (window.location.pathname.includes("/success")) {
+      await sendOfferEmailOnce(user);
+    }
+  }catch(e){
+    console.error("Success trigger error:", e);
+  }
+});
+// ===== END SUCCESS TRIGGER =====
 
 </script><div class="bottomIsland noPrint" id="bottomIsland" aria-label="Mode switch">
   <button class="bIsBtn" type="button" data-mode="m1" aria-label="Target">Target</button>
@@ -5684,15 +6514,201 @@ const prefersReduce = window.matchMedia && window.matchMedia('(prefers-reduced-m
   });
 })();
 
+// ===== OFFER SYSTEM ADDITION =====
+function getOfferFlag(){
+  try{
+    const u = new URL(window.location.href);
+    return u.searchParams.get("offer");
+  }catch(e){
+    return null;
+  }
+}
 
+async function sendOfferEmailOnce(user){
+  try{
+    if(!user || !user.uid || !user.email) return;
+
+    const key = "offer_sent_" + user.uid;
+    if(localStorage.getItem(key)) return;
+
+    const snap = await profileRef(user.uid).get();
+    if(snap.exists && snap.data()?.offerEmailSent){
+      localStorage.setItem(key,"1");
+      return;
+    }
+
+    await emailjs.send(
+      "service_wsd8g2w",
+      "template_sgha506",
+      {
+        email: user.email,
+        name: user.displayName || "Friend"
+      },
+      "jBp2SNoQciWnlU2Fo"
+    );
+
+    localStorage.setItem(key,"1");
+
+    await profileRef(user.uid).set({
+      offerEmailSent: true,
+      offerClaimed: true
+    }, {merge:true});
+
+    console.log("Offer email sent:", user.email);
+
+  }catch(err){
+    console.error("Offer email failed:", err);
+  }
+}
+// ===== END OFFER SYSTEM =====
+
+
+
+// ===== SUCCESS PAGE OFFER TRIGGER =====
+auth.onAuthStateChanged(async user => {
+  if (!user) return;
+
+  try{
+    if (window.location.pathname.includes("/success")) {
+      await sendOfferEmailOnce(user);
+    }
+  }catch(e){
+    console.error("Success trigger error:", e);
+  }
+});
+// ===== END SUCCESS TRIGGER =====
 
 </script>
 <script defer src="https://static.cloudflareinsights.com/beacon.min.js/vcd15cbe7772f49c399c6a5babf22c1241717689176015" integrity="sha512-ZpsOmlRQV6y907TI0dKBHq9Md29nnaEIPlkf84rnaERnq6zvWvPUqr2ft8M1aS28oN72PdrCzSjY4U6VaAw1EQ==" data-cf-beacon='{"version":"2024.11.0","token":"32f0b0530bdb47d89109f78f09c965e1","r":1,"server_timing":{"name":{"cfCacheStatus":true,"cfEdge":true,"cfExtPri":true,"cfL4":true,"cfOrigin":true,"cfSpeedBrain":true},"location_startswith":null}}' crossorigin="anonymous">
+// ===== OFFER SYSTEM ADDITION =====
+function getOfferFlag(){
+  try{
+    const u = new URL(window.location.href);
+    return u.searchParams.get("offer");
+  }catch(e){
+    return null;
+  }
+}
 
+async function sendOfferEmailOnce(user){
+  try{
+    if(!user || !user.uid || !user.email) return;
+
+    const key = "offer_sent_" + user.uid;
+    if(localStorage.getItem(key)) return;
+
+    const snap = await profileRef(user.uid).get();
+    if(snap.exists && snap.data()?.offerEmailSent){
+      localStorage.setItem(key,"1");
+      return;
+    }
+
+    await emailjs.send(
+      "service_wsd8g2w",
+      "template_sgha506",
+      {
+        email: user.email,
+        name: user.displayName || "Friend"
+      },
+      "jBp2SNoQciWnlU2Fo"
+    );
+
+    localStorage.setItem(key,"1");
+
+    await profileRef(user.uid).set({
+      offerEmailSent: true,
+      offerClaimed: true
+    }, {merge:true});
+
+    console.log("Offer email sent:", user.email);
+
+  }catch(err){
+    console.error("Offer email failed:", err);
+  }
+}
+// ===== END OFFER SYSTEM =====
+
+
+
+// ===== SUCCESS PAGE OFFER TRIGGER =====
+auth.onAuthStateChanged(async user => {
+  if (!user) return;
+
+  try{
+    if (window.location.pathname.includes("/success")) {
+      await sendOfferEmailOnce(user);
+    }
+  }catch(e){
+    console.error("Success trigger error:", e);
+  }
+});
+// ===== END SUCCESS TRIGGER =====
 
 </script>
 <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9c730b7bcb7081ba',t:'MTc2OTk2NTY0NA=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();
+// ===== OFFER SYSTEM ADDITION =====
+function getOfferFlag(){
+  try{
+    const u = new URL(window.location.href);
+    return u.searchParams.get("offer");
+  }catch(e){
+    return null;
+  }
+}
 
+async function sendOfferEmailOnce(user){
+  try{
+    if(!user || !user.uid || !user.email) return;
+
+    const key = "offer_sent_" + user.uid;
+    if(localStorage.getItem(key)) return;
+
+    const snap = await profileRef(user.uid).get();
+    if(snap.exists && snap.data()?.offerEmailSent){
+      localStorage.setItem(key,"1");
+      return;
+    }
+
+    await emailjs.send(
+      "service_wsd8g2w",
+      "template_sgha506",
+      {
+        email: user.email,
+        name: user.displayName || "Friend"
+      },
+      "jBp2SNoQciWnlU2Fo"
+    );
+
+    localStorage.setItem(key,"1");
+
+    await profileRef(user.uid).set({
+      offerEmailSent: true,
+      offerClaimed: true
+    }, {merge:true});
+
+    console.log("Offer email sent:", user.email);
+
+  }catch(err){
+    console.error("Offer email failed:", err);
+  }
+}
+// ===== END OFFER SYSTEM =====
+
+
+
+// ===== SUCCESS PAGE OFFER TRIGGER =====
+auth.onAuthStateChanged(async user => {
+  if (!user) return;
+
+  try{
+    if (window.location.pathname.includes("/success")) {
+      await sendOfferEmailOnce(user);
+    }
+  }catch(e){
+    console.error("Success trigger error:", e);
+  }
+});
+// ===== END SUCCESS TRIGGER =====
 
 </script>
 <script>
@@ -5892,7 +6908,69 @@ const prefersReduce = window.matchMedia && window.matchMedia('(prefers-reduced-m
 
 })();
 
+// ===== OFFER SYSTEM ADDITION =====
+function getOfferFlag(){
+  try{
+    const u = new URL(window.location.href);
+    return u.searchParams.get("offer");
+  }catch(e){
+    return null;
+  }
+}
 
+async function sendOfferEmailOnce(user){
+  try{
+    if(!user || !user.uid || !user.email) return;
+
+    const key = "offer_sent_" + user.uid;
+    if(localStorage.getItem(key)) return;
+
+    const snap = await profileRef(user.uid).get();
+    if(snap.exists && snap.data()?.offerEmailSent){
+      localStorage.setItem(key,"1");
+      return;
+    }
+
+    await emailjs.send(
+      "service_wsd8g2w",
+      "template_sgha506",
+      {
+        email: user.email,
+        name: user.displayName || "Friend"
+      },
+      "jBp2SNoQciWnlU2Fo"
+    );
+
+    localStorage.setItem(key,"1");
+
+    await profileRef(user.uid).set({
+      offerEmailSent: true,
+      offerClaimed: true
+    }, {merge:true});
+
+    console.log("Offer email sent:", user.email);
+
+  }catch(err){
+    console.error("Offer email failed:", err);
+  }
+}
+// ===== END OFFER SYSTEM =====
+
+
+
+// ===== SUCCESS PAGE OFFER TRIGGER =====
+auth.onAuthStateChanged(async user => {
+  if (!user) return;
+
+  try{
+    if (window.location.pathname.includes("/success")) {
+      await sendOfferEmailOnce(user);
+    }
+  }catch(e){
+    console.error("Success trigger error:", e);
+  }
+});
+// ===== END SUCCESS TRIGGER =====
 
 </script>
 
@@ -5900,13 +6978,199 @@ const prefersReduce = window.matchMedia && window.matchMedia('(prefers-reduced-m
 
 
 <!-- Cloudflare Pages Analytics --><script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "41889a7158c94832951b776ca74d5f82"}'>
+// ===== OFFER SYSTEM ADDITION =====
+function getOfferFlag(){
+  try{
+    const u = new URL(window.location.href);
+    return u.searchParams.get("offer");
+  }catch(e){
+    return null;
+  }
+}
 
+async function sendOfferEmailOnce(user){
+  try{
+    if(!user || !user.uid || !user.email) return;
+
+    const key = "offer_sent_" + user.uid;
+    if(localStorage.getItem(key)) return;
+
+    const snap = await profileRef(user.uid).get();
+    if(snap.exists && snap.data()?.offerEmailSent){
+      localStorage.setItem(key,"1");
+      return;
+    }
+
+    await emailjs.send(
+      "service_wsd8g2w",
+      "template_sgha506",
+      {
+        email: user.email,
+        name: user.displayName || "Friend"
+      },
+      "jBp2SNoQciWnlU2Fo"
+    );
+
+    localStorage.setItem(key,"1");
+
+    await profileRef(user.uid).set({
+      offerEmailSent: true,
+      offerClaimed: true
+    }, {merge:true});
+
+    console.log("Offer email sent:", user.email);
+
+  }catch(err){
+    console.error("Offer email failed:", err);
+  }
+}
+// ===== END OFFER SYSTEM =====
+
+
+
+// ===== SUCCESS PAGE OFFER TRIGGER =====
+auth.onAuthStateChanged(async user => {
+  if (!user) return;
+
+  try{
+    if (window.location.pathname.includes("/success")) {
+      await sendOfferEmailOnce(user);
+    }
+  }catch(e){
+    console.error("Success trigger error:", e);
+  }
+});
+// ===== END SUCCESS TRIGGER =====
 
 </script><!-- Cloudflare Pages Analytics --><script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9c7f75032ae62224',t:'MTc3MDA5NTc5NQ=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();
+// ===== OFFER SYSTEM ADDITION =====
+function getOfferFlag(){
+  try{
+    const u = new URL(window.location.href);
+    return u.searchParams.get("offer");
+  }catch(e){
+    return null;
+  }
+}
 
+async function sendOfferEmailOnce(user){
+  try{
+    if(!user || !user.uid || !user.email) return;
+
+    const key = "offer_sent_" + user.uid;
+    if(localStorage.getItem(key)) return;
+
+    const snap = await profileRef(user.uid).get();
+    if(snap.exists && snap.data()?.offerEmailSent){
+      localStorage.setItem(key,"1");
+      return;
+    }
+
+    await emailjs.send(
+      "service_wsd8g2w",
+      "template_sgha506",
+      {
+        email: user.email,
+        name: user.displayName || "Friend"
+      },
+      "jBp2SNoQciWnlU2Fo"
+    );
+
+    localStorage.setItem(key,"1");
+
+    await profileRef(user.uid).set({
+      offerEmailSent: true,
+      offerClaimed: true
+    }, {merge:true});
+
+    console.log("Offer email sent:", user.email);
+
+  }catch(err){
+    console.error("Offer email failed:", err);
+  }
+}
+// ===== END OFFER SYSTEM =====
+
+
+
+// ===== SUCCESS PAGE OFFER TRIGGER =====
+auth.onAuthStateChanged(async user => {
+  if (!user) return;
+
+  try{
+    if (window.location.pathname.includes("/success")) {
+      await sendOfferEmailOnce(user);
+    }
+  }catch(e){
+    console.error("Success trigger error:", e);
+  }
+});
+// ===== END SUCCESS TRIGGER =====
 
 </script><script defer src="https://static.cloudflareinsights.com/beacon.min.js/vcd15cbe7772f49c399c6a5babf22c1241717689176015" integrity="sha512-ZpsOmlRQV6y907TI0dKBHq9Md29nnaEIPlkf84rnaERnq6zvWvPUqr2ft8M1aS28oN72PdrCzSjY4U6VaAw1EQ==" data-cf-beacon='{"version":"2024.11.0","token":"32f0b0530bdb47d89109f78f09c965e1","r":1,"server_timing":{"name":{"cfCacheStatus":true,"cfEdge":true,"cfExtPri":true,"cfL4":true,"cfOrigin":true,"cfSpeedBrain":true},"location_startswith":null}}' crossorigin="anonymous">
+// ===== OFFER SYSTEM ADDITION =====
+function getOfferFlag(){
+  try{
+    const u = new URL(window.location.href);
+    return u.searchParams.get("offer");
+  }catch(e){
+    return null;
+  }
+}
 
+async function sendOfferEmailOnce(user){
+  try{
+    if(!user || !user.uid || !user.email) return;
+
+    const key = "offer_sent_" + user.uid;
+    if(localStorage.getItem(key)) return;
+
+    const snap = await profileRef(user.uid).get();
+    if(snap.exists && snap.data()?.offerEmailSent){
+      localStorage.setItem(key,"1");
+      return;
+    }
+
+    await emailjs.send(
+      "service_wsd8g2w",
+      "template_sgha506",
+      {
+        email: user.email,
+        name: user.displayName || "Friend"
+      },
+      "jBp2SNoQciWnlU2Fo"
+    );
+
+    localStorage.setItem(key,"1");
+
+    await profileRef(user.uid).set({
+      offerEmailSent: true,
+      offerClaimed: true
+    }, {merge:true});
+
+    console.log("Offer email sent:", user.email);
+
+  }catch(err){
+    console.error("Offer email failed:", err);
+  }
+}
+// ===== END OFFER SYSTEM =====
+
+
+
+// ===== SUCCESS PAGE OFFER TRIGGER =====
+auth.onAuthStateChanged(async user => {
+  if (!user) return;
+
+  try{
+    if (window.location.pathname.includes("/success")) {
+      await sendOfferEmailOnce(user);
+    }
+  }catch(e){
+    console.error("Success trigger error:", e);
+  }
+});
+// ===== END SUCCESS TRIGGER =====
 
 </script>
 </body>
