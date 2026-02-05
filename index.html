@@ -20,6 +20,8 @@
 
 
 
+
+
 <!doctype html>
 <html lang="en">
 <head>
@@ -1778,6 +1780,23 @@ body.appOpen #notesAcc, body.appOpen #accountAcc{display:none !important;}
     auth = firebase.auth();
     db = firebase.firestore();
     provider = new firebase.auth.GoogleAuthProvider();
+
+  // ✅ Catch users who arrive already signed-in (e.g., from /offer → /success redirect)
+  // Sends welcome email ONLY for truly new users (first sign-in), and only once per user.
+  auth.onAuthStateChanged(async (user) => {
+    if (!user) return;
+    try {
+      const created = new Date(user.metadata?.creationTime || 0).getTime();
+      const last = new Date(user.metadata?.lastSignInTime || 0).getTime();
+      const isNewUser = Number.isFinite(created) && Number.isFinite(last) && Math.abs(last - created) < 60 * 1000;
+      if (isNewUser) {
+        await sendWelcomeEmailOnce(user);
+      }
+    } catch (e) {
+      console.warn('Welcome email (offer-flow) check failed:', e);
+    }
+  });
+
     // no offline persistence
   }
 
@@ -2910,7 +2929,10 @@ function setMode(mode, opts={push:true}){
     });
     $("#doSignin").onclick = async()=>{ 
    const result = await auth.signInWithPopup(provider);
-   await sendWelcomeEmailOnce(result.user);
+   // ✅ Send welcome email only for NEW users
+      if (result && result.additionalUserInfo && result.additionalUserInfo.isNewUser) {
+        await sendWelcomeEmailOnce(result.user);
+      }
    closeModal(); 
  };
     $("#cancel").onclick = closeModal;
