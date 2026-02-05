@@ -37,7 +37,7 @@ onAuthStateChanged(auth, async (user) => {
 
   // Firestore claim write (idempotent)
   const offerKey = (promo.offer || "FREE1YEAR").replace(/\s+/g, "_").toLowerCase();
-  const claimId = `${user.uid}_${offerKey}`;
+  const claimId = `${offerKey}_${user.uid}`;
   const ref = doc(db, "offerClaims", claimId);
 
   try {
