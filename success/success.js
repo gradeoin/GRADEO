@@ -111,7 +111,7 @@ async function sendOfferClaimEmail({ user, promo, now }) {
 
     offer_code: promo.offer || "FREE1YEAR",
     plan_name: "Gradeo Premium — 1 Year",
-    price_original: "₹150",
+    price_original: "₹1500",
     price_paid: "₹0"
   };
 
