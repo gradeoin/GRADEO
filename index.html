@@ -6,20 +6,20 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <meta name="theme-color" content="#FFF7EF" />
   <title>GRADEO — SGPA • CGPA • Minimum SEE</title>
-  <meta name="description" content="GRADEO helps you calculate SGPA from marks, convert SGPA→CGPA, and estimate minimum SEE marks needed for a target CGPA." />
+  <meta name="description" content="Calculate SGPA from marks, convert SGPA→CGPA, and estimate minimum SEE marks for a target." />
   <link rel="icon" href="https://res.cloudinary.com/djy3mjtsz/image/upload/v1769939761/Untitled_1_vtehdh.png" type="image/png" />
   <link rel="apple-touch-icon" sizes="180x180" href="https://res.cloudinary.com/djy3mjtsz/image/upload/v1769939761/Untitled_1_vtehdh.png" />
 
   <style>
     /*
-      GRADEO Landing — Orange, clean copy, smoother interactions.
-      User requests implemented:
-      - Remove "Local mode / Sign-in needs http(s)" wording
-      - "M2" (last mode) shown ONLY after sign-in; before sign-in show something else
-      - "Get started" triggers Google sign-in; after sign-in auto-scroll to Modes
-      - Mode links now: https://gradeo.in/calculator/#m1 | #m2 | #m3
-      - Add cool light-theme background + subtle animations
-      - Keep it fast (no heavy parallax / no continuous JS loops)
+      GRADEO Landing — Orange, bold, minimal, mobile-first.
+      Updates in this version:
+      - Bigger & bolder typography (more readable)
+      - Less text overall
+      - Mobile hamburger menu (3-bar) for clean header
+      - Smoother micro-interactions + cool light background
+      - Get started => Google sign-in => auto scroll to Modes
+      - Modes open absolute URLs on gradeo.in
     */
 
     :root{
@@ -29,22 +29,19 @@
       --card:#ffffff;
       --soft:#FFF0E4;
       --text:#121212;
-      --muted:#606060;
+      --muted:#5d5d5d;
       --outline:rgba(18,18,18,.10);
       --primary:#FF6A00;
       --primary2:#FF8B3D;
-
-      --shadow: 0 14px 44px rgba(0,0,0,.10);
+      --shadow: 0 16px 48px rgba(0,0,0,.10);
       --shadow2: 0 10px 22px rgba(0,0,0,.08);
-
-      --r-xl: 26px;
+      --r-xl: 28px;
       --r-lg: 18px;
-
       --max: 1120px;
       --gutter: 18px;
       --focus: 0 0 0 4px rgba(255,106,0,.22);
 
-      /* Motion (snappy, Google-ish) */
+      /* Motion */
       --dur-1: 120ms;
       --dur-2: 200ms;
       --dur-3: 520ms;
@@ -69,7 +66,7 @@
       position:relative;
     }
 
-    /* Cool animated light background (CSS-only, slow, respects reduced-motion) */
+    /* Cool animated light background (slow, CSS-only) */
     body::before,
     body::after{
       content:"";
@@ -77,7 +74,7 @@
       inset:-25vmax;
       pointer-events:none;
       z-index:-1;
-      opacity:.65;
+      opacity:.62;
       filter: blur(34px);
       transform: translate3d(0,0,0);
       will-change: transform;
@@ -91,43 +88,33 @@
     }
     body::after{
       background:
-        radial-gradient(circle at 75% 20%, rgba(255,211,184,.90), transparent 52%),
-        radial-gradient(circle at 20% 70%, rgba(255,232,214,.95), transparent 55%),
+        radial-gradient(circle at 75% 20%, rgba(255,211,184,.92), transparent 52%),
+        radial-gradient(circle at 20% 70%, rgba(255,232,214,.96), transparent 55%),
         radial-gradient(circle at 60% 75%, rgba(255,106,0,.10), transparent 58%);
       animation: float2 18s var(--ease-inout) infinite alternate;
-      opacity:.55;
+      opacity:.52;
     }
-
-    @keyframes float1{
-      0%{ transform: translate3d(-1.2%, -1.0%, 0) scale(1); }
-      100%{ transform: translate3d(1.4%, 1.2%, 0) scale(1.03); }
-    }
-    @keyframes float2{
-      0%{ transform: translate3d(1.2%, -1.0%, 0) scale(1); }
-      100%{ transform: translate3d(-1.4%, 1.2%, 0) scale(1.04); }
-    }
-
-    @media (prefers-reduced-motion: reduce){
-      body::before, body::after{ animation:none; }
-    }
+    @keyframes float1{ 0%{ transform: translate3d(-1.2%, -1.0%, 0) scale(1);} 100%{ transform: translate3d(1.4%, 1.2%, 0) scale(1.03);} }
+    @keyframes float2{ 0%{ transform: translate3d(1.2%, -1.0%, 0) scale(1);} 100%{ transform: translate3d(-1.4%, 1.2%, 0) scale(1.04);} }
+    @media (prefers-reduced-motion: reduce){ body::before, body::after{ animation:none; } }
 
     a{ color:inherit; text-decoration:none; }
     .wrap{ max-width:var(--max); margin:0 auto; padding: 0 var(--gutter); }
 
-    /* Thin progress */
-    .progress{ position:fixed; top:0; left:0; right:0; height:3px; z-index:70; }
+    /* thin progress */
+    .progress{ position:fixed; top:0; left:0; right:0; height:3px; z-index:80; }
     .progress span{ display:block; height:100%; width:0; background: linear-gradient(90deg, var(--primary), var(--primary2)); }
 
     /* Header */
     header{
       position:sticky;
       top:0;
-      z-index:60;
+      z-index:70;
       background: rgba(255,247,239,.92);
       border-bottom: 1px solid rgba(17,17,17,.06);
       transition: box-shadow var(--dur-2) var(--ease-out);
     }
-    header.scrolled{ box-shadow: 0 10px 22px rgba(0,0,0,.06); }
+    header.scrolled{ box-shadow: 0 12px 26px rgba(0,0,0,.07); }
 
     .topbar{
       display:flex;
@@ -141,15 +128,22 @@
     .logo{ width:44px; height:44px; border-radius:16px; overflow:hidden; background:#fff; border:1px solid var(--outline); box-shadow:var(--shadow2); flex:0 0 auto; }
     .logo img{ width:100%; height:100%; object-fit:cover; display:block; }
     .brandText{ min-width:0; }
-    .brandText .name{ font-weight:1000; letter-spacing:-.3px; font-size:16px; line-height:1.1; }
-    .brandText .tag{ margin-top:2px; color:var(--muted); font-weight:780; font-size:12.5px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+    .brandText .name{ font-weight:1000; letter-spacing:-.4px; font-size:16px; line-height:1.1; }
+    .brandText .tag{ margin-top:2px; color:var(--muted); font-weight:900; font-size:12.5px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
 
-    .nav{ display:flex; align-items:center; gap:10px; flex-wrap:wrap; justify-content:flex-end; }
+    .nav{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      flex-wrap:wrap;
+      justify-content:flex-end;
+    }
 
+    /* Header links (desktop) */
     .linkBtn{
       padding: 10px 10px;
       border-radius: 999px;
-      font-weight: 900;
+      font-weight: 950;
       font-size: 13.5px;
       color: var(--muted);
       background: transparent;
@@ -165,9 +159,10 @@
       border:none;
       cursor:pointer;
       border-radius: 999px;
-      padding: 11px 14px;
-      font-weight:950;
-      font-size:14px;
+      padding: 12px 16px;
+      font-weight: 1000;
+      font-size: 14px;
+      letter-spacing: .1px;
       display:inline-flex;
       align-items:center;
       gap:10px;
@@ -180,8 +175,8 @@
     .btn:focus-visible{ outline:none; box-shadow: var(--focus); }
     .btn:active{ transform: translateY(1px); }
 
-    .btnPrimary{ background: linear-gradient(180deg, var(--primary), #ff5f00); color:#fff; box-shadow: 0 14px 22px rgba(255,106,0,.20); }
-    .btnPrimary:hover{ box-shadow: 0 18px 30px rgba(255,106,0,.22); }
+    .btnPrimary{ background: linear-gradient(180deg, var(--primary), #ff5f00); color:#fff; box-shadow: 0 16px 26px rgba(255,106,0,.22); }
+    .btnPrimary:hover{ box-shadow: 0 20px 34px rgba(255,106,0,.24); }
 
     .btnTonal{ background: var(--soft); color: var(--primary); border: 1px solid rgba(255,106,0,.22); }
     .btnTonal:hover{ border-color: rgba(255,106,0,.35); }
@@ -189,12 +184,14 @@
     .btnGhost{ background:#fff; color: var(--text); border:1px solid rgba(17,17,17,.10); box-shadow: var(--shadow2); }
     .btnGhost:hover{ border-color: rgba(255,106,0,.28); }
 
+    .btnIcon{ padding: 12px 12px; }
+
     /* Ripple */
     .r{ position:absolute; border-radius:999px; pointer-events:none; transform:translate(-50%,-50%); background: rgba(255,255,255,.65); opacity:0; }
 
     /* Hero */
-    .hero{ padding: 28px 0 14px; }
-    .heroGrid{ display:grid; grid-template-columns: 1.25fr .75fr; gap:14px; align-items:stretch; }
+    .hero{ padding: 30px 0 16px; }
+    .heroGrid{ display:grid; grid-template-columns: 1.3fr .7fr; gap:14px; align-items:stretch; }
     @media (max-width: 980px){ .heroGrid{ grid-template-columns:1fr; } }
 
     .card{
@@ -205,7 +202,7 @@
       overflow:hidden;
     }
 
-    .heroMain{ padding: 22px; }
+    .heroMain{ padding: 24px; }
 
     .pill{
       display:inline-flex;
@@ -216,16 +213,16 @@
       background: rgba(255,106,0,.10);
       border:1px solid rgba(255,106,0,.20);
       color: var(--primary);
-      font-weight: 950;
+      font-weight: 1000;
       font-size: 12.5px;
     }
 
     h1{
       margin-top: 12px;
-      font-size: clamp(34px, 5.6vw, 58px);
-      line-height:1.02;
-      letter-spacing:-1px;
-      font-weight: 1050;
+      font-size: clamp(36px, 6.2vw, 62px);
+      line-height: 1.02;
+      letter-spacing: -1.2px;
+      font-weight: 1100;
     }
 
     .grad{
@@ -235,9 +232,16 @@
       color:transparent;
     }
 
-    .subtitle{ margin-top: 10px; color: var(--muted); font-weight: 820; line-height: 1.55; font-size: 15px; max-width: 56ch; }
+    .subtitle{
+      margin-top: 12px;
+      color: var(--muted);
+      font-weight: 900;
+      line-height: 1.5;
+      font-size: 16px;
+      max-width: 54ch;
+    }
 
-    .ctaRow{ margin-top: 16px; display:flex; gap:10px; flex-wrap:wrap; }
+    .ctaRow{ margin-top: 18px; display:flex; gap:10px; flex-wrap:wrap; }
 
     /* Right side */
     .side{ padding: 18px; display:flex; flex-direction:column; gap:12px; }
@@ -248,17 +252,18 @@
     .avatar{ width:40px; height:40px; border-radius:16px; background: rgba(255,106,0,.16); border:1px solid rgba(255,106,0,.22); overflow:hidden; flex:0 0 auto; }
     .avatar img{ width:100%; height:100%; object-fit:cover; display:block; }
     .userText{ min-width:0; }
-    .userText .l1{ font-weight: 1000; font-size: 13.5px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-    .userText .l2{ margin-top:2px; color: var(--muted); font-weight: 780; font-size: 12px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+    .userText .l1{ font-weight: 1100; font-size: 14px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+    .userText .l2{ margin-top:2px; color: var(--muted); font-weight: 850; font-size: 12.5px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
 
-    .miniLabel{ font-weight:1000; font-size:13.5px; letter-spacing:-.2px; }
-    .miniValue{ margin-top:6px; color:var(--muted); font-weight:950; }
+    .mini{ display:flex; align-items:center; justify-content:space-between; gap:10px; }
+    .mini .k{ font-weight: 1100; font-size: 13.5px; }
+    .mini .v{ font-weight: 1100; color: var(--primary); }
 
     /* Sections */
-    section{ padding: 12px 0; }
+    section{ padding: 14px 0; }
     .sectionHead{ display:flex; align-items:flex-end; justify-content:space-between; gap:12px; flex-wrap:wrap; }
-    .sectionHead h2{ font-size: 22px; font-weight: 1050; letter-spacing:-.6px; }
-    .sectionHead p{ margin-top:6px; color: var(--muted); font-weight: 780; font-size: 13px; line-height: 1.45; }
+    .sectionHead h2{ font-size: 24px; font-weight: 1100; letter-spacing:-.7px; }
+    .sectionHead p{ margin-top:6px; color: var(--muted); font-weight: 850; font-size: 13.5px; line-height: 1.45; }
 
     /* Modes */
     .grid{ margin-top: 14px; display:grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 12px; }
@@ -268,7 +273,7 @@
       background:#fff;
       border:1px solid rgba(17,17,17,.08);
       border-radius: var(--r-xl);
-      padding: 16px;
+      padding: 18px;
       box-shadow: var(--shadow2);
       cursor:pointer;
       transition: transform var(--dur-2) var(--ease-out), box-shadow var(--dur-2) var(--ease-out), border-color var(--dur-2) var(--ease-out);
@@ -276,50 +281,111 @@
       display:flex;
       flex-direction:column;
       justify-content:space-between;
-      min-height: 124px;
+      min-height: 132px;
       will-change: transform;
+      position:relative;
+      overflow:hidden;
     }
-    .tile:hover{ transform: translateY(-2px); box-shadow: 0 18px 36px rgba(0,0,0,.10); border-color: rgba(255,106,0,.25); }
-    .tile:active{ transform: translateY(0); }
-    .tile:focus-visible{ box-shadow: var(--focus), 0 18px 36px rgba(0,0,0,.10); }
+    .tile::after{
+      content:"";
+      position:absolute;
+      inset:auto -30% -55% -30%;
+      height: 120px;
+      background: radial-gradient(circle at 50% 50%, rgba(255,106,0,.14), transparent 55%);
+      transform: translateY(18px);
+      transition: transform var(--dur-3) var(--ease-inout);
+    }
+    .tile:hover::after{ transform: translateY(0); }
 
-    .tileTop{ display:flex; align-items:flex-start; justify-content:space-between; gap:12px; }
-    .t{ font-weight: 1050; font-size: 16px; letter-spacing:-.2px; }
-    .s{ margin-top:6px; color: var(--muted); font-weight: 780; font-size: 13px; line-height: 1.4; }
+    .tile:hover{ transform: translateY(-2px); box-shadow: 0 20px 42px rgba(0,0,0,.12); border-color: rgba(255,106,0,.25); }
+    .tile:active{ transform: translateY(0); }
+    .tile:focus-visible{ box-shadow: var(--focus), 0 20px 42px rgba(0,0,0,.12); }
+
+    .tileTop{ display:flex; align-items:flex-start; justify-content:space-between; gap:12px; position:relative; z-index:1; }
+    .t{ font-weight: 1100; font-size: 17px; letter-spacing:-.25px; }
+    .s{ margin-top:7px; color: var(--muted); font-weight: 850; font-size: 13.5px; line-height: 1.35; }
 
     .icon{
-      width: 42px; height: 42px;
-      border-radius: 16px;
+      width: 46px; height: 46px;
+      border-radius: 18px;
       display:grid; place-items:center;
       background: rgba(255,106,0,.10);
       border:1px solid rgba(255,106,0,.18);
       color: var(--primary);
       flex:0 0 auto;
       transition: transform var(--dur-2) var(--ease-inout);
+      position:relative;
+      z-index:1;
     }
-    .tile:hover .icon{ transform: scale(1.06); }
+    .tile:hover .icon{ transform: scale(1.06) rotate(-2deg); }
 
-    .badge{ margin-top: 12px; width:fit-content; padding:8px 10px; border-radius:999px; font-weight: 950; font-size: 11.5px; background: var(--soft); color: var(--primary); border:1px solid rgba(255,106,0,.20); }
+    .badge{ margin-top: 12px; width:fit-content; padding:8px 10px; border-radius:999px; font-weight: 1000; font-size: 11.5px; background: var(--soft); color: var(--primary); border:1px solid rgba(255,106,0,.20); position:relative; z-index:1; }
 
-    /* Features (very short) */
+    /* Features (short) */
     .featGrid{ margin-top: 12px; display:grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 12px; }
     @media (max-width: 980px){ .featGrid{ grid-template-columns:1fr; } }
     .feat{ background:#fff; border:1px solid rgba(17,17,17,.08); border-radius: var(--r-xl); padding: 16px; box-shadow: var(--shadow2); }
-    .feat .ft{ font-weight: 1050; font-size: 15px; letter-spacing:-.2px; }
-    .feat .fs{ margin-top: 6px; color: var(--muted); font-weight: 780; font-size: 13px; line-height: 1.5; }
+    .feat .ft{ font-weight: 1100; font-size: 15px; }
+    .feat .fs{ margin-top: 6px; color: var(--muted); font-weight: 850; font-size: 13.5px; line-height: 1.4; }
 
-    footer{ padding: 22px 0 34px; color: var(--muted); font-weight: 780; font-size: 12.8px; display:flex; justify-content:space-between; gap:12px; flex-wrap:wrap; align-items:center; }
+    footer{ padding: 22px 0 34px; color: var(--muted); font-weight: 900; font-size: 12.8px; display:flex; justify-content:space-between; gap:12px; flex-wrap:wrap; align-items:center; }
 
-    /* Reveal animation (subtle) */
+    /* Reveal */
     .reveal{ opacity:0; transform: translateY(10px); }
     .reveal.show{ opacity:1; transform: translateY(0); transition: opacity var(--dur-3) var(--ease-inout), transform var(--dur-3) var(--ease-inout); }
 
     /* Toast */
-    .toast{ position:fixed; left:50%; bottom:18px; transform:translateX(-50%); width:min(520px, calc(100vw - 24px)); background:#fff; border:1px solid rgba(17,17,17,.10); border-radius: var(--r-lg); box-shadow: var(--shadow); padding: 12px 12px; display:none; gap:10px; align-items:flex-start; z-index:80; }
+    .toast{ position:fixed; left:50%; bottom:18px; transform:translateX(-50%); width:min(520px, calc(100vw - 24px)); background:#fff; border:1px solid rgba(17,17,17,.10); border-radius: var(--r-lg); box-shadow: var(--shadow); padding: 12px 12px; display:none; gap:10px; align-items:flex-start; z-index:90; }
     .toast.show{ display:flex; }
     .toast .dot{ width:10px; height:10px; border-radius:999px; background: linear-gradient(180deg, var(--primary), var(--primary2)); margin-top:6px; }
-    .toast .msg{ font-weight: 850; font-size: 13px; line-height: 1.45; }
+    .toast .msg{ font-weight: 950; font-size: 13px; line-height: 1.45; }
 
+    /* Mobile hamburger */
+    .hamburger{ display:none; }
+
+    /* Mobile menu sheet */
+    .sheetBackdrop{
+      position:fixed; inset:0;
+      background: rgba(18,18,18,.28);
+      display:none;
+      z-index:85;
+    }
+    .sheetBackdrop.show{ display:block; }
+
+    .sheet{
+      position:fixed;
+      left: 50%;
+      transform: translateX(-50%);
+      bottom: 12px;
+      width: min(560px, calc(100vw - 18px));
+      background: rgba(255,255,255,.96);
+      border: 1px solid rgba(17,17,17,.10);
+      border-radius: 22px;
+      box-shadow: 0 26px 70px rgba(0,0,0,.18);
+      padding: 12px;
+      z-index:86;
+      display:none;
+      transform-origin: bottom center;
+    }
+    .sheet.show{ display:block; animation: sheetIn 220ms var(--ease-out) both; }
+    @keyframes sheetIn{ from{ transform: translateX(-50%) translateY(10px) scale(.98); opacity:0; } to{ transform: translateX(-50%) translateY(0) scale(1); opacity:1; } }
+
+    .sheetTop{ display:flex; align-items:center; justify-content:space-between; gap:10px; padding: 4px 6px 10px; }
+    .grab{ width:42px; height:5px; border-radius:999px; background: rgba(17,17,17,.12); margin: 2px auto 0; }
+
+    .sheetGrid{ display:grid; grid-template-columns: 1fr; gap:10px; padding: 8px 4px 6px; }
+    .sheetBtn{ width:100%; justify-content:space-between; }
+
+    @media (max-width: 720px){
+      .brandText .tag{ display:none; }
+      .nav .linkBtn, .nav #offerBtn{ display:none; }
+      .hamburger{ display:inline-flex; }
+      .btn{ padding: 12px 14px; }
+      .heroMain{ padding: 20px; }
+      h1{ font-size: clamp(34px, 10vw, 48px); }
+      .subtitle{ font-size: 15px; }
+      .hero{ padding-top: 22px; }
+    }
   </style>
 </head>
 <body>
@@ -340,22 +406,41 @@
           <a class="linkBtn" href="#modes">Modes</a>
           <a class="linkBtn" href="#features">Features</a>
           <button class="btn btnGhost" id="offerBtn" type="button">Offers</button>
+
+          <!-- Mobile menu button -->
+          <button class="btn btnGhost btnIcon hamburger" id="menuBtn" type="button" aria-label="Menu">
+            ☰
+          </button>
+
           <button class="btn btnPrimary" id="googleBtn" type="button"><span aria-hidden="true">G</span><span id="googleBtnLabel">Sign in</span></button>
         </nav>
       </div>
     </div>
   </header>
 
+  <!-- Mobile sheet menu -->
+  <div class="sheetBackdrop" id="sheetBackdrop" aria-hidden="true"></div>
+  <div class="sheet" id="sheet" role="dialog" aria-modal="true" aria-label="Menu">
+    <div class="grab" aria-hidden="true"></div>
+    <div class="sheetTop">
+      <div style="font-weight:1100; letter-spacing:-.3px;">Menu</div>
+      <button class="btn btnGhost btnIcon" id="sheetClose" type="button" aria-label="Close">✕</button>
+    </div>
+    <div class="sheetGrid">
+      <a class="btn btnGhost sheetBtn" href="#modes">Modes <span aria-hidden="true">›</span></a>
+      <a class="btn btnGhost sheetBtn" href="#features">Features <span aria-hidden="true">›</span></a>
+      <button class="btn btnGhost sheetBtn" id="offerBtnSheet" type="button">Offers <span aria-hidden="true">›</span></button>
+    </div>
+  </div>
+
   <div class="wrap">
-    <!-- HERO -->
     <main class="hero">
       <div class="heroGrid">
         <section class="card reveal" aria-label="Hero">
           <div class="heroMain">
-            <div class="pill"><span aria-hidden="true">⚡</span> Fast • Accurate • Student-first</div>
-            <h1>Plan your
-              <span class="grad">SGPA & CGPA</span>.</h1>
-            <p class="subtitle">SGPA from marks. SGPA→CGPA. Minimum SEE target.</p>
+            <div class="pill"><span aria-hidden="true">⚡</span> Fast • Accurate</div>
+            <h1>Plan your <span class="grad">SGPA & CGPA</span>.</h1>
+            <p class="subtitle">SGPA. CGPA. Minimum SEE.</p>
 
             <div class="ctaRow">
               <button class="btn btnPrimary" id="getStartedBtn" type="button">Get started →</button>
@@ -379,28 +464,22 @@
               </div>
             </div>
 
-            <!-- Shows ONLY after sign-in -->
             <div class="panel" id="lastPanel" style="display:none;">
-              <div class="miniLabel">Recent</div>
-              <div class="miniValue"><span id="lastMode">—</span></div>
-            </div>
-
-            <!-- Before sign-in we show a tiny, non-annoying hint (no local/http wording) -->
-            <div class="panel" id="prePanel">
-              <div class="miniLabel">Tip</div>
-              <div class="miniValue">Sign in → choose mode</div>
+              <div class="mini">
+                <div class="k">Recent</div>
+                <div class="v" id="lastMode">—</div>
+              </div>
             </div>
           </div>
         </aside>
       </div>
     </main>
 
-    <!-- MODES -->
     <section id="modes" class="reveal" aria-label="Modes">
       <div class="sectionHead">
         <div>
           <h2>Modes</h2>
-          <p>Select a calculator.</p>
+          <p>Pick one.</p>
         </div>
       </div>
 
@@ -410,7 +489,7 @@
             <div class="tileTop">
               <div>
                 <div class="t">Planner</div>
-                <div class="s">Target CGPA → minimum SEE</div>
+                <div class="s">Target CGPA → min SEE</div>
               </div>
               <div class="icon" aria-hidden="true">🧾</div>
             </div>
@@ -446,43 +525,31 @@
       </div>
     </section>
 
-    <!-- FEATURES -->
     <section id="features" class="reveal" aria-label="Features">
       <div class="sectionHead">
         <div>
           <h2>Features</h2>
-          <p>Simple, fast, useful.</p>
+          <p>Simple.</p>
         </div>
       </div>
 
       <div class="featGrid">
-        <div class="feat">
-          <div class="ft">Fast</div>
-          <div class="fs">Instant results.</div>
-        </div>
-        <div class="feat">
-          <div class="ft">Accurate</div>
-          <div class="fs">Clear scoring.</div>
-        </div>
-        <div class="feat">
-          <div class="ft">Save</div>
-          <div class="fs">Google sign-in.</div>
-        </div>
+        <div class="feat"><div class="ft">Fast</div><div class="fs">Instant results.</div></div>
+        <div class="feat"><div class="ft">Accurate</div><div class="fs">Clear scoring.</div></div>
+        <div class="feat"><div class="ft">Save</div><div class="fs">Google sign-in.</div></div>
       </div>
     </section>
 
     <footer>
       <div>© <span id="year"></span> GRADEO</div>
-      <div style="display:flex; gap:10px; flex-wrap:wrap;">
-        <a class="linkBtn" href="#top">Top</a>
-      </div>
+      <a class="linkBtn" href="#top">Top</a>
     </footer>
   </div>
 
   <div class="toast" id="toast" role="status" aria-live="polite">
     <div class="dot" aria-hidden="true"></div>
     <div class="msg" id="toastMsg">Done</div>
-    <button class="btn btnGhost" id="toastClose" type="button" aria-label="Close">✕</button>
+    <button class="btn btnGhost btnIcon" id="toastClose" type="button" aria-label="Close">✕</button>
   </div>
 
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
@@ -502,6 +569,28 @@
     // Year
     $('#year').textContent = new Date().getFullYear();
 
+    // Mobile menu sheet
+    const menuBtn = $('#menuBtn');
+    const sheet = $('#sheet');
+    const sheetBackdrop = $('#sheetBackdrop');
+    const sheetClose = $('#sheetClose');
+    const offerBtnSheet = $('#offerBtnSheet');
+
+    function openSheet(){
+      sheetBackdrop.classList.add('show');
+      sheet.classList.add('show');
+    }
+    function closeSheet(){
+      sheetBackdrop.classList.remove('show');
+      sheet.classList.remove('show');
+    }
+    menuBtn && menuBtn.addEventListener('click', openSheet);
+    sheetClose && sheetClose.addEventListener('click', closeSheet);
+    sheetBackdrop && sheetBackdrop.addEventListener('click', closeSheet);
+    document.addEventListener('keydown', (e)=>{ if(e.key === 'Escape') closeSheet(); });
+    // close when clicking menu links
+    $$('#sheet a[href^="#"]').forEach(a => a.addEventListener('click', closeSheet));
+
     // Header shadow + progress (rAF throttled)
     const header = $('#header');
     const bar = $('#progressBar');
@@ -514,9 +603,7 @@
       const h = doc.scrollHeight - doc.clientHeight;
       bar.style.width = ((h > 0 ? (st / h) : 0) * 100).toFixed(2) + '%';
     }
-    window.addEventListener('scroll', ()=>{
-      if(!ticking){ ticking = true; requestAnimationFrame(updateScroll); }
-    }, {passive:true});
+    window.addEventListener('scroll', ()=>{ if(!ticking){ ticking = true; requestAnimationFrame(updateScroll); } }, {passive:true});
     updateScroll();
 
     // Ripple (cheap)
@@ -548,11 +635,11 @@
       toastMsg.textContent = msg;
       toast.classList.add('show');
       clearTimeout(toastTimer);
-      toastTimer = setTimeout(()=>toast.classList.remove('show'), 2600);
+      toastTimer = setTimeout(()=>toast.classList.remove('show'), 2400);
     }
     $('#toastClose').addEventListener('click', ()=> toast.classList.remove('show'));
 
-    // Reveal (subtle)
+    // Reveal
     const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     if(reduced){
       $$('.reveal').forEach(el => el.classList.add('show'));
@@ -568,65 +655,51 @@
       $$('.reveal').forEach(el => io.observe(el));
     }
 
-    // Modes navigation (absolute URLs)
+    // Offers
+    function openOffers(){ window.location.href = SITE_BASE + '/offers/'; }
+    $('#offerBtn').addEventListener('click', openOffers);
+    offerBtnSheet && offerBtnSheet.addEventListener('click', ()=>{ closeSheet(); openOffers(); });
+
+    // Mode nav
     function openMode(m){
       localStorage.setItem('gradeo_last_mode', m);
       window.location.href = MODE_URL[m] || MODE_URL.m2;
     }
-
     $$('.tile[data-mode]').forEach(el => {
       el.addEventListener('click', ()=> openMode(el.getAttribute('data-mode')));
-      el.addEventListener('keydown', (e)=>{
-        if(e.key === 'Enter' || e.key === ' '){ e.preventDefault(); openMode(el.getAttribute('data-mode')); }
-      });
+      el.addEventListener('keydown', (e)=>{ if(e.key === 'Enter' || e.key === ' '){ e.preventDefault(); openMode(el.getAttribute('data-mode')); } });
     });
 
-    // Copy link -> default to SGPA
+    // Copy link (m2)
     async function safeCopy(text){
       try{
-        if(navigator.clipboard && window.isSecureContext){
-          await navigator.clipboard.writeText(text);
-          return true;
-        }
+        if(navigator.clipboard && window.isSecureContext){ await navigator.clipboard.writeText(text); return true; }
         const ta = document.createElement('textarea');
-        ta.value = text;
-        ta.style.position='fixed';
-        ta.style.left='-9999px';
-        document.body.appendChild(ta);
-        ta.select();
-        document.execCommand('copy');
-        ta.remove();
+        ta.value = text; ta.style.position='fixed'; ta.style.left='-9999px';
+        document.body.appendChild(ta); ta.select(); document.execCommand('copy'); ta.remove();
         return true;
       }catch{ return false; }
     }
-
     $('#copyLinkBtn').addEventListener('click', async ()=>{
       const ok = await safeCopy(MODE_URL.m2);
       showToast(ok ? 'Link copied' : 'Copy failed');
     });
 
-    // Offers
-    function openOffers(){ window.location.href = SITE_BASE + '/offers/'; }
-    $('#offerBtn').addEventListener('click', openOffers);
-
-    // Signed-in UI + "recent" only after sign-in
+    // Signed-in UI
     const lastPanel = $('#lastPanel');
-    const prePanel = $('#prePanel');
     const lastModeEl = $('#lastMode');
-
     function updateLastModeUI(){
       const m = localStorage.getItem('gradeo_last_mode');
-      if(!m){ lastModeEl.textContent = '—'; return null; }
-      lastModeEl.textContent = m.toUpperCase();
+      lastModeEl.textContent = m ? m.toUpperCase() : '—';
       return m;
     }
 
-    // Get started => sign-in then scroll to modes
-    let pendingScrollToModes = false;
     function scrollToModes(){
       const el = document.getElementById('modes');
       if(el) el.scrollIntoView({behavior:'smooth', block:'start'});
     }
+
+    let pendingScrollToModes = false;
 
     // Firebase auth
     const firebaseConfig = {
@@ -650,12 +723,8 @@
       userLine2.textContent = subtitle;
       if(photoURL){ avatarImg.src = photoURL; avatarImg.style.display='block'; }
       else{ avatarImg.style.display='none'; avatarImg.removeAttribute('src'); }
-
       googleBtnLabel.textContent = signedIn ? 'Sign out' : 'Sign in';
-
-      // Recent panel only when signed in
       lastPanel.style.display = signedIn ? '' : 'none';
-      prePanel.style.display = signedIn ? 'none' : '';
       if(signedIn) updateLastModeUI();
     }
 
@@ -664,57 +733,42 @@
       return auth.signInWithPopup(provider);
     }
 
-    // CTA behaviors
+    // Get started => sign-in => scroll
     $('#getStartedBtn').addEventListener('click', ()=>{
-      // If already signed in, just scroll
-      if(window.__auth && window.__auth.currentUser){
-        scrollToModes();
-        return;
-      }
+      if(window.__auth && window.__auth.currentUser){ scrollToModes(); return; }
       if(window.__auth && window.__provider){
-        startSignIn(window.__auth, window.__provider).catch((e)=>{
-          console.error(e);
-          showToast('Sign-in failed');
-        });
+        startSignIn(window.__auth, window.__provider).catch((e)=>{ console.error(e); showToast('Sign-in failed'); });
       } else {
-        // fallback if auth disabled
         showToast('Sign-in unavailable');
       }
     });
 
+    // Continue => if signed in open last/m2 else sign in
     $('#continueBtn').addEventListener('click', ()=>{
-      // Continue: if signed in -> go to last mode or m2; else sign in then scroll
       if(window.__auth && window.__auth.currentUser){
         const m = updateLastModeUI();
         openMode(m || 'm2');
         return;
       }
       if(window.__auth && window.__provider){
-        pendingScrollToModes = true;
-        startSignIn(window.__auth, window.__provider).catch((e)=>{
-          console.error(e);
-          showToast('Sign-in failed');
-        });
+        startSignIn(window.__auth, window.__provider).catch((e)=>{ console.error(e); showToast('Sign-in failed'); });
       } else {
         showToast('Sign-in unavailable');
       }
     });
 
-    // File protocol: disable auth button without showing "local/http" wording
+    // file:// fallback (no technical wording)
     if(location.protocol === 'file:'){
       googleBtn.disabled = true;
       googleBtn.style.opacity = '0.6';
       setUserUI({ title:'Welcome', subtitle:'Open the live site to sign in', photoURL:'', signedIn:false });
-      // Keep get started usable (scroll)
-      $('#getStartedBtn').addEventListener('click', scrollToModes);
+      document.getElementById('getStartedBtn').addEventListener('click', scrollToModes);
     } else {
       try{
         firebase.initializeApp(firebaseConfig);
         const auth = firebase.auth();
         const provider = new firebase.auth.GoogleAuthProvider();
         auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL).catch(()=>{});
-
-        // expose for CTA handlers
         window.__auth = auth;
         window.__provider = provider;
 
@@ -722,14 +776,12 @@
           if(user){
             setUserUI({
               title: user.displayName || 'Signed in',
-              subtitle: user.email || 'Ready',
+              subtitle: user.email || '',
               photoURL: user.photoURL || '',
               signedIn: true
             });
-            showToast('Signed in');
             if(pendingScrollToModes){
               pendingScrollToModes = false;
-              // small delay for smoother feel
               setTimeout(scrollToModes, 180);
             }
           } else {
@@ -738,18 +790,9 @@
         });
 
         googleBtn.addEventListener('click', async ()=>{
-          if(auth.currentUser){
-            await auth.signOut();
-            showToast('Signed out');
-            return;
-          }
-          try{
-            pendingScrollToModes = false;
-            await auth.signInWithPopup(provider);
-          }catch(e){
-            console.error(e);
-            showToast('Sign-in failed');
-          }
+          if(auth.currentUser){ await auth.signOut(); showToast('Signed out'); return; }
+          try{ pendingScrollToModes = false; await auth.signInWithPopup(provider); }
+          catch(e){ console.error(e); showToast('Sign-in failed'); }
         });
 
       }catch(e){
