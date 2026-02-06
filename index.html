@@ -2137,7 +2137,20 @@ auth.onAuthStateChanged(async user => {
 (() => {
   "use strict";
 
-  // ===== Welcome email (EmailJS) =====
+  
+  // ---- Offer context detector (used to block welcome email on offer/success flows) ----
+  function isOfferContext(){
+    try{
+      const u = new URL(window.location.href);
+      const offer = (u.searchParams.get('offer')||'').toLowerCase();
+      return window.location.pathname.includes('/success') || offer==='1' || offer==='true' || offer==='yes';
+    }catch(e){
+      return window.location.pathname.includes('/success');
+    }
+  }
+  // -------------------------------------------------------------------------------
+
+// ===== Welcome email (EmailJS) =====
   // Sends only once per user (uses BOTH: Firestore flag + localStorage fallback)
   async function sendWelcomeEmailOnce(user){
     try{
@@ -2461,7 +2474,7 @@ auth.onAuthStateChanged(async user => {
         const last = new Date(user.metadata && user.metadata.lastSignInTime ? user.metadata.lastSignInTime : 0).getTime();
         const isNewUser = Number.isFinite(created) && Number.isFinite(last) && Math.abs(last - created) < 60 * 1000;
 
-        if (hinted || isNewUser) {
+        if (hinted && !isOfferContext()) {
           await sendWelcomeEmailOnce(user);
         }
       } catch (e) {
@@ -3604,10 +3617,10 @@ function setMode(mode, opts={push:true}){
    const result = await auth.signInWithPopup(provider);
       // ✅ Mark new user; welcome email is sent via auth.onAuthStateChanged to avoid duplicates
       try {
-        if (result && result.additionalUserInfo && result.additionalUserInfo.isNewUser && result.user && result.user.uid) {
-          sessionStorage.setItem('welcome_hint_' + result.user.uid, '1');
-        }
-      } catch (e) {}
+        if (!isOfferContext() && result && result.additionalUserInfo && result.additionalUserInfo.isNewUser && result.user && result.user.uid) {
+        sessionStorage.setItem('welcome_hint_' + result.user.uid, '1');
+      }
+} catch (e) {}
    closeModal(); 
  };
     $("#cancel").onclick = closeModal;
