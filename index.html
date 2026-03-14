@@ -1,933 +1,2212 @@
+
 <!doctype html>
-<html lang="en">
+<html lang="en" data-theme="light">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <meta name="theme-color" content="#FFF7EF" />
-  <title>GRADEO — Free SGPA & CGPA Calculator</title>
-  <meta name="description" content="Calculate SGPA from marks, convert SGPA→CGPA, and estimate minimum SEE marks for a target." />
-  <link rel="icon" href="https://res.cloudinary.com/djy3mjtsz/image/upload/v1769939761/Untitled_1_vtehdh.png" type="image/png" />
-  <link rel="apple-touch-icon" sizes="180x180" href="https://res.cloudinary.com/djy3mjtsz/image/upload/v1769939761/Untitled_1_vtehdh.png" />
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=5,viewport-fit=cover"/>
+<meta name="theme-color" id="tcMeta" content="#FFF6ED" media="(prefers-color-scheme: light)"/>
+<meta name="theme-color" content="#080604" media="(prefers-color-scheme: dark)"/>
 
-  <style>
-    /* GRADEO Landing (v3)
-       - Desktop layout kept
-       - Mobile layout kept improved
-       - Offers highlight made smaller / less text
-       - Intro video overlay: desktop 2s, mobile 3s
-    */
+<!-- ═══ CORE SEO ═══ -->
+<title>GRADEO — Free SGPA &amp; CGPA Planner for Engineering Students</title>
+<meta name="description" content="GRADEO is a free SGPA calculator, CGPA converter and grade planner for engineering students. Calculate minimum marks, plan your CGPA target and export your grade card — completely free, no sign-in required."/>
+<meta name="keywords" content="SGPA calculator,CGPA calculator,grade planner,engineering marks calculator,VTU SGPA,KTU CGPA,minimum marks calculator,CGPA planner,SGPA to CGPA,grade point calculator,free SGPA tool"/>
+<meta name="robots" content="index,follow,max-snippet:-1,max-image-preview:large,max-video-preview:-1"/>
+<meta name="author" content="GRADEO"/>
+<meta name="generator" content="GRADEO v10"/>
+<meta name="rating" content="general"/>
+<meta name="revisit-after" content="7 days"/>
+<link rel="canonical" href="https://gradeo.in/"/>
 
-    :root{
-      --bg0:#FFF7EF;
-      --bg1:#FFE8D6;
-      --bg2:#FFD3B8;
-      --card:#ffffff;
-      --soft:#FFF0E4;
-      --text:#121212;
-      --muted:#5d5d5d;
-      --outline:rgba(18,18,18,.10);
-      --primary:#FF6A00;
-      --primary2:#FF8B3D;
-      --shadow: 0 16px 48px rgba(0,0,0,.10);
-      --shadow2: 0 10px 22px rgba(0,0,0,.08);
-      --r-xl: 28px;
-      --r-lg: 18px;
-      --max: 1120px;
-      --gutter: 18px;
-      --focus: 0 0 0 4px rgba(255,106,0,.22);
+<!-- ═══ PWA / APP META ═══ -->
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-status-bar-style" content="default"/>
+<meta name="apple-mobile-web-app-title" content="GRADEO"/>
+<meta name="mobile-web-app-capable" content="yes"/>
+<meta name="application-name" content="GRADEO"/>
+<meta name="msapplication-TileColor" content="#FF6A00"/>
+<meta name="msapplication-config" content="/browserconfig.xml"/>
 
-      --dur-1: 120ms;
-      --dur-2: 200ms;
-      --dur-3: 320ms;
-      --ease-out: cubic-bezier(.2,0,0,1);
-      --ease-inout: cubic-bezier(.2,.8,.2,1);
-      color-scheme: light;
+<!-- ═══ SECURITY / FORMAT ═══ -->
+<meta name="format-detection" content="telephone=no,date=no,email=no,address=no"/>
+<meta name="referrer" content="strict-origin-when-cross-origin"/>
+<meta name="color-scheme" content="light dark"/>
+<meta http-equiv="X-Content-Type-Options" content="nosniff"/>
+
+<!-- ═══ OPEN GRAPH ═══ -->
+<meta property="og:type" content="website"/>
+<meta property="og:url" content="https://gradeo.in/"/>
+<meta property="og:title" content="GRADEO — Free SGPA &amp; CGPA Planner"/>
+<meta property="og:description" content="Calculate SGPA, convert to CGPA and find minimum marks needed. Free forever — no sign-in required to calculate."/>
+<meta property="og:image" content="https://res.cloudinary.com/djy3mjtsz/image/upload/v1770296454/Untitled-2_i2ezfh.png"/>
+<meta property="og:image:width" content="1200"/>
+<meta property="og:image:height" content="630"/>
+<meta property="og:image:alt" content="GRADEO — Free SGPA and CGPA Planner"/>
+<meta property="og:locale" content="en_IN"/>
+<meta property="og:locale:alternate" content="en_US"/>
+<meta property="og:site_name" content="GRADEO"/>
+
+<!-- ═══ TWITTER CARD ═══ -->
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:site" content="@gradeo_in"/>
+<meta name="twitter:creator" content="@gradeo_in"/>
+<meta name="twitter:title" content="GRADEO — Free SGPA &amp; CGPA Planner"/>
+<meta name="twitter:description" content="Calculate SGPA, plan your CGPA target and export grade cards. Free forever."/>
+<meta name="twitter:image" content="https://res.cloudinary.com/djy3mjtsz/image/upload/v1770296454/Untitled-2_i2ezfh.png"/>
+<meta name="twitter:image:alt" content="GRADEO grade planner screenshot"/>
+
+<!-- ═══ STRUCTURED DATA ═══ -->
+<script type="application/ld+json">{
+  "@context":"https://schema.org",
+  "@graph":[
+    {
+      "@type":"WebApplication",
+      "@id":"https://gradeo.in/#webapp",
+      "name":"GRADEO",
+      "url":"https://gradeo.in/",
+      "applicationCategory":"EducationalApplication",
+      "applicationSubCategory":"Calculator",
+      "operatingSystem":"All",
+      "inLanguage":"en-IN",
+      "description":"Free SGPA calculator, CGPA converter and grade planner for engineering students. Calculate minimum marks needed, plan your target CGPA, and export grade cards.",
+      "offers":{"@type":"Offer","price":"0","priceCurrency":"INR","availability":"https://schema.org/InStock"},
+      "featureList":["SGPA Calculator","CGPA Converter","Minimum Marks Planner","PDF Grade Card Export","Cloud Autosave"],
+      "screenshot":"https://res.cloudinary.com/djy3mjtsz/image/upload/v1770296454/Untitled-2_i2ezfh.png",
+      "aggregateRating":{"@type":"AggregateRating","ratingValue":"4.9","ratingCount":"1200","bestRating":"5"}
+    },
+    {
+      "@type":"WebSite",
+      "@id":"https://gradeo.in/#website",
+      "name":"GRADEO",
+      "url":"https://gradeo.in/",
+      "description":"Free grade planner for engineering students",
+      "potentialAction":{"@type":"SearchAction","target":{"@type":"EntryPoint","urlTemplate":"https://gradeo.in/calculator/?q={search_term_string}"},"query-input":"required name=search_term_string"}
+    },
+    {
+      "@type":"FAQPage",
+      "@id":"https://gradeo.in/#faq",
+      "mainEntity":[
+        {"@type":"Question","name":"What is GRADEO?","acceptedAnswer":{"@type":"Answer","text":"A free academic planner for engineering students. Replaces manual SGPA calculations and helps you plan exactly what you need to score to hit your target CGPA."}},
+        {"@type":"Question","name":"How does the Planner work?","acceptedAnswer":{"@type":"Answer","text":"Enter your current CGPA, target CGPA, and internal marks. GRADEO calculates the exact minimum final exam score needed per subject."}},
+        {"@type":"Question","name":"Is GRADEO free?","acceptedAnswer":{"@type":"Answer","text":"Completely free. No sign-in needed to calculate. Sign in with Google to unlock cloud autosave and PDF export. No ads, ever."}}
+      ]
     }
+  ]
+}</script>
 
-    *{ box-sizing:border-box; margin:0; padding:0; font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; -webkit-tap-highlight-color:transparent; }
-    html{ scroll-behavior:smooth; }
-    @media (prefers-reduced-motion: reduce){ html{ scroll-behavior:auto; } *{ transition:none !important; animation:none !important; } }
+<!-- ═══ ICONS + MANIFEST ═══ -->
+<link rel="icon" href="https://res.cloudinary.com/djy3mjtsz/image/upload/v1770296454/Untitled-2_i2ezfh.png" type="image/png"/>
+<link rel="icon" href="https://res.cloudinary.com/djy3mjtsz/image/upload/v1770296454/Untitled-2_i2ezfh.png" sizes="32x32" type="image/png"/>
+<link rel="apple-touch-icon" sizes="180x180" href="https://res.cloudinary.com/djy3mjtsz/image/upload/v1770296454/Untitled-2_i2ezfh.png"/>
+<link rel="manifest" href="/manifest.webmanifest"/>
 
-    body{
-      min-height:100vh;
-      color:var(--text);
-      background:
-        radial-gradient(circle at 18% 18%, var(--bg1) 0%, transparent 48%),
-        radial-gradient(circle at 88% 10%, var(--bg2) 0%, transparent 46%),
-        var(--bg0);
-      overflow-x:hidden;
-      position:relative;
-    }
+<!-- ═══ PERFORMANCE ═══ -->
+<link rel="preconnect" href="https://www.gstatic.com" crossorigin/>
+<link rel="preconnect" href="https://res.cloudinary.com" crossorigin/>
+<link rel="dns-prefetch" href="https://www.gstatic.com"/>
+<link rel="dns-prefetch" href="https://firestore.googleapis.com"/>
+<link rel="dns-prefetch" href="https://res.cloudinary.com"/>
+<link rel="preload" as="image" href="https://res.cloudinary.com/djy3mjtsz/image/upload/v1770296454/Untitled-2_i2ezfh.png" fetchpriority="high"/>
+<style>
+/* ════════════ TOKENS ════════════ */
+:root{
+  --o:#FF6A00;--od:#E05500;--o2:#FF9040;--o3:#FFB870;
+  --bg:#FFF6ED;--surface:#fff;
+  --text:#0D0C0B;--muted:#6B6560;--muted2:#A8A29E;
+  --hdrBg:rgba(255,246,237,.92);
+  --cardBg:#fff;--cb:rgba(255,106,0,.11);
+  --footBg:rgba(255,250,245,.96);
+  --shBg:#FFFAF4;
+  --ib:rgba(255,130,30,.11);--id:rgba(255,106,0,.18);
+  --o1:#FFF5EB;--o2c:#FFD5A8;
+  --sp:cubic-bezier(.34,1.56,.64,1);
+  --sm:cubic-bezier(.16,1,.3,1);
+  --ease:cubic-bezier(.4,0,.2,1);
+  --r:20px;--r2:16px;--r3:12px;
+  --max:1120px;--g:16px;
+  --td:.44s;
+  color-scheme:light;
+}
+[data-theme="dark"]{
+  --bg:#080604;--surface:#161210;
+  --text:#F5E8D8;--muted:#8A7E74;--muted2:#5A5450;
+  --hdrBg:rgba(8,6,4,.94);
+  --cardBg:#1A1410;--cb:rgba(255,106,0,.22);
+  --footBg:rgba(10,7,4,.96);
+  --shBg:#161210;
+  --ib:rgba(255,106,0,.14);--id:rgba(255,106,0,.28);
+  --o1:#221608;--o2c:#341E08;
+  color-scheme:dark;
+}
 
-    /* Subtle animated light background */
-    body::before,
-    body::after{
-      content:"";
-      position:fixed;
-      inset:-25vmax;
-      pointer-events:none;
-      z-index:-2;
-      opacity:.25;
-      filter: blur(38px);
-      transform: translate3d(0,0,0);
-      will-change: transform;
-    }
-    body::before{
-      background:
-        radial-gradient(circle at 30% 25%, rgba(255,106,0,.26), transparent 55%),
-        radial-gradient(circle at 70% 40%, rgba(255,139,61,.20), transparent 58%),
-        radial-gradient(circle at 45% 80%, rgba(255,106,0,.12), transparent 60%);
-      animation: float1 16s var(--ease-inout) infinite alternate;
-    }
-    body::after{
-      background:
-        radial-gradient(circle at 75% 20%, rgba(255,211,184,.88), transparent 52%),
-        radial-gradient(circle at 20% 70%, rgba(255,232,214,.92), transparent 55%),
-        radial-gradient(circle at 60% 75%, rgba(255,106,0,.10), transparent 58%);
-      animation: float2 20s var(--ease-inout) infinite alternate;
-    }
-    @keyframes float1{ 0%{ transform: translate3d(-1.2%, -1.0%, 0) scale(1);} 100%{ transform: translate3d(1.4%, 1.2%, 0) scale(1.03);} }
-    @keyframes float2{ 0%{ transform: translate3d(1.2%, -1.0%, 0) scale(1);} 100%{ transform: translate3d(-1.4%, 1.2%, 0) scale(1.04);} }
-    @media (prefers-reduced-motion: reduce){ body::before, body::after{ animation:none; } }
+/* ════════════ RESET ════════════ */
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+@media(prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important;}}
+html{
+  /* Block pull-to-refresh on Chrome Android */
+  overscroll-behavior:none;
+  touch-action:pan-x pan-y;
+}
+body{
+  font-family:ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+  color:var(--text);background:var(--bg);
+  -webkit-font-smoothing:antialiased;
+  -webkit-text-size-adjust:100%;
+  transition:background var(--td) var(--sm),color var(--td) var(--sm);
+  overflow-x:hidden;
+  /* Block pull-to-refresh on iOS Safari */
+  overscroll-behavior-y:none;
+}
+a{color:inherit;text-decoration:none;}
 
-    a{ color:inherit; text-decoration:none; }
-    .wrap{ max-width:var(--max); margin:0 auto; padding: 0 var(--gutter); }
+/* ════════════ THEME RIPPLE ════════════ */
+#thRipple{position:fixed;inset:0;z-index:8900;pointer-events:none;border-radius:50%;transform:scale(0);opacity:0;}
+#thRipple.go{animation:trX var(--td) var(--sm) forwards;}
+@keyframes trX{0%{transform:scale(0);opacity:.22;}60%{opacity:.13;}100%{transform:scale(5);opacity:0;}}
 
-    .progress{ position:fixed; top:0; left:0; right:0; height:3px; z-index:80; }
-    .progress span{ display:block; height:100%; width:0; background: linear-gradient(90deg, var(--primary), var(--primary2)); }
+/* ════════════ PAGE TRANSITION ════════════ */
+#ptOv{position:fixed;inset:0;z-index:7000;background:var(--o);opacity:0;pointer-events:none;}
+#ptOv.lift{animation:ptL .42s var(--sm) forwards;}
+@keyframes ptL{0%{opacity:0;transform:translateY(100%)}20%{opacity:1;transform:none}100%{opacity:1;transform:translateY(-100%)}}
 
-    header{
-      position:sticky;
-      top:0;
-      z-index:70;
-      background: rgba(255,247,239,.92);
-      border-bottom: 1px solid rgba(17,17,17,.06);
-      transition: box-shadow var(--dur-2) var(--ease-out);
-      backdrop-filter: blur(10px);
-    }
-    header.scrolled{ box-shadow: 0 12px 26px rgba(0,0,0,.07); }
+/* ════════════ DESKTOP CURSOR — always red, zero lag ════════════ */
+#cur{
+  position:fixed;width:13px;height:13px;border-radius:50%;
+  background:#FF1A00;opacity:.92;
+  pointer-events:none;z-index:9999;
+  transform:translate(-50%,-50%);
+  transition:width .09s var(--sp),height .09s var(--sp),opacity .09s;
+  mix-blend-mode:multiply;
+}
+#curRing{
+  position:fixed;width:32px;height:32px;border-radius:50%;
+  border:2px solid rgba(255,26,0,.72);
+  pointer-events:none;z-index:9998;
+  transform:translate(-50%,-50%);
+  transition:width .12s var(--sp),height .12s var(--sp),border-color .1s;
+}
+[data-theme="dark"] #cur{mix-blend-mode:screen;background:#FF3322;}
+[data-theme="dark"] #curRing{border-color:rgba(255,51,34,.85);}
+body.cc #cur{width:7px;height:7px;opacity:1;}
+body.cc #curRing{width:20px;height:20px;border-color:rgba(255,26,0,1);}
+body.ch #cur{width:22px;height:22px;opacity:.3;}
+body.ch #curRing{width:44px;height:44px;border-color:#FF1A00;}
+@media(max-width:1023px){#cur,#curRing{display:none;}body{cursor:auto;}}
+@media(min-width:1024px){body,a,button,.tile,.feat,.fi2,.card,[role=button]{cursor:none;}}
 
-    .topbar{ display:flex; align-items:center; justify-content:space-between; gap:12px; padding: 12px 0; }
-    .brand{ display:flex; align-items:center; gap:12px; min-width:0; }
-    .logo{ width:48px; height:48px; border-radius:18px; overflow:hidden; background:#fff; border:1px solid var(--outline); box-shadow:var(--shadow2); flex:0 0 auto; }
-    .logo img{ width:100%; height:100%; object-fit:cover; display:block; }
-    .brandText{ min-width:0; }
-    .brandText .name{ font-weight:900; letter-spacing:-.4px; font-size:16px; line-height:1.1; }
-    .brandText .tag{ margin-top:2px; color:var(--muted); font-weight:700; font-size:12.5px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+/* ════════════ SCROLL PROGRESS ════════════ */
+#prog{position:fixed;top:0;left:0;right:0;height:2px;z-index:9000;pointer-events:none;}
+#pb{display:block;height:100%;width:0;background:linear-gradient(90deg,#FF2200,#FF7A00,#FFAA30);box-shadow:0 0 5px rgba(255,80,0,.7);}
 
-    .nav{ display:flex; align-items:center; gap:10px; flex-wrap:wrap; justify-content:flex-end; }
+/* ════════════ BG ORBS (desktop only) ════════════ */
+.bgs{position:fixed;inset:0;z-index:-2;overflow:hidden;pointer-events:none;}
+.bg1,.bg2,.bg3,.bg4{position:absolute;border-radius:50%;}
+[data-theme="light"] .bg1{width:80vw;height:80vw;top:-30vw;left:-20vw;background:radial-gradient(circle,rgba(255,106,0,.20),transparent 70%);}
+[data-theme="light"] .bg2{width:60vw;height:60vw;top:-10vw;right:-15vw;background:radial-gradient(circle,rgba(255,180,80,.16),transparent 72%);}
+[data-theme="light"] .bg3{width:55vw;height:55vw;bottom:-15vw;left:10%;background:radial-gradient(circle,rgba(255,100,0,.10),transparent 68%);}
+[data-theme="light"] .bg4{width:40vw;height:40vw;bottom:10%;right:5%;background:radial-gradient(circle,rgba(255,200,100,.08),transparent 65%);}
+[data-theme="dark"] .bg1{width:80vw;height:80vw;top:-30vw;left:-20vw;background:radial-gradient(circle,rgba(255,80,0,.20),transparent 65%);}
+[data-theme="dark"] .bg2{width:60vw;height:60vw;top:-10vw;right:-15vw;background:radial-gradient(circle,rgba(255,110,30,.14),transparent 68%);}
+[data-theme="dark"] .bg3{width:55vw;height:55vw;bottom:-15vw;left:10%;background:radial-gradient(circle,rgba(255,60,0,.11),transparent 65%);}
+[data-theme="dark"] .bg4{width:40vw;height:40vw;bottom:10%;right:5%;background:radial-gradient(circle,rgba(255,140,40,.09),transparent 62%);}
+.bg1{animation:b1 22s ease-in-out infinite alternate;}
+.bg2{animation:b2 26s ease-in-out infinite alternate;}
+.bg3{animation:b3 30s ease-in-out infinite alternate;}
+.bg4{animation:b4 18s ease-in-out infinite alternate;}
+@keyframes b1{to{transform:translate(5%,4%)scale(1.06)}}
+@keyframes b2{to{transform:translate(-4%,5%)scale(1.05)}}
+@keyframes b3{to{transform:translate(3%,-4%)scale(1.07)}}
+@keyframes b4{to{transform:translate(-5%,3%)scale(1.04)}}
+@media(max-width:767px){.bgs{display:none;}}
 
-    .linkBtn{ padding: 9px 10px; border-radius: 999px; font-weight: 800; font-size: 13.5px; color: var(--muted); background: transparent; border: 1px solid transparent;
-      transition: background var(--dur-2) var(--ease-out), border-color var(--dur-2) var(--ease-out), transform var(--dur-1) var(--ease-out);
-    }
-    .linkBtn:hover{ background: rgba(255,106,0,.08); border-color: rgba(255,106,0,.14); color: var(--text); }
-    .linkBtn:active{ transform: translateY(1px); }
-    .linkBtn:focus-visible{ outline:none; box-shadow: var(--focus); }
+/* ════════════════════════════════════════
+   ▌▌ DESKTOP LAYOUT (≥768px)
+   Full desktop/tablet scroll layout
+════════════════════════════════════════ */
+.wrap{max-width:var(--max);margin:0 auto;padding:0 var(--g);}
 
-    .btn{ border:none; cursor:pointer; border-radius: 999px; padding: 12px 16px; font-weight: 850; font-size: 14px; letter-spacing: .1px;
-      display:inline-flex; align-items:center; gap:10px; user-select:none;
-      transition: transform var(--dur-1) var(--ease-out), box-shadow var(--dur-2) var(--ease-out), background var(--dur-2) var(--ease-out), border-color var(--dur-2) var(--ease-out);
-      position:relative; overflow:hidden; will-change: transform; white-space:nowrap;
-    }
-    .btn:focus-visible{ outline:none; box-shadow: var(--focus); }
-    .btn:active{ transform: translateY(1px); }
+/* ── Desktop header ── */
+header.dsk{
+  position:sticky;top:0;z-index:200;
+  background:var(--hdrBg);
+  backdrop-filter:blur(20px) saturate(1.8);
+  -webkit-backdrop-filter:blur(20px) saturate(1.8);
+  border-bottom:1px solid rgba(255,106,0,.10);
+  transition:box-shadow .2s var(--ease),background var(--td);
+}
+header.dsk.scrolled{box-shadow:0 2px 20px rgba(255,60,0,.10);border-bottom-color:rgba(255,106,0,.16);}
+.tb{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 0;transition:padding .28s var(--sm);}
+header.dsk.scrolled .tb{padding:7px 0;}
+.brand{display:flex;align-items:center;gap:10px;cursor:none;user-select:none;}
+.lw{width:36px;height:36px;border-radius:12px;overflow:hidden;flex:0 0 auto;border:1.5px solid rgba(255,106,0,.18);box-shadow:0 2px 8px rgba(255,106,0,.14);transition:transform .3s var(--sp),box-shadow .2s;}
+.lw:hover{transform:rotate(8deg) scale(1.10);box-shadow:0 5px 18px rgba(255,106,0,.28);}
+.lw img{width:100%;height:100%;object-fit:cover;display:block;}
+.bn{font-size:15px;font-weight:900;letter-spacing:-.4px;color:var(--text);transition:color var(--td),font-size .28s var(--sm);}
+header.dsk.scrolled .bn{font-size:14px;}
+.bt{font-size:10.5px;color:var(--muted);font-weight:600;transition:color var(--td),opacity .28s,max-height .28s var(--sm);max-height:20px;overflow:hidden;}
+header.dsk.scrolled .bt{opacity:0;max-height:0;}
+.nav{display:flex;align-items:center;gap:4px;}
+.nl{padding:6px 11px;border-radius:999px;font-size:13px;font-weight:700;color:var(--muted);background:transparent;border:none;cursor:none;transition:background .12s,color .12s,transform .12s var(--sp);}
+.nl:hover{background:rgba(255,106,0,.10);color:var(--text);transform:translateY(-1px);}
 
-    .btnPrimary{ background: linear-gradient(180deg, var(--primary), #ff5f00); color:#fff; box-shadow: 0 16px 26px rgba(255,106,0,.18); }
-    .btnPrimary:hover{ box-shadow: 0 20px 34px rgba(255,106,0,.20); }
+/* Theme toggle — Material You M3 style: icon button, filled tonal, animated */
+.thBtn{
+  position:relative;
+  width:40px;height:40px;border-radius:50%;
+  cursor:none;border:none;
+  /* M3 filled tonal button */
+  background:var(--ib);
+  display:grid;place-items:center;
+  flex-shrink:0;overflow:hidden;
+  transition:background var(--td) var(--sm),transform .2s var(--sp),box-shadow .2s;
+}
+.thBtn:hover{
+  background:rgba(255,106,0,.18);
+  transform:scale(1.08);
+  box-shadow:0 2px 10px rgba(255,80,0,.18);
+}
+.thBtn:active{transform:scale(.90);}
+/* State layer ripple on click */
+.thBtn::after{
+  content:"";position:absolute;inset:0;border-radius:50%;
+  background:rgba(255,106,0,.20);
+  transform:scale(0);opacity:0;
+  transition:transform .3s var(--sm),opacity .3s;
+}
+.thBtn:active::after{transform:scale(1);opacity:1;}
+/* Hide the old knob */
+.thKnob{display:none!important;}
 
-    .btnTonal{ background: var(--soft); color: var(--primary); border: 1px solid rgba(255,106,0,.22); }
-    .btnTonal:hover{ border-color: rgba(255,106,0,.35); }
+/* M3 Icon container — the actual icon swaps */
+.thIcon{
+  position:relative;width:24px;height:24px;
+  display:grid;place-items:center;
+}
+.thIcon svg{
+  position:absolute;
+  width:22px;height:22px;
+  stroke:var(--o);stroke-width:2;fill:none;
+  stroke-linecap:round;stroke-linejoin:round;
+  transition:opacity .28s var(--sm),transform .36s var(--sp);
+}
+/* Sun — visible in light mode */
+.thIcon .sunI{opacity:1;transform:rotate(0) scale(1);}
+.thIcon .moonI{opacity:0;transform:rotate(-60deg) scale(.5);}
+/* Moon — visible in dark mode */
+[data-theme="dark"] .thIcon .sunI{opacity:0;transform:rotate(60deg) scale(.5);}
+[data-theme="dark"] .thIcon .moonI{opacity:1;transform:rotate(0) scale(1);}
 
-    .btnGhost{ background:#fff; color: var(--text); border:1px solid rgba(17,17,17,.10); box-shadow: var(--shadow2); }
-    .btnGhost:hover{ border-color: rgba(255,106,0,.28); }
+/* Mobile M3 toggle — same but 36px */
+.mThBtn{
+  position:relative;
+  width:36px;height:36px;border-radius:50%;
+  cursor:pointer;border:none;
+  background:var(--ib);
+  display:grid;place-items:center;
+  flex-shrink:0;overflow:hidden;
+  transition:background var(--td) var(--sm),transform .2s var(--sp);
+}
+.mThBtn:active{transform:scale(.86);}
+.mThBtn::after{
+  content:"";position:absolute;inset:0;border-radius:50%;
+  background:rgba(255,106,0,.20);
+  transform:scale(0);opacity:0;
+  transition:transform .25s var(--sm),opacity .25s;
+}
+.mThBtn:active::after{transform:scale(1);opacity:1;}
+/* Hide old knob */
+.mThKnob{display:none!important;}
+/* M3 icon in mobile toggle */
+.mThIcon{
+  position:relative;width:22px;height:22px;
+  display:grid;place-items:center;
+}
+.mThIcon svg{
+  position:absolute;
+  width:20px;height:20px;
+  stroke:var(--o);stroke-width:2;fill:none;
+  stroke-linecap:round;stroke-linejoin:round;
+  transition:opacity .28s var(--sm),transform .36s var(--sp);
+}
+.mThIcon .sunI{opacity:1;transform:rotate(0) scale(1);}
+.mThIcon .moonI{opacity:0;transform:rotate(-60deg) scale(.5);}
+[data-theme="dark"] .mThIcon .sunI{opacity:0;transform:rotate(60deg) scale(.5);}
+[data-theme="dark"] .mThIcon .moonI{opacity:1;transform:rotate(0) scale(1);}
 
-    .btnIcon{ padding: 12px 12px; }
+/* Sign-in btn desktop */
+.hsi-btn{display:inline-flex;align-items:center;gap:7px;padding:7px 13px;border-radius:10px;border:1.5px solid rgba(255,106,0,.22);background:var(--ib);color:var(--text);font-size:13px;font-weight:800;cursor:none;transition:background .12s,border-color .12s,transform .14s var(--sp),box-shadow .14s;}
+.hsi-btn:hover{background:var(--surface);border-color:rgba(255,106,0,.40);transform:translateY(-1px);box-shadow:0 4px 12px rgba(255,80,0,.12);}
 
-    .r{ position:absolute; border-radius:999px; pointer-events:none; transform:translate(-50%,-50%); background: rgba(255,255,255,.65); opacity:0; }
+/* ── Buttons ── */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:none;cursor:none;font-family:inherit;font-weight:900;font-size:14.5px;letter-spacing:.02em;padding:13px 24px;border-radius:14px;user-select:none;white-space:nowrap;position:relative;overflow:hidden;transition:transform .26s var(--sp),box-shadow .18s var(--ease),filter .08s;}
+.btn:active{transform:scale(.95) translateY(2px)!important;filter:brightness(.88)!important;transition:transform 55ms,filter 55ms;}
+.btn[disabled]{opacity:.45;cursor:not-allowed;pointer-events:none;}
+.btn::before{content:"";position:absolute;top:0;left:-120%;width:55%;height:100%;background:linear-gradient(105deg,transparent 15%,rgba(255,255,255,.26) 50%,transparent 85%);transform:skewX(-18deg);transition:left .46s var(--ease);pointer-events:none;}
+.btn:hover::before{left:160%;}
+.bp{background:linear-gradient(170deg,#FF7E20,#FF4D00);color:#fff;border:1.5px solid rgba(255,50,0,.22);box-shadow:0 4px 0 #C43A00,0 7px 18px rgba(255,80,0,.30),inset 0 1px 0 rgba(255,255,255,.14);}
+.bp:hover{transform:translateY(-3px) scale(1.02);box-shadow:0 7px 0 #C43A00,0 14px 30px rgba(255,80,0,.36);}
+.bp:active{box-shadow:0 1px 0 #C43A00,0 3px 8px rgba(255,80,0,.20)!important;}
+.bs{background:var(--surface);color:var(--o);border:2px solid var(--o);box-shadow:0 3px 0 rgba(200,70,0,.18),0 4px 12px rgba(255,100,0,.07);font-weight:900;transition:transform .26s var(--sp),box-shadow .18s,background .18s,border-color .18s;}
+.bs:hover{background:rgba(255,106,0,.05);border-color:var(--od);transform:translateY(-3px) scale(1.02);}
+.bgoog{width:100%;background:var(--surface);color:var(--text);font-weight:800;font-size:14px;border:1.5px solid rgba(128,100,80,.13);border-radius:var(--r3);padding:12px 16px;gap:10px;box-shadow:0 1px 0 rgba(0,0,0,.04),0 4px 12px rgba(0,0,0,.05);cursor:pointer;transition:transform .26s var(--sp),box-shadow .18s,border-color .18s;}
+.bgoog:hover{border-color:rgba(255,106,0,.28);transform:translateY(-2px);}
+.bgoog:active{transform:scale(.97)!important;}
+.bgoog[disabled]{opacity:.5;cursor:not-allowed;}
+.bgoog svg{width:18px;height:18px;flex:0 0 auto;}
 
-    .card{ background:var(--card); border:1px solid rgba(17,17,17,.08); border-radius:var(--r-xl); box-shadow:var(--shadow); overflow:hidden; }
+/* ── Desktop cards ── */
+.card{background:var(--cardBg);border:1.5px solid var(--cb);border-radius:var(--r);box-shadow:0 1px 0 rgba(255,255,255,.5) inset,0 6px 22px rgba(255,80,0,.07),0 1px 3px rgba(0,0,0,.05);overflow:hidden;transition:transform .26s var(--sp),box-shadow .18s,border-color .18s,background var(--td);}
+@media(hover:hover) and (pointer:fine){.card:hover{transform:translateY(-3px);border-color:rgba(255,106,0,.20);box-shadow:0 1px 0 rgba(255,255,255,.6) inset,0 16px 38px rgba(255,80,0,.11);}}
 
-    section{ padding: 18px 0; }
-    .sectionHead{ display:flex; align-items:flex-end; justify-content:space-between; gap:12px; flex-wrap:wrap; }
-    .sectionHead h2{ font-size: 24px; font-weight: 900; letter-spacing:-.6px; }
-    .sectionHead p{ margin-top:6px; color: var(--muted); font-weight: 650; font-size: 13.5px; line-height: 1.45; }
+/* ── Desktop sections ── */
+section.dsk{padding:14px 0;}
+.sh{margin-bottom:12px;}
+.sh h2{font-size:20px;font-weight:900;letter-spacing:-.4px;color:var(--text);transition:color var(--td);}
+.sh p{margin-top:3px;color:var(--muted);font-size:13px;transition:color var(--td);}
 
-    /* HERO base */
-    .hero{ padding: 22px 0 10px; }
-    .heroGrid{ display:block; }
-    .heroMain{ padding: 22px; }
+/* ── Hero ── */
+.hero{padding:20px 0 12px;}
+/* Hero cards: visible immediately, no hidden initial state */
+.hero .rv{opacity:1;transform:none;}
+.hero .rv.in{opacity:1;transform:none;transition:none;}
+.hg{display:flex;flex-direction:column;gap:14px;}
+.hp{padding:24px 22px 20px;}
+.htag{display:inline-flex;align-items:center;gap:7px;padding:5px 12px;border-radius:999px;background:rgba(255,106,0,.09);border:1.5px solid rgba(255,106,0,.20);color:var(--o);font-weight:800;font-size:10.5px;letter-spacing:.04em;animation:tagPop .55s .05s var(--sm) both;}
+@keyframes tagPop{from{opacity:0;transform:translateY(6px) scale(.92)}to{opacity:1;transform:none}}
+.hdot{width:6px;height:6px;border-radius:50%;background:var(--o);animation:hdpulse 2.2s ease-in-out infinite;}
+@keyframes hdpulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.35;transform:scale(.5)}}
+h1{margin-top:12px;font-size:clamp(28px,8vw,52px);line-height:1.02;letter-spacing:-1.8px;font-weight:950;color:var(--text);transition:color var(--td);animation:hIn .6s .08s var(--sm) both;}
+@keyframes hIn{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+.gr{background:linear-gradient(100deg,#FF4D00,var(--o) 40%,#FF9040 75%,#FF6A00);background-size:200% auto;-webkit-background-clip:text;background-clip:text;color:transparent;animation:gS 4s ease-in-out infinite alternate;}
+@keyframes gS{0%{background-position:0% center}100%{background-position:100% center}}
+.sub{margin-top:10px;color:var(--muted);font-size:14.5px;font-weight:500;line-height:1.55;max-width:40ch;transition:color var(--td);animation:hIn .6s .22s var(--sm) both;}
+.ctr{margin-top:16px;display:flex;gap:10px;animation:hIn .6s .32s var(--sm) both;}
 
-    .pill{ display:inline-flex; align-items:center; gap:8px; padding: 8px 12px; border-radius:999px; background: rgba(255,106,0,.10);
-      border:1px solid rgba(255,106,0,.20); color: var(--primary); font-weight: 850; font-size: 12.5px;
-    }
+/* ── Account panel ── */
+.ap{padding:18px;}
+.si-t{font-size:14.5px;font-weight:900;letter-spacing:-.3px;margin-bottom:2px;color:var(--text);transition:color var(--td);}
+.si-s{font-size:12px;color:var(--muted);font-weight:500;margin-bottom:12px;line-height:1.4;transition:color var(--td);}
+/* ══ STUDENT OFFER CARD — standalone, compact ══ */
+.offer,.mOfferCard{
+  position:relative;overflow:hidden;
+  border-radius:18px;
+  border:1.5px solid rgba(255,106,0,.32);
+  background:linear-gradient(135deg,#1C1004 0%,#2E1A06 60%,#1A0E04 100%);
+  box-shadow:0 6px 24px rgba(255,80,0,.18),0 1px 0 rgba(255,140,0,.15) inset;
+  transition:border-color var(--td),background var(--td);
+}
+[data-theme="light"] .offer,[data-theme="light"] .mOfferCard{
+  background:linear-gradient(135deg,#FFF3E4 0%,#FFE8CE 60%,#FFFAF4 100%);
+  border-color:rgba(255,106,0,.28);
+  box-shadow:0 4px 18px rgba(255,100,0,.14),0 1px 0 rgba(255,200,100,.30) inset;
+}
+/* shimmer sweep */
+.offerShimmer{
+  position:absolute;top:0;left:-70%;width:45%;height:2px;
+  background:linear-gradient(90deg,transparent,rgba(255,170,60,.95),transparent);
+  animation:offerShim 3s ease-in-out infinite;pointer-events:none;
+}
+@keyframes offerShim{0%{left:-70%;}65%,100%{left:115%;}}
 
-    h1{ margin-top: 12px; font-size: clamp(34px, 10vw, 48px); line-height: 1.05; letter-spacing: -1px; font-weight: 950; }
-    .grad{ background: linear-gradient(90deg, var(--primary), var(--primary2)); -webkit-background-clip:text; background-clip:text; color:transparent; }
+/* Row layout */
+.offerRow{
+  display:flex;align-items:center;justify-content:space-between;
+  gap:12px;padding:13px 14px;
+}
+.offerLeft{flex:1;min-width:0;}
+.offerTopRow{margin-bottom:3px;}
+.offerBadge{
+  display:inline-flex;align-items:center;gap:4px;
+  font-size:9.5px;font-weight:900;letter-spacing:.07em;text-transform:uppercase;
+  color:#FF9040;background:rgba(255,120,0,.14);
+  border:1px solid rgba(255,120,0,.26);
+  padding:3px 8px;border-radius:999px;
+}
+[data-theme="light"] .offerBadge{color:#B83200;background:rgba(255,100,0,.10);border-color:rgba(255,100,0,.22);}
+.offerTitle{
+  font-size:14px;font-weight:950;letter-spacing:-.3px;
+  color:#fff;line-height:1.1;margin-bottom:1px;
+}
+[data-theme="light"] .offerTitle{color:#1A0800;}
+.offerDesc{font-size:10.5px;color:rgba(255,200,150,.60);font-weight:500;}
+[data-theme="light"] .offerDesc{color:rgba(80,40,10,.55);}
 
-    .subtitle{ margin-top: 10px; color: var(--muted); font-weight: 650; line-height: 1.5; font-size: 15.5px; max-width: 56ch; }
+/* CTA — small pill button */
+.offerCTA{
+  flex-shrink:0;
+  display:inline-flex;align-items:center;justify-content:center;
+  background:linear-gradient(160deg,#FF7720,#FF4200);
+  color:#fff;border:none;cursor:pointer;
+  font-family:inherit;font-size:12px;font-weight:900;
+  padding:9px 14px;border-radius:10px;white-space:nowrap;
+  box-shadow:0 3px 0 #A82800,0 5px 14px rgba(255,70,0,.30);
+  position:relative;overflow:hidden;
+  transition:transform .18s var(--sp),box-shadow .18s,filter .08s;
+  letter-spacing:.01em;
+}
+.offerCTA::after{
+  content:"";position:absolute;inset:0;
+  background:linear-gradient(105deg,transparent 30%,rgba(255,255,255,.18) 55%,transparent 80%);
+  transform:skewX(-15deg) translateX(-120%);
+  animation:offerCTAShine 2.8s ease-in-out infinite 1.4s;
+}
+@keyframes offerCTAShine{0%{transform:skewX(-15deg) translateX(-120%);}40%,100%{transform:skewX(-15deg) translateX(180%);}}
+.offerCTA:active{transform:scale(.94) translateY(2px)!important;filter:brightness(.88)!important;box-shadow:0 1px 0 #A82800!important;}
 
-    .ctaRow{ margin-top: 16px; display:flex; gap:10px; flex-wrap:wrap; }
-    .ctaRow .btn{ width:100%; justify-content:center; }
+/* Desktop offer — sits at bottom of card as full-width section */
+.dskOffer{
+  position:relative;overflow:hidden;
+  border-top:1px solid rgba(255,106,0,.14);
+}
+[data-theme="dark"] .dskOffer{
+  background:linear-gradient(135deg,#1C1004 0%,#2A1606 60%,#181004 100%);
+}
+[data-theme="light"] .dskOffer{
+  background:linear-gradient(135deg,#FFF0E0 0%,#FFE8CE 55%,#FFFAF4 100%);
+}
+.dskOffer .offerRow{padding:16px 18px;}
+.dskOffer .offerTitle{font-size:15px;}
 
-    /* Side / Account */
-    .side{ padding: 16px; display:flex; flex-direction:column; gap:12px; }
-    .panel{ background:#fff; border:1px solid rgba(17,17,17,.08); border-radius: var(--r-lg); padding: 14px; box-shadow: var(--shadow2); }
+/* Desktop sign-out button */
+.dskSignOutBtn{
+  display:inline-flex;align-items:center;gap:5px;
+  padding:6px 12px;border-radius:8px;
+  border:1.5px solid rgba(255,106,0,.18);
+  background:transparent;color:var(--muted);
+  font-size:11px;font-weight:700;cursor:none;
+  transition:background .12s,color .12s,border-color .12s;flex-shrink:0;white-space:nowrap;
+}
+.dskSignOutBtn:hover{background:rgba(255,80,0,.07);color:var(--o);border-color:rgba(255,106,0,.32);}
+.dskSignOutBtn svg{width:13px;height:13px;stroke:currentColor;stroke-width:2;fill:none;stroke-linecap:round;stroke-linejoin:round;}
 
-    .userRow{ display:flex; align-items:flex-start; justify-content:space-between; gap:10px; flex-wrap:wrap; }
-    .userLeft{ display:flex; align-items:center; gap:10px; min-width:0; }
-    .avatar{ width:44px; height:44px; border-radius:18px; background: rgba(255,106,0,.14); border:1px solid rgba(255,106,0,.22); overflow:hidden; flex:0 0 auto; }
-    .avatar img{ width:100%; height:100%; object-fit:cover; display:block; }
+/* Mobile sign-out button */
+.mSignOutBtn{
+  display:inline-flex;align-items:center;gap:5px;
+  padding:6px 11px;border-radius:8px;
+  border:1.5px solid rgba(255,106,0,.18);
+  background:transparent;color:var(--muted);
+  font-size:11px;font-weight:700;cursor:pointer;
+  transition:background .12s,color .12s;flex-shrink:0;
+}
+.mSignOutBtn:active{background:rgba(255,80,0,.08);color:var(--o);}
+.mSignOutBtn svg{width:13px;height:13px;stroke:currentColor;stroke-width:2;fill:none;stroke-linecap:round;stroke-linejoin:round;}
+.ur{display:flex;align-items:center;gap:10px;margin-bottom:10px;}
+.av{width:40px;height:40px;border-radius:13px;background:linear-gradient(135deg,rgba(255,106,0,.13),rgba(255,160,80,.09));border:1.5px solid rgba(255,106,0,.20);overflow:hidden;flex:0 0 auto;display:grid;place-items:center;}
+.av img{width:40px;height:40px;object-fit:cover;display:block;}
+.avi{font-size:15px;font-weight:900;color:var(--o);}
+.un{font-size:13px;font-weight:900;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--text);transition:color var(--td);}
+.ue{font-size:11px;color:var(--muted);font-weight:500;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;transition:color var(--td);}
+.aa{display:flex;gap:7px;}
+.aa .btn{flex:1;font-size:12px;padding:8px 10px;}
+.rh{display:flex;justify-content:space-between;align-items:center;padding:12px 18px 5px;border-top:1px solid rgba(128,80,0,.08);}
+.rk{font-size:11px;font-weight:800;color:var(--muted);transition:color var(--td);}
+.rcl{background:transparent;border:none;font-size:11px;font-weight:700;color:var(--muted2);cursor:pointer;padding:3px 6px;border-radius:7px;transition:background .12s,color .12s;}
+.rcl:hover{background:rgba(128,80,0,.06);color:var(--text);}
+.rl{display:flex;gap:6px;flex-wrap:wrap;padding:4px 18px 14px;}
+.rc{display:inline-flex;align-items:center;gap:5px;padding:5px 11px;border-radius:999px;border:1.5px solid rgba(255,106,0,.16);background:var(--ib);font-size:11.5px;font-weight:800;cursor:pointer;color:var(--text);transition:border-color .12s,background .12s,transform .2s var(--sp),color var(--td);}
+.rc:hover{border-color:var(--o);transform:translateY(-2px);}
+.rd{width:5px;height:5px;border-radius:50%;background:var(--o);}
+.ic{display:inline-flex;align-items:center;justify-content:center;width:42px;height:42px;border-radius:13px;flex:0 0 auto;background:transparent;border:none;transition:transform .5s var(--sp);}
+.ic svg{width:22px;height:22px;stroke:var(--o);stroke-width:2;fill:none;stroke-linecap:round;stroke-linejoin:round;}
+.fi{display:inline-flex;align-items:center;justify-content:center;width:38px;height:38px;border-radius:11px;flex:0 0 auto;background:var(--ib);border:1.5px solid var(--id);transition:transform .3s var(--sp),box-shadow .18s,background var(--td);}
+.fi svg{width:18px;height:18px;stroke:var(--o);stroke-width:2.2;fill:none;stroke-linecap:round;stroke-linejoin:round;}
+.oi{display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:11px;flex:0 0 auto;background:var(--ib);border:1.5px solid var(--id);transition:background var(--td);}
+.oi svg{width:17px;height:17px;stroke:var(--o);stroke-width:2.2;fill:none;stroke-linecap:round;stroke-linejoin:round;}
 
-    .userText{ min-width:0; }
-    .userText .l1{ font-weight: 900; font-size: 14px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-    .userText .l2{ margin-top:2px; color: var(--muted); font-weight: 650; font-size: 12.5px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+/* ── Tiles desktop — distinct look: numbered, accent left border ── */
+.tg{display:grid;grid-template-columns:1fr;gap:10px;margin-top:12px;}
+.tile{
+  background:var(--cardBg);border:1.5px solid var(--cb);
+  border-radius:var(--r);padding:20px 18px 16px;cursor:none;
+  min-height:106px;display:flex;flex-direction:column;justify-content:space-between;
+  position:relative;overflow:hidden;
+  box-shadow:0 1px 5px rgba(255,80,0,.05);
+  transition:transform .26s var(--sp),box-shadow .18s,border-color .18s,background var(--td);
+  -webkit-user-select:none;user-select:none;
+  /* Accent left border — makes tiles feel like action cards */
+  border-left:3px solid var(--o);
+}
+/* Each tile gets a distinct accent colour on the left */
+.tile:nth-child(1){border-left-color:#FF6A00;}
+.tile:nth-child(2){border-left-color:#FF9040;}
+.tile:nth-child(3){border-left-color:#FFB870;}
+/* Number badge top-right */
+.tile::before{
+  content:attr(data-num);
+  position:absolute;top:14px;right:14px;
+  width:24px;height:24px;border-radius:50%;
+  background:var(--ib);border:1.5px solid var(--id);
+  color:var(--o);font-size:11px;font-weight:900;
+  display:grid;place-items:center;
+  transition:background var(--td),transform .3s var(--sp);
+  z-index:1;
+}
+/* shimmer line */
+.tile::after{content:"";position:absolute;top:0;left:-100%;width:45%;height:3px;background:linear-gradient(90deg,transparent,rgba(255,106,0,.70),transparent);transition:left .5s var(--ease);pointer-events:none;}
+@media(hover:hover) and (pointer:fine){
+  .tile:hover{transform:translateY(-5px) scale(1.012);border-color:rgba(255,106,0,.28);box-shadow:0 18px 38px rgba(255,80,0,.12),0 4px 12px rgba(0,0,0,.06);}
+  .tile:hover::before{transform:scale(1.2) rotate(10deg);}
+  .tile:hover::after{left:110%;}
+  .tile:hover .ic{transform:rotate(360deg) scale(1.1);}
+}
+.tile:active{transform:scale(.96)!important;transition:transform 55ms;}
+.tile:focus-visible{outline:2.5px solid var(--o);outline-offset:3px;}
+.tt{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;position:relative;z-index:1;}
+/* Push number badge further right so it doesn't overlap */
+.tt .ic{margin-right:30px;}
+.tn{font-size:15.5px;font-weight:950;letter-spacing:-.3px;color:var(--text);transition:color var(--td);}
+.td{margin-top:4px;font-size:12px;color:var(--muted);font-weight:500;line-height:1.3;transition:color var(--td);}
+.tb2{align-self:flex-start;margin-top:8px;display:inline-block;padding:4px 10px;border-radius:999px;font-size:9.5px;font-weight:800;letter-spacing:.02em;background:var(--ib);color:var(--o);border:1px solid var(--id);position:relative;z-index:1;transition:background var(--td),border-color var(--td);}
 
-    .accountActions{ margin-top: 10px; display:flex; gap:10px; flex-wrap:wrap; }
-    .accountActions .btn{ flex:1; justify-content:center; }
+/* Features desktop — each card has a tinted icon background, subtle gradient */
+.fg{display:grid;grid-template-columns:1fr;gap:9px;margin-top:12px;}
+.feat{
+  background:var(--cardBg);border:1.5px solid var(--cb);border-radius:var(--r);
+  padding:16px 18px;display:flex;align-items:flex-start;gap:14px;
+  transition:transform .26s var(--sp),box-shadow .18s,border-color .18s,background var(--td);
+  position:relative;overflow:hidden;
+}
+/* Subtle warm tint strip on right edge */
+.feat::after{
+  content:"";position:absolute;top:0;right:0;width:3px;height:100%;
+  background:linear-gradient(180deg,rgba(255,106,0,.18),rgba(255,180,80,.06));
+  border-radius:0 var(--r) var(--r) 0;
+}
+@media(hover:hover) and (pointer:fine){
+  .feat:hover{transform:translateY(-3px) scale(1.008);border-color:rgba(255,106,0,.22);box-shadow:0 12px 30px rgba(255,80,0,.09);}
+  .feat:hover .fi{transform:rotate(-8deg) scale(1.15);box-shadow:0 4px 14px rgba(255,90,0,.20);}
+}
+.ft{font-size:13.5px;font-weight:900;letter-spacing:-.1px;color:var(--text);transition:color var(--td);}
+.fs{margin-top:3px;font-size:12px;color:var(--muted);font-weight:500;line-height:1.45;transition:color var(--td);}
+/* Each feature icon gets a unique tinted background */
+.feat:nth-child(1) .fi{background:rgba(255,106,0,.14);border-color:rgba(255,106,0,.28);}
+.feat:nth-child(2) .fi{background:rgba(255,130,0,.12);border-color:rgba(255,130,0,.24);}
+.feat:nth-child(3) .fi{background:rgba(255,80,180,.08);border-color:rgba(255,80,180,.18);}
+.feat:nth-child(4) .fi{background:rgba(80,180,255,.09);border-color:rgba(80,180,255,.20);}
+.feat:nth-child(5) .fi{background:rgba(80,220,120,.09);border-color:rgba(80,220,120,.20);}
+.feat:nth-child(6) .fi{background:rgba(100,100,255,.08);border-color:rgba(100,100,255,.18);}
+/* Match icon stroke to background tint */
+.feat:nth-child(1) .fi svg{stroke:#FF6A00;}
+.feat:nth-child(2) .fi svg{stroke:#FF8030;}
+.feat:nth-child(3) .fi svg{stroke:#E060B0;}
+.feat:nth-child(4) .fi svg{stroke:#40A0E0;}
+.feat:nth-child(5) .fi svg{stroke:#30B860;}
+.feat:nth-child(6) .fi svg{stroke:#6060DD;}
 
-    /* Recents */
-    .recentHead{ display:flex; align-items:center; justify-content:space-between; gap:10px; }
-    .recentHead .k{ font-weight: 900; font-size: 13px; }
-    .linkMini{ border:none; background:transparent; color:var(--muted); font-weight:800; cursor:pointer; padding:6px 8px; border-radius:10px; }
-    .linkMini:hover{ background:rgba(17,17,17,.06); color:var(--text); }
+/* FAQ desktop */
+.fl{margin-top:10px;display:flex;flex-direction:column;gap:7px;}
+.fi2{background:var(--cardBg);border:1.5px solid var(--cb);border-radius:var(--r2);overflow:hidden;box-shadow:0 1px 4px rgba(255,80,0,.04);transition:border-color .18s,box-shadow .18s,transform .2s var(--sp),background var(--td);}
+@media(hover:hover) and (pointer:fine){.fi2:hover{border-color:rgba(255,106,0,.20);box-shadow:0 4px 14px rgba(255,80,0,.07);transform:translateY(-1px);}}
+.fq{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:14px 15px;cursor:pointer;font-size:13px;font-weight:800;line-height:1.3;user-select:none;color:var(--text);transition:color .12s,background .12s;}
+.fq:hover{color:var(--o);background:rgba(255,106,0,.04);}
+.fa2{width:20px;height:20px;border-radius:7px;flex:0 0 auto;display:grid;place-items:center;background:var(--ib);border:1.5px solid var(--id);transition:transform .32s var(--sp),background .18s;}
+.fi2.open .fa2{transform:rotate(180deg);background:rgba(255,106,0,.16);border-color:rgba(255,106,0,.30);}
+.fa2 svg{width:11px;height:11px;stroke:var(--o);stroke-width:2.5;fill:none;stroke-linecap:round;stroke-linejoin:round;}
+.fan{display:none;padding:9px 15px 13px;border-top:1px solid rgba(255,106,0,.08);font-size:12.5px;color:var(--muted);font-weight:500;line-height:1.6;transition:color var(--td);}
+.fi2.open .fan{display:block;animation:fanIn .24s var(--sm) both;}
+@keyframes fanIn{from{opacity:0;transform:translateY(-5px)}to{opacity:1;transform:none}}
 
-    .recentList{ margin-top:10px; display:flex; gap:10px; overflow-x:auto; padding-bottom:4px; }
-    .recentChip{ display:inline-flex; align-items:center; gap:8px; padding:10px 12px; border-radius:999px; border:1px solid rgba(17,17,17,.10);
-      background:#fff; font-weight: 900; cursor:pointer; box-shadow: var(--shadow2); flex: 0 0 auto;
-    }
-    .recentChip:hover{ border-color: rgba(255,106,0,.28); }
-    .recentChip .dot{ width:8px; height:8px; border-radius:999px; background: linear-gradient(180deg, var(--primary), var(--primary2)); }
+/* Footer */
+.fw{padding:8px 0 max(40px,env(safe-area-inset-bottom));}
+.fc{background:var(--footBg);border:1.5px solid rgba(255,106,0,.12);border-radius:var(--r);padding:22px 20px 18px;box-shadow:0 6px 22px rgba(255,80,0,.05);transition:background var(--td),border-color var(--td);}
+.ftop{display:grid;grid-template-columns:1fr;gap:18px;}
+.fb-n{font-size:14px;font-weight:900;letter-spacing:-.3px;margin-bottom:3px;color:var(--text);transition:color var(--td);}
+.fb-t{font-size:12px;color:var(--muted);font-weight:500;line-height:1.5;max-width:26ch;transition:color var(--td);}
+.fcols{display:flex;gap:16px 32px;flex-wrap:wrap;}
+.fch{font-size:9.5px;font-weight:900;letter-spacing:.10em;text-transform:uppercase;color:var(--muted2);margin-bottom:8px;transition:color var(--td);}
+.fco a{display:block;font-size:12.5px;color:var(--muted);font-weight:600;padding:2.5px 0;transition:color .12s,transform .18s var(--sp);}
+.fco a:hover{color:var(--o);transform:translateX(3px);}
+.fbot{margin-top:16px;padding-top:12px;border-top:1px solid rgba(255,106,0,.08);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:7px;font-size:11.5px;color:var(--muted2);font-weight:600;transition:color var(--td);}
+.fbtn2{background:transparent;border:none;cursor:pointer;font-size:12px;font-weight:700;color:var(--muted);padding:4px 8px;border-radius:8px;transition:background .12s,color .12s,transform .18s var(--sp);}
+.fbtn2:hover{background:rgba(255,106,0,.09);color:var(--o);transform:translateY(-2px);}
 
-    /* Offers highlight (smaller) */
-    .offerCard{ background: rgba(255,255,255,.92);
-      border: 1px solid rgba(255,106,0,.18);
-      border-radius: 18px;
-      padding: 12px 14px;
-      box-shadow: var(--shadow2);
-      display:flex; align-items:center; justify-content:space-between; gap:12px;
-    }
-    .offerTag{ display:inline-flex; padding:5px 9px; border-radius:999px; font-weight:900; font-size:11.5px; background: rgba(255,106,0,.10);
-      border:1px solid rgba(255,106,0,.16); color: var(--primary);
-    }
-    .offerTitle{ display:flex; align-items:center; gap:10px; min-width:0; }
-    .offerTitle h3{ font-size: 14.5px; font-weight: 950; letter-spacing:-.2px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-    .offerSub{ margin-top:2px; color: var(--muted); font-weight: 650; font-size: 12.3px; line-height: 1.25; }
-    .offerText{ min-width:0; }
+/* Back to top */
+#btt{position:fixed;bottom:20px;right:16px;z-index:400;width:40px;height:40px;border-radius:13px;background:var(--footBg);border:1.5px solid rgba(255,106,0,.22);box-shadow:0 3px 12px rgba(255,100,0,.15);cursor:pointer;display:grid;place-items:center;opacity:0;transform:translateY(10px) scale(.88);pointer-events:none;transition:opacity .2s,transform .26s var(--sp),background var(--td);}
+#btt.on{opacity:1;transform:translateY(0) scale(1);pointer-events:auto;}
+#btt:hover{transform:translateY(-2px) scale(1.06)!important;box-shadow:0 6px 18px rgba(255,100,0,.22);}
+#btt svg{width:15px;height:15px;stroke:var(--o);stroke-width:2.5;fill:none;stroke-linecap:round;stroke-linejoin:round;}
 
-    /* Modes */
-    .grid{ margin-top: 14px; display:grid; grid-template-columns: 1fr; gap: 12px; }
-    .tile{ background:#fff; border:1px solid rgba(17,17,17,.08); border-radius: var(--r-xl); padding: 18px; box-shadow: var(--shadow2);
-      cursor:pointer; transition: transform var(--dur-2) var(--ease-out), box-shadow var(--dur-2) var(--ease-out), border-color var(--dur-2) var(--ease-out);
-      outline:none; display:flex; flex-direction:column; justify-content:space-between; min-height: 128px; will-change: transform; position:relative; overflow:hidden;
-    }
-    .tile::after{ content:""; position:absolute; inset:auto -30% -55% -30%; height: 120px; background: radial-gradient(circle at 50% 50%, rgba(255,106,0,.12), transparent 55%);
-      transform: translateY(18px); transition: transform var(--dur-3) var(--ease-inout);
-    }
-    .tile:hover::after{ transform: translateY(0); }
-    .tile:hover{ transform: translateY(-2px); box-shadow: 0 20px 42px rgba(0,0,0,.12); border-color: rgba(255,106,0,.22); }
-    .tile:active{ transform: translateY(0); }
-    .tile:focus-visible{ box-shadow: var(--focus), 0 20px 42px rgba(0,0,0,.12); }
+/* Toast */
+.toast{position:fixed;bottom:18px;left:50%;transform:translateX(-50%) translateY(10px);min-width:160px;max-width:min(360px,calc(100vw - 28px));background:rgba(8,6,4,.95);color:#fff;border-radius:var(--r2);padding:10px 14px;font-size:12.5px;font-weight:700;display:none;align-items:center;gap:8px;z-index:9500;box-shadow:0 6px 20px rgba(0,0,0,.22);opacity:0;transition:opacity .16s,transform .26s var(--sp);}
+[data-theme="dark"] .toast{background:rgba(255,240,220,.97);color:var(--text);}
+.toast.on{display:flex;opacity:1;transform:translateX(-50%) translateY(0);}
+.tx{background:transparent;border:none;color:rgba(255,255,255,.45);cursor:pointer;font-size:14px;line-height:1;padding:0;margin-left:auto;transition:color .12s;}
 
-    .tileTop{ display:flex; align-items:flex-start; justify-content:space-between; gap:12px; position:relative; z-index:1; }
-    .t{ font-weight: 950; font-size: 17px; letter-spacing:-.25px; }
-    .s{ margin-top:7px; color: var(--muted); font-weight: 650; font-size: 13.5px; line-height: 1.35; }
+/* Modal */
+.mbd{display:none;position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:9000;align-items:center;justify-content:center;padding:14px;backdrop-filter:blur(8px);}
+[data-theme="dark"] .mbd{background:rgba(0,0,0,.66);}
+.mbd.on{display:flex;animation:bdIn .16s ease both;}
+@keyframes bdIn{from{opacity:0}to{opacity:1}}
+.mbox{background:var(--shBg);border:1.5px solid rgba(255,106,0,.14);border-radius:20px;max-width:500px;width:100%;max-height:80dvh;overflow:hidden;display:flex;flex-direction:column;box-shadow:0 20px 60px rgba(0,0,0,.18);animation:popIn .26s var(--sp) both;transition:background var(--td);}
+@keyframes popIn{from{transform:scale(.90) translateY(14px);opacity:0}to{transform:none;opacity:1}}
+.mhd{padding:12px 15px;border-bottom:1px solid rgba(255,106,0,.08);display:flex;justify-content:space-between;align-items:center;}
+.mhd strong{font-size:14px;font-weight:900;color:var(--text);transition:color var(--td);}
+.mhd button{background:transparent;border:none;cursor:pointer;font-size:17px;color:var(--muted);line-height:1;transition:color .12s,transform .2s var(--sp);}
+.mhd button:hover{color:var(--o);transform:scale(1.10) rotate(90deg);}
+.mb{padding:14px;overflow-y:auto;font-size:13px;color:var(--muted);font-weight:500;line-height:1.7;transition:color var(--td);}
 
-    .icon{ width: 46px; height: 46px; border-radius: 18px; display:grid; place-items:center; background: rgba(255,106,0,.10); border:1px solid rgba(255,106,0,.18);
-      color: var(--primary); flex:0 0 auto; transition: transform var(--dur-2) var(--ease-inout); position:relative; z-index:1; font-size: 20px;
-    }
-    .tile:hover .icon{ transform: scale(1.06) rotate(-2deg); }
+/* Desktop scroll reveal — wheel effect using Y+scale spring (safe, no 3D stacking issues) */
+.rv{
+  opacity:0;
+  transform:translateY(28px) scale(.97);
+  transform-origin:center top;
+}
+.rv.in{
+  opacity:1;
+  transform:translateY(0) scale(1);
+  transition:
+    opacity .5s var(--sm),
+    transform .55s cubic-bezier(.22,.68,0,1.1);
+}
+/* Grid children stagger */
+.tg .rv,.fg .rv,.fl .rv{
+  opacity:0;
+  transform:translateY(20px) scale(.98);
+}
+.tg .rv.in,.fg .rv.in,.fl .rv.in{
+  opacity:1;
+  transform:translateY(0) scale(1);
+  transition:opacity .44s var(--sm),transform .48s cubic-bezier(.22,.68,0,1.1);
+}
 
-    .badge{ margin-top: 12px; width:fit-content; padding:8px 10px; border-radius:999px; font-weight: 900; font-size: 11.5px;
-      background: var(--soft); color: var(--primary); border:1px solid rgba(255,106,0,.20); position:relative; z-index:1;
-    }
+/* ════════════════════════════════════════════════════════
+   ▌▌▌ MOBILE APP LAYOUT  (≤767px)
+   Full-screen swipe navigation — like Instagram / Spotify
+   4 panels: Home | Calculators | Features | FAQ
+   Bottom tab bar navigation
+   Horizontal swipe switches panels
+════════════════════════════════════════════════════════ */
+@media(max-width:767px){
 
-    /* Features */
-    .featGrid{ margin-top: 12px; display:grid; grid-template-columns: 1fr; gap: 12px; }
-    .feat{ background:#fff; border:1px solid rgba(17,17,17,.08); border-radius: var(--r-xl); padding: 16px; box-shadow: var(--shadow2); }
-    .feat .ft{ font-weight: 900; font-size: 15px; }
-    .feat .fs{ margin-top: 6px; color: var(--muted); font-weight: 650; font-size: 13.5px; line-height: 1.4; }
+  /* Prevent body scroll on mobile — app handles it */
+  html,body{height:100%;overflow:hidden;overscroll-behavior:none;}
 
-    footer{ padding: 22px 0 34px; color: var(--muted); font-weight: 750; font-size: 12.8px; display:flex; justify-content:space-between; gap:12px; flex-wrap:wrap; align-items:center; }
+  /* Hide desktop elements on mobile */
+  header.dsk,.bgs,#btt,#prog,#cur,#curRing,.fw,footer{display:none!important;}
 
-    .reveal{ opacity:0; transform: translateY(10px); }
-    .reveal.show{ opacity:1; transform: translateY(0); transition: opacity var(--dur-3) var(--ease-inout), transform var(--dur-3) var(--ease-inout); }
+  /* ── MOBILE SHELL ── */
+  #mApp{
+    position:fixed;inset:0;
+    display:flex;flex-direction:column;
+    background:var(--bg);
+    overscroll-behavior:none;
+    /* Prevent Chrome pull-to-refresh */
+    touch-action:pan-x pan-y;
+  }
+  [data-theme="light"] #mApp{
+    background:
+      radial-gradient(ellipse 140% 50% at 0% 0%,rgba(255,100,0,.12) 0%,transparent 55%),
+      radial-gradient(ellipse 100% 40% at 100% 0%,rgba(255,180,60,.08) 0%,transparent 50%),
+      #FFF6ED;
+  }
+  [data-theme="dark"] #mApp{
+    background:
+      radial-gradient(ellipse 140% 50% at 0% 0%,rgba(255,70,0,.14) 0%,transparent 55%),
+      radial-gradient(ellipse 80% 35% at 100% 0%,rgba(255,100,0,.07) 0%,transparent 48%),
+      #080604;
+  }
 
-    .toast{ position:fixed; left:50%; bottom:18px; transform:translateX(-50%); width:min(520px, calc(100vw - 24px)); background:#fff;
-      border:1px solid rgba(17,17,17,.10); border-radius: var(--r-lg); box-shadow: var(--shadow); padding: 12px 12px; display:none;
-      gap:10px; align-items:flex-start; z-index:90;
-    }
-    .toast.show{ display:flex; }
-    .toast .dot{ width:10px; height:10px; border-radius:999px; background: linear-gradient(180deg, var(--primary), var(--primary2)); margin-top:6px; }
-    .toast .msg{ font-weight: 850; font-size: 13px; line-height: 1.45; }
+  /* ── MOBILE TOP BAR ── */
+  #mBar{
+    flex:0 0 auto;
+    display:flex;align-items:center;justify-content:space-between;
+    padding:max(12px,env(safe-area-inset-top)) 16px 10px;
+    background:transparent;
+    position:relative;z-index:50;
+    transition:padding .22s var(--sm);
+  }
+  #mBar.mini{padding-top:8px;padding-bottom:7px;}
+  .mBrand{display:flex;align-items:center;gap:8px;user-select:none;}
+  .mLogo{width:32px;height:32px;border-radius:10px;overflow:hidden;border:1.5px solid rgba(255,106,0,.18);box-shadow:0 2px 8px rgba(255,106,0,.14);flex:0 0 auto;transition:width .22s var(--sm),height .22s var(--sm);}
+  #mBar.mini .mLogo{width:28px;height:28px;border-radius:9px;}
+  .mLogo img{width:100%;height:100%;object-fit:cover;display:block;}
+  .mBrandTxt{transition:opacity .22s,max-height .22s;}
+  .mBN{font-size:14.5px;font-weight:900;letter-spacing:-.4px;color:var(--text);line-height:1;transition:color var(--td);}
+  .mBT{font-size:9.5px;color:var(--muted);font-weight:600;margin-top:1px;transition:color var(--td);}
+  #mBar.mini .mBrandTxt .mBT{display:none;}
+  .mBarRight{display:flex;align-items:center;gap:8px;}
+  /* Mobile theme toggle inherits M3 style from shared CSS — just resize */
+  .mThBtn{width:36px;height:36px;}
+  .mThIcon{width:20px;height:20px;}
+  .mThIcon svg{width:18px;height:18px;}
 
-    /* Intro overlay */
-    .introOverlay{
-      position:fixed;
-      inset:0;
-      z-index:120;
-      background: #000;
-      display:none;
-      align-items:center;
-      justify-content:center;
-    }
-    .introOverlay.show{ display:flex; animation: introIn 160ms var(--ease-out) both; }
-    .introOverlay.hide{ animation: introOut 220ms var(--ease-out) both; pointer-events:none; }
-    @keyframes introIn{ from{ opacity:0; } to{ opacity:1; } }
-    @keyframes introOut{ from{ opacity:1; } to{ opacity:0; } }
+  /* ── PANEL TRACK — GPU promoted, smooth 60fps ── */
+  #mTrack{
+    display:flex;
+    height:100%;
+    /* Spring easing for natural feel */
+    transition:transform .36s cubic-bezier(.22,.68,0,1.2);
+    will-change:transform;
+    transform:translateZ(0);
+    backface-visibility:hidden;
+    -webkit-backface-visibility:hidden;
+  }
+  #mTrack.no-transition{transition:none!important;}
+  .mPanel{
+    flex:0 0 100vw;
+    width:100vw;
+    height:100%;
+    overflow-y:auto;
+    overflow-x:hidden;
+    -webkit-overflow-scrolling:touch;
+    overscroll-behavior-x:none;
+    overscroll-behavior-y:contain;
+    padding:0 clamp(12px,4.5vw,20px) max(110px,env(safe-area-inset-bottom)) clamp(12px,4.5vw,20px);
+    /* Promote to own layer — no repaints during swipe */
+    transform:translateZ(0);
+    backface-visibility:hidden;
+    -webkit-backface-visibility:hidden;
+    /* Remove expensive background transitions on panels */
+    contain:layout style;
+  }
+  .mPanel::-webkit-scrollbar{display:none;}
+  .mPanel{scrollbar-width:none;}
 
-    .introVideo{
-      width:100%;
-      height:100%;
-      object-fit:cover;
-    }
+  /* ══ DYNAMIC ISLAND — full-width, Apple-style ══ */
+  #mTabs{
+    flex:0 0 auto;
+    display:flex;align-items:flex-end;justify-content:center;
+    padding:8px 12px max(20px,env(safe-area-inset-bottom)) 12px;
+    background:transparent;
+    position:relative;z-index:50;
+    pointer-events:none;
+    /* Full width container */
+    width:100%;
+  }
+  /* The pill — now spans full width */
+  #diIsland{
+    display:flex;align-items:center;
+    width:100%;  /* FULL WIDTH */
+    border-radius:26px;
+    pointer-events:auto;
+    padding:5px 5px;
+    gap:0;
+    position:relative;
+    /* DARK MODE: deep black glass */
+    background:#0A0806;
+    border:1px solid rgba(255,255,255,.10);
+    box-shadow:
+      0 0 0 1px rgba(255,106,0,.14),
+      0 16px 48px rgba(0,0,0,.60),
+      0 4px 12px rgba(0,0,0,.40),
+      0 1px 0 rgba(255,255,255,.08) inset;
+    backdrop-filter:blur(40px) saturate(3);
+    -webkit-backdrop-filter:blur(40px) saturate(3);
+    transition:box-shadow .3s;
+  }
+  /* LIGHT MODE: frosted liquid glass */
+  [data-theme="light"] #diIsland{
+    background:rgba(255,252,248,.20);
+    border:1px solid rgba(255,255,255,.72);
+    box-shadow:
+      0 12px 44px rgba(160,70,0,.18),
+      0 4px 16px rgba(180,80,0,.12),
+      0 2px 0 rgba(255,255,255,.90) inset,
+      0 -1px 0 rgba(200,100,0,.08) inset;
+    backdrop-filter:blur(44px) saturate(3) brightness(1.10);
+    -webkit-backdrop-filter:blur(44px) saturate(3) brightness(1.10);
+  }
+  /* Squeeze animation on tab change */
+  #diIsland.diPulse{animation:diPulse .28s cubic-bezier(.34,1.56,.64,1);}
+  @keyframes diPulse{0%,100%{transform:scale(1);}45%{transform:scaleX(.98) scaleY(.93);}}
 
-    .hamburger{ display:inline-flex; }
-    .sheetBackdrop{ position:fixed; inset:0; background: rgba(18,18,18,.28); display:none; z-index:85; }
-    .sheetBackdrop.show{ display:block; }
-    .sheet{ position:fixed; left: 50%; transform: translateX(-50%); bottom: 12px; width: min(560px, calc(100vw - 18px)); background: rgba(255,255,255,.96);
-      border: 1px solid rgba(17,17,17,.10); border-radius: 22px; box-shadow: 0 26px 70px rgba(0,0,0,.18); padding: 12px; z-index:86; display:none; transform-origin: bottom center;
-    }
-    .sheet.show{ display:block; animation: sheetIn 220ms var(--ease-out) both; }
-    @keyframes sheetIn{ from{ transform: translateX(-50%) translateY(10px) scale(.98); opacity:0; } to{ transform: translateX(-50%) translateY(0) scale(1); opacity:1; } }
-    .sheetTop{ display:flex; align-items:center; justify-content:space-between; gap:10px; padding: 4px 6px 10px; }
-    .grab{ width:42px; height:5px; border-radius:999px; background: rgba(17,17,17,.12); margin: 2px auto 0; }
-    .sheetGrid{ display:grid; grid-template-columns: 1fr; gap:10px; padding: 8px 4px 6px; }
-    .sheetBtn{ width:100%; justify-content:space-between; }
+  /* Each tab — equal flex share of full width */
+  .mTab{
+    flex:1;  /* equal width share */
+    display:flex;flex-direction:column;align-items:center;justify-content:center;
+    gap:4px;
+    padding:11px 8px;
+    cursor:pointer;border:none;background:transparent;
+    border-radius:22px;
+    transition:
+      background .28s cubic-bezier(.34,1.56,.64,1),
+      transform .2s cubic-bezier(.34,1.56,.64,1);
+    -webkit-user-select:none;user-select:none;
+    color:rgba(255,255,255,.30);
+    min-width:0;
+  }
+  [data-theme="light"] .mTab{color:rgba(80,40,10,.32);}
+  .mTab:active{transform:scale(.82);}
 
-    /* =========================
-       MOBILE (improved)
-       ========================= */
-    @media (max-width: 919px){
-      .nav .linkBtn{ display:none; }
-      .brandText .tag{ display:none; }
+  /* Active tab — highlighted pill within the bar */
+  .mTab.active{
+    background:rgba(255,106,0,.24);
+    color:#fff;
+    flex:1.5; /* active tab slightly wider */
+  }
+  [data-theme="light"] .mTab.active{
+    background:rgba(255,106,0,.16);
+    color:rgba(140,45,0,.95);
+  }
 
-      .hero{ padding: 18px 0 6px; }
-      .heroMain{ padding: 20px; }
+  /* Icon */
+  .mTab svg{
+    width:22px;height:22px;
+    stroke:currentColor;stroke-width:2;fill:none;
+    stroke-linecap:round;stroke-linejoin:round;
+    transition:transform .3s cubic-bezier(.34,1.56,.64,1),filter .26s,stroke .22s;
+    flex-shrink:0;
+  }
+  .mTab.active svg{transform:scale(1.18) translateY(-0.5px);}
+  [data-theme="dark"] .mTab.active svg{
+    stroke:#FF9040;
+    filter:drop-shadow(0 0 3px rgba(255,150,0,1)) drop-shadow(0 0 8px rgba(255,100,0,.80)) drop-shadow(0 0 16px rgba(255,70,0,.45));
+  }
+  [data-theme="dark"] .mTab:not(.active) svg{
+    /* NO filter on inactive — saves GPU */
+    opacity:.65;
+  }
+  [data-theme="light"] .mTab:not(.active) svg{
+    opacity:.45;
+  }
 
-      h1{ font-size: clamp(30px, 9.5vw, 44px); line-height: 1.06; }
-      .subtitle{ font-size: 14.8px; }
+  /* Label — tiny, below icon */
+  .mTabLbl{
+    font-size:8.5px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;
+    white-space:nowrap;line-height:1;
+    color:rgba(255,255,255,.24);
+    transition:color .22s;
+  }
+  .mTab.active .mTabLbl{color:rgba(255,160,80,.90);}
+  [data-theme="light"] .mTabLbl{color:rgba(80,40,10,.26);}
+  [data-theme="light"] .mTab.active .mTabLbl{color:rgba(160,50,0,.80);}
 
-      /* 2-up CTAs */
-      .ctaRow .btn{ width: calc(50% - 5px); }
+  /* ══ PANEL WHEEL ANIMATION — compositor-safe (opacity+transform only) ══ */
+  .mPanel{transform-origin:center center;}
+  @keyframes panelWheelIn{
+    from{opacity:.6;transform:translate3d(16px,0,0) scale(.97);}
+    to{opacity:1;transform:translate3d(0,0,0) scale(1);}
+  }
+  @keyframes panelWheelInLeft{
+    from{opacity:.6;transform:translate3d(-16px,0,0) scale(.97);}
+    to{opacity:1;transform:translate3d(0,0,0) scale(1);}
+  }
+  .mPanel.entering-right{animation:panelWheelIn .32s cubic-bezier(.22,.68,0,1.2) both;}
+  .mPanel.entering-left{animation:panelWheelInLeft .32s cubic-bezier(.22,.68,0,1.2) both;}
 
-      .accountActions{ flex-direction: column; }
-      .accountActions .btn{ width:100%; flex:unset; }
+  /* ── PANEL VIEWPORT ── */
+  #mViewport{
+    flex:1 1 0;
+    overflow:hidden;
+    position:relative;
+    isolation:isolate;
+    perspective:1200px;
+  }
 
-      /* Offers compact on mobile too */
-      .offerCard{ padding: 12px 12px; align-items:flex-start; }
-      .offerRight .btn{ padding: 11px 14px; }
-      .offerSub{ display:none; } /* even less text */
+  /* ══ PANEL 0 — HOME ══ */
+  /* Hero inside panel */
+  /* ══ HOW IT WORKS CARD ══ */
+  .mHowCard{
+    margin-top:12px;
+    background:var(--cardBg);
+    border:1.5px solid var(--cb);
+    border-radius:20px;
+    overflow:hidden;
+    box-shadow:0 2px 12px rgba(255,80,0,.06);
+    animation:mCardIn .42s .26s var(--sm) both;
+  }
+  [data-theme="dark"] .mHowCard{background:var(--cardBg);}
 
-      .tile{ min-height: 118px; padding: 16px; }
-      .icon{ width:44px; height:44px; border-radius:16px; }
+  /* Header row */
+  .mHowHdr{
+    padding:14px 16px 0;
+    display:flex;align-items:center;justify-content:space-between;
+  }
+  .mHowTitle{
+    font-size:12px;font-weight:900;letter-spacing:.06em;text-transform:uppercase;
+    color:var(--o);
+  }
+  .mHowSkip{
+    font-size:11px;font-weight:700;color:var(--muted);
+    background:none;border:none;cursor:pointer;padding:2px 6px;
+    border-radius:6px;transition:color .12s,background .12s;
+  }
+  .mHowSkip:active{color:var(--o);background:rgba(255,106,0,.08);}
 
-      /* Recents as list */
-      .recentList{ overflow:visible; display:grid; grid-template-columns: 1fr; }
-      .recentChip{ border-radius: 18px; padding: 12px 12px; justify-content:flex-start; }
-    }
+  /* Live preview area — animated CGPA/marks display */
+  .mHowPreview{
+    margin:12px 16px 0;
+    background:linear-gradient(135deg,rgba(255,106,0,.07) 0%,rgba(255,160,60,.04) 100%);
+    border:1.5px solid rgba(255,106,0,.14);
+    border-radius:14px;
+    padding:16px;
+    display:flex;align-items:center;justify-content:space-between;
+    gap:12px;
+    position:relative;overflow:hidden;
+  }
+  [data-theme="dark"] .mHowPreview{
+    background:linear-gradient(135deg,rgba(255,106,0,.10) 0%,rgba(255,80,0,.05) 100%);
+    border-color:rgba(255,106,0,.20);
+  }
+  /* Animated shimmer behind preview */
+  .mHowPreview::before{
+    content:"";position:absolute;inset:0;
+    background:linear-gradient(90deg,transparent 0%,rgba(255,120,0,.06) 50%,transparent 100%);
+    animation:previewSweep 2.4s ease-in-out infinite;
+  }
+  @keyframes previewSweep{
+    0%{transform:translateX(-100%);}
+    100%{transform:translateX(100%);}
+  }
 
-    @media (max-width: 380px){
-      .ctaRow .btn{ width: 100%; }
-    }
+  /* Counter display */
+  .mHowCounter{
+    display:flex;flex-direction:column;align-items:flex-start;gap:1px;
+    position:relative;z-index:1;
+  }
+  .mHowCounterLabel{
+    font-size:10px;font-weight:800;letter-spacing:.05em;text-transform:uppercase;
+    color:var(--muted);
+  }
+  .mHowCounterVal{
+    font-size:36px;font-weight:950;letter-spacing:-1.5px;
+    color:var(--o);line-height:1;
+    font-variant-numeric:tabular-nums;
+  }
+  .mHowCounterSub{
+    font-size:11px;font-weight:600;color:var(--muted);margin-top:2px;
+  }
 
-    /* =========================
-       DESKTOP (kept good)
-       ========================= */
-    @media (min-width: 920px){
-      .brandText .tag{ display:block; }
-      .hamburger{ display:none; }
+  /* Marks mini bars */
+  .mHowBars{
+    display:flex;flex-direction:column;gap:6px;
+    flex:1;min-width:0;
+    position:relative;z-index:1;
+  }
+  .mHowBar{display:flex;align-items:center;gap:7px;}
+  .mHowBarLabel{font-size:10px;font-weight:700;color:var(--muted);width:32px;flex-shrink:0;text-align:right;}
+  .mHowBarTrack{flex:1;height:6px;border-radius:999px;background:rgba(128,80,0,.10);overflow:hidden;}
+  [data-theme="dark"] .mHowBarTrack{background:rgba(255,180,80,.10);}
+  .mHowBarFill{height:100%;border-radius:999px;background:linear-gradient(90deg,#FF6A00,#FF9040);transform-origin:left;transform:scaleX(0);transition:transform .8s cubic-bezier(.22,.68,0,1.1);}
+  .mHowBarFill.go{transform:scaleX(1);}
+  .mHowBarPct{font-size:10px;font-weight:800;color:var(--o);width:26px;flex-shrink:0;}
 
-      .hero{ padding: 34px 0 14px; }
-      .heroGrid{ display:grid; grid-template-columns: 1.25fr .75fr; gap:18px; align-items:stretch; }
-      h1{ font-size: clamp(44px, 5.2vw, 64px); font-weight: 950; }
-      .subtitle{ font-size: 16px; }
+  /* 3 steps row */
+  .mHowSteps{
+    display:flex;gap:0;
+    padding:14px 16px 16px;
+  }
+  .mHowStep{
+    flex:1;display:flex;flex-direction:column;align-items:center;gap:6px;
+    position:relative;
+  }
+  /* connector line between steps */
+  .mHowStep:not(:last-child)::after{
+    content:"";
+    position:absolute;top:14px;left:calc(50% + 14px);
+    width:calc(100% - 28px);height:1.5px;
+    background:linear-gradient(90deg,rgba(255,106,0,.30),rgba(255,106,0,.12));
+  }
+  .mHowStepNum{
+    width:28px;height:28px;border-radius:50%;
+    background:rgba(255,106,0,.12);border:1.5px solid rgba(255,106,0,.26);
+    display:grid;place-items:center;
+    font-size:12px;font-weight:900;color:var(--o);
+    flex-shrink:0;
+    transition:background .3s,border-color .3s,transform .3s var(--sp);
+  }
+  .mHowStep.active .mHowStepNum{
+    background:var(--o);color:#fff;border-color:var(--o);
+    transform:scale(1.15);
+    box-shadow:0 4px 12px rgba(255,106,0,.38);
+  }
+  .mHowStepTxt{
+    font-size:10px;font-weight:700;color:var(--muted);text-align:center;line-height:1.3;
+    transition:color .3s;
+  }
+  .mHowStep.active .mHowStepTxt{color:var(--text);}
 
-      .ctaRow .btn{ width:auto; }
+  /* Step descriptions — one shows at a time */
+  .mHowDesc{
+    padding:0 16px 14px;
+    font-size:12.5px;font-weight:600;color:var(--muted);
+    line-height:1.5;
+    min-height:38px;
+    transition:opacity .3s;
+  }
+  .mHero{padding:8px 0 0;}
+  .mOfferCard{margin-top:10px;}
 
-      .grid{ grid-template-columns: repeat(3, minmax(0,1fr)); }
-      .featGrid{ grid-template-columns: repeat(3, minmax(0,1fr)); }
+  /* Cards — NO background transition on mobile (causes jank) */
+  .mHeroCard,.mAccCard,.mOfferCard{
+    /* Only animate transform and opacity — GPU composited, no repaints */
+    transition:transform .18s var(--sp),box-shadow .18s;
+  }
 
-      .recentList{ overflow:visible; display:grid; grid-template-columns: repeat(3, minmax(0,1fr)); }
-      .recentChip{ border-radius: 18px; padding: 12px 12px; justify-content:flex-start; }
+  /* Staggered entrance — translateY+opacity only (compositor-safe) */
+  .mHeroCard,.mAccCard,.mOfferCard,.mQuickRow{animation:mCardIn .42s var(--sm) both;}
+  .mHeroCard{animation-delay:.04s;}
+  .mAccCard{animation-delay:.12s;}
+  .mOfferCard{animation-delay:.19s;}
+  .mQuickRow{animation-delay:.26s;}
+  @keyframes mCardIn{
+    from{opacity:0;transform:translate3d(0,18px,0) scale(.97);}
+    to{opacity:1;transform:translate3d(0,0,0) scale(1);}
+  }
 
-      /* Offers as small horizontal strip */
-      .offerCard{ padding: 12px 16px; }
-      .offerSub{ font-size: 12.5px; }
-    }
+  /* Top bar padding matches panel padding */
+  #mBar{
+    padding-left:clamp(12px,4.5vw,20px);
+    padding-right:clamp(12px,4.5vw,20px);
+  }
 
-    @media (max-width: 360px){
-      .logo{ width:44px; height:44px; border-radius:16px; }
-      h1{ font-size: 30px; }
-    }
-  </style>
+  .mHeroCard{
+    background:var(--cardBg);border:1.5px solid var(--cb);
+    border-radius:20px;padding:18px 16px 16px;
+    box-shadow:0 1px 0 rgba(255,255,255,.5) inset,0 6px 20px rgba(255,80,0,.07);
+    transition:background var(--td),border-color var(--td);
+    animation:cardPop .5s .05s var(--sm) both;
+  }
+  @keyframes cardPop{from{opacity:0;transform:translateY(14px) scale(.96)}to{opacity:1;transform:none}}
+  .mHTag{display:inline-flex;align-items:center;gap:6px;padding:4px 10px;border-radius:999px;background:rgba(255,106,0,.09);border:1.5px solid rgba(255,106,0,.18);color:var(--o);font-weight:800;font-size:10px;letter-spacing:.04em;}
+  .mH1{margin-top:10px;font-size:clamp(24px,8vw,34px);line-height:1.04;letter-spacing:-1.4px;font-weight:950;color:var(--text);transition:color var(--td);}
+  .mSub{margin-top:7px;color:var(--muted);font-size:13px;font-weight:500;line-height:1.5;transition:color var(--td);}
+  /* CTA buttons stacked */
+  .mCtr{margin-top:14px;display:flex;flex-direction:column;gap:8px;}
+  .mCtr .btn{width:100%;font-size:14.5px;padding:14px 18px;border-radius:14px;justify-content:center;}
+
+  /* Account panel mobile */
+  .mAccCard{
+    background:var(--cardBg);border:1.5px solid var(--cb);
+    border-radius:20px;margin-top:12px;overflow:hidden;
+    box-shadow:0 4px 16px rgba(255,80,0,.06);
+    transition:background var(--td),border-color var(--td);
+    animation:cardPop .5s .12s var(--sm) both;
+  }
+  /* Quick nav row below account */
+  .mQuickRow{
+    display:grid;grid-template-columns:1fr 1fr 1fr;
+    gap:8px;margin-top:12px;
+    animation:cardPop .5s .18s var(--sm) both;
+  }
+  .mQBtn{
+    display:flex;flex-direction:column;align-items:center;justify-content:center;
+    gap:5px;padding:14px 8px;
+    background:var(--cardBg);border:1.5px solid var(--cb);
+    border-radius:16px;cursor:pointer;
+    font-size:11px;font-weight:800;color:var(--text);
+    transition:background .12s,border-color .12s,transform .2s var(--sp),color var(--td);
+    box-shadow:0 2px 8px rgba(255,80,0,.05);
+    -webkit-user-select:none;user-select:none;
+  }
+  .mQBtn:active{transform:scale(.93);background:rgba(255,106,0,.07);}
+  .mQBtn svg{width:20px;height:20px;stroke:var(--o);stroke-width:2;fill:none;stroke-linecap:round;stroke-linejoin:round;}
+
+  /* ══ PANEL 1 — CALCULATORS — coloured like desktop ══ */
+  .mCalcGrid{
+    display:flex;flex-direction:column;gap:10px;
+    padding-top:10px;
+  }
+  .mTile{
+    background:var(--cardBg);border:1.5px solid var(--cb);
+    border-radius:18px;padding:16px;
+    display:flex;align-items:center;gap:14px;
+    box-shadow:0 2px 10px rgba(255,80,0,.06);
+    cursor:pointer;
+    /* Only compositor-safe transitions */
+    transition:transform .16s var(--sp),opacity .16s;
+    -webkit-user-select:none;user-select:none;
+    position:relative;overflow:hidden;
+    /* Accent left border — matches desktop */
+    border-left:3px solid var(--o);
+  }
+  /* Each tile: unique left-border colour */
+  .mTile:nth-child(1){border-left-color:#FF6A00;}
+  .mTile:nth-child(2){border-left-color:#FF9040;}
+  .mTile:nth-child(3){border-left-color:#FFB870;}
+  /* Shimmer top line */
+  .mTile::after{
+    content:"";position:absolute;top:0;left:-100%;width:45%;height:2px;
+    background:linear-gradient(90deg,transparent,rgba(255,106,0,.70),transparent);
+    transition:left .45s var(--ease);
+  }
+  .mTile:active{transform:scale(.96);opacity:.85;}
+  .mTile:active::after{left:110%;}
+  .mTileIcon{
+    width:46px;height:46px;border-radius:14px;flex:0 0 auto;
+    display:grid;place-items:center;
+    background:transparent;border:none;
+  }
+  /* Each tile icon: just the icon colour, no box */
+  .mTile:nth-child(1) .mTileIcon{background:transparent;}
+  .mTile:nth-child(2) .mTileIcon{background:transparent;}
+  .mTile:nth-child(3) .mTileIcon{background:transparent;}
+  /* Bigger icons since no box */
+  .mTile:nth-child(1) .mTileIcon svg{stroke:#FF6A00;width:26px;height:26px;}
+  .mTile:nth-child(2) .mTileIcon svg{stroke:#E07020;width:26px;height:26px;}
+  .mTile:nth-child(3) .mTileIcon svg{stroke:#C06030;width:26px;height:26px;}
+  .mTileIcon svg{width:26px;height:26px;stroke-width:2;fill:none;stroke-linecap:round;stroke-linejoin:round;}
+  /* Number badge — matches desktop */
+  .mTile::before{
+    content:attr(data-num);
+    position:absolute;top:12px;right:40px;
+    width:20px;height:20px;border-radius:50%;
+    background:var(--ib);border:1px solid var(--id);
+    color:var(--o);font-size:10px;font-weight:900;
+    display:grid;place-items:center;z-index:1;
+  }
+  .mTileBody{flex:1;min-width:0;}
+  .mTileName{font-size:15px;font-weight:950;letter-spacing:-.2px;color:var(--text);}
+  .mTileDesc{font-size:12px;color:var(--muted);font-weight:500;margin-top:2px;line-height:1.3;}
+  .mTileBadge{font-size:9px;font-weight:800;padding:3px 8px;border-radius:999px;background:var(--ib);color:var(--o);border:1px solid var(--id);margin-top:5px;display:inline-block;}
+  .mTileArrow{color:var(--muted2);font-size:18px;flex:0 0 auto;transition:transform .16s var(--sp),color .16s;}
+  .mTile:active .mTileArrow{transform:translateX(4px);color:var(--o);}
+
+  /* ══ PANEL 2 — FEATURES — unique colours like desktop ══ */
+  .mFeatGrid{
+    display:grid;grid-template-columns:1fr 1fr;
+    gap:9px;padding-top:10px;
+  }
+  .mFeatCard{
+    background:var(--cardBg);border:1.5px solid var(--cb);
+    border-radius:16px;padding:14px 12px;
+    display:flex;flex-direction:column;gap:7px;
+    box-shadow:0 2px 8px rgba(255,80,0,.05);
+    transition:transform .16s var(--sp),opacity .16s;
+    position:relative;overflow:hidden;
+  }
+  /* Right-edge tint strip — matches desktop */
+  .mFeatCard::after{
+    content:"";position:absolute;top:0;right:0;width:3px;height:100%;
+    border-radius:0 16px 16px 0;
+  }
+  .mFeatCard:nth-child(1)::after{background:linear-gradient(180deg,rgba(255,106,0,.25),rgba(255,106,0,.05));}
+  .mFeatCard:nth-child(2)::after{background:linear-gradient(180deg,rgba(255,130,0,.22),rgba(255,130,0,.04));}
+  .mFeatCard:nth-child(3)::after{background:linear-gradient(180deg,rgba(220,80,170,.20),rgba(220,80,170,.04));}
+  .mFeatCard:nth-child(4)::after{background:linear-gradient(180deg,rgba(60,160,230,.20),rgba(60,160,230,.04));}
+  .mFeatCard:nth-child(5)::after{background:linear-gradient(180deg,rgba(60,200,100,.20),rgba(60,200,100,.04));}
+  .mFeatCard:nth-child(6)::after{background:linear-gradient(180deg,rgba(100,100,240,.18),rgba(100,100,240,.04));}
+  .mFeatCard:active{transform:scale(.94);opacity:.88;}
+  .mFeatIcon{
+    width:34px;height:34px;border-radius:10px;
+    display:grid;place-items:center;
+    flex-shrink:0;
+  }
+  /* Unique colours per feature — same scheme as desktop */
+  .mFeatCard:nth-child(1) .mFeatIcon{background:rgba(255,106,0,.14);border:1.5px solid rgba(255,106,0,.28);}
+  .mFeatCard:nth-child(2) .mFeatIcon{background:rgba(255,130,0,.12);border:1.5px solid rgba(255,130,0,.24);}
+  .mFeatCard:nth-child(3) .mFeatIcon{background:rgba(255,80,180,.09);border:1.5px solid rgba(255,80,180,.20);}
+  .mFeatCard:nth-child(4) .mFeatIcon{background:rgba(80,180,255,.10);border:1.5px solid rgba(80,180,255,.22);}
+  .mFeatCard:nth-child(5) .mFeatIcon{background:rgba(80,220,120,.10);border:1.5px solid rgba(80,220,120,.22);}
+  .mFeatCard:nth-child(6) .mFeatIcon{background:rgba(100,100,255,.09);border:1.5px solid rgba(100,100,255,.20);}
+  /* Matching icon stroke colours */
+  .mFeatCard:nth-child(1) .mFeatIcon svg{stroke:#FF6A00;}
+  .mFeatCard:nth-child(2) .mFeatIcon svg{stroke:#FF8030;}
+  .mFeatCard:nth-child(3) .mFeatIcon svg{stroke:#E060B0;}
+  .mFeatCard:nth-child(4) .mFeatIcon svg{stroke:#40A0E0;}
+  .mFeatCard:nth-child(5) .mFeatIcon svg{stroke:#30B860;}
+  .mFeatCard:nth-child(6) .mFeatIcon svg{stroke:#6060DD;}
+  .mFeatIcon svg{width:16px;height:16px;stroke-width:2.2;fill:none;stroke-linecap:round;stroke-linejoin:round;}
+  .mFeatName{font-size:12.5px;font-weight:900;letter-spacing:-.1px;color:var(--text);}
+  .mFeatDesc{font-size:11px;color:var(--muted);font-weight:500;line-height:1.4;}
+
+  /* ══ PANEL 3 — FAQ ══ */
+  .mFAQ{padding-top:10px;display:flex;flex-direction:column;gap:7px;}
+  .mFItem{
+    background:var(--cardBg);border:1.5px solid var(--cb);
+    border-radius:16px;overflow:hidden;
+    box-shadow:0 1px 4px rgba(255,80,0,.04);
+    transition:background var(--td),border-color .18s;
+  }
+  .mFQ{
+    display:flex;justify-content:space-between;align-items:center;gap:10px;
+    padding:14px 14px;cursor:pointer;
+    font-size:13px;font-weight:800;line-height:1.3;
+    user-select:none;color:var(--text);
+    transition:color .12s,background .12s;
+  }
+  .mFQ:active{background:rgba(255,106,0,.06);}
+  .mFQ.open{color:var(--o);}
+  .mFArr{width:20px;height:20px;border-radius:7px;flex:0 0 auto;display:grid;place-items:center;background:var(--ib);border:1.5px solid var(--id);transition:transform .3s var(--sp),background .18s;}
+  .mFQ.open .mFArr{transform:rotate(180deg);background:rgba(255,106,0,.14);}
+  .mFArr svg{width:11px;height:11px;stroke:var(--o);stroke-width:2.5;fill:none;stroke-linecap:round;stroke-linejoin:round;}
+  .mFA{max-height:0;overflow:hidden;transition:max-height .32s var(--sm);}
+  .mFA.open{max-height:200px;}
+  .mFAIn{padding:8px 14px 14px;border-top:1px solid rgba(255,106,0,.08);font-size:12.5px;color:var(--muted);font-weight:500;line-height:1.6;transition:color var(--td);}
+
+  /* Panel section header */
+  .mSecHdr{padding:14px 0 8px;display:flex;align-items:baseline;justify-content:space-between;}
+  .mSecHdr h2{font-size:18px;font-weight:900;letter-spacing:-.4px;color:var(--text);transition:color var(--td);}
+  .mSecSub{font-size:11.5px;color:var(--muted2);font-weight:600;transition:color var(--td);}
+
+  /* Footer inside panel */
+  .mFooter{
+    margin-top:18px;padding:16px;
+    background:var(--cardBg);border:1.5px solid var(--cb);
+    border-radius:18px;
+    box-shadow:0 2px 10px rgba(255,80,0,.05);
+    transition:background var(--td),border-color var(--td);
+  }
+  .mFooter .fb-n{font-size:13px;font-weight:900;color:var(--text);margin-bottom:2px;transition:color var(--td);}
+  .mFooter .fb-t{font-size:11.5px;color:var(--muted);font-weight:500;line-height:1.4;margin-bottom:12px;transition:color var(--td);}
+  .mFLinks{display:flex;gap:8px 20px;flex-wrap:wrap;margin-bottom:10px;}
+  .mFLinks a{font-size:12px;color:var(--muted);font-weight:600;transition:color .12s;}
+  .mFLinks a:active{color:var(--o);}
+  .mCopyright{font-size:11px;color:var(--muted2);font-weight:600;border-top:1px solid rgba(255,106,0,.08);padding-top:9px;transition:color var(--td);}
+
+  /* Panel entry animation — spring Y+scale, GPU safe */
+  .mPanel .rv{
+    opacity:0;
+    transform:translateY(18px) scale(.97);
+    transform-origin:center top;
+  }
+  .mPanel .rv.in{
+    opacity:1;
+    transform:translateY(0) scale(1);
+    transition:opacity .4s var(--sm),transform .44s cubic-bezier(.22,.68,0,1.1);
+  }
+  .mPanel .rv.in:nth-child(1){transition-delay:0ms;}
+  .mPanel .rv.in:nth-child(2){transition-delay:55ms;}
+  .mPanel .rv.in:nth-child(3){transition-delay:110ms;}
+  .mPanel .rv.in:nth-child(4){transition-delay:165ms;}
+  .mPanel .rv.in:nth-child(5){transition-delay:220ms;}
+  .mPanel .rv.in:nth-child(6){transition-delay:275ms;}
+}
+
+/* ════════════ TABLET (768–1023) ════════════ */
+@media(min-width:768px) and (max-width:1023px){
+  .hg{display:grid;grid-template-columns:1fr 1fr;gap:14px;align-items:start;}
+  .hg > *{min-width:0;}
+  .tg{grid-template-columns:repeat(3,1fr);}
+  .fg{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;}
+  .feat{flex-direction:column;gap:8px;align-items:flex-start;padding:16px 16px 14px;}
+  .fi{margin-bottom:4px;}
+  .ctr .btn{width:auto;}
+  h1{font-size:clamp(30px,4vw,44px);}
+  .ftop{grid-template-columns:1fr auto;align-items:start;}
+}
+
+/* ════════════ DESKTOP (≥1024) ════════════ */
+@media(min-width:1024px){
+  /* Hero: two-column grid, cards full height */
+  .hg{
+    display:grid;
+    grid-template-columns:1.18fr .82fr;
+    gap:16px;
+    align-items:start;
+  }
+  /* Grid children never overflow */
+  .hg > *{min-width:0;}
+  .tg{grid-template-columns:repeat(3,1fr);}
+  .fg{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;}
+  .feat{flex-direction:column;gap:8px;align-items:flex-start;padding:18px 18px 16px;}
+  .fi{margin-bottom:6px;}
+  .ctr .btn{width:auto;}
+  .ftop{grid-template-columns:1fr auto;align-items:start;}
+  h1{font-size:clamp(36px,4.5vw,54px);}
+  .hp{padding:30px 26px 26px;}
+  .ap{padding:22px;}
+}
+@media(min-width:1280px){h1{font-size:clamp(44px,4vw,56px);}}
+</style>
 </head>
-
 <body>
-  <!-- Intro overlay (video selected by device) -->
-  <div class="introOverlay" id="introOverlay" aria-hidden="true">
-    <video class="introVideo" id="introVideo" muted playsinline preload="auto"></video>
+
+<!-- Shared: theme ripple, page transition, cursor, progress -->
+<div id="thRipple"></div>
+<div id="ptOv"></div>
+<div id="cur"></div>
+<div id="curRing"></div>
+<div id="prog" aria-hidden="true"><span id="pb"></span></div>
+
+<!-- ══════════════════════════════════════════
+     MOBILE APP SHELL  (shown only on mobile via CSS)
+══════════════════════════════════════════ -->
+<div id="mApp" style="display:none;">
+
+  <!-- Top bar -->
+  <div id="mBar">
+    <div class="mBrand">
+      <div class="mLogo"><img src="https://res.cloudinary.com/djy3mjtsz/image/upload/v1770296454/Untitled-2_i2ezfh.png" alt="GRADEO" width="32" height="32" loading="eager"/></div>
+      <div class="mBrandTxt">
+        <div class="mBN">GRADEO</div>
+        <div class="mBT">Grade &amp; CGPA Planner</div>
+      </div>
+    </div>
+    <div class="mBarRight">
+      <button class="mThBtn" id="mThBtn" aria-label="Toggle theme">
+        <div class="mThIcon">
+          <svg class="sunI" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+          <svg class="moonI" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+        </div>
+      </button>
+    </div>
   </div>
 
-  <div class="progress" aria-hidden="true"><span id="progressBar"></span></div>
+  <!-- Panel viewport -->
+  <div id="mViewport">
+    <div id="mTrack">
 
-  <header id="header">
+      <!-- ── PANEL 0: HOME ── -->
+      <div class="mPanel" id="mp0">
+        <div class="mHero">
+          <div class="mHeroCard rv">
+            <div class="mHTag"><span class="hdot"></span>SGPA · CGPA · Min. marks</div>
+            <div class="mH1">Plan your <span class="gr">grades &amp; CGPA</span>.</div>
+            <div class="mSub">Know exactly what you need to score — before your exams.</div>
+            <div class="mCtr">
+              <button class="btn bp" id="mGsb">Get started →</button>
+            </div>
+          </div>
+
+          <!-- Student offer — separate card -->
+          <div class="mOfferCard rv" id="mOffp">
+            <div class="offerShimmer"></div>
+            <div class="offerRow">
+              <div class="offerLeft">
+                <div class="offerTopRow">
+                  <span class="offerBadge">🎓 Student Offer</span>
+                </div>
+                <div class="offerTitle">Cloud Save &amp; PDF</div>
+                <div class="offerDesc">Free forever. No card needed.</div>
+              </div>
+              <button class="offerCTA" id="mOffb">Claim free →</button>
+            </div>
+          </div>
+
+          <!-- Signed-in state -->
+          <div class="mAccCard rv" id="mPin" style="display:none;">
+            <div class="ap">
+              <div class="ur">
+                <div class="av" id="mAvw"><img id="mAvi2" alt="" width="40" height="40" style="display:none;"/><span class="avi" id="mAvii"></span></div>
+                <div style="min-width:0;flex:1;"><div class="un" id="mUn"></div><div class="ue" id="mUe"></div></div>
+                <button class="mSignOutBtn" id="mSignOutBtn" aria-label="Sign out">
+                  <svg viewBox="0 0 24 24" fill="none"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+                  Sign out
+                </button>
+              </div>
+              <div class="aa">
+                <button class="btn bs" id="mCpb" style="font-size:12px;padding:8px 10px;">Copy link</button>
+                <button class="btn bs" id="mOlb" style="display:none;font-size:12px;padding:8px 10px;">Open last</button>
+              </div>
+            </div>
+            <div id="mPrec" style="display:none;">
+              <div class="rh"><span class="rk">Recent</span><button class="rcl" id="mRcl">Clear</button></div>
+              <div class="rl" id="mRl"></div>
+            </div>
+          </div>
+
+          <!-- HOW IT WORKS — animated explainer for first-time users -->
+          <div class="mHowCard" id="mHowCard">
+            <div class="mHowHdr">
+              <span class="mHowTitle">⚡ How it works</span>
+              <button class="mHowSkip" onclick="document.getElementById('mHowCard').style.display='none'">Hide</button>
+            </div>
+
+            <!-- Live animated preview -->
+            <div class="mHowPreview">
+              <div class="mHowCounter">
+                <div class="mHowCounterLabel">Your CGPA</div>
+                <div class="mHowCounterVal" id="mHowCGPA">7.4</div>
+                <div class="mHowCounterSub">→ target 8.5</div>
+              </div>
+              <div class="mHowBars">
+                <div class="mHowBar">
+                  <div class="mHowBarLabel">Maths</div>
+                  <div class="mHowBarTrack"><div class="mHowBarFill" data-w=".72"></div></div>
+                  <div class="mHowBarPct">72%</div>
+                </div>
+                <div class="mHowBar">
+                  <div class="mHowBarLabel">DSA</div>
+                  <div class="mHowBarTrack"><div class="mHowBarFill" data-w=".58"></div></div>
+                  <div class="mHowBarPct">58%</div>
+                </div>
+                <div class="mHowBar">
+                  <div class="mHowBarLabel">OS</div>
+                  <div class="mHowBarTrack"><div class="mHowBarFill" data-w=".85"></div></div>
+                  <div class="mHowBarPct">85%</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- 3 steps -->
+            <div class="mHowSteps">
+              <div class="mHowStep active" data-step="0">
+                <div class="mHowStepNum">1</div>
+                <div class="mHowStepTxt">Enter<br/>marks</div>
+              </div>
+              <div class="mHowStep" data-step="1">
+                <div class="mHowStepNum">2</div>
+                <div class="mHowStepTxt">Set<br/>target</div>
+              </div>
+              <div class="mHowStep" data-step="2">
+                <div class="mHowStepNum">3</div>
+                <div class="mHowStepTxt">Get<br/>min. marks</div>
+              </div>
+            </div>
+            <div class="mHowDesc" id="mHowDesc">Enter your internal marks and credits for each subject — takes about 30 seconds.</div>
+          </div>
+
+        </div>
+      </div><!-- /panel 0 -->
+
+      <!-- ── PANEL 1: CALCULATORS ── -->
+      <div class="mPanel" id="mp1">
+        <div class="mSecHdr">
+          <h2>Calculators</h2>
+          <span class="mSecSub">Tap to open</span>
+        </div>
+        <div class="mCalcGrid">
+          <div class="mTile rv" data-mode="m1" data-num="1">
+            <div class="mTileIcon"><svg viewBox="0 0 24 24"><path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="2"/><line x1="9" y1="12" x2="15" y2="12"/><line x1="9" y1="16" x2="12" y2="16"/></svg></div>
+            <div class="mTileBody">
+              <div class="mTileName">Planner</div>
+              <div class="mTileDesc">Set a target CGPA — get exact minimum marks per subject</div>
+              <div class="mTileBadge">⭐ Recommended</div>
+            </div>
+            <div class="mTileArrow">›</div>
+          </div>
+          <div class="mTile rv" data-mode="m2" data-num="2">
+            <div class="mTileIcon"><svg viewBox="0 0 24 24"><rect x="4" y="2" width="16" height="20" rx="2"/><line x1="8" y1="6" x2="16" y2="6"/><line x1="8" y1="10" x2="10" y2="10"/><line x1="14" y1="10" x2="16" y2="10"/><line x1="8" y1="14" x2="10" y2="14"/><line x1="14" y1="14" x2="16" y2="14"/></svg></div>
+            <div class="mTileBody">
+              <div class="mTileName">SGPA Calculator</div>
+              <div class="mTileDesc">Enter marks and credits — instant SGPA with grade points</div>
+              <div class="mTileBadge">Most used</div>
+            </div>
+            <div class="mTileArrow">›</div>
+          </div>
+          <div class="mTile rv" data-mode="m3" data-num="3">
+            <div class="mTileIcon"><svg viewBox="0 0 24 24"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg></div>
+            <div class="mTileBody">
+              <div class="mTileName">CGPA Converter</div>
+              <div class="mTileDesc">Add semester SGPAs — running CGPA across all semesters</div>
+              <div class="mTileBadge">Convert</div>
+            </div>
+            <div class="mTileArrow">›</div>
+          </div>
+        </div>
+      </div><!-- /panel 1 -->
+
+      <!-- ── PANEL 2: FEATURES ── -->
+      <div class="mPanel" id="mp2">
+        <div class="mSecHdr">
+          <h2>Features</h2>
+          <span class="mSecSub">All free</span>
+        </div>
+        <div class="mFeatGrid">
+          <div class="mFeatCard rv">
+            <div class="mFeatIcon"><svg viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg></div>
+            <div class="mFeatName">Instant results</div>
+            <div class="mFeatDesc">Updates as you type — no submit needed.</div>
+          </div>
+          <div class="mFeatCard rv">
+            <div class="mFeatIcon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg></div>
+            <div class="mFeatName">Backwards planning</div>
+            <div class="mFeatDesc">Target CGPA → minimum marks per subject.</div>
+          </div>
+          <div class="mFeatCard rv">
+            <div class="mFeatIcon"><svg viewBox="0 0 24 24"><path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"/></svg></div>
+            <div class="mFeatName">Cloud autosave</div>
+            <div class="mFeatDesc">Sync across all your devices after sign-in.</div>
+          </div>
+          <div class="mFeatCard rv">
+            <div class="mFeatIcon"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div>
+            <div class="mFeatName">PDF grade card</div>
+            <div class="mFeatDesc">Export a clean grade card instantly.</div>
+          </div>
+          <div class="mFeatCard rv">
+            <div class="mFeatIcon"><svg viewBox="0 0 24 24"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg></div>
+            <div class="mFeatName">All subject types</div>
+            <div class="mFeatDesc">Theory, labs, NSS, activity subjects.</div>
+          </div>
+          <div class="mFeatCard rv">
+            <div class="mFeatIcon"><svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
+            <div class="mFeatName">Private &amp; free</div>
+            <div class="mFeatDesc">No ads. No data selling. Ever.</div>
+          </div>
+        </div>
+      </div><!-- /panel 2 -->
+
+      <!-- ── PANEL 3: FAQ ── -->
+      <div class="mPanel" id="mp3">
+        <div class="mSecHdr">
+          <h2>FAQ</h2>
+          <span class="mSecSub">Tap to expand</span>
+        </div>
+        <div class="mFAQ">
+          <div class="mFItem rv"><div class="mFQ" onclick="mFaq(this)">What is GRADEO?<span class="mFArr"><svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></span></div><div class="mFA"><div class="mFAIn">A free academic planner for engineering students. Replaces manual SGPA calculations and helps you plan exactly what you need to score to hit your target CGPA.</div></div></div>
+          <div class="mFItem rv"><div class="mFQ" onclick="mFaq(this)">How does the Planner work?<span class="mFArr"><svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></span></div><div class="mFA"><div class="mFAIn">Enter your current CGPA, target CGPA, and internal marks. GRADEO calculates the exact minimum final exam score needed per subject.</div></div></div>
+          <div class="mFItem rv"><div class="mFQ" onclick="mFaq(this)">Does it support NSS subjects?<span class="mFArr"><svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></span></div><div class="mFA"><div class="mFAIn">Yes. Activity subjects carry 1 fixed credit and a single final grade. GRADEO handles this correctly so your SGPA is accurate.</div></div></div>
+          <div class="mFItem rv"><div class="mFQ" onclick="mFaq(this)">Is GRADEO free?<span class="mFArr"><svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></span></div><div class="mFA"><div class="mFAIn">Completely free. No sign-in needed to calculate. Sign in with Google to unlock cloud autosave and PDF export. No ads, ever.</div></div></div>
+          <div class="mFItem rv"><div class="mFQ" onclick="mFaq(this)">What is the student offer?<span class="mFArr"><svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></span></div><div class="mFA"><div class="mFAIn">Sign up with Google and GRADEO unlocks cloud save + PDF export free. No payment required — permanent free offer for students.</div></div></div>
+        </div>
+        <!-- Footer in FAQ panel -->
+        <div class="mFooter rv" style="margin-top:20px;">
+          <div class="fb-n">GRADEO</div>
+          <div class="fb-t">Free grade planner for engineering students.</div>
+          <div class="mFLinks">
+            <a href="https://gradeo.in/offer">Student offer</a>
+            <a href="https://gradeo.in/feedback">Feedback</a>
+            <a href="#" id="mFp">Privacy</a>
+            <a href="#" id="mFt">Terms</a>
+            <a href="#" id="mFd">Disclaimer</a>
+          </div>
+          <div class="mCopyright">© <span id="mYr"></span> GRADEO · Made for students.</div>
+        </div>
+      </div><!-- /panel 3 -->
+
+    </div><!-- /mTrack -->
+
+  </div><!-- /mViewport -->
+
+  <!-- Dynamic Island bottom bar — clean pill, 4 tabs, tiny labels below icons -->
+  <div id="mTabs">
+    <div id="diIsland">
+      <button class="mTab active" id="mTab0" onclick="goTab(0)" aria-label="Home">
+        <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+        <span class="mTabLbl">Home</span>
+      </button>
+      <button class="mTab" id="mTab1" onclick="goTab(1)" aria-label="Calculator">
+        <svg viewBox="0 0 24 24"><path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="2"/></svg>
+        <span class="mTabLbl">Calculate</span>
+      </button>
+      <button class="mTab" id="mTab2" onclick="goTab(2)" aria-label="Features">
+        <svg viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+        <span class="mTabLbl">Features</span>
+      </button>
+      <button class="mTab" id="mTab3" onclick="goTab(3)" aria-label="FAQ">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+        <span class="mTabLbl">FAQ</span>
+      </button>
+    </div>
+  </div>
+
+</div><!-- /mApp -->
+
+<!-- ══════════════════════════════════════════
+     DESKTOP LAYOUT (hidden on mobile via CSS)
+══════════════════════════════════════════ -->
+<div id="dskLayout">
+  <div class="bgs" aria-hidden="true"><div class="bg1"></div><div class="bg2"></div><div class="bg3"></div><div class="bg4"></div></div>
+  <button id="btt" aria-label="Back to top" onclick="window.scrollTo({top:0,behavior:'smooth'})"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18 15l-6-6-6 6"/></svg></button>
+
+  <header class="dsk" id="hdr">
     <div class="wrap">
-      <div class="topbar" id="top">
-        <a class="brand" href="#top" aria-label="GRADEO home">
-          <span class="logo" aria-hidden="true"><img src="https://res.cloudinary.com/djy3mjtsz/image/upload/v1769939761/Untitled_1_vtehdh.png" alt="GRADEO" /></span>
-          <span class="brandText">
-            <div class="name">GRADEO</div>
-            <div class="tag">SGPA • CGPA • Minimum SEE</div>
-          </span>
-        </a>
-
+      <div class="tb">
+        <div class="brand" id="brd" role="link" tabindex="0" aria-label="GRADEO home">
+          <div class="lw"><img src="https://res.cloudinary.com/djy3mjtsz/image/upload/v1770296454/Untitled-2_i2ezfh.png" alt="GRADEO" width="36" height="36" loading="eager"/></div>
+          <div><div class="bn">GRADEO</div><div class="bt">Grade &amp; CGPA Planner</div></div>
+        </div>
         <nav class="nav" aria-label="Primary">
-          <a class="linkBtn" href="#offers" id="offersLink">Offers</a>
-          <a class="linkBtn" href="#modes">Modes</a>
-          <a class="linkBtn" href="#features">Features</a>
-
-          <button class="btn btnGhost btnIcon hamburger" id="menuBtn" type="button" aria-label="Menu">☰</button>
-
-          <button class="btn btnGhost" id="googleBtn" type="button" aria-label="Account">
-            <span aria-hidden="true">G</span>
-            <span id="googleBtnLabel">Sign in</span>
+          <button class="nl" onclick="ss('#modes')">Calculator</button>
+          <button class="nl" onclick="ss('#features')">Features</button>
+          <button class="nl" onclick="ss('#faq')">FAQ</button>
+          <button class="thBtn" id="thBtn" aria-label="Toggle theme">
+            <div class="thIcon">
+              <svg class="sunI" viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+              <svg class="moonI" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+            </div>
           </button>
+          <button class="hsi-btn" id="hsi"><svg width="13" height="13" viewBox="0 0 24 24" fill="none"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg><span id="hsl">Sign in</span></button>
         </nav>
       </div>
     </div>
   </header>
 
-  <div class="sheetBackdrop" id="sheetBackdrop" aria-hidden="true"></div>
-  <div class="sheet" id="sheet" role="dialog" aria-modal="true" aria-label="Menu">
-    <div class="grab" aria-hidden="true"></div>
-    <div class="sheetTop">
-      <div style="font-weight:900; letter-spacing:-.3px;">Menu</div>
-      <button class="btn btnGhost btnIcon" id="sheetClose" type="button" aria-label="Close">✕</button>
-    </div>
-    <div class="sheetGrid">
-      <a class="btn btnGhost sheetBtn" href="#offers">Offers <span aria-hidden="true">›</span></a>
-      <a class="btn btnGhost sheetBtn" href="#modes">Modes <span aria-hidden="true">›</span></a>
-      <a class="btn btnGhost sheetBtn" href="#features">Features <span aria-hidden="true">›</span></a>
-      <button class="btn btnPrimary sheetBtn" id="offerOpenBtnSheet" type="button">View offers page <span aria-hidden="true">↗</span></button>
-    </div>
-  </div>
-
   <div class="wrap">
-    <main class="hero">
-      <div class="heroGrid">
-        <section class="card reveal" aria-label="Hero">
-          <div class="heroMain">
-            <div class="pill"><span aria-hidden="true">⚡</span> Fast • Accurate</div>
-            <h1>Plan your <span class="grad">SGPA &amp; CGPA</span>.</h1>
-            <p class="subtitle">SGPA. CGPA. Minimum SEE — in seconds.</p>
-
-            <div class="ctaRow">
-              <button class="btn btnPrimary" id="getStartedBtn" type="button">Get started →</button>
-              <button class="btn btnTonal" id="continueBtn" type="button">Continue</button>
+    <main class="hero" id="top">
+      <div class="hg">
+        <div class="card rv">
+          <div class="hp">
+            <div class="htag"><span class="hdot"></span>SGPA · CGPA · Minimum marks</div>
+            <h1>Plan your <span class="gr">grades &amp; CGPA</span>.</h1>
+            <p class="sub">Know exactly what you need to score — before your exams. No guesswork, no spreadsheets.</p>
+            <div class="ctr"><button class="btn bp" id="gsb">Get started →</button></div>
+          </div>
+        </div>
+        <div class="card rv">
+          <!-- Signed-out placeholder — shows offer + brief value prop -->
+          <div class="ap" id="pout">
+            <div class="si-t" style="font-size:13px;font-weight:700;color:var(--muted);letter-spacing:.02em;text-transform:uppercase;margin-bottom:10px;">Unlock more</div>
+            <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:4px;">
+              <div style="display:flex;align-items:center;gap:10px;font-size:13px;font-weight:600;color:var(--text);">
+                <span style="width:28px;height:28px;border-radius:8px;background:rgba(255,106,0,.12);border:1.5px solid rgba(255,106,0,.22);display:grid;place-items:center;flex-shrink:0;">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--o)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"/></svg>
+                </span>Cloud save across devices
+              </div>
+              <div style="display:flex;align-items:center;gap:10px;font-size:13px;font-weight:600;color:var(--text);">
+                <span style="width:28px;height:28px;border-radius:8px;background:rgba(255,106,0,.12);border:1.5px solid rgba(255,106,0,.22);display:grid;place-items:center;flex-shrink:0;">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--o)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+                </span>Export PDF grade card
+              </div>
+              <div style="display:flex;align-items:center;gap:10px;font-size:13px;font-weight:600;color:var(--text);">
+                <span style="width:28px;height:28px;border-radius:8px;background:rgba(255,106,0,.12);border:1.5px solid rgba(255,106,0,.22);display:grid;place-items:center;flex-shrink:0;">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--o)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                </span>No ads, no data selling
+              </div>
             </div>
           </div>
-        </section>
-
-        <aside class="card reveal" aria-label="Account">
-          <div class="side">
-            <div class="panel">
-              <div class="userRow">
-                <div class="userLeft">
-                  <div class="avatar" aria-hidden="true"><img id="avatarImg" alt="" style="display:none" /></div>
-                  <div class="userText">
-                    <div class="l1" id="userLine1">Welcome</div>
-                    <div class="l2" id="userLine2">Sign in to continue</div>
-                  </div>
-                </div>
-              </div>
-
-              <div class="accountActions">
-                <button class="btn btnGhost" id="copyLinkBtn" type="button">Copy SGPA link</button>
-                <button class="btn btnGhost" id="openLastBtn" type="button" style="display:none;">Open last</button>
-              </div>
+          <!-- Signed-in state — hidden until auth fires -->
+          <div class="ap" id="pin" style="display:none;">
+            <div class="ur">
+              <div class="av" id="avw"><img id="avi2" alt="" width="40" height="40" style="display:none;"/><span class="avi" id="avii"></span></div>
+              <div style="min-width:0;flex:1;"><div class="un" id="un"></div><div class="ue" id="ue"></div></div>
+              <button class="dskSignOutBtn" id="dskSignOut">
+                <svg viewBox="0 0 24 24" fill="none"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+                Sign out
+              </button>
             </div>
-
-            <div class="panel" id="lastPanel" style="display:none;">
-              <div class="recentHead">
-                <div class="k">Recents</div>
-                <button class="linkMini" id="clearRecentsBtn" type="button">Clear</button>
+            <div class="aa"><button class="btn bs" id="cpb" style="font-size:12px;padding:8px 10px;">Copy link</button><button class="btn bs" id="olb" style="display:none;font-size:12px;padding:8px 10px;">Open last</button></div>
+          </div>
+          <div id="prec" style="display:none;"><div class="rh"><span class="rk">Recent</span><button class="rcl" id="rcl">Clear</button></div><div class="rl" id="rl"></div></div>
+          <!-- Student offer — separate section with border-top divider -->
+          <div class="dskOffer" id="offp">
+            <div class="offerShimmer"></div>
+            <div class="offerRow">
+              <div class="offerLeft">
+                <div class="offerTopRow"><span class="offerBadge">🎓 Student Offer</span></div>
+                <div class="offerTitle">Cloud Save &amp; PDF</div>
+                <div class="offerDesc">Free forever. No card needed.</div>
               </div>
-              <div class="recentList" id="recentList"></div>
+              <button class="offerCTA" id="offb">Claim free →</button>
             </div>
           </div>
-        </aside>
+        </div>
       </div>
     </main>
 
-    <!-- Offers: now compact strip with minimal text -->
-    <section id="offers" class="reveal" aria-label="Offers">
-      <div class="offerCard" role="group" aria-label="Offer highlight">
-        <div class="offerTitle">
-          <span class="offerTag">🔥 Offer</span>
-          <div class="offerText">
-            <h3>Student Offer</h3>
-            <div class="offerSub">Save history + faster planning.</div>
-          </div>
-        </div>
-        <div class="offerRight">
-          <button class="btn btnPrimary" id="offerCta" type="button">View</button>
-        </div>
-      </div>
-    </section>
+    <section class="dsk" id="modes"><div class="sh"><h2>Choose a calculator</h2><p>Pick what you need right now.</p></div><div class="tg" role="list"><div class="tile rv" data-mode="m1" data-num="1" role="button" tabindex="0"><div class="tt"><div><div class="tn">Planner</div><div class="td">Set a target CGPA — get exact minimum marks per subject</div></div><div class="ic"><svg viewBox="0 0 24 24"><path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="2"/><line x1="9" y1="12" x2="15" y2="12"/><line x1="9" y1="16" x2="12" y2="16"/></svg></div></div><div class="tb2">⭐ Recommended</div></div><div class="tile rv" data-mode="m2" data-num="2" role="button" tabindex="0"><div class="tt"><div><div class="tn">SGPA Calculator</div><div class="td">Enter marks and credits — instant SGPA with grade points</div></div><div class="ic"><svg viewBox="0 0 24 24"><rect x="4" y="2" width="16" height="20" rx="2"/><line x1="8" y1="6" x2="16" y2="6"/><line x1="8" y1="10" x2="10" y2="10"/><line x1="14" y1="10" x2="16" y2="10"/><line x1="8" y1="14" x2="10" y2="14"/><line x1="14" y1="14" x2="16" y2="14"/></svg></div></div><div class="tb2">Most used</div></div><div class="tile rv" data-mode="m3" data-num="3" role="button" tabindex="0"><div class="tt"><div><div class="tn">CGPA Converter</div><div class="td">Add semester SGPAs — running CGPA across all semesters</div></div><div class="ic"><svg viewBox="0 0 24 24"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg></div></div><div class="tb2">Convert</div></div></div></section>
 
-    <section id="modes" class="reveal" aria-label="Modes">
-      <div class="sectionHead">
-        <div>
-          <h2>Modes</h2>
-          <p>Pick one.</p>
-        </div>
-      </div>
+    <section class="dsk" id="features"><div class="sh"><h2>Everything included. Free.</h2></div><div class="fg"><div class="feat rv"><div class="fi"><svg viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg></div><div><div class="ft">Instant results</div><div class="fs">Updates as you type. No submit, no reload.</div></div></div><div class="feat rv"><div class="fi"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg></div><div><div class="ft">Backwards planning</div><div class="fs">Work from your target CGPA to what you need to score.</div></div></div><div class="feat rv"><div class="fi"><svg viewBox="0 0 24 24"><path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"/></svg></div><div><div class="ft">Cloud autosave</div><div class="fs">Plans sync across every device after sign-in.</div></div></div><div class="feat rv"><div class="fi"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div><div><div class="ft">PDF grade card</div><div class="fs">Export and share a clean grade card instantly.</div></div></div><div class="feat rv"><div class="fi"><svg viewBox="0 0 24 24"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg></div><div><div class="ft">All subject types</div><div class="fs">Theory, labs, practicals, NSS, activity subjects.</div></div></div><div class="feat rv"><div class="fi"><svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div><div><div class="ft">Private &amp; free</div><div class="fs">No ads. No data selling. Your marks stay yours.</div></div></div></div></section>
 
-      <div class="grid" role="list">
-        <div class="tile" data-mode="m1" role="button" tabindex="0" aria-label="Open Planner">
-          <div>
-            <div class="tileTop">
-              <div>
-                <div class="t">Planner</div>
-                <div class="s">Target CGPA → min SEE</div>
-              </div>
-              <div class="icon" aria-hidden="true">🧾</div>
-            </div>
-            <div class="badge">Recommended</div>
-          </div>
-        </div>
+    <section class="dsk" id="faq"><div class="sh"><h2>Questions</h2></div><div class="fl"><div class="fi2"><div class="fq" role="button" tabindex="0" aria-expanded="false" onclick="faq(this)">What is GRADEO?<span class="fa2"><svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></span></div><div class="fan">A free academic planner for engineering students. Replaces manual SGPA calculations and helps you plan exactly what you need to score to hit your target CGPA.</div></div><div class="fi2"><div class="fq" role="button" tabindex="0" aria-expanded="false" onclick="faq(this)">How does the Planner work?<span class="fa2"><svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></span></div><div class="fan">Enter your current CGPA, target CGPA, and internal marks. GRADEO calculates the exact minimum final exam score needed per subject.</div></div><div class="fi2"><div class="fq" role="button" tabindex="0" aria-expanded="false" onclick="faq(this)">Does it support NSS and activity subjects?<span class="fa2"><svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></span></div><div class="fan">Yes. Activity subjects carry 1 fixed credit and a single final grade. GRADEO handles this correctly so your SGPA is accurate.</div></div><div class="fi2"><div class="fq" role="button" tabindex="0" aria-expanded="false" onclick="faq(this)">Is GRADEO free?<span class="fa2"><svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></span></div><div class="fan">Completely free. No sign-in needed to calculate. Sign in with Google to unlock cloud autosave and PDF export. No ads, ever.</div></div><div class="fi2"><div class="fq" role="button" tabindex="0" aria-expanded="false" onclick="faq(this)">What is the student offer?<span class="fa2"><svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></span></div><div class="fan">Sign up with Google and GRADEO unlocks cloud save + PDF export free. No payment required — permanent free offer for students.</div></div></div></section>
 
-        <div class="tile" data-mode="m2" role="button" tabindex="0" aria-label="Open SGPA">
-          <div>
-            <div class="tileTop">
-              <div>
-                <div class="t">SGPA</div>
-                <div class="s">Marks → SGPA</div>
-              </div>
-              <div class="icon" aria-hidden="true">📘</div>
-            </div>
-            <div class="badge">Most used</div>
-          </div>
-        </div>
-
-        <div class="tile" data-mode="m3" role="button" tabindex="0" aria-label="Open CGPA">
-          <div>
-            <div class="tileTop">
-              <div>
-                <div class="t">CGPA</div>
-                <div class="s">SGPA → CGPA</div>
-              </div>
-              <div class="icon" aria-hidden="true">🔁</div>
-            </div>
-            <div class="badge">Convert</div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section id="features" class="reveal" aria-label="Features">
-      <div class="sectionHead">
-        <div>
-          <h2>Features</h2>
-          <p>Simple.</p>
-        </div>
-      </div>
-
-      <div class="featGrid">
-        <div class="feat"><div class="ft">Fast</div><div class="fs">Instant results.</div></div>
-        <div class="feat"><div class="ft">Accurate</div><div class="fs">Clear scoring.</div></div>
-        <div class="feat"><div class="ft">Save</div><div class="fs">Google sign-in and recents.</div></div>
-      </div>
-    </section>
-
-    <footer>
-      <div>© <span id="year"></span> GRADEO</div>
-      <a class="linkBtn" href="#top">Top</a>
-    </footer>
+    <div class="fw rv"><div class="fc"><div class="ftop"><div><div class="fb-n">GRADEO</div><div class="fb-t">Free grade planner for engineering students.</div></div><div class="fcols"><div class="fco"><div class="fch">Calculator</div><a href="https://gradeo.in/calculator/#m1">Planner</a><a href="https://gradeo.in/calculator/#m2">SGPA</a><a href="https://gradeo.in/calculator/#m3">CGPA</a></div><div class="fco"><div class="fch">Company</div><a href="https://gradeo.in/offer">Student offer</a><a href="https://gradeo.in/feedback">Feedback</a></div><div class="fco"><div class="fch">Legal</div><a href="#" id="fp">Privacy</a><a href="#" id="ft">Terms</a><a href="#" id="fd">Disclaimer</a></div></div></div><div class="fbot"><span>© <span id="yr"></span> GRADEO · Made for students.</span><button class="fbtn2" onclick="window.scrollTo({top:0,behavior:'smooth'})">Back to top ↑</button></div></div></div>
   </div>
+</div><!-- /dskLayout -->
 
-  <div class="toast" id="toast" role="status" aria-live="polite">
-    <div class="dot" aria-hidden="true"></div>
-    <div class="msg" id="toastMsg">Done</div>
-    <button class="btn btnGhost btnIcon" id="toastClose" type="button" aria-label="Close">✕</button>
-  </div>
+<!-- Shared: toast + modal -->
+<div class="toast" id="toast" role="status" aria-live="polite"><span id="tm"></span><button class="tx" id="tx" aria-label="Close">✕</button></div>
+<div class="mbd" id="mbd" onclick="cm()"><div class="mbox" onclick="event.stopPropagation()"><div class="mhd"><strong id="mt"></strong><button onclick="cm()">✕</button></div><div class="mb" id="mb"></div></div></div>
 
-  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+<script>
+const $=s=>document.querySelector(s);
+const $$=s=>document.querySelectorAll(s);
+const SITE='https://gradeo.in';
+const MU={m1:SITE+'/calculator/#m1',m2:SITE+'/calculator/#m2',m3:SITE+'/calculator/#m3'};
+const RK='gradeo_recents';
+const isMob=()=>window.innerWidth<=767;
+const isTouch=()=>window.matchMedia('(hover:none)').matches;
+function vib(ms){if(isMob()&&navigator.vibrate)try{navigator.vibrate(ms);}catch{}}
+function ss(sel){$(sel)?.scrollIntoView({behavior:'smooth',block:'start'});}
 
-  <script>
-    const $ = (q, el=document) => el.querySelector(q);
-    const $$ = (q, el=document) => Array.from(el.querySelectorAll(q));
+/* ─── YEAR ─── */
+['#yr','#mYr'].forEach(id=>{const el=$(id);if(el)el.textContent=new Date().getFullYear();});
 
-    const SITE_BASE = 'https://gradeo.in';
-    const MODE_URL = {
-      m1: SITE_BASE + '/calculator/#m1',
-      m2: SITE_BASE + '/calculator/#m2',
-      m3: SITE_BASE + '/calculator/#m3'
-    };
+/* ─── SHOW CORRECT LAYOUT ─── */
+function showLayout(){
+  const mob=isMob();
+  $('#mApp').style.display=mob?'flex':'none';
+  $('#dskLayout').style.display=mob?'none':'block';
+}
+showLayout();
+window.addEventListener('resize',()=>{showLayout();if(isMob()){setTrackWidth();goTab(curTab,false);}},{passive:true});
 
-    // Intro videos (device-specific)
-    const INTRO_DESKTOP = 'https://res.cloudinary.com/djy3mjtsz/video/upload/v1770327988/2_lnpdlu.mp4';
-    const INTRO_MOBILE  = 'https://res.cloudinary.com/djy3mjtsz/video/upload/v1770373278/mobilelanding_page_video_jor8iv.mp4';
+/* ─── THEME ─── */
+const html=document.documentElement,tc=$('#tcMeta');
+function applyTheme(t,animate){
+  if(animate){
+    const ripple=$('#thRipple');
+    // Use theme btn position for ripple origin
+    const btn=$('#thBtn')||$('#mThBtn');
+    const rect=btn.getBoundingClientRect();
+    const cx=rect.left+rect.width/2,cy=rect.top+rect.height/2;
+    const d=Math.hypot(window.innerWidth,window.innerHeight)*2.6;
+    ripple.style.cssText=`background:${t==='dark'?'#080604':'#FFF6ED'};width:${d}px;height:${d}px;left:${cx-d/2}px;top:${cy-d/2}px;`;
+    ripple.classList.remove('go');void ripple.offsetWidth;ripple.classList.add('go');
+    setTimeout(()=>{html.setAttribute('data-theme',t);tc.setAttribute('content',t==='dark'?'#080604':'#FFF6ED');},150);
+    setTimeout(()=>ripple.classList.remove('go'),460);
+  }else{
+    html.setAttribute('data-theme',t);tc.setAttribute('content',t==='dark'?'#080604':'#FFF6ED');
+  }
+  localStorage.setItem('gradeo_theme',t);
+}
+(()=>{
+  const s=localStorage.getItem('gradeo_theme');
+  if(s)applyTheme(s,false);
+  else if(window.matchMedia('(prefers-color-scheme:dark)').matches)applyTheme('dark',false);
+})();
+const toggleTheme=()=>{applyTheme(html.dataset.theme==='dark'?'light':'dark',true);vib(6);};
+$('#thBtn')?.addEventListener('click',toggleTheme);
+$('#mThBtn')?.addEventListener('click',toggleTheme);
+window.matchMedia('(prefers-color-scheme:dark)').addEventListener('change',e=>{
+  if(!localStorage.getItem('gradeo_theme'))applyTheme(e.matches?'dark':'light',false);
+});
 
-    function runIntro(){
-      const overlay = document.getElementById('introOverlay');
-      const vid = document.getElementById('introVideo');
-      if(!overlay || !vid) return;
+/* ─── PAGE TRANSITION ─── */
+function navTo(url){
+  $('#ptOv').classList.add('lift');
+  setTimeout(()=>{location.href=url;},420);
+}
 
-      // If you want to skip intro via URL: ?noIntro=1
-      if(new URLSearchParams(location.search).get('noIntro') === '1') return;
+/* ─── DESKTOP CURSOR ─── */
+(()=>{
+  if(isTouch()||window.innerWidth<1024)return;
+  const dot=$('#cur'),ring=$('#curRing');
+  let mx=0,my=0,rx=0,ry=0;
+  document.addEventListener('mousemove',e=>{
+    mx=e.clientX;my=e.clientY;
+    dot.style.left=mx+'px';dot.style.top=my+'px';
+  },{passive:true});
+  (function animRing(){rx+=(mx-rx)*.24;ry+=(my-ry)*.24;
+    ring.style.left=rx.toFixed(1)+'px';ring.style.top=ry.toFixed(1)+'px';
+    requestAnimationFrame(animRing);
+  })();
+  document.addEventListener('mousedown',()=>document.body.classList.add('cc'));
+  document.addEventListener('mouseup',()=>document.body.classList.remove('cc'));
+  $$('a,button,.tile,.feat,.fi2,.card,[role=button]').forEach(el=>{
+    el.addEventListener('mouseenter',()=>document.body.classList.add('ch'));
+    el.addEventListener('mouseleave',()=>document.body.classList.remove('ch'));
+  });
+})();
 
-      // Recommended: once per tab session (won't annoy returning users, but easy to test)
-      if(sessionStorage.getItem('gradeo_intro_seen') === '1') return;
-      sessionStorage.setItem('gradeo_intro_seen', '1');
+/* ─── DESKTOP SCROLL ─── */
+const pb=$('#pb'),hdr=$('#hdr'),btt=$('#btt');
+let _raf=false;
+window.addEventListener('scroll',()=>{
+  if(!_raf){_raf=true;requestAnimationFrame(()=>{
+    _raf=false;
+    const d=document.documentElement,s=d.scrollTop,h=d.scrollHeight-d.clientHeight;
+    if(pb)pb.style.width=(h>0?Math.round(s/h*1000)/10:0)+'%';
+    if(hdr)hdr.classList.toggle('scrolled',s>20);
+    if(btt)btt.classList.toggle('on',s>280);
+  });}
+},{passive:true});
 
-      const isMobile = window.matchMedia('(max-width: 919px)').matches;
-      const src = isMobile ? INTRO_MOBILE : INTRO_DESKTOP;
-      const targetMs = isMobile ? 3000 : 2000;
-
-      // Prepare overlay
-      overlay.classList.add('show');
-      overlay.setAttribute('aria-hidden', 'false');
-
-      // Allow user to skip by tapping/clicking
-      const onSkip = ()=> cleanup('skip');
-      overlay.addEventListener('pointerdown', onSkip, {once:true});
-
-      // Configure video
-      vid.muted = true;
-      vid.playsInline = true;
-      vid.autoplay = true;
-      vid.preload = 'auto';
-      vid.loop = false;
-      vid.controls = false;
-
-      // Some browsers are picky: set src then load
-      vid.src = src;
-      try{ vid.load(); }catch{}
-
-      let started = false;
-      let startTimer;
-      let safetyTimer;
-
-      const cleanup = (_why)=>{
-        // prevent double cleanup
-        if(overlay.classList.contains('hide')) return;
-
-        overlay.classList.add('hide');
-        setTimeout(()=>{
-          overlay.classList.remove('show','hide');
-          overlay.setAttribute('aria-hidden','true');
-          try{ vid.pause(); }catch{}
-          try{ vid.removeAttribute('src'); vid.load(); }catch{}
-          vid.onloadeddata = null;
-          vid.oncanplay = null;
-          vid.onplaying = null;
-          vid.onerror = null;
-          vid.onended = null;
-          clearTimeout(startTimer);
-          clearTimeout(safetyTimer);
-        }, 240);
-      };
-
-      const beginCountdown = ()=>{
-        if(started) return;
-        started = true;
-
-        // Ensure the intro is actually visible long enough (avoid "random vanish")
-        const minVisibleMs = isMobile ? 1800 : 1400;
-
-        // If we know the actual video duration, don't cut it earlier than minVisible
-        const videoMs = (isFinite(vid.duration) && vid.duration > 0) ? (vid.duration * 1000) : null;
-
-        // End time rule:
-        // - Prefer the smaller of (targetMs, videoDuration) so we don't show black after video ends.
-        // - But never shorter than minVisibleMs.
-        let endMs = targetMs;
-        if(videoMs) endMs = Math.min(targetMs, videoMs);
-        endMs = Math.max(endMs, minVisibleMs);
-
-        startTimer = setTimeout(()=> cleanup('timer'), endMs);
-      };
-
-      // Start as soon as we have enough data; then play; countdown begins only after playing.
-      vid.onloadeddata = async ()=>{
-        try{
-          const p = vid.play();
-          if(p && typeof p.then === 'function') await p;
-          // countdown will start on 'playing' handler
-        }catch{
-          // Autoplay failed - show briefly, then hide
-          setTimeout(()=> cleanup('autoplay-failed'), 600);
-        }
-      };
-
-      vid.onplaying = beginCountdown;
-
-      // If video ends earlier (e.g., short clip), close shortly after end.
-      vid.onended = ()=> setTimeout(()=> cleanup('ended'), 250);
-
-      // If video fails to load, don't block the UI
-      vid.onerror = ()=> setTimeout(()=> cleanup('error'), 600);
-
-      // Safety: never block longer than 6s
-      safetyTimer = setTimeout(()=> cleanup('safety'), 6000);
-    }
-
-    // Run intro after first paint
-    window.addEventListener('load', ()=>{ setTimeout(runIntro, 50); });
-
-    // Year
-    $('#year').textContent = new Date().getFullYear();
-
-    // Mobile sheet
-    const menuBtn = $('#menuBtn');
-    const sheet = $('#sheet');
-    const sheetBackdrop = $('#sheetBackdrop');
-    const sheetClose = $('#sheetClose');
-
-    function openSheet(){ sheetBackdrop.classList.add('show'); sheet.classList.add('show'); }
-    function closeSheet(){ sheetBackdrop.classList.remove('show'); sheet.classList.remove('show'); }
-
-    menuBtn && menuBtn.addEventListener('click', openSheet);
-    sheetClose && sheetClose.addEventListener('click', closeSheet);
-    sheetBackdrop && sheetBackdrop.addEventListener('click', closeSheet);
-    document.addEventListener('keydown', (e)=>{ if(e.key === 'Escape') closeSheet(); });
-    $$('#sheet a[href^="#"]').forEach(a => a.addEventListener('click', closeSheet));
-
-    // Header shadow + progress
-    const header = $('#header');
-    const bar = $('#progressBar');
-    let ticking = false;
-    function updateScroll(){
-      ticking = false;
-      const doc = document.documentElement;
-      const st = doc.scrollTop || document.body.scrollTop;
-      header.classList.toggle('scrolled', st > 6);
-      const h = doc.scrollHeight - doc.clientHeight;
-      bar.style.width = (((h > 0 ? (st / h) : 0) * 100).toFixed(2) + '%');
-    }
-    window.addEventListener('scroll', ()=>{ if(!ticking){ ticking = true; requestAnimationFrame(updateScroll); } }, {passive:true});
-    updateScroll();
-
-    // Ripple
-    function ripple(el){
-      el.addEventListener('pointerdown', (e)=>{
-        if(el.disabled) return;
-        const rect = el.getBoundingClientRect();
-        const r = Math.max(rect.width, rect.height) * 1.1;
-        const s = document.createElement('span');
-        s.className = 'r';
-        s.style.width = s.style.height = r + 'px';
-        s.style.left = (e.clientX - rect.left) + 'px';
-        s.style.top = (e.clientY - rect.top) + 'px';
-        s.style.opacity = '0.18';
-        s.style.transition = 'transform 520ms cubic-bezier(.2,.8,.2,1), opacity 620ms cubic-bezier(.2,0,0,1)';
-        s.style.transform = 'translate(-50%, -50%) scale(0.2)';
-        el.appendChild(s);
-        requestAnimationFrame(()=>{ s.style.transform = 'translate(-50%, -50%) scale(1)'; s.style.opacity = '0'; });
-        setTimeout(()=>s.remove(), 650);
-      });
-    }
-    $$('.btn, .linkBtn, .tile, .linkMini').forEach(ripple);
-
-    // Toast
-    const toast = $('#toast');
-    const toastMsg = $('#toastMsg');
-    let toastTimer;
-    function showToast(msg){
-      toastMsg.textContent = msg;
-      toast.classList.add('show');
-      clearTimeout(toastTimer);
-      toastTimer = setTimeout(()=>toast.classList.remove('show'), 2400);
-    }
-    $('#toastClose').addEventListener('click', ()=> toast.classList.remove('show'));
-
-    // Reveal
-    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    if(reduced){
-      $$('.reveal').forEach(el => el.classList.add('show'));
-    } else {
-      const io = new IntersectionObserver((entries)=>{
-        for(const ent of entries){
-          if(ent.isIntersecting){ ent.target.classList.add('show'); io.unobserve(ent.target); }
-        }
-      }, {threshold: 0.14, rootMargin: '0px 0px -10% 0px'});
-      $$('.reveal').forEach(el => io.observe(el));
-    }
-
-    // Offers
-    function openOffers(){ window.location.href = SITE_BASE + '/offers/'; }
-    $('#offerCta').addEventListener('click', openOffers);
-    $('#offerOpenBtnSheet').addEventListener('click', ()=>{ closeSheet(); openOffers(); });
-
-    // Mode nav + Recents storage
-    const RECENTS_KEY = 'gradeo_recent_modes';
-
-    function pushRecent(mode){
-      const arr = JSON.parse(localStorage.getItem(RECENTS_KEY) || '[]');
-      const next = [mode, ...arr.filter(m => m !== mode)].slice(0, 3);
-      localStorage.setItem(RECENTS_KEY, JSON.stringify(next));
-      localStorage.setItem('gradeo_last_mode', mode);
-      renderRecents();
-      return next;
-    }
-
-    function renderRecents(){
-      const box = document.getElementById('recentList');
-      if(!box) return;
-      const arr = JSON.parse(localStorage.getItem(RECENTS_KEY) || '[]');
-      box.innerHTML = '';
-      if(arr.length === 0){
-        const d = document.createElement('div');
-        d.style.color = 'var(--muted)';
-        d.style.fontWeight = '650';
-        d.textContent = 'No recents yet';
-        box.appendChild(d);
-        return;
-      }
-      const labels = { m1:'Planner', m2:'SGPA', m3:'CGPA' };
-      arr.forEach(m => {
-        const btn = document.createElement('button');
-        btn.className = 'recentChip';
-        btn.type = 'button';
-        btn.innerHTML = `<span class="dot"></span>${labels[m] || m.toUpperCase()}`;
-        btn.addEventListener('click', ()=> openMode(m));
-        box.appendChild(btn);
-      });
-    }
-
-    function updateLastModeUI(){ return localStorage.getItem('gradeo_last_mode'); }
-
-    function openMode(m){
-      if(m) pushRecent(m);
-      window.location.href = (MODE_URL[m] || MODE_URL.m2);
-    }
-
-    $$('.tile[data-mode]').forEach(el => {
-      el.addEventListener('click', ()=> openMode(el.getAttribute('data-mode')));
-      el.addEventListener('keydown', (e)=>{
-        if(e.key === 'Enter' || e.key === ' '){ e.preventDefault(); openMode(el.getAttribute('data-mode')); }
-      });
+/* ─── DESKTOP PARALLAX ─── */
+if(!isTouch()){
+  const MAX=5;
+  document.addEventListener('mousemove',e=>{
+    const cx=(e.clientX/window.innerWidth-.5)*MAX*2;
+    const cy=(e.clientY/window.innerHeight-.5)*MAX*2;
+    $$('.bg1,.bg2,.bg3,.bg4').forEach((b,i)=>{
+      const d=[1.2,1,.8,.6][i]||1;
+      b.style.transform=`translate(${cx*d*.6}px,${cy*d*.4}px)`;
     });
+  },{passive:true});
+}
 
-    // Copy link (m2)
-    async function safeCopy(text){
-      try{
-        if(navigator.clipboard && window.isSecureContext){ await navigator.clipboard.writeText(text); return true; }
-        const ta = document.createElement('textarea');
-        ta.value = text; ta.style.position='fixed'; ta.style.left='-9999px';
-        document.body.appendChild(ta); ta.select(); document.execCommand('copy'); ta.remove();
-        return true;
-      }catch{ return false; }
+/* ─── DESKTOP 3D TILES ─── */
+if(!isTouch()){
+  $$('.tile').forEach(tile=>{
+    tile.addEventListener('mousemove',e=>{
+      const r=tile.getBoundingClientRect();
+      const x=(e.clientX-r.left)/r.width-.5,y=(e.clientY-r.top)/r.height-.5;
+      tile.style.transform=`translateY(-5px) rotateX(${-y*6}deg) rotateY(${x*6}deg) scale(1.012)`;
+    });
+    tile.addEventListener('mouseleave',()=>{tile.style.transform='';});
+  });
+  $$('.bp,.bs').forEach(btn=>{
+    btn.addEventListener('mousemove',e=>{
+      const r=btn.getBoundingClientRect();
+      const dx=(e.clientX-r.left-r.width/2)/r.width,dy=(e.clientY-r.top-r.height/2)/r.height;
+      btn.style.transform=`translateY(-3px) scale(1.02) translate(${dx*5}px,${dy*3}px)`;
+    });
+    btn.addEventListener('mouseleave',()=>{btn.style.transform='';});
+  });
+}
+
+/* ─── MOBILE TAB SWIPE SYSTEM ─── */
+let curTab=0;
+const TABS=4;
+const track=$('#mTrack');
+const panels=Array.from($('#mTrack')?.children||[]);
+
+/* Set track pixel width so swipe math is correct */
+function setTrackWidth(){
+  if(track)track.style.width=(TABS*window.innerWidth)+'px';
+}
+setTrackWidth();
+
+
+function goTab(idx,animate=true){
+  if(!isMob())return;
+  const prev=curTab;
+  curTab=Math.max(0,Math.min(TABS-1,idx));
+  const w=window.innerWidth;
+  if(!animate){
+    track.classList.add('no-transition');
+    track.style.transform=`translateX(-${curTab*w}px)`;
+    setTimeout(()=>track.classList.remove('no-transition'),20);
+  }else{
+    track.classList.remove('no-transition');
+    track.style.transform=`translateX(-${curTab*w}px)`;
+  }
+  $$('.mTab').forEach((t,i)=>t.classList.toggle('active',i===curTab));
+  updateDI(curTab);
+  if(curTab!==prev)vib(HV.tick);  // crisp double-tick on tab switch
+  const dir=curTab>prev?1:-1;
+  revealPanel(curTab,animate?dir:null);
+  if(curTab>0)$('#mBar')?.classList.add('mini');
+  else $('#mBar')?.classList.remove('mini');
+}
+window.goTab=goTab;
+
+/* Dynamic Island updater */
+function updateDI(idx){
+  const di=$('#diIsland');if(!di)return;
+  di.classList.remove('diPulse');void di.offsetWidth;di.classList.add('diPulse');
+}
+
+function revealPanel(idx,dir){
+  const panel=panels[idx];
+  if(!panel)return;
+  // Wheel/slide entry animation
+  panel.classList.remove('entering-right','entering-left');
+  if(dir!=null){
+    void panel.offsetWidth;
+    panel.classList.add(dir>0?'entering-right':'entering-left');
+    setTimeout(()=>panel.classList.remove('entering-right','entering-left'),380);
+  }
+  panel.querySelectorAll('.rv:not(.in)').forEach((el,i)=>{
+    setTimeout(()=>el.classList.add('in'),i*55);
+  });
+}
+
+/* Touch swipe — fully fixed bidirectional with velocity */
+(()=>{
+  const vp=$('#mViewport');
+  if(!vp)return;
+  let sx=0,sy=0,st=0,startTab=0,dragging=false,blocked=false,lastX=0,velX=0,lastT=0;
+  function getBase(){return startTab*window.innerWidth;}
+  vp.addEventListener('touchstart',e=>{
+    sx=e.touches[0].clientX;sy=e.touches[0].clientY;
+    lastX=sx;lastT=Date.now();velX=0;
+    startTab=curTab;dragging=false;blocked=false;
+    track.classList.add('no-transition');
+  },{passive:true});
+  vp.addEventListener('touchmove',e=>{
+    const cx=e.touches[0].clientX;
+    const dx=cx-sx;
+    const dy=e.touches[0].clientY-sy;
+    const now=Date.now();
+    velX=(cx-lastX)/(now-lastT||1);lastX=cx;lastT=now;
+    if(!dragging&&!blocked){
+      if(Math.abs(dx)>7&&Math.abs(dx)>Math.abs(dy)*1.1){dragging=true;}
+      else if(Math.abs(dy)>10){blocked=true;}
     }
+    if(!dragging)return;
+    e.preventDefault();
+    const w=window.innerWidth;
+    // raw pixel offset from start, clamped to valid range
+    const rawPx=getBase()-dx;
+    const clampedPx=Math.max(0,Math.min((TABS-1)*w,rawPx));
+    track.style.transform=`translateX(-${clampedPx}px)`;
+  },{passive:false});
+  vp.addEventListener('touchend',e=>{
+    track.classList.remove('no-transition');
+    if(!dragging)return;
+    const dx=e.changedTouches[0].clientX-sx;
+    // velocity in px/ms — positive = right swipe (going back), negative = left (going forward)
+    let next=startTab;
+    if(dx<-40||velX<-0.3)next=Math.min(TABS-1,startTab+1);   // swipe left → next panel
+    else if(dx>40||velX>0.3)next=Math.max(0,startTab-1);      // swipe right → prev panel
+    goTab(next);
+  },{passive:true});
+  // also cancel on touchcancel
+  vp.addEventListener('touchcancel',()=>{track.classList.remove('no-transition');goTab(startTab);},{passive:true});
+})();
 
-    $('#copyLinkBtn').addEventListener('click', async ()=>{
-      const ok = await safeCopy(MODE_URL.m2);
-      showToast(ok ? 'Link copied' : 'Copy failed');
-    });
+/* ─── MOBILE TOP BAR SCROLL COMPRESS ─── */
+(()=>{
+  $$('.mPanel').forEach(panel=>{
+    panel.addEventListener('scroll',()=>{
+      const bar=$('#mBar');
+      if(panel.scrollTop>30)bar.classList.add('mini');
+      else if(curTab===0)bar.classList.remove('mini');
+    },{passive:true});
+  });
+})();
 
-    // Clear recents
-    $('#clearRecentsBtn').addEventListener('click', ()=>{
-      localStorage.removeItem(RECENTS_KEY);
-      localStorage.removeItem('gradeo_last_mode');
-      renderRecents();
-      showToast('Recents cleared');
-    });
+/* ─── MOBILE FAQ ─── */
+function mFaq(el){
+  const isOpen=el.classList.contains('open');
+  $$('.mFQ.open').forEach(q=>{
+    q.classList.remove('open');
+    q.nextElementSibling.classList.remove('open');
+  });
+  if(!isOpen){
+    el.classList.add('open');
+    el.nextElementSibling.classList.add('open');
+    vib(HV.soft);
+  }
+}
+window.mFaq=mFaq;
 
-    // Get started => sign-in => scroll to Modes
-    function scrollToModes(){ document.getElementById('modes')?.scrollIntoView({behavior:'smooth', block:'start'}); }
-    let pendingScrollToModes = false;
+/* ─── DESKTOP FAQ ─── */
+function faq(el){
+  const i=el.closest('.fi2'),o=i.classList.contains('open');
+  $$('.fi2.open').forEach(x=>{x.classList.remove('open');x.querySelector('.fq').setAttribute('aria-expanded','false');});
+  if(!o){i.classList.add('open');el.setAttribute('aria-expanded','true');vib([4,8,4]);}
+}
+$$('.fq').forEach(q=>q.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();faq(q);}}));
 
-    $('#getStartedBtn').addEventListener('click', ()=>{
-      if(window.__auth && window.__auth.currentUser){ scrollToModes(); return; }
-      if(window.__auth && window.__provider){ pendingScrollToModes = true; window.__auth.signInWithPopup(window.__provider).catch((e)=>{ console.error(e); showToast('Sign-in failed'); }); }
-      else{ showToast('Sign-in unavailable'); }
-    });
-
-    // Continue => if signed in open last (or m2); else sign in
-    $('#continueBtn').addEventListener('click', ()=>{
-      if(window.__auth && window.__auth.currentUser){ openMode(updateLastModeUI() || 'm2'); return; }
-      if(window.__auth && window.__provider){ pendingScrollToModes = false; window.__auth.signInWithPopup(window.__provider).catch((e)=>{ console.error(e); showToast('Sign-in failed'); }); }
-      else{ showToast('Sign-in unavailable'); }
-    });
-
-    // Open last button
-    const openLastBtn = $('#openLastBtn');
-    openLastBtn.addEventListener('click', ()=> openMode(updateLastModeUI() || 'm2'));
-
-    // Signed-in UI
-    const lastPanel = $('#lastPanel');
-    const googleBtn = $('#googleBtn');
-    const googleBtnLabel = $('#googleBtnLabel');
-    const userLine1 = $('#userLine1');
-    const userLine2 = $('#userLine2');
-    const avatarImg = $('#avatarImg');
-
-    function setUserUI({title, subtitle, photoURL, signedIn}){
-      userLine1.textContent = title;
-      userLine2.textContent = subtitle;
-      if(photoURL){ avatarImg.src = photoURL; avatarImg.style.display='block'; }
-      else{ avatarImg.style.display='none'; avatarImg.removeAttribute('src'); }
-
-      googleBtnLabel.textContent = signedIn ? 'Sign out' : 'Sign in';
-      lastPanel.style.display = signedIn ? '' : 'none';
-      openLastBtn.style.display = signedIn ? '' : 'none';
-      if(signedIn) renderRecents();
-    }
-
-    // file:// fallback
-    if(location.protocol === 'file:'){
-      googleBtn.disabled = true;
-      googleBtn.style.opacity = '0.6';
-      setUserUI({ title:'Welcome', subtitle:'Open the live site to sign in', photoURL:'', signedIn:false });
-      document.getElementById('getStartedBtn').addEventListener('click', scrollToModes);
-    } else {
-      try{
-        const firebaseConfig = {
-          apiKey: "AIzaSyDB_FK8-3ATZBpuvfL34EMp9WHTTd5sfIo",
-          authDomain: "gradeo-in.firebaseapp.com",
-          projectId: "gradeo-in",
-          storageBucket: "gradeo-in.firebasestorage.app",
-          messagingSenderId: "784963451684",
-          appId: "1:784963451684:web:9d57beed639d488e4891b1",
-          measurementId: "G-JSNGKKMJEH"
-        };
-        firebase.initializeApp(firebaseConfig);
-        const auth = firebase.auth();
-        const provider = new firebase.auth.GoogleAuthProvider();
-        auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL).catch(()=>{});
-        window.__auth = auth;
-        window.__provider = provider;
-
-        auth.onAuthStateChanged(user => {
-          if(user){
-            setUserUI({
-              title: user.displayName || 'Signed in',
-              subtitle: user.email || '',
-              photoURL: user.photoURL || '',
-              signedIn: true
-            });
-            if(pendingScrollToModes){ pendingScrollToModes = false; setTimeout(scrollToModes, 160); }
-          } else {
-            setUserUI({ title:'Welcome', subtitle:'Sign in to continue', photoURL:'', signedIn:false });
+/* ─── DESKTOP SCROLL REVEAL — wheel animation with child stagger ─── */
+(()=>{
+  if(window.matchMedia('(prefers-reduced-motion:reduce)').matches){
+    $$('.rv').forEach(e=>e.classList.add('in'));return;
+  }
+  const io=new IntersectionObserver(entries=>{
+    entries.forEach(e=>{
+      if(e.isIntersecting){
+        e.target.classList.add('in');
+        // Stagger direct children if this is a grid container
+        const children=e.target.querySelectorAll(':scope > .rv, :scope > * > .rv');
+        children.forEach((child,i)=>{
+          if(!child.classList.contains('in')){
+            child.style.transitionDelay=`${i*65}ms`;
+            setTimeout(()=>child.classList.add('in'),(i*65));
+            setTimeout(()=>{child.style.transitionDelay='';},800);
           }
         });
-
-        googleBtn.addEventListener('click', async ()=>{
-          if(auth.currentUser){ await auth.signOut(); showToast('Signed out'); return; }
-          try{ pendingScrollToModes = false; await auth.signInWithPopup(provider); }
-          catch(e){ console.error(e); showToast('Sign-in failed'); }
-        });
-
-      }catch(e){
-        console.error(e);
-        setUserUI({ title:'Welcome', subtitle:'Sign in to continue', photoURL:'', signedIn:false });
+        io.unobserve(e.target);
       }
-    }
-  </script>
+    });
+  },{threshold:0.06,rootMargin:'0px 0px -4% 0px'});
+  $$('#dskLayout .rv').forEach(e=>io.observe(e));
+})();
 
-  <script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "41889a7158c94832951b776ca74d5f82"}'></script>
-  <script defer src="https://static.cloudflareinsights.com/beacon.min.js/vcd15cbe7772f49c399c6a5babf22c1241717689176015" integrity="sha512-ZpsOmlRQV6y907TI0dKBHq9Md29nnaEIPlkf84rnaERnq6zvWvPUqr2ft8M1aS28oN72PdrCzSjY4U6VaAw1EQ==" data-cf-beacon='{"version":"2024.11.0","token":"32f0b0530bdb47d89109f78f09c965e1","r":1,"server_timing":{"name":{"cfCacheStatus":true,"cfEdge":true,"cfExtPri":true,"cfL4":true,"cfOrigin":true,"cfSpeedBrain":true},"location_startswith":null}}' crossorigin="anonymous"></script>
+/* Reveal first panel on mobile load */
+setTimeout(()=>{revealPanel(0);updateDI(0);},100);
+
+/* ─── HAPTIC — upgraded patterns, higher intensity ─── */
+// Haptic patterns: [vibrate, pause, vibrate, ...]
+const HV={
+  light:[8],           // light tap — buttons
+  medium:[14],         // medium — tile press
+  strong:[20],         // strong — primary action
+  tick:[6,8,6],        // double tick — tab switch
+  success:[10,40,10,40,18], // success pattern — claim/sign-in
+  soft:[5,5,5],        // triple soft — FAQ open
+};
+function vib(ms){
+  if(!isMob()||!navigator.vibrate)return;
+  try{navigator.vibrate(ms);}catch{}
+}
+// All interactive elements get haptics
+$$('.mTile').forEach(el=>el.addEventListener('pointerdown',()=>vib(HV.medium)));
+$$('.btn.bp').forEach(el=>el.addEventListener('pointerdown',()=>vib(HV.strong)));
+$$('.btn.bs,.hsi-btn').forEach(el=>el.addEventListener('pointerdown',()=>vib(HV.light)));
+$$('.offerCTA').forEach(el=>el.addEventListener('pointerdown',()=>vib(HV.success)));
+$$('.mQBtn').forEach(el=>el.addEventListener('pointerdown',()=>vib(HV.light)));
+$$('.mFItem').forEach(el=>el.addEventListener('pointerdown',()=>vib(HV.soft)));
+$$('.mFeatCard').forEach(el=>el.addEventListener('pointerdown',()=>vib(HV.soft)));
+// mTab haptic on pointerdown for instant feedback
+$$('.mTab').forEach(el=>el.addEventListener('pointerdown',()=>vib(HV.tick)));
+
+/* ─── TOAST ─── */
+let _tt;
+function toast(msg){const t=$('#toast');$('#tm').textContent=msg;t.classList.add('on');clearTimeout(_tt);_tt=setTimeout(()=>t.classList.remove('on'),2600);}
+$('#tx').addEventListener('click',()=>$('#toast').classList.remove('on'));
+
+/* ─── MODAL ─── */
+const MD={
+  p:{t:'Privacy Policy',b:'<p><strong>Last updated 2026.</strong></p><p style="margin-top:9px">GRADEO stores your Google user ID, name and email in Firebase when you sign in. We do not sell or share this data. No ads.</p><p style="margin-top:9px">Questions: <a href="mailto:info@gradeo.in" style="color:#FF6A00">info@gradeo.in</a></p>'},
+  t:{t:'Terms of Use',b:'<p>GRADEO is free for personal educational use. Commercial use is prohibited.</p><p style="margin-top:9px">Results are estimates only. Always verify with your university\'s official evaluation.</p>'},
+  d:{t:'Disclaimer',b:'<p>GRADEO is independent — not affiliated with any university. Calculations are estimates. Actual grades may vary.</p>'}
+};
+function om(k){const m=MD[k];if(!m)return;$('#mt').textContent=m.t;$('#mb').innerHTML=m.b;$('#mbd').classList.add('on');}
+function cm(){$('#mbd').classList.remove('on');}
+[['#fp','p'],['#ft','t'],['#fd','d'],['#mFp','p'],['#mFt','t'],['#mFd','d']].forEach(([sel,k])=>{
+  $(sel)?.addEventListener('click',e=>{e.preventDefault();om(k);});
+});
+document.addEventListener('keydown',e=>{if(e.key==='Escape')cm();});
+
+/* ─── MODE TILES ─── */
+function pr(m){const a=JSON.parse(localStorage.getItem(RK)||'[]'),n=[m,...a.filter(x=>x!==m)].slice(0,3);localStorage.setItem(RK,JSON.stringify(n));localStorage.setItem('gradeo_last_mode',m);rr();}
+function rr(){
+  ['#rl','#mRl'].forEach(sel=>{
+    const b=$(sel);if(!b)return;
+    const a=JSON.parse(localStorage.getItem(RK)||'[]');b.innerHTML='';
+    if(!a.length){b.innerHTML='<span style="font-size:11px;color:var(--muted2)">No recents yet</span>';return;}
+    const l={m1:'Planner',m2:'SGPA',m3:'CGPA'};
+    a.forEach(m=>{const x=document.createElement('button');x.className='rc';x.type='button';x.innerHTML=`<span class="rd"></span>${l[m]||m}`;x.addEventListener('click',()=>om2(m));b.appendChild(x);});
+  });
+}
+function om2(m){if(m)pr(m);navTo(MU[m]||MU.m2);}
+// Desktop tiles
+$$('.tile[data-mode]').forEach(el=>{el.addEventListener('click',()=>om2(el.dataset.mode));el.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();om2(el.dataset.mode);}});});
+// Mobile tiles
+$$('.mTile[data-mode]').forEach(el=>el.addEventListener('click',()=>om2(el.dataset.mode)));
+
+/* copy link */
+async function copyLink(){
+  try{
+    if(navigator.clipboard&&window.isSecureContext){await navigator.clipboard.writeText(MU.m2);toast('Link copied!');}
+    else{const t=document.createElement('textarea');t.value=MU.m2;t.style.cssText='position:fixed;left:-9999px';document.body.appendChild(t);t.select();document.execCommand('copy');t.remove();toast('Link copied!');}
+  }catch{toast('Copy failed');}
+  vib([4,10,4]);
+}
+$('#cpb')?.addEventListener('click',copyLink);
+$('#mCpb')?.addEventListener('click',copyLink);
+$('#rcl')?.addEventListener('click',()=>{localStorage.removeItem(RK);localStorage.removeItem('gradeo_last_mode');rr();toast('Recents cleared');});
+$('#mRcl')?.addEventListener('click',()=>{localStorage.removeItem(RK);localStorage.removeItem('gradeo_last_mode');rr();toast('Recents cleared');});
+
+/* offer */
+$('#offb')?.addEventListener('click',()=>navTo(SITE+'/offer'));
+$('#mOffb')?.addEventListener('click',()=>navTo(SITE+'/offer'));
+
+function goM(){if(isMob()){goTab(1);}else{$('#modes')?.scrollIntoView({behavior:'smooth',block:'start'});}}
+let ps=false;
+
+/* ─── AUTH ─── */
+function sIn(u){
+  const n=u.displayName||'Student',e=u.email||'',p=u.photoURL||'';
+  const hsl=$('#hsl');if(hsl)hsl.textContent='Sign out';
+  // Swap "Get started" → "Open calculator →" and rewire to goM
+  ['#gsb','#mGsb'].forEach(s=>{
+    const el=$(s);if(!el)return;
+    el.textContent='Open calculator →';
+    el.onclick=()=>goM();
+    el.style.display='';
+  });
+  // Show signed-in profile card, hide placeholder
+  ['#pout'].forEach(s=>{const el=$(s);if(el)el.style.display='none';});
+  ['#pin','#mPin'].forEach(s=>{const el=$(s);if(el)el.style.display='';});
+  ['#prec','#mPrec'].forEach(s=>{const el=$(s);if(el)el.style.display='';});
+  // Hide offer — user already has access
+  ['#offp','#mOffp'].forEach(s=>{const el=$(s);if(el)el.style.display='none';});
+  const lm=localStorage.getItem('gradeo_last_mode');
+  ['#olb','#mOlb'].forEach(s=>{const el=$(s);if(el)el.style.display=lm?'':'none';});
+  ['#un','#mUn'].forEach(s=>{const el=$(s);if(el)el.textContent=n;});
+  ['#ue','#mUe'].forEach(s=>{const el=$(s);if(el)el.textContent=e;});
+  [['#avi2','#avii'],['#mAvi2','#mAvii']].forEach(([imgSel,iniSel])=>{
+    const img=$(imgSel),ini=$(iniSel);if(!img||!ini)return;
+    if(p){img.src=p;img.style.display='block';ini.style.display='none';}
+    else{ini.textContent=n[0].toUpperCase();ini.style.display='';img.style.display='none';}
+  });
+  rr();
+}
+function sOut(){
+  const hsl=$('#hsl');if(hsl)hsl.textContent='Sign in';
+  // Restore "Get started" and rewire back to doSI
+  ['#gsb','#mGsb'].forEach(s=>{
+    const el=$(s);if(!el)return;
+    el.textContent='Get started →';
+    el.onclick=()=>{if(window.__a?.currentUser){goM();return;}doSI(()=>{ps=true;});};
+    el.style.display='';
+  });
+  // Hide signed-in profile card, show placeholder
+  ['#pout'].forEach(s=>{const el=$(s);if(el)el.style.display='';});
+  ['#pin','#mPin'].forEach(s=>{const el=$(s);if(el)el.style.display='none';});
+  ['#prec','#mPrec'].forEach(s=>{const el=$(s);if(el)el.style.display='none';});
+  // Show offer again
+  ['#offp','#mOffp'].forEach(s=>{const el=$(s);if(el)el.style.display='';});
+}
+function doSI(after){
+  if(!window.__a||!window.__p){toast('Sign-in unavailable');return;}
+  if(window.__a.currentUser){if(after)after();return;}
+  // Disable just the get started buttons while sign-in is in progress
+  const bs=[$('#hsi'),$('#gsb'),$('#mGsb')];
+  bs.forEach(b=>{if(b)b.disabled=true;});
+  window.__a.signInWithPopup(window.__p).then(()=>{
+    bs.forEach(b=>{if(b)b.disabled=false;});
+    if(after)after();
+  }).catch(e=>{
+    console.error(e);
+    bs.forEach(b=>{if(b)b.disabled=false;});
+    toast('Sign-in failed. Try again.');
+  });
+}
+$('#hsi')?.addEventListener('click',()=>{if(window.__a?.currentUser){window.__a.signOut().then(()=>{toast('Signed out');sOut();});return;}doSI();});
+$('#mSignOutBtn')?.addEventListener('click',()=>{
+  if(window.__a?.currentUser){window.__a.signOut().then(()=>{toast('Signed out');sOut();});}
+});
+$('#dskSignOut')?.addEventListener('click',()=>{
+  if(window.__a?.currentUser){window.__a.signOut().then(()=>{toast('Signed out');sOut();});}
+});
+// Single sign-in CTA — Get started handles everything
+$('#gsb')?.addEventListener('click',()=>{if(window.__a?.currentUser){goM();return;}doSI(()=>{ps=true;});});
+$('#mGsb')?.addEventListener('click',()=>{if(window.__a?.currentUser){goM();return;}doSI(()=>{ps=true;});});
+$('#olb')?.addEventListener('click',()=>om2(localStorage.getItem('gradeo_last_mode')||'m2'));
+$('#mOlb')?.addEventListener('click',()=>om2(localStorage.getItem('gradeo_last_mode')||'m2'));
+
+$('#brd')?.addEventListener('click',e=>{
+  if(e.ctrlKey||e.metaKey){window.open(SITE+'/calculator/','_blank');return;}
+  if(location.hostname===new URL(SITE).hostname)window.scrollTo({top:0,behavior:'smooth'});
+  else navTo(SITE+'/');
+});
+
+/* ─── HOW IT WORKS ANIMATION ─── */
+(()=>{
+  if(!isMob())return;
+  const steps=[
+    'Enter your internal marks and credits for each subject — takes about 30 seconds.',
+    'Set your target CGPA and your current CGPA so GRADEO knows the gap.',
+    'Instantly see the minimum marks you need in each final exam. Zero guesswork.'
+  ];
+  const cgpaFrom=['7.4','7.8','8.1'];
+  const cgpaTo=  ['7.8','8.1','8.5'];
+  const barW=[[.72,.58,.85],[.60,.74,.68],[.82,.65,.91]];
+  const pcts=[['72%','58%','85%'],['60%','74%','68%'],['82%','65%','91%']];
+  let curStep=0,running=true;
+
+  // Animate bars on load
+  setTimeout(()=>{
+    $$('.mHowBarFill').forEach((b,i)=>{
+      b.style.transition='transform .9s cubic-bezier(.22,.68,0,1.1) '+(i*120)+'ms';
+      b.style.transform='scaleX('+barW[0][i]+')';
+    });
+  },900);
+
+  function animateCGPA(from,to,el){
+    const s=performance.now(),fN=parseFloat(from),tN=parseFloat(to),dur=900;
+    (function f(now){
+      const p=Math.min((now-s)/dur,1),e=1-Math.pow(1-p,3);
+      el.textContent=(fN+(tN-fN)*e).toFixed(1);
+      if(p<1)requestAnimationFrame(f);else el.textContent=to;
+    })(performance.now());
+  }
+
+  function goStep(n){
+    curStep=((n%3)+3)%3;
+    const desc=$('#mHowDesc'),cgpa=$('#mHowCGPA');
+    if(!desc||!cgpa)return;
+    $$('.mHowStep').forEach((s,i)=>s.classList.toggle('active',i===curStep));
+    desc.style.opacity='0';
+    setTimeout(()=>{desc.textContent=steps[curStep];desc.style.transition='opacity .22s';desc.style.opacity='1';},200);
+    animateCGPA(cgpaFrom[curStep],cgpaTo[curStep],cgpa);
+    $$('.mHowBarFill').forEach((b,i)=>{
+      b.style.transition='transform .7s cubic-bezier(.22,.68,0,1.1) '+(i*80)+'ms';
+      b.style.transform='scaleX('+barW[curStep][i]+')';
+    });
+    $$('.mHowBarPct').forEach((el,i)=>{el.textContent=pcts[curStep][i];});
+    if(typeof vib==='function')vib([5,5,5]);
+  }
+
+  let auto=setInterval(()=>{if(running)goStep(curStep+1);},2800);
+  $$('.mHowStep').forEach((s,i)=>{
+    s.addEventListener('click',()=>{
+      clearInterval(auto);goStep(i);
+      auto=setInterval(()=>{if(running)goStep(curStep+1);},2800);
+    });
+  });
+  document.addEventListener('visibilitychange',()=>{running=!document.hidden;});
+})();
+
+/* battery saver */
+document.addEventListener('visibilitychange',()=>{
+  $$('.gr').forEach(el=>{el.style.animationPlayState=document.hidden?'paused':'running';});
+});
+
+if(location.protocol==='file:'){
+  sOut();
+  ['#hsi','#gsb','#mGsb'].forEach(s=>{const el=$(s);if(el)el.disabled=true;});
+  $('#gsb')?.addEventListener('click',goM);
+  $('#mGsb')?.addEventListener('click',goM);
+}else{
+  try{
+    firebase.initializeApp({apiKey:'AIzaSyDB_FK8-3ATZBpuvfL34EMp9WHTTd5sfIo',authDomain:'gradeo-in.firebaseapp.com',projectId:'gradeo-in',storageBucket:'gradeo-in.firebasestorage.app',messagingSenderId:'784963451684',appId:'1:784963451684:web:9d57beed639d488e4891b1',measurementId:'G-JSNGKKMJEH'});
+    const a=firebase.auth(),p=new firebase.auth.GoogleAuthProvider();
+    a.setPersistence(firebase.auth.Auth.Persistence.LOCAL).catch(()=>{});
+    window.__a=a;window.__p=p;
+    a.onAuthStateChanged(u=>{if(u){sIn(u);if(ps){ps=false;setTimeout(goM,160);}}else sOut();});
+  }catch(e){console.error(e);sOut();}
+}
+</script>
+<script defer src="https://static.cloudflareinsights.com/beacon.min.js/vcd15cbe7772f49c399c6a5babf22c1241717689176015" integrity="sha512-ZpsOmlRQV6y907TI0dKBHq9Md29nnaEIPlkf84rnaERnq6zvWvPUqr2ft8M1aS28oN72PdrCzSjY4U6VaAw1EQ==" data-cf-beacon='{"rayId":"","version":"2024.10.5","token":"f4fc10b46af24912ac04d9a23d8a9f74"}' crossorigin="anonymous"></script>
 </body>
 </html>
