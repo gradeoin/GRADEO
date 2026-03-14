@@ -1,0 +1,16 @@
+# robots.txt for https://gradeo.in/
+# Generated for GRADEO — Free SGPA & CGPA Calculator for VTU Students
+
+User-agent: *
+Allow: /
+Allow: /feedback
+Allow: /thanks
+Allow: /offer
+
+# Disallow transient / auth callback paths
+Disallow: /success
+Disallow: /__/
+Disallow: /cdn-cgi/
+
+# Sitemap location
+Sitemap: https://gradeo.in/sitemap.xml
