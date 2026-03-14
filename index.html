@@ -99,6 +99,18 @@
 <link rel="icon" href="https://res.cloudinary.com/djy3mjtsz/image/upload/v1770296454/Untitled-2_i2ezfh.png" sizes="32x32" type="image/png"/>
 <link rel="apple-touch-icon" sizes="180x180" href="https://res.cloudinary.com/djy3mjtsz/image/upload/v1770296454/Untitled-2_i2ezfh.png"/>
 <link rel="manifest" href="/manifest.webmanifest"/>
+<script>
+// Inline PWA manifest fallback — inject if server doesn't serve manifest
+(()=>{
+  const m={name:'GRADEO',short_name:'GRADEO',description:'Free SGPA & CGPA Planner for Engineering Students',start_url:'/',display:'standalone',background_color:'#FFF6ED',theme_color:'#FF6A00',orientation:'portrait-primary',icons:[{src:'https://res.cloudinary.com/djy3mjtsz/image/upload/v1770296454/Untitled-2_i2ezfh.png',sizes:'192x192',type:'image/png'},{src:'https://res.cloudinary.com/djy3mjtsz/image/upload/v1770296454/Untitled-2_i2ezfh.png',sizes:'512x512',type:'image/png',purpose:'any maskable'}]};
+  fetch('/manifest.webmanifest').catch(()=>{
+    const b=new Blob([JSON.stringify(m)],{type:'application/manifest+json'});
+    const u=URL.createObjectURL(b);
+    const el=document.createElement('link');el.rel='manifest';el.href=u;
+    document.head.appendChild(el);
+  });
+})();
+</script>
 
 <!-- ═══ PERFORMANCE ═══ -->
 <link rel="preconnect" href="https://www.gstatic.com" crossorigin/>
@@ -108,6 +120,10 @@
 <link rel="dns-prefetch" href="https://res.cloudinary.com"/>
 <link rel="preload" as="image" href="https://res.cloudinary.com/djy3mjtsz/image/upload/v1770296454/Untitled-2_i2ezfh.png" fetchpriority="high"/>
 <style>
+/* Skip link — keyboard/screen reader nav */
+.skip-link{position:absolute;top:-100px;left:12px;z-index:99999;padding:8px 16px;background:var(--o);color:#fff;font-weight:800;font-size:13px;border-radius:0 0 10px 10px;transition:top .16s;}
+.skip-link:focus{top:0;outline:none;}
+
 /* ════════════ TOKENS ════════════ */
 :root{
   --o:#FF6A00;--od:#E05500;--o2:#FF9040;--o3:#FFB870;
@@ -169,28 +185,40 @@ a{color:inherit;text-decoration:none;}
 #ptOv.lift{animation:ptL .42s var(--sm) forwards;}
 @keyframes ptL{0%{opacity:0;transform:translateY(100%)}20%{opacity:1;transform:none}100%{opacity:1;transform:translateY(-100%)}}
 
-/* ════════════ DESKTOP CURSOR — always red, zero lag ════════════ */
+/* ════════════ DESKTOP CURSOR ════════════ */
 #cur{
-  position:fixed;width:13px;height:13px;border-radius:50%;
-  background:#FF1A00;opacity:.92;
+  position:fixed;width:10px;height:10px;border-radius:50%;
+  background:var(--o);
   pointer-events:none;z-index:9999;
+  /* Use transform for zero-reflow positioning */
+  top:0;left:0;
   transform:translate(-50%,-50%);
-  transition:width .09s var(--sp),height .09s var(--sp),opacity .09s;
-  mix-blend-mode:multiply;
+  transition:width .1s var(--sp),height .1s var(--sp),opacity .1s,background .2s;
+  /* Hidden until mouse enters viewport */
+  opacity:0;
+  will-change:transform;
 }
 #curRing{
-  position:fixed;width:32px;height:32px;border-radius:50%;
-  border:2px solid rgba(255,26,0,.72);
+  position:fixed;width:36px;height:36px;border-radius:50%;
+  border:1.5px solid rgba(255,106,0,.55);
   pointer-events:none;z-index:9998;
+  top:0;left:0;
   transform:translate(-50%,-50%);
-  transition:width .12s var(--sp),height .12s var(--sp),border-color .1s;
+  transition:width .18s var(--sp),height .18s var(--sp),border-color .15s,opacity .15s;
+  opacity:0;
+  will-change:transform;
 }
-[data-theme="dark"] #cur{mix-blend-mode:screen;background:#FF3322;}
-[data-theme="dark"] #curRing{border-color:rgba(255,51,34,.85);}
-body.cc #cur{width:7px;height:7px;opacity:1;}
-body.cc #curRing{width:20px;height:20px;border-color:rgba(255,26,0,1);}
-body.ch #cur{width:22px;height:22px;opacity:.3;}
-body.ch #curRing{width:44px;height:44px;border-color:#FF1A00;}
+/* Visible once mouse enters */
+body.cur-ready #cur{opacity:1;}
+body.cur-ready #curRing{opacity:1;}
+/* Click — dot shrinks, ring tightens */
+body.cc #cur{width:6px;height:6px;background:var(--od);}
+body.cc #curRing{width:22px;height:22px;border-color:rgba(255,106,0,.90);}
+/* Hover interactive element — dot hides, ring expands into halo */
+body.ch #cur{width:4px;height:4px;opacity:.4;}
+body.ch #curRing{width:52px;height:52px;border-color:rgba(255,106,0,.35);border-width:1px;}
+[data-theme="dark"] #cur{background:#FF6A00;}
+[data-theme="dark"] #curRing{border-color:rgba(255,120,0,.50);}
 @media(max-width:1023px){#cur,#curRing{display:none;}body{cursor:auto;}}
 @media(min-width:1024px){body,a,button,.tile,.feat,.fi2,.card,[role=button]{cursor:none;}}
 
@@ -382,10 +410,21 @@ h1{margin-top:12px;font-size:clamp(28px,8vw,52px);line-height:1.02;letter-spacin
 .sub{margin-top:10px;color:var(--muted);font-size:14.5px;font-weight:500;line-height:1.55;max-width:40ch;transition:color var(--td);animation:hIn .6s .22s var(--sm) both;}
 .ctr{margin-top:16px;display:flex;gap:10px;animation:hIn .6s .32s var(--sm) both;}
 
-/* ── Account panel ── */
+/* ── Signed-out placeholder card ── */
+.poutHdr{font-size:11px;font-weight:800;color:var(--muted);letter-spacing:.08em;text-transform:uppercase;margin-bottom:12px;transition:color var(--td);}
+.poutList{display:flex;flex-direction:column;gap:9px;margin-bottom:4px;}
+.poutRow{display:flex;align-items:center;gap:10px;font-size:13px;font-weight:600;color:var(--text);transition:color var(--td);}
+.poutIcon{width:28px;height:28px;border-radius:8px;background:rgba(255,106,0,.12);border:1.5px solid rgba(255,106,0,.22);display:grid;place-items:center;flex-shrink:0;transition:background var(--td),border-color var(--td);}
+[data-theme="dark"] .poutIcon{background:rgba(255,106,0,.16);border-color:rgba(255,106,0,.30);}
 .ap{padding:18px;}
 .si-t{font-size:14.5px;font-weight:900;letter-spacing:-.3px;margin-bottom:2px;color:var(--text);transition:color var(--td);}
 .si-s{font-size:12px;color:var(--muted);font-weight:500;margin-bottom:12px;line-height:1.4;transition:color var(--td);}
+/* Desktop signed-out "Unlock more" panel */
+.pout-label{font-size:11px;font-weight:800;color:var(--muted);letter-spacing:.08em;text-transform:uppercase;margin-bottom:12px;transition:color var(--td);}
+.pout-list{display:flex;flex-direction:column;gap:9px;margin-bottom:4px;}
+.pout-item{display:flex;align-items:center;gap:10px;font-size:13px;font-weight:600;color:var(--text);transition:color var(--td);}
+.pout-icon{width:28px;height:28px;border-radius:8px;background:rgba(255,106,0,.10);border:1.5px solid rgba(255,106,0,.20);display:grid;place-items:center;flex-shrink:0;transition:background var(--td),border-color var(--td);}
+[data-theme="dark"] .pout-icon{background:rgba(255,106,0,.14);border-color:rgba(255,106,0,.26);}
 /* ══ STUDENT OFFER CARD — standalone, compact ══ */
 .offer,.mOfferCard{
   position:relative;overflow:hidden;
@@ -627,12 +666,62 @@ h1{margin-top:12px;font-size:clamp(28px,8vw,52px);line-height:1.02;letter-spacin
 #btt svg{width:15px;height:15px;stroke:var(--o);stroke-width:2.5;fill:none;stroke-linecap:round;stroke-linejoin:round;}
 
 /* Toast */
-.toast{position:fixed;bottom:18px;left:50%;transform:translateX(-50%) translateY(10px);min-width:160px;max-width:min(360px,calc(100vw - 28px));background:rgba(8,6,4,.95);color:#fff;border-radius:var(--r2);padding:10px 14px;font-size:12.5px;font-weight:700;display:none;align-items:center;gap:8px;z-index:9500;box-shadow:0 6px 20px rgba(0,0,0,.22);opacity:0;transition:opacity .16s,transform .26s var(--sp);}
+.toast{position:fixed;bottom:18px;left:50%;transform:translateX(-50%) translateY(10px);min-width:160px;max-width:min(360px,calc(100vw - 28px));background:rgba(8,6,4,.95);color:#fff;border-radius:var(--r2);padding:10px 14px;font-size:12.5px;font-weight:700;display:none;align-items:center;gap:8px;z-index:9600;box-shadow:0 6px 20px rgba(0,0,0,.22);opacity:0;transition:opacity .16s,transform .26s var(--sp);}
 [data-theme="dark"] .toast{background:rgba(255,240,220,.97);color:var(--text);}
 .toast.on{display:flex;opacity:1;transform:translateX(-50%) translateY(0);}
+/* On mobile, lift toast above Dynamic Island */
+@media(max-width:767px){
+  .toast{bottom:calc(max(20px,env(safe-area-inset-bottom)) + 76px);}
+}
 .tx{background:transparent;border:none;color:rgba(255,255,255,.45);cursor:pointer;font-size:14px;line-height:1;padding:0;margin-left:auto;transition:color .12s;}
 
-/* Modal */
+/* ── SIGN-IN MODAL ── */
+.siBox{max-width:400px;width:calc(100vw - 32px);}
+.siBody{padding:20px 20px 24px;display:flex;flex-direction:column;gap:10px;}
+.siSub{font-size:13px;color:var(--muted);font-weight:500;line-height:1.45;margin-bottom:2px;transition:color var(--td);}
+.siBtn{
+  width:100%;display:flex;align-items:center;justify-content:center;gap:10px;
+  padding:13px 16px;border-radius:14px;border:1.5px solid var(--cb);
+  background:var(--surface);color:var(--text);
+  font-family:inherit;font-size:14px;font-weight:700;cursor:pointer;
+  transition:background .14s,border-color .14s,transform .18s var(--sp),box-shadow .14s;
+  box-shadow:0 1px 3px rgba(0,0,0,.06);
+  position:relative;overflow:hidden;
+}
+.siBtn::after{content:"";position:absolute;inset:0;background:rgba(255,106,0,.06);opacity:0;transition:opacity .12s;}
+.siBtn:hover{border-color:rgba(255,106,0,.28);transform:translateY(-2px);box-shadow:0 4px 14px rgba(0,0,0,.10);}
+.siBtn:hover::after{opacity:1;}
+.siBtn:active{transform:scale(.97)!important;}
+/* Google */
+.siGoogle svg{flex-shrink:0;}
+/* GitHub */
+.siGithub{color:var(--text);}
+[data-theme="dark"] .siGithub svg{fill:#F0E8DC;}
+/* Email */
+.siEmail svg{stroke:var(--o);}
+/* Email form */
+.siDivider{display:flex;align-items:center;gap:10px;color:var(--muted2);font-size:11px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;margin:2px 0;}
+.siDivider::before,.siDivider::after{content:"";flex:1;height:1px;background:rgba(128,80,0,.10);}
+[data-theme="dark"] .siDivider::before,[data-theme="dark"] .siDivider::after{background:rgba(255,180,80,.08);}
+.siInput{
+  width:100%;padding:11px 14px;border-radius:12px;
+  border:1.5px solid var(--cb);background:var(--surface);
+  color:var(--text);font-family:inherit;font-size:14px;
+  outline:none;transition:border-color .14s,box-shadow .14s,background var(--td);
+}
+.siInput:focus{border-color:var(--o);box-shadow:0 0 0 3px rgba(255,106,0,.14);}
+.siInput::placeholder{color:var(--muted2);}
+.siEmailBtns{display:flex;gap:8px;}
+.siEmailAction{flex:1;padding:11px 14px!important;font-size:13px!important;}
+.siForgot{background:none;border:none;cursor:pointer;color:var(--muted);font-size:12px;font-weight:600;text-align:left;padding:0;transition:color .12s;}
+.siForgot:hover{color:var(--o);}
+.siEmailForm{display:flex;flex-direction:column;gap:8px;}
+.siFootNote{font-size:11px;color:var(--muted2);font-weight:500;line-height:1.5;margin-top:4px;transition:color var(--td);}
+.siFootNote a{color:var(--o);text-decoration:underline;text-underline-offset:2px;}
+/* loading state */
+.siBtn.loading{opacity:.6;pointer-events:none;}
+.siBtn.loading::before{content:"";position:absolute;inset:0;background:linear-gradient(90deg,transparent,rgba(255,255,255,.15),transparent);animation:siBtnLoad 1.1s ease-in-out infinite;}
+@keyframes siBtnLoad{0%{transform:translateX(-100%);}100%{transform:translateX(100%);}}
 .mbd{display:none;position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:9000;align-items:center;justify-content:center;padding:14px;backdrop-filter:blur(8px);}
 [data-theme="dark"] .mbd{background:rgba(0,0,0,.66);}
 .mbd.on{display:flex;animation:bdIn .16s ease both;}
@@ -805,6 +894,19 @@ h1{margin-top:12px;font-size:clamp(28px,8vw,52px);line-height:1.02;letter-spacin
       0 -1px 0 rgba(200,100,0,.08) inset;
     backdrop-filter:blur(44px) saturate(3) brightness(1.10);
     -webkit-backdrop-filter:blur(44px) saturate(3) brightness(1.10);
+  }
+  /* Low-end / reduced transparency fallback — solid background, no blur */
+  @media(prefers-reduced-transparency:reduce){
+    #diIsland{
+      backdrop-filter:none!important;
+      -webkit-backdrop-filter:none!important;
+      background:#0C0906!important;
+    }
+    [data-theme="light"] #diIsland{
+      backdrop-filter:none!important;
+      -webkit-backdrop-filter:none!important;
+      background:rgba(255,248,240,.96)!important;
+    }
   }
   /* Squeeze animation on tab change */
   #diIsland.diPulse{animation:diPulse .28s cubic-bezier(.34,1.56,.64,1);}
@@ -1301,6 +1403,8 @@ h1{margin-top:12px;font-size:clamp(28px,8vw,52px);line-height:1.02;letter-spacin
 </style>
 </head>
 <body>
+<a class="skip-link" href="#top">Skip to main content</a>
+<noscript><div style="font-family:system-ui,sans-serif;padding:32px;text-align:center;"><h1>GRADEO</h1><p style="margin-top:12px">Please enable JavaScript to use GRADEO — <a href="https://gradeo.in/calculator/">open calculator</a>.</p></div></noscript>
 
 <!-- Shared: theme ripple, page transition, cursor, progress -->
 <div id="thRipple"></div>
@@ -1308,6 +1412,42 @@ h1{margin-top:12px;font-size:clamp(28px,8vw,52px);line-height:1.02;letter-spacin
 <div id="cur"></div>
 <div id="curRing"></div>
 <div id="prog" aria-hidden="true"><span id="pb"></span></div>
+
+<!-- ── SIGN-IN METHOD PICKER MODAL ── -->
+<div class="mbd" id="siModal" aria-modal="true" role="dialog" aria-label="Sign in to GRADEO">
+  <div class="mbox siBox">
+    <div class="mhd">
+      <strong>Sign in to GRADEO</strong>
+      <button onclick="$('#siModal').classList.remove('on')" aria-label="Close">✕</button>
+    </div>
+    <div class="mb siBody">
+      <p class="siSub">Save your plans and export grade cards — free forever.</p>
+      <button class="siBtn siGoogle" id="siBtnGoogle">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>
+        Continue with Google
+      </button>
+      <button class="siBtn siGithub" id="siBtnGithub">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0 1 12 6.844a9.59 9.59 0 0 1 2.504.337c1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.02 10.02 0 0 0 22 12.017C22 6.484 17.522 2 12 2z"/></svg>
+        Continue with GitHub
+      </button>
+      <button class="siBtn siEmail" id="siBtnEmailToggle">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+        Continue with Email
+      </button>
+      <div class="siEmailForm" id="siEmailForm" style="display:none;">
+        <div class="siDivider"><span>or enter details</span></div>
+        <input class="siInput" id="siEmail" type="email" placeholder="your@email.com" autocomplete="email" inputmode="email"/>
+        <input class="siInput" id="siPass" type="password" placeholder="Password (6+ characters)" autocomplete="current-password"/>
+        <div class="siEmailBtns">
+          <button class="btn bp siEmailAction" id="siBtnEmailSignIn">Sign in</button>
+          <button class="btn bs siEmailAction" id="siBtnEmailCreate">Create account</button>
+        </div>
+        <button class="siForgot" id="siBtnForgot">Forgot password?</button>
+      </div>
+      <p class="siFootNote">By continuing you agree to GRADEO's <a href="/terms">Terms</a> &amp; <a href="/privacy">Privacy Policy</a>.</p>
+    </div>
+  </div>
+</div>
 
 <!-- ══════════════════════════════════════════
      MOBILE APP SHELL  (shown only on mobile via CSS)
@@ -1368,7 +1508,7 @@ h1{margin-top:12px;font-size:clamp(28px,8vw,52px);line-height:1.02;letter-spacin
           <div class="mAccCard rv" id="mPin" style="display:none;">
             <div class="ap">
               <div class="ur">
-                <div class="av" id="mAvw"><img id="mAvi2" alt="" width="40" height="40" style="display:none;"/><span class="avi" id="mAvii"></span></div>
+                <div class="av" id="mAvw"><img id="mAvi2" alt="" width="40" height="40" loading="lazy" style="display:none;"/><span class="avi" id="mAvii"></span></div>
                 <div style="min-width:0;flex:1;"><div class="un" id="mUn"></div><div class="ue" id="mUe"></div></div>
                 <button class="mSignOutBtn" id="mSignOutBtn" aria-label="Sign out">
                   <svg viewBox="0 0 24 24" fill="none"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
@@ -1615,31 +1755,28 @@ h1{margin-top:12px;font-size:clamp(28px,8vw,52px);line-height:1.02;letter-spacin
           </div>
         </div>
         <div class="card rv">
-          <!-- Signed-out placeholder — shows offer + brief value prop -->
+          <!-- Signed-out placeholder — shows value props cleanly -->
           <div class="ap" id="pout">
-            <div class="si-t" style="font-size:13px;font-weight:700;color:var(--muted);letter-spacing:.02em;text-transform:uppercase;margin-bottom:10px;">Unlock more</div>
-            <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:4px;">
-              <div style="display:flex;align-items:center;gap:10px;font-size:13px;font-weight:600;color:var(--text);">
-                <span style="width:28px;height:28px;border-radius:8px;background:rgba(255,106,0,.12);border:1.5px solid rgba(255,106,0,.22);display:grid;place-items:center;flex-shrink:0;">
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--o)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"/></svg>
-                </span>Cloud save across devices
+            <div class="poutHdr">Unlock more</div>
+            <div class="poutList">
+              <div class="poutRow">
+                <span class="poutIcon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--o)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"/></svg></span>
+                Cloud save across devices
               </div>
-              <div style="display:flex;align-items:center;gap:10px;font-size:13px;font-weight:600;color:var(--text);">
-                <span style="width:28px;height:28px;border-radius:8px;background:rgba(255,106,0,.12);border:1.5px solid rgba(255,106,0,.22);display:grid;place-items:center;flex-shrink:0;">
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--o)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
-                </span>Export PDF grade card
+              <div class="poutRow">
+                <span class="poutIcon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--o)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></span>
+                Export PDF grade card
               </div>
-              <div style="display:flex;align-items:center;gap:10px;font-size:13px;font-weight:600;color:var(--text);">
-                <span style="width:28px;height:28px;border-radius:8px;background:rgba(255,106,0,.12);border:1.5px solid rgba(255,106,0,.22);display:grid;place-items:center;flex-shrink:0;">
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--o)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-                </span>No ads, no data selling
+              <div class="poutRow">
+                <span class="poutIcon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--o)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></span>
+                No ads, no data selling
               </div>
             </div>
           </div>
           <!-- Signed-in state — hidden until auth fires -->
           <div class="ap" id="pin" style="display:none;">
             <div class="ur">
-              <div class="av" id="avw"><img id="avi2" alt="" width="40" height="40" style="display:none;"/><span class="avi" id="avii"></span></div>
+              <div class="av" id="avw"><img id="avi2" alt="" width="40" height="40" loading="lazy" style="display:none;"/><span class="avi" id="avii"></span></div>
               <div style="min-width:0;flex:1;"><div class="un" id="un"></div><div class="ue" id="ue"></div></div>
               <button class="dskSignOutBtn" id="dskSignOut">
                 <svg viewBox="0 0 24 24" fill="none"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
@@ -1703,7 +1840,16 @@ function showLayout(){
   $('#dskLayout').style.display=mob?'none':'block';
 }
 showLayout();
-window.addEventListener('resize',()=>{showLayout();if(isMob()){setTrackWidth();goTab(curTab,false);}},{passive:true});
+// Debounced resize — only re-init when layout type actually changes (e.g. phone rotation)
+let _lastMob=isMob(),_resizeTimer;
+window.addEventListener('resize',()=>{
+  clearTimeout(_resizeTimer);
+  _resizeTimer=setTimeout(()=>{
+    const nowMob=isMob();
+    if(nowMob!==_lastMob){_lastMob=nowMob;showLayout();}
+    if(nowMob){setTrackWidth();goTab(curTab,false);}
+  },120);
+},{passive:true});
 
 /* ─── THEME ─── */
 const html=document.documentElement,tc=$('#tcMeta');
@@ -1746,20 +1892,50 @@ function navTo(url){
 (()=>{
   if(isTouch()||window.innerWidth<1024)return;
   const dot=$('#cur'),ring=$('#curRing');
-  let mx=0,my=0,rx=0,ry=0;
+  if(!dot||!ring)return;
+  let mx=0,my=0,rx=0,ry=0,rAFid=null,moved=false;
+
+  function moveDot(x,y){
+    dot.style.transform=`translate(calc(${x}px - 50%),calc(${y}px - 50%))`;
+  }
+  function moveRing(){
+    // Smooth follow with lerp
+    rx+=(mx-rx)*.18;ry+=(my-ry)*.18;
+    ring.style.transform=`translate(calc(${rx.toFixed(1)}px - 50%),calc(${ry.toFixed(1)}px - 50%))`;
+    // Only keep looping if ring hasn't caught up
+    if(Math.abs(mx-rx)>0.3||Math.abs(my-ry)>0.3){
+      rAFid=requestAnimationFrame(moveRing);
+    }else{
+      rAFid=null;
+    }
+  }
+
   document.addEventListener('mousemove',e=>{
     mx=e.clientX;my=e.clientY;
-    dot.style.left=mx+'px';dot.style.top=my+'px';
+    moveDot(mx,my);
+    // Reveal cursor on first move
+    if(!moved){moved=true;document.body.classList.add('cur-ready');}
+    // Kick off ring lerp if not already running
+    if(!rAFid)rAFid=requestAnimationFrame(moveRing);
   },{passive:true});
-  (function animRing(){rx+=(mx-rx)*.24;ry+=(my-ry)*.24;
-    ring.style.left=rx.toFixed(1)+'px';ring.style.top=ry.toFixed(1)+'px';
-    requestAnimationFrame(animRing);
-  })();
+
+  // Hide cursor when mouse leaves window
+  document.addEventListener('mouseleave',()=>{
+    document.body.classList.remove('cur-ready','ch');
+    moved=false;
+  });
+  document.addEventListener('mouseenter',()=>{
+    if(moved)document.body.classList.add('cur-ready');
+  });
+
   document.addEventListener('mousedown',()=>document.body.classList.add('cc'));
   document.addEventListener('mouseup',()=>document.body.classList.remove('cc'));
+
+  // Track hovered interactive elements
+  let hoverCount=0;
   $$('a,button,.tile,.feat,.fi2,.card,[role=button]').forEach(el=>{
-    el.addEventListener('mouseenter',()=>document.body.classList.add('ch'));
-    el.addEventListener('mouseleave',()=>document.body.classList.remove('ch'));
+    el.addEventListener('mouseenter',()=>{hoverCount++;document.body.classList.add('ch');});
+    el.addEventListener('mouseleave',()=>{hoverCount=Math.max(0,hoverCount-1);if(!hoverCount)document.body.classList.remove('ch');});
   });
 })();
 
@@ -1789,23 +1965,35 @@ if(!isTouch()){
   },{passive:true});
 }
 
-/* ─── DESKTOP 3D TILES ─── */
+/* ─── DESKTOP 3D TILES — use CSS var to avoid inline-style conflict ─── */
 if(!isTouch()){
   $$('.tile').forEach(tile=>{
     tile.addEventListener('mousemove',e=>{
       const r=tile.getBoundingClientRect();
       const x=(e.clientX-r.left)/r.width-.5,y=(e.clientY-r.top)/r.height-.5;
-      tile.style.transform=`translateY(-5px) rotateX(${-y*6}deg) rotateY(${x*6}deg) scale(1.012)`;
+      // Use CSS custom property so :active/:focus can still override via !important
+      tile.style.setProperty('--tilt',`translateY(-5px) rotateX(${(-y*6).toFixed(2)}deg) rotateY(${(x*6).toFixed(2)}deg) scale(1.012)`);
+      tile.style.transform='var(--tilt)';
     });
-    tile.addEventListener('mouseleave',()=>{tile.style.transform='';});
+    tile.addEventListener('mouseleave',()=>{
+      tile.style.removeProperty('--tilt');
+      tile.style.transform='';
+    });
+    // Clear on mousedown so :active scale works cleanly
+    tile.addEventListener('mousedown',()=>tile.style.transform='');
   });
   $$('.bp,.bs').forEach(btn=>{
     btn.addEventListener('mousemove',e=>{
       const r=btn.getBoundingClientRect();
       const dx=(e.clientX-r.left-r.width/2)/r.width,dy=(e.clientY-r.top-r.height/2)/r.height;
-      btn.style.transform=`translateY(-3px) scale(1.02) translate(${dx*5}px,${dy*3}px)`;
+      btn.style.setProperty('--btilt',`translateY(-3px) scale(1.02) translate(${(dx*5).toFixed(2)}px,${(dy*3).toFixed(2)}px)`);
+      btn.style.transform='var(--btilt)';
     });
-    btn.addEventListener('mouseleave',()=>{btn.style.transform='';});
+    btn.addEventListener('mouseleave',()=>{
+      btn.style.removeProperty('--btilt');
+      btn.style.transform='';
+    });
+    btn.addEventListener('mousedown',()=>btn.style.transform='');
   });
 }
 
@@ -1982,10 +2170,6 @@ const HV={
   success:[10,40,10,40,18], // success pattern — claim/sign-in
   soft:[5,5,5],        // triple soft — FAQ open
 };
-function vib(ms){
-  if(!isMob()||!navigator.vibrate)return;
-  try{navigator.vibrate(ms);}catch{}
-}
 // All interactive elements get haptics
 $$('.mTile').forEach(el=>el.addEventListener('pointerdown',()=>vib(HV.medium)));
 $$('.btn.bp').forEach(el=>el.addEventListener('pointerdown',()=>vib(HV.strong)));
@@ -2013,7 +2197,12 @@ function cm(){$('#mbd').classList.remove('on');}
 [['#fp','p'],['#ft','t'],['#fd','d'],['#mFp','p'],['#mFt','t'],['#mFd','d']].forEach(([sel,k])=>{
   $(sel)?.addEventListener('click',e=>{e.preventDefault();om(k);});
 });
-document.addEventListener('keydown',e=>{if(e.key==='Escape')cm();});
+document.addEventListener('keydown',e=>{
+  if(e.key==='Escape'){
+    cm(); // close privacy/terms modal
+    $('#siModal')?.classList.remove('on'); // close sign-in modal
+  }
+});
 
 /* ─── MODE TILES ─── */
 function pr(m){const a=JSON.parse(localStorage.getItem(RK)||'[]'),n=[m,...a.filter(x=>x!==m)].slice(0,3);localStorage.setItem(RK,JSON.stringify(n));localStorage.setItem('gradeo_last_mode',m);rr();}
@@ -2063,6 +2252,8 @@ function sIn(u){
     el.onclick=()=>goM();
     el.style.display='';
   });
+  // Hide "how it works" — signed-in users don't need onboarding
+  const hw=$('#mHowCard');if(hw)hw.style.display='none';
   // Show signed-in profile card, hide placeholder
   ['#pout'].forEach(s=>{const el=$(s);if(el)el.style.display='none';});
   ['#pin','#mPin'].forEach(s=>{const el=$(s);if(el)el.style.display='';});
@@ -2089,28 +2280,137 @@ function sOut(){
     el.onclick=()=>{if(window.__a?.currentUser){goM();return;}doSI(()=>{ps=true;});};
     el.style.display='';
   });
+  // Restore how-it-works card for returning signed-out users
+  const hw=$('#mHowCard');if(hw)hw.style.display='';
+  // Restart the animation from step 1
+  if(typeof window._howRestart==='function')window._howRestart();
   // Hide signed-in profile card, show placeholder
   ['#pout'].forEach(s=>{const el=$(s);if(el)el.style.display='';});
   ['#pin','#mPin'].forEach(s=>{const el=$(s);if(el)el.style.display='none';});
   ['#prec','#mPrec'].forEach(s=>{const el=$(s);if(el)el.style.display='none';});
   // Show offer again
   ['#offp','#mOffp'].forEach(s=>{const el=$(s);if(el)el.style.display='';});
+  // Go back to home tab on mobile so state is clean
+  if(isMob())goTab(0);
 }
 function doSI(after){
   if(!window.__a||!window.__p){toast('Sign-in unavailable');return;}
   if(window.__a.currentUser){if(after)after();return;}
-  // Disable just the get started buttons while sign-in is in progress
+  // Store callback for after sign-in
+  window._siAfter=after||null;
+  // Open the sign-in picker modal
+  $('#siModal').classList.add('on');
+  // Reset email form
+  const ef=$('#siEmailForm');if(ef)ef.style.display='none';
+}
+
+/* ─── SIGN-IN PROVIDERS ─── */
+function _doProviderSI(provider,btnId){
+  const btn=$(btnId);
+  if(btn)btn.classList.add('loading');
   const bs=[$('#hsi'),$('#gsb'),$('#mGsb')];
   bs.forEach(b=>{if(b)b.disabled=true;});
-  window.__a.signInWithPopup(window.__p).then(()=>{
+  window.__a.signInWithPopup(provider).then(()=>{
+    if(btn)btn.classList.remove('loading');
     bs.forEach(b=>{if(b)b.disabled=false;});
-    if(after)after();
+    $('#siModal').classList.remove('on');
+    vib(HV.success);
+    if(window._siAfter){window._siAfter();window._siAfter=null;}
+    else if(ps){ps=false;setTimeout(goM,160);}
   }).catch(e=>{
     console.error(e);
+    if(btn)btn.classList.remove('loading');
     bs.forEach(b=>{if(b)b.disabled=false;});
-    toast('Sign-in failed. Try again.');
+    const msg=e.code==='auth/popup-closed-by-user'?'Sign-in cancelled':
+               e.code==='auth/account-exists-with-different-credential'?'Account already exists with a different provider':
+               'Sign-in failed. Try again.';
+    toast(msg);
   });
 }
+
+// Google
+$('#siBtnGoogle')?.addEventListener('click',()=>{
+  if(!window.__a||!window.__p)return;
+  _doProviderSI(window.__p,'#siBtnGoogle');
+});
+
+// GitHub — set up provider on first use (requires GitHub OAuth in Firebase console)
+$('#siBtnGithub')?.addEventListener('click',()=>{
+  if(!window.__a)return;
+  try{
+    const ghp=new firebase.auth.GithubAuthProvider();
+    ghp.addScope('read:user');
+    ghp.addScope('user:email');
+    _doProviderSI(ghp,'#siBtnGithub');
+  }catch(e){
+    toast('GitHub sign-in unavailable. Use Google or Email.');
+  }
+});
+
+// Email toggle
+$('#siBtnEmailToggle')?.addEventListener('click',()=>{
+  const ef=$('#siEmailForm');
+  if(!ef)return;
+  const showing=ef.style.display!=='none';
+  ef.style.display=showing?'none':'flex';
+  if(!showing)setTimeout(()=>$('#siEmail')?.focus(),80);
+});
+
+// Email sign-in
+$('#siBtnEmailSignIn')?.addEventListener('click',()=>{
+  const email=$('#siEmail')?.value?.trim();
+  const pass=$('#siPass')?.value;
+  if(!email||!pass){toast('Enter your email and password.');return;}
+  const btn=$('#siBtnEmailSignIn');
+  if(btn)btn.disabled=true;
+  window.__a.signInWithEmailAndPassword(email,pass).then(()=>{
+    $('#siModal').classList.remove('on');
+    vib(HV.success);
+    if(window._siAfter){window._siAfter();window._siAfter=null;}
+  }).catch(e=>{
+    if(btn)btn.disabled=false;
+    const msg=e.code==='auth/wrong-password'?'Incorrect password':
+               e.code==='auth/user-not-found'?'No account found — try Create account':
+               e.code==='auth/invalid-email'?'Invalid email address':
+               'Sign-in failed. Check your details.';
+    toast(msg);
+  });
+});
+
+// Email create account
+$('#siBtnEmailCreate')?.addEventListener('click',()=>{
+  const email=$('#siEmail')?.value?.trim();
+  const pass=$('#siPass')?.value;
+  if(!email||!pass){toast('Enter your email and password.');return;}
+  if(pass.length<6){toast('Password must be 6+ characters.');return;}
+  const btn=$('#siBtnEmailCreate');
+  if(btn)btn.disabled=true;
+  window.__a.createUserWithEmailAndPassword(email,pass).then(()=>{
+    $('#siModal').classList.remove('on');
+    vib(HV.success);
+    toast('Account created! Welcome to GRADEO.');
+    if(window._siAfter){window._siAfter();window._siAfter=null;}
+  }).catch(e=>{
+    if(btn)btn.disabled=false;
+    const msg=e.code==='auth/email-already-in-use'?'Email already in use — try Sign in':
+               e.code==='auth/invalid-email'?'Invalid email address':
+               e.code==='auth/weak-password'?'Password too weak — use 6+ characters':
+               'Could not create account. Try again.';
+    toast(msg);
+  });
+});
+
+// Forgot password
+$('#siBtnForgot')?.addEventListener('click',()=>{
+  const email=$('#siEmail')?.value?.trim();
+  if(!email){toast('Enter your email first.');$('#siEmail')?.focus();return;}
+  window.__a.sendPasswordResetEmail(email).then(()=>{
+    toast('Reset email sent — check your inbox.');
+  }).catch(()=>toast('Could not send reset email.'));
+});
+
+// Close modal on backdrop click
+$('#siModal')?.addEventListener('click',e=>{if(e.target===$('#siModal'))$('#siModal').classList.remove('on');});
 $('#hsi')?.addEventListener('click',()=>{if(window.__a?.currentUser){window.__a.signOut().then(()=>{toast('Signed out');sOut();});return;}doSI();});
 $('#mSignOutBtn')?.addEventListener('click',()=>{
   if(window.__a?.currentUser){window.__a.signOut().then(()=>{toast('Signed out');sOut();});}
@@ -2184,7 +2484,20 @@ $('#brd')?.addEventListener('click',e=>{
       auto=setInterval(()=>{if(running)goStep(curStep+1);},2800);
     });
   });
-  document.addEventListener('visibilitychange',()=>{running=!document.hidden;});
+  // Pause/resume on visibility change
+  document.addEventListener('visibilitychange',()=>{
+    running=!document.hidden;
+    // Restart interval when tab becomes visible again
+    if(running){clearInterval(auto);auto=setInterval(()=>{if(running)goStep(curStep+1);},2800);}
+  });
+  // Expose restart for sOut() — card reappears when signed out
+  window._howRestart=()=>{
+    curStep=0;running=true;
+    clearInterval(auto);
+    if($('#mHowDesc'))$('#mHowDesc').textContent=steps[0];
+    $$('.mHowStep').forEach((s,i)=>s.classList.toggle('active',i===0));
+    auto=setInterval(()=>{if(running)goStep(curStep+1);},2800);
+  };
 })();
 
 /* battery saver */
