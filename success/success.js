@@ -12,9 +12,9 @@ const NEXT_URL = "https://gradeo.in/"; // main website
 const BACK_URL = "/offer";
 
 // ✅ EmailJS (provided by you)
-const EMAILJS_PUBLIC_KEY = "jBp2SNoQciWnlU2Fo";
-const EMAILJS_SERVICE_ID = "service_wsd8g2w";
-const EMAILJS_TEMPLATE_ID = "template_sgha506";
+const EMAILJS_PUBLIC_KEY = "Bqz25zWIjiSRHomv3";
+const EMAILJS_SERVICE_ID = "service_2krwpjn";
+const EMAILJS_TEMPLATE_ID = "template_w7vnq8q";
 // =====================
 
 const countEl = document.getElementById("count");
