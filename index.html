@@ -2244,22 +2244,67 @@ else { try{ firebase.initializeApp({apiKey:'AIzaSyDB_FK8-3ATZBpuvfL34EMp9WHTTd5s
     localStorage.setItem(PUSH_DISMISSED_KEY, Date.now().toString());
   });
 
+  const WORKER_URL = 'https://gradeo-push.gradeo-in.workers.dev';
+
   function subscribeToPush(){
     if(!swReg) return;
-    /* NOTE: Replace with your actual VAPID public key from web-push library */
     const VAPID_PUBLIC_KEY = 'BGwcazDRVGBgZz-CJNBQa7riAwt-HUsA0HSjELSmC4qAxtcslt8JzairfnEmCDKCn5FDDRyrfr3oSxcmghCZCuM';
-
-
     const appServerKey = urlBase64ToUint8Array(VAPID_PUBLIC_KEY);
     swReg.pushManager.subscribe({ userVisibleOnly: true, applicationServerKey: appServerKey })
       .then(sub => {
-        /* Send subscription to your server */
-        fetch('/api/push-subscribe', {
+        fetch(WORKER_URL + '/subscribe', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(sub)
+        }).then(() => {
+          if(typeof toast === 'function') toast('Notifications enabled \u2713');
         }).catch(() => {});
       }).catch(e => console.warn('[GRADEO Push]', e));
+  }
+
+  /* ── Admin panel (visit gradeo.in/?admin=1 to access) ── */
+  if(new URLSearchParams(location.search).get('admin') === '1'){
+    const ap = document.createElement('div');
+    ap.innerHTML = `
+      <div id="adminPanel" style="position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:var(--surface);border:1px solid var(--cb);border-radius:16px;padding:16px;width:min(340px,calc(100vw - 32px));z-index:9999;box-shadow:0 8px 32px rgba(0,0,0,.15);">
+        <div style="font-size:13px;font-weight:700;margin-bottom:10px;">\uD83D\uDCE3 Send Notification to All Users</div>
+        <input id="an_title" placeholder="Title e.g. Exams in 7 days!" style="width:100%;padding:8px 10px;border-radius:8px;border:1px solid var(--cb);background:var(--bg);color:var(--text);font-size:13px;margin-bottom:8px;box-sizing:border-box;">
+        <input id="an_msg" placeholder="Message e.g. Time to calculate your minimum marks" style="width:100%;padding:8px 10px;border-radius:8px;border:1px solid var(--cb);background:var(--bg);color:var(--text);font-size:13px;margin-bottom:8px;box-sizing:border-box;">
+        <input id="an_secret" placeholder="Admin password" type="password" style="width:100%;padding:8px 10px;border-radius:8px;border:1px solid var(--cb);background:var(--bg);color:var(--text);font-size:13px;margin-bottom:10px;box-sizing:border-box;">
+        <div style="display:flex;gap:8px;">
+          <button id="an_send" style="flex:1;background:#FF6A00;color:#fff;border:none;border-radius:10px;padding:10px;font-size:13px;font-weight:700;cursor:pointer;">Send to all</button>
+          <button id="an_count" style="background:transparent;border:1px solid var(--cb);color:var(--muted);border-radius:10px;padding:10px 12px;font-size:13px;cursor:pointer;">Count</button>
+          <button id="an_close" style="background:transparent;border:none;color:var(--muted);font-size:20px;cursor:pointer;padding:0 4px;">\u2715</button>
+        </div>
+        <div id="an_result" style="font-size:12px;color:var(--muted);margin-top:8px;min-height:18px;"></div>
+      </div>`;
+    document.body.appendChild(ap);
+    document.getElementById('an_send')?.addEventListener('click', async () => {
+      const title = document.getElementById('an_title').value.trim();
+      const message = document.getElementById('an_msg').value.trim();
+      const secret = document.getElementById('an_secret').value.trim();
+      const result = document.getElementById('an_result');
+      if(!title || !message || !secret){ result.textContent = 'Fill all 3 fields'; return; }
+      result.textContent = 'Sending...';
+      try {
+        const r = await fetch(WORKER_URL + '/broadcast', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + secret },
+          body: JSON.stringify({ title, message, url: 'https://gradeo.in' })
+        });
+        const d = await r.json();
+        result.textContent = d.ok ? '\u2713 Sent to ' + d.sent + ' users (' + d.failed + ' failed)' : '\u2717 ' + (d.error || 'Error');
+      } catch(e){ result.textContent = '\u2717 Network error'; }
+    });
+    document.getElementById('an_count')?.addEventListener('click', async () => {
+      const result = document.getElementById('an_result');
+      try {
+        const r = await fetch(WORKER_URL + '/count');
+        const d = await r.json();
+        result.textContent = '\uD83D\uDC65 ' + d.count + ' subscriber' + (d.count !== 1 ? 's' : '');
+      } catch(e){ result.textContent = '\u2717 Could not fetch'; }
+    });
+    document.getElementById('an_close')?.addEventListener('click', () => document.getElementById('adminPanel')?.remove());
   }
 
   function urlBase64ToUint8Array(base64String){
