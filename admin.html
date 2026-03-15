@@ -1,0 +1,491 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>GRADEO — Notification Admin</title>
+<meta name="robots" content="noindex,nofollow"/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --bg:#0A0805;
+  --surface:#131008;
+  --card:#1A1510;
+  --border:rgba(255,106,0,.15);
+  --o:#FF6A00;
+  --o2:#FF9040;
+  --text:#F0E8DC;
+  --muted:#7A6E64;
+  --muted2:#4A4440;
+  --green:#2ECC71;
+  --red:#E74C3C;
+}
+html,body{min-height:100vh;background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;}
+
+/* Background grid */
+body::before{
+  content:'';position:fixed;inset:0;z-index:0;
+  background-image:
+    linear-gradient(rgba(255,106,0,.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,106,0,.03) 1px, transparent 1px);
+  background-size:40px 40px;
+  pointer-events:none;
+}
+
+/* Glow orb */
+body::after{
+  content:'';position:fixed;top:-200px;right:-200px;z-index:0;
+  width:600px;height:600px;border-radius:50%;
+  background:radial-gradient(circle, rgba(255,106,0,.08) 0%, transparent 70%);
+  pointer-events:none;
+}
+
+.wrap{position:relative;z-index:1;min-height:100vh;display:flex;flex-direction:column;}
+
+/* ── Header ── */
+header{
+  padding:24px 32px;
+  display:flex;align-items:center;justify-content:space-between;
+  border-bottom:1px solid var(--border);
+  backdrop-filter:blur(12px);
+  position:sticky;top:0;z-index:100;
+  background:rgba(10,8,5,.85);
+}
+.logo{display:flex;align-items:center;gap:10px;}
+.logo-icon{
+  width:36px;height:36px;border-radius:10px;
+  background:linear-gradient(135deg,#FF6A00,#FF9040);
+  display:flex;align-items:center;justify-content:center;
+  font-size:16px;font-weight:800;color:#fff;
+  font-family:'Syne',sans-serif;
+}
+.logo-text{font-family:'Syne',sans-serif;font-weight:700;font-size:16px;color:var(--text);}
+.logo-badge{font-size:10px;background:var(--border);color:var(--o);border:1px solid var(--border);padding:2px 8px;border-radius:20px;font-family:'DM Sans',sans-serif;font-weight:500;letter-spacing:.5px;}
+#lockBadge{font-size:12px;color:var(--muted);display:flex;align-items:center;gap:6px;}
+#lockBadge span{width:8px;height:8px;border-radius:50%;background:var(--muted2);display:inline-block;}
+#lockBadge.authed span{background:var(--green);}
+#lockBadge.authed{color:var(--green);}
+
+/* ── Login screen ── */
+#loginScreen{
+  flex:1;display:flex;align-items:center;justify-content:center;padding:24px;
+}
+.login-card{
+  width:100%;max-width:400px;
+  background:var(--card);border:1px solid var(--border);
+  border-radius:24px;padding:40px;
+  box-shadow:0 32px 80px rgba(0,0,0,.6);
+}
+.login-title{font-family:'Syne',sans-serif;font-size:28px;font-weight:800;margin-bottom:6px;}
+.login-sub{color:var(--muted);font-size:14px;margin-bottom:32px;line-height:1.5;}
+.field{margin-bottom:16px;}
+.field label{display:block;font-size:12px;font-weight:500;color:var(--muted);margin-bottom:6px;letter-spacing:.5px;text-transform:uppercase;}
+.field input{
+  width:100%;padding:14px 16px;
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:12px;color:var(--text);font-size:15px;font-family:'DM Sans',sans-serif;
+  outline:none;transition:border-color .2s;
+}
+.field input:focus{border-color:var(--o);}
+.field input::placeholder{color:var(--muted2);}
+.btn-login{
+  width:100%;padding:15px;margin-top:8px;
+  background:linear-gradient(135deg,#FF6A00,#FF9040);
+  color:#fff;border:none;border-radius:12px;
+  font-size:15px;font-weight:600;font-family:'DM Sans',sans-serif;
+  cursor:pointer;transition:opacity .2s,transform .15s;
+}
+.btn-login:hover{opacity:.9;transform:translateY(-1px);}
+.btn-login:active{transform:translateY(0);}
+#loginErr{font-size:13px;color:var(--red);margin-top:12px;min-height:18px;text-align:center;}
+
+/* ── Dashboard ── */
+#dashboard{display:none;flex:1;padding:32px;}
+.dash-inner{max-width:900px;margin:0 auto;}
+
+.page-title{font-family:'Syne',sans-serif;font-size:32px;font-weight:800;margin-bottom:4px;}
+.page-sub{color:var(--muted);font-size:14px;margin-bottom:32px;}
+
+/* Stats row */
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:32px;}
+.stat-card{
+  background:var(--card);border:1px solid var(--border);border-radius:16px;
+  padding:20px 24px;position:relative;overflow:hidden;
+}
+.stat-card::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:2px;
+  background:linear-gradient(90deg,var(--o),transparent);
+}
+.stat-label{font-size:11px;color:var(--muted);letter-spacing:.8px;text-transform:uppercase;margin-bottom:10px;}
+.stat-val{font-family:'Syne',sans-serif;font-size:36px;font-weight:800;color:var(--text);line-height:1;}
+.stat-sub{font-size:12px;color:var(--muted);margin-top:6px;}
+
+/* Main grid */
+.main-grid{display:grid;grid-template-columns:1fr 380px;gap:20px;}
+
+/* Cards */
+.card{background:var(--card);border:1px solid var(--border);border-radius:20px;padding:28px;}
+.card-title{font-family:'Syne',sans-serif;font-size:16px;font-weight:700;margin-bottom:6px;display:flex;align-items:center;gap:8px;}
+.card-title .dot{width:8px;height:8px;border-radius:50%;background:var(--o);}
+.card-sub{font-size:13px;color:var(--muted);margin-bottom:24px;line-height:1.5;}
+
+/* Form fields */
+.form-field{margin-bottom:14px;}
+.form-label{font-size:11px;font-weight:500;color:var(--muted);letter-spacing:.6px;text-transform:uppercase;margin-bottom:6px;display:block;}
+.form-input{
+  width:100%;padding:12px 14px;
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:10px;color:var(--text);font-size:14px;font-family:'DM Sans',sans-serif;
+  outline:none;transition:border-color .2s;
+}
+.form-input:focus{border-color:var(--o);}
+.form-input::placeholder{color:var(--muted2);}
+textarea.form-input{resize:vertical;min-height:80px;line-height:1.5;}
+
+.preview-box{
+  background:var(--surface);border:1px solid var(--border);border-radius:12px;
+  padding:14px;margin-bottom:20px;display:flex;gap:12px;align-items:flex-start;
+}
+.preview-icon{
+  width:40px;height:40px;border-radius:10px;flex-shrink:0;
+  background:linear-gradient(135deg,#FF6A00,#FF9040);
+  display:flex;align-items:center;justify-content:center;font-size:18px;
+}
+.preview-content{}
+.preview-title{font-size:13px;font-weight:600;color:var(--text);margin-bottom:2px;}
+.preview-msg{font-size:12px;color:var(--muted);line-height:1.4;}
+.preview-label{font-size:10px;color:var(--muted2);letter-spacing:.5px;text-transform:uppercase;margin-bottom:8px;}
+
+.btn-send{
+  width:100%;padding:14px;
+  background:linear-gradient(135deg,#FF6A00,#FF9040);
+  color:#fff;border:none;border-radius:12px;
+  font-size:14px;font-weight:600;font-family:'DM Sans',sans-serif;
+  cursor:pointer;transition:opacity .2s,transform .15s;
+  display:flex;align-items:center;justify-content:center;gap:8px;
+}
+.btn-send:hover{opacity:.9;transform:translateY(-1px);}
+.btn-send:active{transform:translateY(0);}
+.btn-send:disabled{opacity:.4;cursor:not-allowed;transform:none;}
+
+/* Result */
+#sendResult{
+  margin-top:14px;padding:12px 16px;border-radius:10px;
+  font-size:13px;display:none;
+}
+#sendResult.ok{background:rgba(46,204,113,.1);border:1px solid rgba(46,204,113,.25);color:var(--green);}
+#sendResult.err{background:rgba(231,76,60,.1);border:1px solid rgba(231,76,60,.25);color:var(--red);}
+
+/* History */
+.hist-empty{font-size:13px;color:var(--muted2);text-align:center;padding:24px 0;}
+.hist-item{
+  padding:14px 0;border-bottom:1px solid var(--border);
+  display:flex;align-items:flex-start;gap:12px;
+}
+.hist-item:last-child{border-bottom:none;}
+.hist-dot{width:8px;height:8px;border-radius:50%;background:var(--o);margin-top:5px;flex-shrink:0;}
+.hist-title{font-size:13px;font-weight:500;color:var(--text);margin-bottom:2px;}
+.hist-detail{font-size:12px;color:var(--muted);}
+.hist-time{font-size:11px;color:var(--muted2);margin-top:3px;}
+
+/* Spinner */
+@keyframes spin{to{transform:rotate(360deg)}}
+.spinner{width:16px;height:16px;border:2px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:spin .7s linear infinite;}
+
+/* Responsive */
+@media(max-width:720px){
+  .stats{grid-template-columns:1fr 1fr;}
+  .main-grid{grid-template-columns:1fr;}
+  header{padding:16px 20px;}
+  #dashboard{padding:20px;}
+  .stat-val{font-size:28px;}
+}
+@media(max-width:420px){
+  .stats{grid-template-columns:1fr;}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<!-- Header -->
+<header>
+  <div class="logo">
+    <div class="logo-icon">G</div>
+    <div class="logo-text">GRADEO</div>
+    <div class="logo-badge">ADMIN</div>
+  </div>
+  <div id="lockBadge"><span></span> <span id="lockText">Not authenticated</span></div>
+</header>
+
+<!-- Login -->
+<div id="loginScreen">
+  <div class="login-card">
+    <div class="login-title">Admin Panel</div>
+    <div class="login-sub">Enter your admin password to access the GRADEO notification dashboard.</div>
+    <div class="field">
+      <label>Admin Password</label>
+      <input type="password" id="passInput" placeholder="Enter password" autocomplete="current-password"/>
+    </div>
+    <button class="btn-login" id="loginBtn">Unlock Dashboard</button>
+    <div id="loginErr"></div>
+  </div>
+</div>
+
+<!-- Dashboard -->
+<div id="dashboard">
+  <div class="dash-inner">
+
+    <div class="page-title">Notification Center</div>
+    <div class="page-sub">Send push notifications to all GRADEO subscribers</div>
+
+    <!-- Stats -->
+    <div class="stats">
+      <div class="stat-card">
+        <div class="stat-label">Total Subscribers</div>
+        <div class="stat-val" id="statCount">—</div>
+        <div class="stat-sub">Users with notifications on</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Last Sent</div>
+        <div class="stat-val" id="statLast" style="font-size:18px;padding-top:8px;">Never</div>
+        <div class="stat-sub">Most recent broadcast</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Total Sent</div>
+        <div class="stat-val" id="statTotal">0</div>
+        <div class="stat-sub">Notifications this session</div>
+      </div>
+    </div>
+
+    <!-- Main grid -->
+    <div class="main-grid">
+
+      <!-- Compose -->
+      <div class="card">
+        <div class="card-title"><span class="dot"></span> Compose Notification</div>
+        <div class="card-sub">This will be sent to all subscribers instantly.</div>
+
+        <div class="form-field">
+          <label class="form-label">Title</label>
+          <input type="text" class="form-input" id="notifTitle" placeholder="e.g. Exams in 7 days!" maxlength="60"/>
+        </div>
+        <div class="form-field">
+          <label class="form-label">Message</label>
+          <textarea class="form-input" id="notifMsg" placeholder="e.g. Time to calculate your minimum marks on GRADEO." maxlength="140"></textarea>
+        </div>
+        <div class="form-field">
+          <label class="form-label">Link (optional)</label>
+          <input type="url" class="form-input" id="notifUrl" value="https://gradeo.in" placeholder="https://gradeo.in"/>
+        </div>
+
+        <div class="preview-label">Preview</div>
+        <div class="preview-box">
+          <div class="preview-icon">📊</div>
+          <div class="preview-content">
+            <div class="preview-title" id="prevTitle">Your title here</div>
+            <div class="preview-msg" id="prevMsg">Your message here</div>
+          </div>
+        </div>
+
+        <button class="btn-send" id="sendBtn">
+          <span id="sendBtnText">Send to All Subscribers</span>
+        </button>
+        <div id="sendResult"></div>
+      </div>
+
+      <!-- History + info -->
+      <div style="display:flex;flex-direction:column;gap:16px;">
+
+        <div class="card">
+          <div class="card-title"><span class="dot"></span> Quick Actions</div>
+          <button class="btn-send" id="refreshBtn" style="background:var(--surface);color:var(--text);border:1px solid var(--border);margin-bottom:10px;">
+            Refresh Subscriber Count
+          </button>
+          <button class="btn-send" id="testBtn" style="background:var(--surface);color:var(--text);border:1px solid var(--border);">
+            Send Test to Yourself
+          </button>
+        </div>
+
+        <div class="card" style="flex:1;">
+          <div class="card-title"><span class="dot"></span> Sent History</div>
+          <div id="histList"><div class="hist-empty">No notifications sent yet this session.</div></div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+</div><!-- wrap -->
+
+<script>
+const WORKER = 'https://gradeo-push.gradeo-in.workers.dev';
+let adminSecret = '';
+let totalSent = 0;
+const history = [];
+
+/* ── Login ── */
+document.getElementById('passInput').addEventListener('keydown', e => {
+  if(e.key === 'Enter') document.getElementById('loginBtn').click();
+});
+
+document.getElementById('loginBtn').addEventListener('click', async () => {
+  const pass = document.getElementById('passInput').value.trim();
+  if(!pass){ showLoginErr('Enter your password'); return; }
+  const btn = document.getElementById('loginBtn');
+  btn.textContent = 'Checking...'; btn.disabled = true;
+
+  /* Verify by calling /count with auth header — if it works, password is correct */
+  try {
+    const r = await fetch(WORKER + '/count', {
+      headers: { 'Authorization': 'Bearer ' + pass }
+    });
+    const d = await r.json();
+    if(r.ok && typeof d.count === 'number'){
+      adminSecret = pass;
+      unlockDashboard(d.count);
+    } else {
+      showLoginErr('Wrong password. Try again.');
+      btn.textContent = 'Unlock Dashboard'; btn.disabled = false;
+    }
+  } catch(e){
+    showLoginErr('Could not connect to server.');
+    btn.textContent = 'Unlock Dashboard'; btn.disabled = false;
+  }
+});
+
+function showLoginErr(msg){
+  document.getElementById('loginErr').textContent = msg;
+}
+
+function unlockDashboard(count){
+  document.getElementById('loginScreen').style.display = 'none';
+  document.getElementById('dashboard').style.display = 'flex';
+  document.getElementById('lockBadge').classList.add('authed');
+  document.getElementById('lockText').textContent = 'Authenticated';
+  updateCount(count);
+}
+
+/* ── Stats ── */
+function updateCount(n){
+  document.getElementById('statCount').textContent = n ?? '—';
+}
+
+/* ── Live preview ── */
+function updatePreview(){
+  const t = document.getElementById('notifTitle').value || 'Your title here';
+  const m = document.getElementById('notifMsg').value || 'Your message here';
+  document.getElementById('prevTitle').textContent = t;
+  document.getElementById('prevMsg').textContent = m;
+}
+document.getElementById('notifTitle').addEventListener('input', updatePreview);
+document.getElementById('notifMsg').addEventListener('input', updatePreview);
+
+/* ── Send ── */
+document.getElementById('sendBtn').addEventListener('click', async () => {
+  const title = document.getElementById('notifTitle').value.trim();
+  const message = document.getElementById('notifMsg').value.trim();
+  const url = document.getElementById('notifUrl').value.trim() || 'https://gradeo.in';
+  const result = document.getElementById('sendResult');
+
+  if(!title){ showResult('err', 'Please enter a title.'); return; }
+  if(!message){ showResult('err', 'Please enter a message.'); return; }
+
+  const btn = document.getElementById('sendBtn');
+  const btnText = document.getElementById('sendBtnText');
+  btn.disabled = true;
+  btnText.innerHTML = '<div class="spinner"></div> Sending...';
+  result.style.display = 'none';
+
+  try {
+    const r = await fetch(WORKER + '/broadcast', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + adminSecret },
+      body: JSON.stringify({ title, message, url })
+    });
+    const d = await r.json();
+    if(d.ok){
+      showResult('ok', `✓ Sent to ${d.sent} subscriber${d.sent !== 1 ? 's' : ''} • ${d.failed} failed`);
+      totalSent += d.sent;
+      document.getElementById('statTotal').textContent = totalSent;
+      const now = new Date();
+      document.getElementById('statLast').textContent = now.toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'});
+      addHistory(title, message, d.sent, now);
+      /* Clear form */
+      document.getElementById('notifTitle').value = '';
+      document.getElementById('notifMsg').value = '';
+      updatePreview();
+      /* Refresh count */
+      fetchCount();
+    } else {
+      showResult('err', '✗ ' + (d.error || 'Failed to send'));
+    }
+  } catch(e){
+    showResult('err', '✗ Network error — check your connection');
+  }
+
+  btn.disabled = false;
+  btnText.textContent = 'Send to All Subscribers';
+});
+
+/* ── Refresh count ── */
+document.getElementById('refreshBtn').addEventListener('click', fetchCount);
+async function fetchCount(){
+  const btn = document.getElementById('refreshBtn');
+  btn.disabled = true;
+  btn.querySelector('#sendBtnText') || (btn.dataset.orig = btn.textContent);
+  btn.textContent = 'Loading...';
+  try {
+    const r = await fetch(WORKER + '/count');
+    const d = await r.json();
+    updateCount(d.count);
+  } catch(e){}
+  btn.textContent = 'Refresh Subscriber Count';
+  btn.disabled = false;
+}
+
+/* ── Test notification (to self) ── */
+document.getElementById('testBtn').addEventListener('click', async () => {
+  if(!('Notification' in window)){ alert('Notifications not supported in this browser'); return; }
+  if(Notification.permission === 'granted'){
+    new Notification('GRADEO Test', {
+      body: 'Test notification from admin panel ✓',
+      icon: 'https://res.cloudinary.com/djy3mjtsz/image/upload/v1770296454/Untitled-2_i2ezfh.png'
+    });
+  } else {
+    const p = await Notification.requestPermission();
+    if(p === 'granted'){
+      new Notification('GRADEO Test', { body: 'Notifications enabled! ✓' });
+    } else {
+      alert('Please allow notifications in your browser first.');
+    }
+  }
+});
+
+/* ── Helpers ── */
+function showResult(type, msg){
+  const el = document.getElementById('sendResult');
+  el.className = type;
+  el.textContent = msg;
+  el.style.display = 'block';
+}
+
+function addHistory(title, msg, count, date){
+  history.unshift({ title, msg, count, date });
+  const list = document.getElementById('histList');
+  list.innerHTML = history.map(h => `
+    <div class="hist-item">
+      <div class="hist-dot"></div>
+      <div>
+        <div class="hist-title">${h.title}</div>
+        <div class="hist-detail">${h.msg}</div>
+        <div class="hist-time">${h.date.toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'})} · ${h.count} sent</div>
+      </div>
+    </div>`).join('');
+}
+</script>
+</body>
+</html>
