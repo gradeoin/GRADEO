@@ -1,4 +1,5 @@
 
+
 <!doctype html>
 <html lang="en" data-theme="light">
 <head>
@@ -2272,11 +2273,11 @@ else { try{ firebase.initializeApp({apiKey:'AIzaSyDB_FK8-3ATZBpuvfL34EMp9WHTTd5s
   window.addEventListener('beforeinstallprompt', e => {
     e.preventDefault();
     deferredPrompt = e;
-    if(!isInStandaloneMode && daysSince > 3){
+    if(!isInStandaloneMode && daysSince > 0.04){
       document.getElementById('sheetAndroid').style.display = 'block';
       document.getElementById('sheetIOS').style.display = 'none';
-      /* Show after user has been on the page 4 seconds */
-      setTimeout(openSheet, 4000);
+      /* Show after user has been on the page 2 seconds */
+      setTimeout(openSheet, 2000);
     }
   });
 
@@ -2309,7 +2310,7 @@ else { try{ firebase.initializeApp({apiKey:'AIzaSyDB_FK8-3ATZBpuvfL34EMp9WHTTd5s
   if(isIOS && !isInStandaloneMode){
     const iosDismissed = parseInt(localStorage.getItem('gradeo_ios_tip') || '0');
     const daysSinceIos = (Date.now() - iosDismissed) / 86400000;
-    if(daysSinceIos > 5){
+    if(daysSinceIos > 0.04){  /* ~1 hour cooldown */
       document.getElementById('sheetAndroid').style.display = 'none';
       document.getElementById('sheetIOS').style.display = 'block';
       setTimeout(openSheet, 5000);
@@ -2323,6 +2324,17 @@ else { try{ firebase.initializeApp({apiKey:'AIzaSyDB_FK8-3ATZBpuvfL34EMp9WHTTd5s
   /* ── Push Notification Subscription ── */
   const WORKER_URL = 'https://gradeo-push.gradeo-in.workers.dev';
   const PUSH_KEY   = 'gradeo_push_dismissed';
+
+  /* Reset dismissed timestamps if user cleared site data or first visit after key change */
+  (function resetIfNeeded(){
+    const VERSION = 'v4';
+    if(localStorage.getItem('gradeo_pwa_version') !== VERSION){
+      localStorage.removeItem('gradeo_pwa_dismissed');
+      localStorage.removeItem('gradeo_ios_tip');
+      localStorage.removeItem(PUSH_KEY);
+      localStorage.setItem('gradeo_pwa_version', VERSION);
+    }
+  })();
 
   function subscribeToPush(){
     if(!swReg) return;
@@ -2346,9 +2358,9 @@ else { try{ firebase.initializeApp({apiKey:'AIzaSyDB_FK8-3ATZBpuvfL34EMp9WHTTd5s
     if(!('Notification' in window) || !('PushManager' in window)) return;
     if(Notification.permission !== 'default') return;
     const dis = parseInt(localStorage.getItem(PUSH_KEY) || '0');
-    if((Date.now() - dis) < 14 * 86400000) return; /* 14 day cooldown */
+    if((Date.now() - dis) < 1 * 86400000) return; /* 1 day cooldown */
     /* Don't show push AND install sheet at the same time — wait for sheet to close */
-    const delay = (!isInStandaloneMode && (deferredPrompt || isIOS)) ? 20000 : 12000;
+    const delay = (!isInStandaloneMode && (deferredPrompt || isIOS)) ? 10000 : 6000;
     setTimeout(() => {
       if(Notification.permission !== 'default') return;
       /* Use native browser prompt directly — no custom UI popup */
@@ -2385,8 +2397,7 @@ else { try{ firebase.initializeApp({apiKey:'AIzaSyDB_FK8-3ATZBpuvfL34EMp9WHTTd5s
 })();
 </script>
 
-</script>
-
 <script defer src="https://static.cloudflareinsights.com/beacon.min.js/vcd15cbe7772f49c399c6a5babf22c1241717689176015" integrity="sha512-ZpsOmlRQV6y907TI0dKBHq9Md29nnaEIPlkf84rnaERnq6zvWvPUqr2ft8M1aS28oN72PdrCzSjY4U6VaAw1EQ==" data-cf-beacon='{"rayId":"","version":"2024.10.5","token":"f4fc10b46af24912ac04d9a23d8a9f74"}' crossorigin="anonymous"></script>
 </body>
 </html>
+
