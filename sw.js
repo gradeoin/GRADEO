@@ -1,95 +1,69 @@
-/* ═══════════════════════════════════════════════
-   GRADEO Service Worker v2
-   - Cache-first for assets, network-first for pages
-   - Offline fallback
-   - Push notification support
-   - Background sync
-═══════════════════════════════════════════════ */
-
-const SW_VERSION = 'gradeo-v2';
+/* GRADEO Service Worker v4 */
+const SW_VERSION = 'gradeo-v4';
 const STATIC_CACHE = SW_VERSION + '-static';
 const DYNAMIC_CACHE = SW_VERSION + '-dynamic';
+const ICON = 'https://res.cloudinary.com/djy3mjtsz/image/upload/v1770296454/Untitled-2_i2ezfh.png';
 
-/* Assets to pre-cache on install */
-const PRECACHE_ASSETS = [
-  '/',
-  '/manifest.webmanifest',
-  '/offline.html'
-];
-
-/* ── Install ──────────────────────────────── */
+/* ── Install ── */
 self.addEventListener('install', event => {
+  console.log('[SW] Installing', SW_VERSION);
   event.waitUntil(
-    caches.open(STATIC_CACHE).then(cache => {
-      return cache.addAll(PRECACHE_ASSETS).catch(() => {
-        /* Non-fatal: if offline.html doesn't exist yet, skip */
-        return cache.add('/').catch(() => {});
-      });
-    }).then(() => self.skipWaiting())
+    caches.open(STATIC_CACHE)
+      .then(cache => cache.addAll(['/', '/manifest.webmanifest']).catch(() => {}))
+      .then(() => self.skipWaiting())
   );
 });
 
-/* ── Activate: clean old caches ──────────── */
+/* ── Activate ── */
 self.addEventListener('activate', event => {
+  console.log('[SW] Activating', SW_VERSION);
   event.waitUntil(
-    caches.keys().then(keys =>
-      Promise.all(
-        keys
-          .filter(key => key !== STATIC_CACHE && key !== DYNAMIC_CACHE)
-          .map(key => caches.delete(key))
-      )
-    ).then(() => self.clients.claim())
+    caches.keys()
+      .then(keys => Promise.all(
+        keys.filter(k => k !== STATIC_CACHE && k !== DYNAMIC_CACHE).map(k => caches.delete(k))
+      ))
+      .then(() => self.clients.claim())
+      .then(() => console.log('[SW] Active and claimed all clients'))
   );
 });
 
-/* ── Fetch strategy ──────────────────────── */
+/* ── Fetch ── */
 self.addEventListener('fetch', event => {
   const { request } = event;
   const url = new URL(request.url);
 
-  /* Skip non-GET, chrome-extension, and Firebase calls */
-  if (
-    request.method !== 'GET' ||
-    url.protocol === 'chrome-extension:' ||
-    url.hostname.includes('firebaseio.com') ||
-    url.hostname.includes('googleapis.com') ||
-    url.hostname.includes('cloudflareinsights.com')
-  ) return;
+  if (request.method !== 'GET') return;
+  if (url.protocol === 'chrome-extension:') return;
+  if (url.hostname.includes('firebaseio.com')) return;
+  if (url.hostname.includes('googleapis.com') && !url.hostname.includes('fcm')) return;
+  if (url.hostname.includes('cloudflareinsights.com')) return;
+  if (url.hostname.includes('workers.dev')) return;
 
-  /* HTML pages → Network first, fallback to cache, then offline page */
   if (request.headers.get('Accept')?.includes('text/html')) {
     event.respondWith(
-      fetch(request)
-        .then(res => {
-          const clone = res.clone();
-          caches.open(DYNAMIC_CACHE).then(c => c.put(request, clone));
-          return res;
-        })
-        .catch(() =>
-          caches.match(request).then(cached =>
-            cached || caches.match('/offline.html') || caches.match('/')
-          )
-        )
+      fetch(request).then(res => {
+        const clone = res.clone();
+        caches.open(DYNAMIC_CACHE).then(c => c.put(request, clone));
+        return res;
+      }).catch(() => caches.match(request).then(c => c || caches.match('/')))
     );
     return;
   }
 
-  /* Static assets (images, fonts, scripts) → Cache first */
   if (
     url.hostname.includes('cloudinary.com') ||
     url.hostname.includes('gstatic.com') ||
     request.destination === 'image' ||
-    request.destination === 'font' ||
-    request.destination === 'style' ||
-    request.destination === 'script'
+    request.destination === 'font'
   ) {
     event.respondWith(
       caches.match(request).then(cached => {
         if (cached) return cached;
         return fetch(request).then(res => {
-          if (!res || res.status !== 200) return res;
-          const clone = res.clone();
-          caches.open(DYNAMIC_CACHE).then(c => c.put(request, clone));
+          if (res && res.status === 200) {
+            const clone = res.clone();
+            caches.open(DYNAMIC_CACHE).then(c => c.put(request, clone));
+          }
           return res;
         }).catch(() => cached);
       })
@@ -97,102 +71,97 @@ self.addEventListener('fetch', event => {
     return;
   }
 
-  /* Default: network with dynamic cache fallback */
   event.respondWith(
-    fetch(request)
-      .then(res => {
-        if (res && res.status === 200) {
-          const clone = res.clone();
-          caches.open(DYNAMIC_CACHE).then(c => c.put(request, clone));
-        }
-        return res;
-      })
-      .catch(() => caches.match(request))
+    fetch(request).then(res => {
+      if (res && res.status === 200) {
+        const clone = res.clone();
+        caches.open(DYNAMIC_CACHE).then(c => c.put(request, clone));
+      }
+      return res;
+    }).catch(() => caches.match(request))
   );
 });
 
-/* ── Push Notifications ──────────────────── */
+/* ── Push ── */
 self.addEventListener('push', event => {
-  const ICON = 'https://res.cloudinary.com/djy3mjtsz/image/upload/v1770296454/Untitled-2_i2ezfh.png';
+  console.log('[SW] Push received', event.data ? 'with data' : 'no data');
 
-  /* Safely parse whatever format the payload arrives in */
   let title = 'GRADEO';
   let body  = 'You have a new update!';
-  let url   = 'https://gradeo.in';
+  let openUrl = 'https://gradeo.in';
 
   if (event.data) {
     try {
       const d = event.data.json();
-      title = d.title || title;
-      body  = d.body  || body;
-      url   = d.url   || url;
-    } catch (_) {
-      try {
-        const text = event.data.text();
-        if (text) body = text;
-      } catch (_) {}
+      console.log('[SW] Push data:', JSON.stringify(d));
+      if (d.title) title = d.title;
+      if (d.body)  body  = d.body;
+      if (d.url)   openUrl = d.url;
+    } catch (e) {
+      console.log('[SW] Push data parse error:', e.message);
+      try { body = event.data.text(); } catch (_) {}
     }
   }
 
+  console.log('[SW] Showing notification:', title, body);
+
+  const showPromise = self.registration.showNotification(title, {
+    body,
+    icon: ICON,
+    badge: ICON,
+    vibrate: [300, 100, 300],
+    tag: 'gradeo-' + Date.now(),
+    renotify: false,
+    requireInteraction: false,
+    silent: false,
+    data: { url: openUrl }
+  });
+
   event.waitUntil(
-    self.registration.showNotification(title, {
-      body,
-      icon: ICON,
-      badge: ICON,
-      vibrate: [200, 100, 200],
-      tag: 'gradeo-notification',
-      renotify: true,
-      requireInteraction: false,
-      data: { url },
-      actions: [
-        { action: 'open',    title: 'Open GRADEO' },
-        { action: 'dismiss', title: 'Dismiss'     }
-      ]
+    showPromise.then(() => {
+      console.log('[SW] Notification shown successfully');
+    }).catch(err => {
+      console.error('[SW] showNotification failed:', err.message);
     })
   );
 });
 
-/* ── Notification click ──────────────────── */
+/* ── Notification click ── */
 self.addEventListener('notificationclick', event => {
+  console.log('[SW] Notification clicked, action:', event.action);
   event.notification.close();
-
   if (event.action === 'dismiss') return;
 
-  const targetUrl = event.notification.data?.url || '/';
+  const targetUrl = event.notification.data?.url || 'https://gradeo.in';
   event.waitUntil(
-    clients.matchAll({ type: 'window', includeUncontrolled: true }).then(windowClients => {
-      /* Focus existing tab if open */
-      for (const client of windowClients) {
+    clients.matchAll({ type: 'window', includeUncontrolled: true }).then(list => {
+      for (const client of list) {
         if (client.url.includes('gradeo.in') && 'focus' in client) {
           client.focus();
-          client.navigate(targetUrl);
-          return;
+          return client.navigate(targetUrl);
         }
       }
-      /* Otherwise open new window */
-      if (clients.openWindow) return clients.openWindow(targetUrl);
+      return clients.openWindow(targetUrl);
     })
   );
 });
 
-/* ── Background sync ─────────────────────── */
-self.addEventListener('sync', event => {
-  if (event.tag === 'gradeo-sync') {
-    event.waitUntil(
-      /* Notify all open tabs that sync happened */
-      clients.matchAll().then(all =>
-        all.forEach(c => c.postMessage({ type: 'BG_SYNC_COMPLETE' }))
-      )
-    );
+/* ── Message ── */
+self.addEventListener('message', event => {
+  if (event.data?.type === 'SKIP_WAITING') {
+    console.log('[SW] Skip waiting requested');
+    self.skipWaiting();
+  }
+  if (event.data?.type === 'PING') {
+    event.source?.postMessage({ type: 'PONG', version: SW_VERSION });
   }
 });
 
-/* ── Message from page ───────────────────── */
-self.addEventListener('message', event => {
-  if (event.data?.type === 'SKIP_WAITING') self.skipWaiting();
-  if (event.data?.type === 'CLEAR_CACHE') {
-    caches.delete(DYNAMIC_CACHE).then(() =>
-      event.source?.postMessage({ type: 'CACHE_CLEARED' })
+/* ── Sync ── */
+self.addEventListener('sync', event => {
+  if (event.tag === 'gradeo-sync') {
+    event.waitUntil(
+      clients.matchAll().then(all => all.forEach(c => c.postMessage({ type: 'BG_SYNC_COMPLETE' })))
     );
   }
 });
