@@ -194,6 +194,12 @@ html.loading .bgs{opacity:0;}
   .mTab:active{opacity:.7;}
 }
 @media(prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important;}}
+
+/* Reduce animations on low-end devices (save-data mode) */
+@media(prefers-reduced-data:reduce){
+  .bgs,.offerShimmer,.offerCTA::after{display:none!important;}
+  .gr{animation:none;background:var(--o);-webkit-background-clip:initial;background-clip:initial;color:var(--o);}
+}
 html{
   /* Block pull-to-refresh on Chrome Android */
   overscroll-behavior:none;
@@ -203,11 +209,12 @@ body{
   font-family:ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
   color:var(--text);background:var(--bg);
   -webkit-font-smoothing:antialiased;
+  -moz-osx-font-smoothing:grayscale;
   -webkit-text-size-adjust:100%;
+  text-rendering:optimizeSpeed;
   transition:none;
   overflow-x:hidden;
   overscroll-behavior-y:none;
-  /* iOS momentum scrolling */
   -webkit-overflow-scrolling:touch;
 }
 body.theme-ready{
@@ -448,7 +455,7 @@ section.dsk{padding:14px 0;}
 @keyframes hdpulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.35;transform:scale(.5)}}
 h1{margin-top:12px;font-size:clamp(28px,8vw,52px);line-height:1.02;letter-spacing:-1.8px;font-weight:950;color:var(--text);transition:color var(--td);animation:hIn .6s .08s var(--sm) both;}
 @keyframes hIn{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
-.gr{background:linear-gradient(100deg,#FF4D00,var(--o) 40%,#FF9040 75%,#FF6A00);background-size:200% auto;-webkit-background-clip:text;background-clip:text;color:transparent;animation:gS 4s ease-in-out infinite alternate;}
+.gr{background:linear-gradient(100deg,#FF4D00,var(--o) 40%,#FF9040 75%,#FF6A00);background-size:200% auto;-webkit-background-clip:text;background-clip:text;color:transparent;animation:gS 4s ease-in-out infinite alternate;will-change:background-position;}
 @keyframes gS{0%{background-position:0% center}100%{background-position:100% center}}
 .sub{margin-top:10px;color:var(--muted);font-size:14.5px;font-weight:500;line-height:1.55;max-width:40ch;transition:color var(--td);animation:hIn .6s .22s var(--sm) both;}
 .ctr{margin-top:16px;display:flex;gap:10px;animation:hIn .6s .32s var(--sm) both;}
@@ -641,7 +648,7 @@ h1{margin-top:12px;font-size:clamp(28px,8vw,52px);line-height:1.02;letter-spacin
 .tb2{align-self:flex-start;margin-top:8px;display:inline-block;padding:4px 10px;border-radius:999px;font-size:9.5px;font-weight:800;letter-spacing:.02em;background:var(--ib);color:var(--o);border:1px solid var(--id);position:relative;z-index:1;transition:background var(--td),border-color var(--td);}
 
 /* Features desktop — each card has a tinted icon background, subtle gradient */
-.fg{display:grid;grid-template-columns:1fr;gap:9px;margin-top:12px;}
+.fg{content-visibility:auto;contain-intrinsic-size:0 500px;display:grid;grid-template-columns:1fr;gap:9px;margin-top:12px;}
 .feat{
   background:var(--cardBg);border:1.5px solid var(--cb);border-radius:var(--r);
   padding:16px 18px;display:flex;align-items:flex-start;gap:14px;
@@ -769,7 +776,7 @@ h1{margin-top:12px;font-size:clamp(28px,8vw,52px);line-height:1.02;letter-spacin
 [data-theme="dark"] .mbd{background:rgba(0,0,0,.66);}
 .mbd.on{display:flex;animation:bdIn .16s ease both;}
 @keyframes bdIn{from{opacity:0}to{opacity:1}}
-.mbox{background:var(--shBg);border:1.5px solid rgba(255,106,0,.14);border-radius:20px;max-width:500px;width:100%;max-height:80dvh;overflow:hidden;display:flex;flex-direction:column;box-shadow:0 20px 60px rgba(0,0,0,.18);animation:popIn .26s var(--sp) both;transition:background var(--td);}
+.mbox{background:var(--shBg);border:1.5px solid rgba(255,106,0,.14);border-radius:20px;max-width:500px;width:100%;max-height:80vh;max-height:80vh;max-height:80dvh;overflow:hidden;display:flex;flex-direction:column;box-shadow:0 20px 60px rgba(0,0,0,.18);animation:popIn .26s var(--sp) both;transition:background var(--td);}
 @keyframes popIn{from{transform:scale(.90) translateY(14px);opacity:0}to{transform:none;opacity:1}}
 .mhd{padding:12px 15px;border-bottom:1px solid rgba(255,106,0,.08);display:flex;justify-content:space-between;align-items:center;}
 .mhd strong{font-size:14px;font-weight:900;color:var(--text);transition:color var(--td);}
@@ -842,7 +849,7 @@ h1{margin-top:12px;font-size:clamp(28px,8vw,52px);line-height:1.02;letter-spacin
   #mBar{
     flex:0 0 auto;
     display:flex;align-items:center;justify-content:space-between;
-    padding:max(12px,env(safe-area-inset-top)) 16px 10px;
+    padding:max(14px,calc(env(safe-area-inset-top) + 8px)) 16px 10px;
     background:transparent;
     position:relative;z-index:50;
     transition:padding .22s var(--sm);
@@ -866,12 +873,13 @@ h1{margin-top:12px;font-size:clamp(28px,8vw,52px);line-height:1.02;letter-spacin
   #mTrack{
     display:flex;
     height:100%;
-    /* Spring easing for natural feel */
+    -webkit-transition:-webkit-transform .36s cubic-bezier(.22,.68,0,1.2);
     transition:transform .36s cubic-bezier(.22,.68,0,1.2);
     will-change:transform;
+    -webkit-transform:translateZ(0);
     transform:translateZ(0);
-    backface-visibility:hidden;
     -webkit-backface-visibility:hidden;
+    backface-visibility:hidden;
   }
   #mTrack.no-transition{transition:none!important;}
   .mPanel{
@@ -884,12 +892,12 @@ h1{margin-top:12px;font-size:clamp(28px,8vw,52px);line-height:1.02;letter-spacin
     overscroll-behavior-x:none;
     overscroll-behavior-y:contain;
     padding:0 clamp(12px,4.5vw,20px) max(110px,env(safe-area-inset-bottom)) clamp(12px,4.5vw,20px);
-    /* Promote to own layer — no repaints during swipe */
     transform:translateZ(0);
     backface-visibility:hidden;
     -webkit-backface-visibility:hidden;
-    /* Remove expensive background transitions on panels */
     contain:layout style;
+    /* Improve scroll performance */
+    scroll-behavior:auto;
   }
   .mPanel::-webkit-scrollbar{display:none;}
   .mPanel{scrollbar-width:none;}
@@ -898,7 +906,7 @@ h1{margin-top:12px;font-size:clamp(28px,8vw,52px);line-height:1.02;letter-spacin
   #mTabs{
     flex:0 0 auto;
     display:flex;align-items:flex-end;justify-content:center;
-    padding:8px 12px max(20px,env(safe-area-inset-bottom)) 12px;
+    padding:8px 12px max(24px,env(safe-area-inset-bottom)) 12px;
     background:transparent;
     position:relative;z-index:50;
     pointer-events:none;
@@ -1767,7 +1775,7 @@ h1{margin-top:12px;font-size:clamp(28px,8vw,52px);line-height:1.02;letter-spacin
     <div class="wrap">
       <div class="tb">
         <div class="brand" id="brd" role="link" tabindex="0" aria-label="GRADEO home">
-          <div class="lw"><img src="https://res.cloudinary.com/djy3mjtsz/image/upload/v1770296454/Untitled-2_i2ezfh.png" alt="GRADEO" width="36" height="36" loading="eager"/></div>
+          <div class="lw"><img src="https://res.cloudinary.com/djy3mjtsz/image/upload/v1770296454/Untitled-2_i2ezfh.png" decoding="async" fetchpriority="high" alt="GRADEO" width="36" height="36" loading="eager"/></div>
           <div><div class="bn">GRADEO</div><div class="bt">Grade &amp; CGPA Planner</div></div>
         </div>
         <nav class="nav" aria-label="Primary">
@@ -1916,6 +1924,14 @@ function applyTheme(t, animate){
 }
 (()=>{ const s=localStorage.getItem('gradeo_theme'); if(s) applyTheme(s,false); else if(window.matchMedia('(prefers-color-scheme:dark)').matches) applyTheme('dark',false); })();
 /* Remove loading lock after first paint — all transitions now work smoothly */
+/* Safe area polyfill for old Android */
+(function(){
+  if(CSS.supports('padding-top', 'env(safe-area-inset-top)')) return;
+  const style = document.createElement('style');
+  style.textContent = '#mBar{padding-top:20px!important;} #mTabs{padding-bottom:16px!important;}';
+  document.head.appendChild(style);
+})();
+
 requestAnimationFrame(()=>{
   requestAnimationFrame(()=>{
     document.documentElement.classList.remove('loading');
@@ -2030,6 +2046,29 @@ $$('.mQBtn').forEach(el=>el.addEventListener('pointerdown',()=>vib(HV.light)));
 $$('.mFItem').forEach(el=>el.addEventListener('pointerdown',()=>vib(HV.soft)));
 $$('.mFeatCard').forEach(el=>el.addEventListener('pointerdown',()=>vib(HV.soft)));
 $$('.mTab').forEach(el=>el.addEventListener('pointerdown',()=>vib(HV.tick)));
+
+/* Network status */
+(function(){
+  const bar = document.getElementById('netStatus');
+  function setNet(online){
+    if(!bar) return;
+    if(online){
+      bar.style.background='#22C55E';
+      bar.textContent='Back online';
+      bar.style.display='block';
+      bar.style.transform='translateY(0)';
+      setTimeout(()=>{ bar.style.transform='translateY(-100%)'; setTimeout(()=>bar.style.display='none',300); },2000);
+    } else {
+      bar.style.background='#EF4444';
+      bar.textContent='No internet connection';
+      bar.style.display='block';
+      bar.style.transform='translateY(0)';
+    }
+  }
+  window.addEventListener('online', ()=>setNet(true));
+  window.addEventListener('offline', ()=>setNet(false));
+  if(!navigator.onLine) setNet(false);
+})();
 
 /* Toast */
 let _tt; function toast(msg){ const t=$('#toast'); if(!t) return; $('#tm').textContent=msg; t.classList.add('on'); clearTimeout(_tt); _tt=setTimeout(()=>t.classList.remove('on'),2600);} $('#tx')?.addEventListener('click',()=>$('#toast')?.classList.remove('on'));
