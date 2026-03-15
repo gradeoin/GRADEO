@@ -5,16 +5,17 @@
 <html lang="en">
 <head>
 <script>
-/* Instant theme — runs before CSS to prevent flash */
 (function(){
   var t=localStorage.getItem('gradeo_theme');
   if(!t) t=window.matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light';
   document.documentElement.setAttribute('data-theme',t);
   document.documentElement.style.colorScheme=t;
+  /* Mark as app-loading to suppress transitions */
+  document.documentElement.classList.add('loading');
 })();
 </script>
 <meta charset="utf-8"/>
-<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=5,viewport-fit=cover"/>
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=5,viewport-fit=cover,user-scalable=yes"/>
 <meta name="theme-color" id="tcMeta" content="#FFF6ED" media="(prefers-color-scheme: light)"/>
 <meta name="theme-color" content="#080604" media="(prefers-color-scheme: dark)"/>
 
@@ -31,7 +32,7 @@
 
 <!-- ═══ PWA / APP META ═══ -->
 <meta name="apple-mobile-web-app-capable" content="yes"/>
-<meta name="apple-mobile-web-app-status-bar-style" content="default"/>
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
 <meta name="apple-mobile-web-app-title" content="GRADEO"/>
 <meta name="mobile-web-app-capable" content="yes"/>
 <meta name="application-name" content="GRADEO"/>
@@ -131,6 +132,10 @@
 <link rel="dns-prefetch" href="https://res.cloudinary.com"/>
 <link rel="preload" as="image" href="https://res.cloudinary.com/djy3mjtsz/image/upload/v1770296454/Untitled-2_i2ezfh.png" fetchpriority="high"/>
 <style>
+/* ── App loading — suppress all transitions until ready ── */
+html.loading *{transition:none!important;animation-duration:0.01ms!important;}
+html.loading .bgs{opacity:0;}
+
 /* Skip link — keyboard/screen reader nav */
 .skip-link{position:absolute;top:-100px;left:12px;z-index:99999;padding:8px 16px;background:var(--o);color:#fff;font-weight:800;font-size:13px;border-radius:0 0 10px 10px;transition:top .16s;}
 .skip-link:focus{top:0;outline:none;}
@@ -168,6 +173,15 @@
 
 /* ════════════ RESET ════════════ */
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+
+/* ── Mobile tap feedback ── */
+@media(hover:none){
+  .tile:active,.mTile:active,.btn:active,button:active,.fq:active{
+    opacity:.75;transform:scale(.97)!important;
+    transition:opacity .08s,transform .08s!important;
+  }
+  .mTab:active{opacity:.7;}
+}
 @media(prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important;}}
 html{
   /* Block pull-to-refresh on Chrome Android */
@@ -182,6 +196,8 @@ body{
   transition:none;
   overflow-x:hidden;
   overscroll-behavior-y:none;
+  /* iOS momentum scrolling */
+  -webkit-overflow-scrolling:touch;
 }
 body.theme-ready{
   transition:background var(--td) var(--sm),color var(--td) var(--sm);
@@ -196,7 +212,10 @@ a{color:inherit;text-decoration:none;}
 /* ════════════ PAGE TRANSITION ════════════ */
 #ptOv{position:fixed;inset:0;z-index:7000;background:var(--o);opacity:0;pointer-events:none;}
 #ptOv.lift{animation:ptL .42s var(--sm) forwards;}
-@keyframes ptL{0%{opacity:0;transform:translateY(100%)}20%{opacity:1;transform:none}100%{opacity:1;transform:translateY(-100%)}}
+@keyframes ptL{0%{opacity:0;transform:translateY(100%)}15%{opacity:1;transform:none}100%{opacity:1;transform:translateY(-100%)}}
+@media(max-width:767px){
+  #ptOv.lift{animation-duration:.3s!important;}
+}
 
 /* ════════════ DESKTOP CURSOR ════════════ */
 #cur{
@@ -1851,7 +1870,12 @@ function vib(ms){ if(!isMob() || !('vibrate' in navigator)) return; try{navigato
 ['#yr','#mYr'].forEach(id=>{const el=$(id); if(el) el.textContent=new Date().getFullYear();});
 
 /* Layout switch */
-function showLayout(){ const mob=isMob(); const mApp=$('#mApp'), dsk=$('#dskLayout'); if(mApp) mApp.style.display=mob?'flex':'none'; if(dsk) dsk.style.display=mob?'none':'block'; }
+function showLayout(){
+  const mob=isMob();
+  const mApp=$('#mApp'), dsk=$('#dskLayout');
+  if(mApp){ mApp.style.display=mob?'flex':'none'; mApp.style.opacity='1'; }
+  if(dsk){ dsk.style.display=mob?'none':'block'; dsk.style.opacity='1'; }
+}
 showLayout();
 let _lastMob=isMob(), _resizeTimer; 
 window.addEventListener('resize',()=>{ clearTimeout(_resizeTimer); _resizeTimer=setTimeout(()=>{ const nowMob=isMob(); if(nowMob!==_lastMob){_lastMob=nowMob; showLayout();} if(nowMob){ setTrackWidth(); goTab(curTab,false);} },120); }, {passive:true});
@@ -1880,14 +1904,51 @@ function applyTheme(t, animate){
   localStorage.setItem('gradeo_theme', t);
 }
 (()=>{ const s=localStorage.getItem('gradeo_theme'); if(s) applyTheme(s,false); else if(window.matchMedia('(prefers-color-scheme:dark)').matches) applyTheme('dark',false); })();
-/* Enable transitions after page load to prevent flash */
-setTimeout(()=>document.body.classList.add('theme-ready'), 100);
+/* Remove loading lock after first paint — all transitions now work smoothly */
+requestAnimationFrame(()=>{
+  requestAnimationFrame(()=>{
+    document.documentElement.classList.remove('loading');
+    document.body.classList.add('theme-ready');
+    /* Fade in bg orbs smoothly */
+    document.querySelectorAll('.bg1,.bg2,.bg3,.bg4').forEach(function(b){
+      b.style.transition='opacity .6s ease';
+      b.style.opacity='1';
+    });
+  });
+});
 const toggleTheme=()=>{ applyTheme(htmlEl.dataset.theme==='dark'?'light':'dark',true); vib(HV.light); };
 $('#thBtn')?.addEventListener('click',toggleTheme); $('#mThBtn')?.addEventListener('click',toggleTheme);
 window.matchMedia('(prefers-color-scheme:dark)').addEventListener('change',e=>{ if(!localStorage.getItem('gradeo_theme')) applyTheme(e.matches?'dark':'light',false); });
 
+/* Intercept all internal links on mobile for smooth transition */
+if(isMob()){
+  document.addEventListener('click', function(e){
+    const a = e.target.closest('a[href]');
+    if(!a) return;
+    const href = a.getAttribute('href');
+    if(!href || href.startsWith('#') || href.startsWith('mailto:') || href.startsWith('tel:')) return;
+    if(a.target === '_blank') return;
+    try{
+      const url = new URL(href, location.origin);
+      if(url.origin !== location.origin) return;
+      e.preventDefault();
+      navTo(url.href);
+    } catch(_){}
+  }, {passive:false});
+}
+
 /* Page transition */
-function navTo(url){ $('#ptOv')?.classList.add('lift'); setTimeout(()=>location.href=url,420); }
+function navTo(url){
+  if(window._navigating) return;
+  window._navigating = true;
+  const ov = $('#ptOv');
+  if(ov){
+    ov.classList.add('lift');
+    setTimeout(()=>{ location.href=url; },380);
+  } else {
+    location.href = url;
+  }
+}
 
 /* Desktop cursor */
 (()=>{
