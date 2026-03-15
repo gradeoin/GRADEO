@@ -276,10 +276,14 @@ textarea.fi{resize:vertical;min-height:78px;line-height:1.55;}
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
             Refresh Subscriber Count
           </button>
-          <button class="btn-s" id="testBtn">
+          <button class="btn-s" id="testThisBtn">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
-            Send Test Notification
+            Test on This Device
           </button>
+          <div id="testStatus" style="font-size:12px;margin-top:8px;min-height:16px;color:var(--muted);text-align:center;"></div>
+          <div style="height:1px;background:var(--border);margin:12px 0;"></div>
+          <div style="font-size:11px;color:var(--muted);margin-bottom:8px;letter-spacing:.5px;text-transform:uppercase;font-weight:600;">Device Status</div>
+          <div id="deviceStatus" style="font-size:12px;color:var(--muted);line-height:1.6;">Checking...</div>
         </div>
 
         <div class="card" style="flex:1;">
@@ -328,6 +332,7 @@ document.getElementById('loginBtn').addEventListener('click', async () => {
       document.getElementById('lockText').textContent='Authenticated';
       document.getElementById('statCount').textContent=d.count;
       loadHistory();
+      checkDeviceStatus();
     } else {
       document.getElementById('loginErr').textContent='Incorrect password. Please try again.';
       btn.textContent='Unlock Dashboard'; btn.disabled=false;
@@ -385,13 +390,108 @@ async function fetchCount(){
   btn.disabled=false;
 }
 
-/* Test */
-document.getElementById('testBtn').addEventListener('click', async () => {
-  if(!('Notification' in window)){alert('Notifications not supported here.'); return;}
-  const send=()=>new Notification('GRADEO — Test Notification',{body:'Your push notifications are working correctly.',icon:ICON,badge:ICON});
-  if(Notification.permission==='granted') send();
-  else { const p=await Notification.requestPermission(); if(p==='granted') send(); else alert('Please allow notifications in your browser first.'); }
+/* Device status check */
+let thisDeviceSub = null;
+
+async function checkDeviceStatus(){
+  const el = document.getElementById('deviceStatus');
+  if(!el) return;
+  if(!('serviceWorker' in navigator) || !('PushManager' in navigator)){
+    el.innerHTML = '<span style="color:var(--red)">Push not supported on this browser</span>';
+    return;
+  }
+  const perm = Notification.permission;
+  if(perm === 'denied'){
+    el.innerHTML = '<span style="color:var(--red)">Notifications blocked — check browser settings</span>';
+    return;
+  }
+  if(perm === 'default'){
+    el.innerHTML = '<span style="color:var(--muted)">Notifications not enabled on this device</span>';
+    return;
+  }
+  try {
+    const reg = await navigator.serviceWorker.ready;
+    const sub = await reg.pushManager.getSubscription();
+    if(sub){
+      thisDeviceSub = sub.toJSON();
+      const short = sub.endpoint.split('/').pop().slice(0,16) + '...';
+      el.innerHTML = '<span style="color:var(--green)">Subscribed</span> · ID: ' + short;
+    } else {
+      el.innerHTML = '<span style="color:var(--red)">No subscription found — visit gradeo.in first and allow notifications</span>';
+    }
+  } catch(e){
+    el.innerHTML = '<span style="color:var(--muted)">Could not check subscription</span>';
+  }
+}
+
+/* Test on THIS device via Worker (real push, not fake Notification API) */
+document.getElementById('testThisBtn').addEventListener('click', async () => {
+  const statusEl = document.getElementById('testStatus');
+  const btn = document.getElementById('testThisBtn');
+
+  /* Step 1 — make sure we have a subscription */
+  if(!thisDeviceSub){
+    await checkDeviceStatus();
+  }
+
+  if(!thisDeviceSub){
+    /* Try to subscribe this device on the spot */
+    try {
+      const reg = await navigator.serviceWorker.ready;
+      const VAPID = 'BGwcazDRVGBgZz-CJNBQa7riAwt-HUsA0HSjELSmC4qAxtcslt8JzairfnEmCDKCn5FDDRyrfr3oSxcmghCZCuM';
+      const appServerKey = urlB64ToUint8(VAPID);
+      const sub = await reg.pushManager.subscribe({ userVisibleOnly: true, applicationServerKey: appServerKey });
+      thisDeviceSub = sub.toJSON();
+      /* Save to KV */
+      await fetch(WORKER+'/subscribe', {
+        method:'POST', headers:{'Content-Type':'application/json'},
+        body: JSON.stringify(thisDeviceSub)
+      });
+      statusEl.textContent = 'Subscribed this device — sending test...';
+    } catch(e){
+      statusEl.style.color = 'var(--red)';
+      statusEl.textContent = 'Cannot subscribe: ' + e.message;
+      return;
+    }
+  }
+
+  /* Step 2 — send real push through Worker to this device only */
+  btn.disabled = true;
+  statusEl.style.color = 'var(--muted)';
+  statusEl.textContent = 'Sending test push...';
+
+  try {
+    const r = await fetch(WORKER+'/send-one', {
+      method: 'POST',
+      headers: { 'Content-Type':'application/json', 'Authorization':'Bearer '+secret },
+      body: JSON.stringify({
+        subscription: thisDeviceSub,
+        title: 'GRADEO — Test',
+        message: 'Push notifications are working on this device!'
+      })
+    });
+    const d = await r.json();
+    if(d.ok){
+      statusEl.style.color = 'var(--green)';
+      statusEl.textContent = 'Test sent! You should see a notification now.';
+    } else {
+      statusEl.style.color = 'var(--red)';
+      statusEl.textContent = 'Failed: ' + (d.error || 'unknown error');
+    }
+  } catch(e){
+    statusEl.style.color = 'var(--red)';
+    statusEl.textContent = 'Network error: ' + e.message;
+  }
+
+  btn.disabled = false;
+  setTimeout(() => { statusEl.textContent = ''; statusEl.style.color = 'var(--muted)'; }, 6000);
 });
+
+function urlB64ToUint8(b64){
+  const pad = '='.repeat((4-b64.length%4)%4);
+  const raw = atob((b64+pad).replace(/-/g,'+').replace(/_/g,'/'));
+  return Uint8Array.from([...raw].map(c=>c.charCodeAt(0)));
+}
 
 /* Helpers */
 function showR(type,msg){ const el=document.getElementById('sr'); el.className=type; el.textContent=msg; el.style.display='block'; }
