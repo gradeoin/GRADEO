@@ -1,0 +1,65 @@
+{
+  "name": "GRADEO — SGPA & CGPA Planner",
+  "short_name": "GRADEO",
+  "description": "Free SGPA calculator, CGPA converter and grade planner for engineering students.",
+  "start_url": "/?utm_source=pwa&utm_medium=homescreen",
+  "scope": "/",
+  "display": "standalone",
+  "display_override": ["window-controls-overlay", "standalone", "minimal-ui"],
+  "background_color": "#FFF6ED",
+  "theme_color": "#FF6A00",
+  "orientation": "portrait-primary",
+  "lang": "en-IN",
+  "dir": "ltr",
+  "categories": ["education", "utilities", "productivity"],
+  "iarc_rating_id": "",
+  "prefer_related_applications": false,
+  "icons": [
+    {
+      "src": "https://res.cloudinary.com/djy3mjtsz/image/upload/v1770296454/Untitled-2_i2ezfh.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "https://res.cloudinary.com/djy3mjtsz/image/upload/v1770296454/Untitled-2_i2ezfh.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "https://res.cloudinary.com/djy3mjtsz/image/upload/v1770296454/Untitled-2_i2ezfh.png",
+      "sizes": "1200x630",
+      "type": "image/png",
+      "form_factor": "wide",
+      "label": "GRADEO SGPA and CGPA Planner"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "SGPA Calculator",
+      "short_name": "SGPA",
+      "description": "Calculate your SGPA instantly",
+      "url": "/calculator/?mode=sgpa&utm_source=pwa_shortcut",
+      "icons": [{ "src": "https://res.cloudinary.com/djy3mjtsz/image/upload/v1770296454/Untitled-2_i2ezfh.png", "sizes": "96x96" }]
+    },
+    {
+      "name": "CGPA Planner",
+      "short_name": "Planner",
+      "description": "Plan your target CGPA",
+      "url": "/calculator/?mode=planner&utm_source=pwa_shortcut",
+      "icons": [{ "src": "https://res.cloudinary.com/djy3mjtsz/image/upload/v1770296454/Untitled-2_i2ezfh.png", "sizes": "96x96" }]
+    }
+  ],
+  "share_target": {
+    "action": "/calculator/",
+    "method": "GET",
+    "params": {
+      "title": "title",
+      "text": "text",
+      "url": "url"
+    }
+  }
+}

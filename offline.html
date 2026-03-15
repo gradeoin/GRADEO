@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>GRADEO — You're Offline</title>
+<meta name="theme-color" content="#FF6A00"/>
+<style>
+:root{--o:#FF6A00;--bg:#FFF6ED;--text:#0D0C0B;--muted:#6B6560;}
+@media(prefers-color-scheme:dark){:root{--bg:#080604;--text:#F5E8D8;--muted:#8A7E74;}}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:ui-sans-serif,system-ui,-apple-system,sans-serif;background:var(--bg);color:var(--text);min-height:100dvh;display:flex;align-items:center;justify-content:center;padding:24px;}
+.card{max-width:400px;width:100%;text-align:center;}
+.icon{font-size:56px;margin-bottom:20px;display:block;}
+h1{font-size:24px;font-weight:800;letter-spacing:-.4px;margin-bottom:10px;}
+p{font-size:15px;color:var(--muted);line-height:1.6;margin-bottom:28px;}
+button{background:var(--o);color:#fff;border:none;border-radius:14px;padding:14px 32px;font-size:15px;font-weight:700;cursor:pointer;width:100%;}
+button:active{opacity:.85;}
+</style>
+</head>
+<body>
+<div class="card">
+  <span class="icon">📡</span>
+  <h1>You're offline</h1>
+  <p>GRADEO needs a connection to load. Check your internet and try again — your saved data is safe.</p>
+  <button onclick="location.reload()">Try again</button>
+</div>
+</body>
+</html>
