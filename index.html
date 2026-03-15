@@ -33,11 +33,22 @@
 <!-- ═══ PWA / APP META ═══ -->
 <meta name="apple-mobile-web-app-capable" content="yes"/>
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
-<meta name="apple-mobile-web-app-title" content="GRADEO"/>
+<meta name="apple-mobile-web-app-title" content="Gradeo"/>
 <meta name="mobile-web-app-capable" content="yes"/>
-<meta name="application-name" content="GRADEO"/>
+<meta name="application-name" content="Gradeo"/>
 <meta name="msapplication-TileColor" content="#FF6A00"/>
 <meta name="msapplication-config" content="/browserconfig.xml"/>
+<meta name="msapplication-TileImage" content="https://res.cloudinary.com/djy3mjtsz/image/upload/v1770296454/Untitled-2_i2ezfh.png"/>
+
+<!-- iOS splash screens for instant app feel -->
+<meta name="apple-touch-startup-image" content="https://res.cloudinary.com/djy3mjtsz/image/upload/v1770296454/Untitled-2_i2ezfh.png"/>
+
+<!-- Prevent iOS from making phone number links -->
+<meta name="format-detection" content="telephone=no"/>
+
+<!-- Android Chrome: show app in recents with proper theme -->
+<meta name="theme-color" content="#FF6A00" media="(prefers-color-scheme: light)"/>
+<meta name="theme-color" content="#080604" media="(prefers-color-scheme: dark)"/>
 
 <!-- ═══ SECURITY / FORMAT ═══ -->
 <meta name="format-detection" content="telephone=no,date=no,email=no,address=no"/>
@@ -114,7 +125,7 @@
 <script>
 // Inline PWA manifest fallback — inject if server doesn't serve manifest
 (()=>{
-  const m={name:'GRADEO',short_name:'GRADEO',description:'Free SGPA & CGPA Planner for Engineering Students',start_url:'/',display:'standalone',background_color:'#FFF6ED',theme_color:'#FF6A00',orientation:'portrait-primary',icons:[{src:'https://res.cloudinary.com/djy3mjtsz/image/upload/v1770296454/Untitled-2_i2ezfh.png',sizes:'192x192',type:'image/png'},{src:'https://res.cloudinary.com/djy3mjtsz/image/upload/v1770296454/Untitled-2_i2ezfh.png',sizes:'512x512',type:'image/png',purpose:'any maskable'}]};
+  const m={name:'Gradeo',short_name:'Gradeo',description:'Free SGPA & CGPA Planner for Engineering Students',start_url:'/',display:'standalone',background_color:'#FFF6ED',theme_color:'#FF6A00',orientation:'portrait-primary',icons:[{src:'https://res.cloudinary.com/djy3mjtsz/image/upload/v1770296454/Untitled-2_i2ezfh.png',sizes:'192x192',type:'image/png'},{src:'https://res.cloudinary.com/djy3mjtsz/image/upload/v1770296454/Untitled-2_i2ezfh.png',sizes:'512x512',type:'image/png',purpose:'any maskable'}]};
   fetch('/manifest.webmanifest').catch(()=>{
     const b=new Blob([JSON.stringify(m)],{type:'application/manifest+json'});
     const u=URL.createObjectURL(b);
@@ -2266,8 +2277,10 @@ else { try{ firebase.initializeApp({apiKey:'AIzaSyDB_FK8-3ATZBpuvfL34EMp9WHTTd5s
   /* ── Service Worker ── */
   let swReg = null;
   if('serviceWorker' in navigator){
-    navigator.serviceWorker.register('/sw.js', { scope:'/' }).then(reg => {
+    navigator.serviceWorker.register('/sw.js', { scope:'/', updateViaCache:'none' }).then(reg => {
       swReg = reg;
+
+      /* Listen for updates */
       reg.addEventListener('updatefound', () => {
         const nw = reg.installing;
         nw?.addEventListener('statechange', () => {
@@ -2281,6 +2294,25 @@ else { try{ firebase.initializeApp({apiKey:'AIzaSyDB_FK8-3ATZBpuvfL34EMp9WHTTd5s
           }
         });
       });
+
+      /* Register periodic background sync (refresh content while app is closed) */
+      if('periodicSync' in reg){
+        navigator.permissions.query({ name:'periodic-background-sync' }).then(status => {
+          if(status.state === 'granted'){
+            reg.periodicSync.register('gradeo-refresh', { minInterval: 24 * 60 * 60 * 1000 }).catch(() => {});
+          }
+        }).catch(() => {});
+      }
+
+      /* Pre-cache the calculator page in background after 3s */
+      setTimeout(() => {
+        if(navigator.onLine){
+          fetch('/calculator/').then(r => {
+            if(r.ok) caches.open('gradeo-pages-v5').then(c => c.put('/calculator/', r)).catch(() => {});
+          }).catch(() => {});
+        }
+      }, 3000);
+
     }).catch(e => console.warn('[GRADEO SW]', e));
 
     navigator.serviceWorker.addEventListener('controllerchange', () => {
