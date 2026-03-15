@@ -1,4 +1,3 @@
-
 <!doctype html>
 <html lang="en" data-theme="dark">
 <head>
@@ -328,6 +327,7 @@ document.getElementById('loginBtn').addEventListener('click', async () => {
       b.classList.add('ok');
       document.getElementById('lockText').textContent='Authenticated';
       document.getElementById('statCount').textContent=d.count;
+      loadHistory();
     } else {
       document.getElementById('loginErr').textContent='Incorrect password. Please try again.';
       btn.textContent='Unlock Dashboard'; btn.disabled=false;
@@ -397,13 +397,45 @@ document.getElementById('testBtn').addEventListener('click', async () => {
 function showR(type,msg){ const el=document.getElementById('sr'); el.className=type; el.textContent=msg; el.style.display='block'; }
 function addHist(title,msg,count,date){
   hist.unshift({title,msg,count,date});
+  renderHistory();
+}
+
+async function loadHistory(){
+  try {
+    const r = await fetch(WORKER+'/history', { headers:{'Authorization':'Bearer '+secret} });
+    const d = await r.json();
+    if(d.ok && d.history && d.history.length){
+      hist.length = 0;
+      let total = 0;
+      d.history.forEach(h => {
+        total += h.sent;
+        hist.push({ title:h.title, msg:h.message, count:h.sent, date:new Date(h.ts) });
+      });
+      totalSent = total;
+      document.getElementById('statTotal').textContent = totalSent;
+      if(hist[0]) document.getElementById('statLast').textContent =
+        hist[0].date.toLocaleDateString([],{day:'numeric',month:'short'}) + ' ' +
+        hist[0].date.toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});
+      renderHistory();
+    }
+  } catch(e){ console.warn('[GRADEO] History load failed', e); }
+}
+
+function renderHistory(){
+  if(!hist.length){
+    document.getElementById('histList').innerHTML='<div class="he">No notifications sent yet.</div>';
+    return;
+  }
   document.getElementById('histList').innerHTML=hist.map(h=>`
     <div class="hi">
       <div class="hi-icon"><img src="${ICON}" alt=""/></div>
       <div style="flex:1;min-width:0;">
         <div class="hi-title">${h.title}</div>
         <div class="hi-msg">${h.msg}</div>
-        <div class="hi-meta"><span>${h.date.toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'})}</span><span class="hi-badge">${h.count} sent</span></div>
+        <div class="hi-meta">
+          <span>${h.date.toLocaleDateString([],{day:'numeric',month:'short'})} ${h.date.toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'})}</span>
+          <span class="hi-badge">${h.count} sent</span>
+        </div>
       </div>
     </div>`).join('');
 }
