@@ -113,25 +113,42 @@ self.addEventListener('fetch', event => {
 
 /* ── Push Notifications ──────────────────── */
 self.addEventListener('push', event => {
-  let data = { title: 'GRADEO', body: 'You have a new update!', url: '/' };
-  try { data = { ...data, ...event.data.json() }; } catch (_) {}
+  const ICON = 'https://res.cloudinary.com/djy3mjtsz/image/upload/v1770296454/Untitled-2_i2ezfh.png';
 
-  const options = {
-    body: data.body,
-    icon: 'https://res.cloudinary.com/djy3mjtsz/image/upload/v1770296454/Untitled-2_i2ezfh.png',
-    badge: 'https://res.cloudinary.com/djy3mjtsz/image/upload/v1770296454/Untitled-2_i2ezfh.png',
-    vibrate: [100, 50, 100],
-    tag: data.tag || 'gradeo-notification',
-    renotify: true,
-    data: { url: data.url || '/' },
-    actions: [
-      { action: 'open', title: 'Open GRADEO' },
-      { action: 'dismiss', title: 'Dismiss' }
-    ]
-  };
+  /* Safely parse whatever format the payload arrives in */
+  let title = 'GRADEO';
+  let body  = 'You have a new update!';
+  let url   = 'https://gradeo.in';
+
+  if (event.data) {
+    try {
+      const d = event.data.json();
+      title = d.title || title;
+      body  = d.body  || body;
+      url   = d.url   || url;
+    } catch (_) {
+      try {
+        const text = event.data.text();
+        if (text) body = text;
+      } catch (_) {}
+    }
+  }
 
   event.waitUntil(
-    self.registration.showNotification(data.title, options)
+    self.registration.showNotification(title, {
+      body,
+      icon: ICON,
+      badge: ICON,
+      vibrate: [200, 100, 200],
+      tag: 'gradeo-notification',
+      renotify: true,
+      requireInteraction: false,
+      data: { url },
+      actions: [
+        { action: 'open',    title: 'Open GRADEO' },
+        { action: 'dismiss', title: 'Dismiss'     }
+      ]
+    })
   );
 });
 
