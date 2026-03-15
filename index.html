@@ -1819,358 +1819,122 @@ h1{margin-top:12px;font-size:clamp(28px,8vw,52px);line-height:1.02;letter-spacin
 <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+
 <script>
-const $=s=>document.querySelector(s);
-const $$=s=>document.querySelectorAll(s);
+/* ========= helpers ========= */
+const $  = (s) => document.querySelector(s);
+const $$ = (s) => document.querySelectorAll(s);
 const SITE='https://gradeo.in';
-const MU={m1:SITE+'/calculator/#m1',m2:SITE+'/calculator/#m2',m3:SITE+'/calculator/#m3'};
+const MU={m1: SITE+'/calculator/#m1', m2: SITE+'/calculator/#m2', m3: SITE+'/calculator/#m3'};
 const RK='gradeo_recents';
-const isMob=()=>window.innerWidth<=767;
-const isTouch=()=>window.matchMedia('(hover:none)').matches;
-function vib(ms){if(isMob()&&navigator.vibrate)try{navigator.vibrate(ms);}catch{}}
-function ss(sel){$(sel)?.scrollIntoView({behavior:'smooth',block:'start'});}
+const isMob   = () => window.innerWidth <= 767;
+const isTouch = () => window.matchMedia('(hover:none)').matches;
 
-/* ─── YEAR ─── */
-['#yr','#mYr'].forEach(id=>{const el=$(id);if(el)el.textContent=new Date().getFullYear();});
+/* Haptics */
+const HV={light:[8], medium:[14], strong:[20], tick:[6,8,6], success:[10,40,10,40,18], soft:[5,5,5]};
+function vib(ms){ if(!isMob() || !('vibrate' in navigator)) return; try{navigator.vibrate(ms);}catch{} }
 
-/* ─── SHOW CORRECT LAYOUT ─── */
-function showLayout(){
-  const mob=isMob();
-  $('#mApp').style.display=mob?'flex':'none';
-  $('#dskLayout').style.display=mob?'none':'block';
-}
+/* Year */
+['#yr','#mYr'].forEach(id=>{const el=$(id); if(el) el.textContent=new Date().getFullYear();});
+
+/* Layout switch */
+function showLayout(){ const mob=isMob(); const mApp=$('#mApp'), dsk=$('#dskLayout'); if(mApp) mApp.style.display=mob?'flex':'none'; if(dsk) dsk.style.display=mob?'none':'block'; }
 showLayout();
-// Debounced resize — only re-init when layout type actually changes (e.g. phone rotation)
-let _lastMob=isMob(),_resizeTimer;
-window.addEventListener('resize',()=>{
-  clearTimeout(_resizeTimer);
-  _resizeTimer=setTimeout(()=>{
-    const nowMob=isMob();
-    if(nowMob!==_lastMob){_lastMob=nowMob;showLayout();}
-    if(nowMob){setTrackWidth();goTab(curTab,false);}
-  },120);
-},{passive:true});
+let _lastMob=isMob(), _resizeTimer; 
+window.addEventListener('resize',()=>{ clearTimeout(_resizeTimer); _resizeTimer=setTimeout(()=>{ const nowMob=isMob(); if(nowMob!==_lastMob){_lastMob=nowMob; showLayout();} if(nowMob){ setTrackWidth(); goTab(curTab,false);} },120); }, {passive:true});
 
-/* ─── THEME ─── */
-const html=document.documentElement,tc=$('#tcMeta');
-function applyTheme(t,animate){
+/* Scroll to section */
+function ss(sel){ $(sel)?.scrollIntoView({behavior:'smooth',block:'start'}); }
+
+/* Theme */
+const htmlEl=document.documentElement, tc=$('#tcMeta');
+function applyTheme(t, animate){
+  const nextBg = (t==='dark'?'#080604':'#FFF6ED');
   if(animate){
     const ripple=$('#thRipple');
-    // Use theme btn position for ripple origin
-    const btn=$('#thBtn')||$('#mThBtn');
-    const rect=btn.getBoundingClientRect();
-    const cx=rect.left+rect.width/2,cy=rect.top+rect.height/2;
-    const d=Math.hypot(window.innerWidth,window.innerHeight)*2.6;
-    ripple.style.cssText=`background:${t==='dark'?'#080604':'#FFF6ED'};width:${d}px;height:${d}px;left:${cx-d/2}px;top:${cy-d/2}px;`;
-    ripple.classList.remove('go');void ripple.offsetWidth;ripple.classList.add('go');
-    setTimeout(()=>{html.setAttribute('data-theme',t);tc.setAttribute('content',t==='dark'?'#080604':'#FFF6ED');},150);
-    setTimeout(()=>ripple.classList.remove('go'),460);
-  }else{
-    html.setAttribute('data-theme',t);tc.setAttribute('content',t==='dark'?'#080604':'#FFF6ED');
-  }
-  localStorage.setItem('gradeo_theme',t);
-}
-(()=>{
-  const s=localStorage.getItem('gradeo_theme');
-  if(s)applyTheme(s,false);
-  else if(window.matchMedia('(prefers-color-scheme:dark)').matches)applyTheme('dark',false);
-})();
-const toggleTheme=()=>{applyTheme(html.dataset.theme==='dark'?'light':'dark',true);vib(6);};
-$('#thBtn')?.addEventListener('click',toggleTheme);
-$('#mThBtn')?.addEventListener('click',toggleTheme);
-window.matchMedia('(prefers-color-scheme:dark)').addEventListener('change',e=>{
-  if(!localStorage.getItem('gradeo_theme'))applyTheme(e.matches?'dark':'light',false);
-});
-
-/* ─── PAGE TRANSITION ─── */
-function navTo(url){
-  $('#ptOv').classList.add('lift');
-  setTimeout(()=>{location.href=url;},420);
-}
-
-/* ─── DESKTOP CURSOR ─── */
-(()=>{
-  if(isTouch()||window.innerWidth<1024)return;
-  const dot=$('#cur'),ring=$('#curRing');
-  if(!dot||!ring)return;
-  let mx=0,my=0,rx=0,ry=0,rAFid=null,moved=false;
-
-  function moveDot(x,y){
-    dot.style.transform=`translate(calc(${x}px - 50%),calc(${y}px - 50%))`;
-  }
-  function moveRing(){
-    // Smooth follow with lerp
-    rx+=(mx-rx)*.18;ry+=(my-ry)*.18;
-    ring.style.transform=`translate(calc(${rx.toFixed(1)}px - 50%),calc(${ry.toFixed(1)}px - 50%))`;
-    // Only keep looping if ring hasn't caught up
-    if(Math.abs(mx-rx)>0.3||Math.abs(my-ry)>0.3){
-      rAFid=requestAnimationFrame(moveRing);
-    }else{
-      rAFid=null;
+    const btn = isMob()? $('#mThBtn') : $('#thBtn');
+    const rect = btn?.getBoundingClientRect?.();
+    const cx = rect ? rect.left+rect.width/2 : innerWidth/2;
+    const cy = rect ? rect.top +rect.height/2 : innerHeight/2;
+    const d  = Math.hypot(innerWidth, innerHeight)*2.6;
+    if(ripple){
+      ripple.style.cssText = `background:${nextBg};width:${d}px;height:${d}px;left:${cx-d/2}px;top:${cy-d/2}px;`;
+      ripple.classList.remove('go'); void ripple.offsetWidth; ripple.classList.add('go');
+      setTimeout(()=>ripple.classList.remove('go'),460);
     }
-  }
+    setTimeout(()=>{ htmlEl.setAttribute('data-theme',t); tc?.setAttribute('content',nextBg); },150);
+  } else { htmlEl.setAttribute('data-theme',t); tc?.setAttribute('content',nextBg); }
+  localStorage.setItem('gradeo_theme', t);
+}
+(()=>{ const s=localStorage.getItem('gradeo_theme'); if(s) applyTheme(s,false); else if(window.matchMedia('(prefers-color-scheme:dark)').matches) applyTheme('dark',false); })();
+const toggleTheme=()=>{ applyTheme(htmlEl.dataset.theme==='dark'?'light':'dark',true); vib(HV.light); };
+$('#thBtn')?.addEventListener('click',toggleTheme); $('#mThBtn')?.addEventListener('click',toggleTheme);
+window.matchMedia('(prefers-color-scheme:dark)').addEventListener('change',e=>{ if(!localStorage.getItem('gradeo_theme')) applyTheme(e.matches?'dark':'light',false); });
 
-  document.addEventListener('mousemove',e=>{
-    mx=e.clientX;my=e.clientY;
-    moveDot(mx,my);
-    // Reveal cursor on first move
-    if(!moved){moved=true;document.body.classList.add('cur-ready');}
-    // Kick off ring lerp if not already running
-    if(!rAFid)rAFid=requestAnimationFrame(moveRing);
-  },{passive:true});
+/* Page transition */
+function navTo(url){ $('#ptOv')?.classList.add('lift'); setTimeout(()=>location.href=url,420); }
 
-  // Hide cursor when mouse leaves window
-  document.addEventListener('mouseleave',()=>{
-    document.body.classList.remove('cur-ready','ch');
-    moved=false;
-  });
-  document.addEventListener('mouseenter',()=>{
-    if(moved)document.body.classList.add('cur-ready');
-  });
-
+/* Desktop cursor */
+(()=>{
+  const prefersReduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if(isTouch() || innerWidth<1024 || prefersReduce) return;
+  const dot=$('#cur'), ring=$('#curRing'); if(!dot || !ring) return;
+  let mx=0,my=0,rx=0,ry=0, rAFid=null, moved=false;
+  function moveDot(x,y){ dot.style.transform=`translate(calc(${x}px - 50%),calc(${y}px - 50%))`; }
+  function moveRing(){ rx+=(mx-rx)*.18; ry+=(my-ry)*.18; ring.style.transform=`translate(calc(${rx.toFixed(1)}px - 50%),calc(${ry.toFixed(1)}px - 50%))`; if(Math.abs(mx-rx)>0.3 || Math.abs(my-ry)>0.3){ rAFid=requestAnimationFrame(moveRing);} else { rAFid=null; } }
+  document.addEventListener('mousemove',e=>{ mx=e.clientX; my=e.clientY; moveDot(mx,my); if(!moved){moved=true; document.body.classList.add('cur-ready');} if(!rAFid) rAFid=requestAnimationFrame(moveRing); }, {passive:true});
+  document.addEventListener('mouseleave',()=>{ document.body.classList.remove('cur-ready','ch'); moved=false; });
+  document.addEventListener('mouseenter',()=>{ if(moved) document.body.classList.add('cur-ready'); });
   document.addEventListener('mousedown',()=>document.body.classList.add('cc'));
-  document.addEventListener('mouseup',()=>document.body.classList.remove('cc'));
-
-  // Track hovered interactive elements
-  let hoverCount=0;
-  $$('a,button,.tile,.feat,.fi2,.card,[role=button]').forEach(el=>{
+  document.addEventListener('mouseup',  ()=>document.body.classList.remove('cc'));
+  let hoverCount=0; $$('a,button,.tile,.feat,.fi2,.card,[role=button]').forEach(el=>{
     el.addEventListener('mouseenter',()=>{hoverCount++;document.body.classList.add('ch');});
-    el.addEventListener('mouseleave',()=>{hoverCount=Math.max(0,hoverCount-1);if(!hoverCount)document.body.classList.remove('ch');});
+    el.addEventListener('mouseleave',()=>{hoverCount=Math.max(0,hoverCount-1); if(!hoverCount) document.body.classList.remove('ch');});
   });
 })();
 
-/* ─── DESKTOP SCROLL ─── */
-const pb=$('#pb'),hdr=$('#hdr'),btt=$('#btt');
-let _raf=false;
-window.addEventListener('scroll',()=>{
-  if(!_raf){_raf=true;requestAnimationFrame(()=>{
-    _raf=false;
-    const d=document.documentElement,s=d.scrollTop,h=d.scrollHeight-d.clientHeight;
-    if(pb)pb.style.width=(h>0?Math.round(s/h*1000)/10:0)+'%';
-    if(hdr)hdr.classList.toggle('scrolled',s>20);
-    if(btt)btt.classList.toggle('on',s>280);
-  });}
-},{passive:true});
+/* Desktop scroll */
+const pb=$('#pb'), hdr=$('#hdr'), btt=$('#btt'); let _raf=false;
+window.addEventListener('scroll',()=>{ if(_raf) return; _raf=true; requestAnimationFrame(()=>{ _raf=false; const d=document.documentElement,s=d.scrollTop,h=d.scrollHeight-d.clientHeight; if(pb) pb.style.width=(h>0?Math.round(s/h*1000)/10:0)+'%'; if(hdr) hdr.classList.toggle('scrolled', s>20); if(btt) btt.classList.toggle('on', s>280); }); }, {passive:true});
 
-/* ─── DESKTOP PARALLAX ─── */
+/* Parallax */
 if(!isTouch()){
-  const MAX=5;
-  document.addEventListener('mousemove',e=>{
-    const cx=(e.clientX/window.innerWidth-.5)*MAX*2;
-    const cy=(e.clientY/window.innerHeight-.5)*MAX*2;
-    $$('.bg1,.bg2,.bg3,.bg4').forEach((b,i)=>{
-      const d=[1.2,1,.8,.6][i]||1;
-      b.style.transform=`translate(${cx*d*.6}px,${cy*d*.4}px)`;
-    });
-  },{passive:true});
+  const MAX=5; document.addEventListener('mousemove',e=>{ const cx=(e.clientX/innerWidth-.5)*MAX*2; const cy=(e.clientY/innerHeight-.5)*MAX*2; $$('.bg1,.bg2,.bg3,.bg4').forEach((b,i)=>{ const d=[1.2,1,.8,.6][i]??1; b.style.transform=`translate(${cx*d*.6}px,${cy*d*.4}px)`;}); }, {passive:true});
 }
 
-/* ─── DESKTOP 3D TILES — use CSS var to avoid inline-style conflict ─── */
+/* Tiles & buttons tilt */
 if(!isTouch()){
-  $$('.tile').forEach(tile=>{
-    tile.addEventListener('mousemove',e=>{
-      const r=tile.getBoundingClientRect();
-      const x=(e.clientX-r.left)/r.width-.5,y=(e.clientY-r.top)/r.height-.5;
-      // Use CSS custom property so :active/:focus can still override via !important
-      tile.style.setProperty('--tilt',`translateY(-5px) rotateX(${(-y*6).toFixed(2)}deg) rotateY(${(x*6).toFixed(2)}deg) scale(1.012)`);
-      tile.style.transform='var(--tilt)';
-    });
-    tile.addEventListener('mouseleave',()=>{
-      tile.style.removeProperty('--tilt');
-      tile.style.transform='';
-    });
-    // Clear on mousedown so :active scale works cleanly
-    tile.addEventListener('mousedown',()=>tile.style.transform='');
-  });
-  $$('.bp,.bs').forEach(btn=>{
-    btn.addEventListener('mousemove',e=>{
-      const r=btn.getBoundingClientRect();
-      const dx=(e.clientX-r.left-r.width/2)/r.width,dy=(e.clientY-r.top-r.height/2)/r.height;
-      btn.style.setProperty('--btilt',`translateY(-3px) scale(1.02) translate(${(dx*5).toFixed(2)}px,${(dy*3).toFixed(2)}px)`);
-      btn.style.transform='var(--btilt)';
-    });
-    btn.addEventListener('mouseleave',()=>{
-      btn.style.removeProperty('--btilt');
-      btn.style.transform='';
-    });
-    btn.addEventListener('mousedown',()=>btn.style.transform='');
-  });
+  $$('.tile').forEach(tile=>{ tile.addEventListener('mousemove',e=>{ const r=tile.getBoundingClientRect(); const x=(e.clientX-r.left)/r.width-.5, y=(e.clientY-r.top)/r.height-.5; tile.style.setProperty('--tilt',`translateY(-5px) rotateX(${(-y*6).toFixed(2)}deg) rotateY(${(x*6).toFixed(2)}deg) scale(1.012)`); tile.style.transform='var(--tilt)'; }); tile.addEventListener('mouseleave',()=>{ tile.style.removeProperty('--tilt'); tile.style.transform=''; }); tile.addEventListener('mousedown',()=>tile.style.transform=''); });
+  $$('.bp,.bs').forEach(btn=>{ btn.addEventListener('mousemove',e=>{ const r=btn.getBoundingClientRect(); const dx=(e.clientX-r.left-r.width/2)/r.width, dy=(e.clientY-r.top-r.height/2)/r.height; btn.style.setProperty('--btilt',`translateY(-3px) scale(1.02) translate(${(dx*5).toFixed(2)}px,${(dy*3).toFixed(2)}px)`); btn.style.transform='var(--btilt)'; }); btn.addEventListener('mouseleave',()=>{ btn.style.removeProperty('--btilt'); btn.style.transform=''; }); btn.addEventListener('mousedown',()=>btn.style.transform=''); });
 }
 
-/* ─── MOBILE TAB SWIPE SYSTEM ─── */
-let curTab=0;
-const TABS=4;
-const track=$('#mTrack');
-const panels=Array.from($('#mTrack')?.children||[]);
-
-/* Set track pixel width so swipe math is correct */
-function setTrackWidth(){
-  if(track)track.style.width=(TABS*window.innerWidth)+'px';
-}
-setTrackWidth();
-
-
-function goTab(idx,animate=true){
-  if(!isMob())return;
-  const prev=curTab;
-  curTab=Math.max(0,Math.min(TABS-1,idx));
-  const w=window.innerWidth;
-  if(!animate){
-    track.classList.add('no-transition');
-    track.style.transform=`translateX(-${curTab*w}px)`;
-    setTimeout(()=>track.classList.remove('no-transition'),20);
-  }else{
-    track.classList.remove('no-transition');
-    track.style.transform=`translateX(-${curTab*w}px)`;
-  }
-  $$('.mTab').forEach((t,i)=>t.classList.toggle('active',i===curTab));
-  updateDI(curTab);
-  if(curTab!==prev)vib(HV.tick);  // crisp double-tick on tab switch
-  const dir=curTab>prev?1:-1;
-  revealPanel(curTab,animate?dir:null);
-  if(curTab>0)$('#mBar')?.classList.add('mini');
-  else $('#mBar')?.classList.remove('mini');
-}
+/* Mobile tabs */
+let curTab=0; const TABS=4; const track=$('#mTrack'); const panels=Array.from($('#mTrack')?.children ?? []);
+function setTrackWidth(){ if(track) track.style.width=(TABS*innerWidth)+'px'; } setTrackWidth();
+function updateDI(){ const di=$('#diIsland'); if(!di) return; di.classList.remove('diPulse'); void di.offsetWidth; di.classList.add('diPulse'); }
+function revealPanel(idx,dir){ const panel=panels[idx]; if(!panel) return; panel.classList.remove('entering-right','entering-left'); if(dir!=null){ void panel.offsetWidth; panel.classList.add(dir>0?'entering-right':'entering-left'); setTimeout(()=>panel.classList.remove('entering-right','entering-left'),380);} panel.querySelectorAll('.rv:not(.in)').forEach((el,i)=>{ setTimeout(()=>el.classList.add('in'), i*55); }); }
+function goTab(idx,animate=true){ if(!isMob()||!track) return; const prev=curTab; curTab=Math.max(0,Math.min(TABS-1,idx)); const w=innerWidth; if(!animate){ track.classList.add('no-transition'); track.style.transform=`translateX(-${curTab*w}px)`; setTimeout(()=>track.classList.remove('no-transition'),20);} else { track.classList.remove('no-transition'); track.style.transform=`translateX(-${curTab*w}px)`; } $$('.mTab').forEach((t,i)=>t.classList.toggle('active',i===curTab)); updateDI(); if(curTab!==prev) vib(HV.tick); const dir=curTab>prev?1:-1; revealPanel(curTab, animate?dir:null); if(curTab>0) $('#mBar')?.classList.add('mini'); else $('#mBar')?.classList.remove('mini'); }
 window.goTab=goTab;
 
-/* Dynamic Island updater */
-function updateDI(idx){
-  const di=$('#diIsland');if(!di)return;
-  di.classList.remove('diPulse');void di.offsetWidth;di.classList.add('diPulse');
-}
+/* Swipe */
+(()=>{ const vp=$('#mViewport'); if(!vp||!track) return; let sx=0,sy=0,startTab=0,dragging=false,blocked=false,lastX=0,velX=0,lastT=0; function base(){return startTab*innerWidth;} vp.addEventListener('touchstart',e=>{ sx=e.touches[0].clientX; sy=e.touches[0].clientY; lastX=sx; lastT=Date.now(); velX=0; startTab=curTab; dragging=false; blocked=false; track.classList.add('no-transition'); }, {passive:true}); vp.addEventListener('touchmove',e=>{ const cx=e.touches[0].clientX; const dx=cx-sx; const dy=e.touches[0].clientY-sy; const now=Date.now(); velX=(cx-lastX)/Math.max(1, (now-lastT)); lastX=cx; lastT=now; if(!dragging && !blocked){ if(Math.abs(dx)>7 && Math.abs(dx)>Math.abs(dy)*1.1) dragging=true; else if(Math.abs(dy)>10) blocked=true; } if(!dragging) return; e.preventDefault(); const w=innerWidth; const raw=base()-dx; const clamp=Math.max(0, Math.min((TABS-1)*w, raw)); track.style.transform=`translateX(-${clamp}px)`; }, {passive:false}); vp.addEventListener('touchend',e=>{ track.classList.remove('no-transition'); if(!dragging) return; const dx=e.changedTouches[0].clientX - sx; let next=startTab; if(dx<-40 || velX<-0.3) next=Math.min(TABS-1, startTab+1); else if(dx>40 || velX>0.3) next=Math.max(0, startTab-1); goTab(next); }, {passive:true}); vp.addEventListener('touchcancel',()=>{ track.classList.remove('no-transition'); goTab(startTab); }, {passive:true}); })();
 
-function revealPanel(idx,dir){
-  const panel=panels[idx];
-  if(!panel)return;
-  // Wheel/slide entry animation
-  panel.classList.remove('entering-right','entering-left');
-  if(dir!=null){
-    void panel.offsetWidth;
-    panel.classList.add(dir>0?'entering-right':'entering-left');
-    setTimeout(()=>panel.classList.remove('entering-right','entering-left'),380);
-  }
-  panel.querySelectorAll('.rv:not(.in)').forEach((el,i)=>{
-    setTimeout(()=>el.classList.add('in'),i*55);
-  });
-}
+/* Top bar compress */
+(()=>{ $$('.mPanel').forEach(panel=>{ panel.addEventListener('scroll',()=>{ const bar=$('#mBar'); if(!bar) return; if(panel.scrollTop>30) bar.classList.add('mini'); else if(curTab===0) bar.classList.remove('mini'); }, {passive:true}); }); })();
 
-/* Touch swipe — fully fixed bidirectional with velocity */
-(()=>{
-  const vp=$('#mViewport');
-  if(!vp)return;
-  let sx=0,sy=0,st=0,startTab=0,dragging=false,blocked=false,lastX=0,velX=0,lastT=0;
-  function getBase(){return startTab*window.innerWidth;}
-  vp.addEventListener('touchstart',e=>{
-    sx=e.touches[0].clientX;sy=e.touches[0].clientY;
-    lastX=sx;lastT=Date.now();velX=0;
-    startTab=curTab;dragging=false;blocked=false;
-    track.classList.add('no-transition');
-  },{passive:true});
-  vp.addEventListener('touchmove',e=>{
-    const cx=e.touches[0].clientX;
-    const dx=cx-sx;
-    const dy=e.touches[0].clientY-sy;
-    const now=Date.now();
-    velX=(cx-lastX)/(now-lastT||1);lastX=cx;lastT=now;
-    if(!dragging&&!blocked){
-      if(Math.abs(dx)>7&&Math.abs(dx)>Math.abs(dy)*1.1){dragging=true;}
-      else if(Math.abs(dy)>10){blocked=true;}
-    }
-    if(!dragging)return;
-    e.preventDefault();
-    const w=window.innerWidth;
-    // raw pixel offset from start, clamped to valid range
-    const rawPx=getBase()-dx;
-    const clampedPx=Math.max(0,Math.min((TABS-1)*w,rawPx));
-    track.style.transform=`translateX(-${clampedPx}px)`;
-  },{passive:false});
-  vp.addEventListener('touchend',e=>{
-    track.classList.remove('no-transition');
-    if(!dragging)return;
-    const dx=e.changedTouches[0].clientX-sx;
-    // velocity in px/ms — positive = right swipe (going back), negative = left (going forward)
-    let next=startTab;
-    if(dx<-40||velX<-0.3)next=Math.min(TABS-1,startTab+1);   // swipe left → next panel
-    else if(dx>40||velX>0.3)next=Math.max(0,startTab-1);      // swipe right → prev panel
-    goTab(next);
-  },{passive:true});
-  // also cancel on touchcancel
-  vp.addEventListener('touchcancel',()=>{track.classList.remove('no-transition');goTab(startTab);},{passive:true});
-})();
-
-/* ─── MOBILE TOP BAR SCROLL COMPRESS ─── */
-(()=>{
-  $$('.mPanel').forEach(panel=>{
-    panel.addEventListener('scroll',()=>{
-      const bar=$('#mBar');
-      if(panel.scrollTop>30)bar.classList.add('mini');
-      else if(curTab===0)bar.classList.remove('mini');
-    },{passive:true});
-  });
-})();
-
-/* ─── MOBILE FAQ ─── */
-function mFaq(el){
-  const isOpen=el.classList.contains('open');
-  $$('.mFQ.open').forEach(q=>{
-    q.classList.remove('open');
-    q.nextElementSibling.classList.remove('open');
-  });
-  if(!isOpen){
-    el.classList.add('open');
-    el.nextElementSibling.classList.add('open');
-    vib(HV.soft);
-  }
-}
+/* FAQ */
+function mFaq(el){ const isOpen=el.classList.contains('open'); $$('.mFQ.open').forEach(q=>{ q.classList.remove('open'); q.nextElementSibling.classList.remove('open'); }); if(!isOpen){ el.classList.add('open'); el.nextElementSibling.classList.add('open'); vib(HV.soft);} }
 window.mFaq=mFaq;
+function faq(el){ const i=el.closest('.fi2'); if(!i) return; const o=i.classList.contains('open'); $$('.fi2.open').forEach(x=>{ x.classList.remove('open'); x.querySelector('.fq')?.setAttribute('aria-expanded','false'); }); if(!o){ i.classList.add('open'); el.setAttribute('aria-expanded','true'); vib([4,8,4]); } }
+$$('.fq').forEach(q=>q.addEventListener('keydown',e=>{ if(e.key==='Enter'|| e.key===' '){ e.preventDefault(); faq(q); }}));
 
-/* ─── DESKTOP FAQ ─── */
-function faq(el){
-  const i=el.closest('.fi2'),o=i.classList.contains('open');
-  $$('.fi2.open').forEach(x=>{x.classList.remove('open');x.querySelector('.fq').setAttribute('aria-expanded','false');});
-  if(!o){i.classList.add('open');el.setAttribute('aria-expanded','true');vib([4,8,4]);}
-}
-$$('.fq').forEach(q=>q.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();faq(q);}}));
+/* Reveal on intersection */
+(()=>{ if(window.matchMedia('(prefers-reduced-motion:reduce)').matches){ $$('.rv').forEach(e=>e.classList.add('in')); return; } const io=new IntersectionObserver(entries=>{ entries.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('in'); const children=e.target.querySelectorAll(':scope > .rv, :scope > * > .rv'); children.forEach((child,i)=>{ if(!child.classList.contains('in')){ child.style.transitionDelay=`${i*65}ms`; setTimeout(()=>child.classList.add('in'), i*65); setTimeout(()=>{ child.style.transitionDelay='';},800); } }); io.unobserve(e.target); } }); }, {threshold:0.06, rootMargin:'0px 0px -4% 0px'}); $$('#dskLayout .rv').forEach(e=>io.observe(e)); })();
+setTimeout(()=>{ revealPanel(0); updateDI(); },100);
 
-/* ─── DESKTOP SCROLL REVEAL — wheel animation with child stagger ─── */
-(()=>{
-  if(window.matchMedia('(prefers-reduced-motion:reduce)').matches){
-    $$('.rv').forEach(e=>e.classList.add('in'));return;
-  }
-  const io=new IntersectionObserver(entries=>{
-    entries.forEach(e=>{
-      if(e.isIntersecting){
-        e.target.classList.add('in');
-        // Stagger direct children if this is a grid container
-        const children=e.target.querySelectorAll(':scope > .rv, :scope > * > .rv');
-        children.forEach((child,i)=>{
-          if(!child.classList.contains('in')){
-            child.style.transitionDelay=`${i*65}ms`;
-            setTimeout(()=>child.classList.add('in'),(i*65));
-            setTimeout(()=>{child.style.transitionDelay='';},800);
-          }
-        });
-        io.unobserve(e.target);
-      }
-    });
-  },{threshold:0.06,rootMargin:'0px 0px -4% 0px'});
-  $$('#dskLayout .rv').forEach(e=>io.observe(e));
-})();
+document.addEventListener('visibilitychange',()=>{ $$('.gr').forEach(el=>{ el.style.animationPlayState=document.hidden?'paused':'running';}); });
 
-/* Reveal first panel on mobile load */
-setTimeout(()=>{revealPanel(0);updateDI(0);},100);
-
-/* ─── HAPTIC — upgraded patterns, higher intensity ─── */
-// Haptic patterns: [vibrate, pause, vibrate, ...]
-const HV={
-  light:[8],           // light tap — buttons
-  medium:[14],         // medium — tile press
-  strong:[20],         // strong — primary action
-  tick:[6,8,6],        // double tick — tab switch
-  success:[10,40,10,40,18], // success pattern — claim/sign-in
-  soft:[5,5,5],        // triple soft — FAQ open
-};
-// All interactive elements get haptics
+/* Haptics wiring */
 $$('.mTile').forEach(el=>el.addEventListener('pointerdown',()=>vib(HV.medium)));
 $$('.btn.bp').forEach(el=>el.addEventListener('pointerdown',()=>vib(HV.strong)));
 $$('.btn.bs,.hsi-btn').forEach(el=>el.addEventListener('pointerdown',()=>vib(HV.light)));
@@ -2178,348 +1942,361 @@ $$('.offerCTA').forEach(el=>el.addEventListener('pointerdown',()=>vib(HV.success
 $$('.mQBtn').forEach(el=>el.addEventListener('pointerdown',()=>vib(HV.light)));
 $$('.mFItem').forEach(el=>el.addEventListener('pointerdown',()=>vib(HV.soft)));
 $$('.mFeatCard').forEach(el=>el.addEventListener('pointerdown',()=>vib(HV.soft)));
-// mTab haptic on pointerdown for instant feedback
 $$('.mTab').forEach(el=>el.addEventListener('pointerdown',()=>vib(HV.tick)));
 
-/* ─── TOAST ─── */
-let _tt;
-function toast(msg){const t=$('#toast');$('#tm').textContent=msg;t.classList.add('on');clearTimeout(_tt);_tt=setTimeout(()=>t.classList.remove('on'),2600);}
-$('#tx').addEventListener('click',()=>$('#toast').classList.remove('on'));
+/* Toast */
+let _tt; function toast(msg){ const t=$('#toast'); if(!t) return; $('#tm').textContent=msg; t.classList.add('on'); clearTimeout(_tt); _tt=setTimeout(()=>t.classList.remove('on'),2600);} $('#tx')?.addEventListener('click',()=>$('#toast')?.classList.remove('on'));
 
-/* ─── MODAL ─── */
-const MD={
-  p:{t:'Privacy Policy',b:'<p><strong>Last updated 2026.</strong></p><p style="margin-top:9px">GRADEO stores your Google user ID, name and email in Firebase when you sign in. We do not sell or share this data. No ads.</p><p style="margin-top:9px">Questions: <a href="mailto:info@gradeo.in" style="color:#FF6A00">info@gradeo.in</a></p>'},
-  t:{t:'Terms of Use',b:'<p>GRADEO is free for personal educational use. Commercial use is prohibited.</p><p style="margin-top:9px">Results are estimates only. Always verify with your university\'s official evaluation.</p>'},
-  d:{t:'Disclaimer',b:'<p>GRADEO is independent — not affiliated with any university. Calculations are estimates. Actual grades may vary.</p>'}
-};
-function om(k){const m=MD[k];if(!m)return;$('#mt').textContent=m.t;$('#mb').innerHTML=m.b;$('#mbd').classList.add('on');}
-function cm(){$('#mbd').classList.remove('on');}
-[['#fp','p'],['#ft','t'],['#fd','d'],['#mFp','p'],['#mFt','t'],['#mFd','d']].forEach(([sel,k])=>{
-  $(sel)?.addEventListener('click',e=>{e.preventDefault();om(k);});
-});
-document.addEventListener('keydown',e=>{
-  if(e.key==='Escape'){
-    cm(); // close privacy/terms modal
-    $('#siModal')?.classList.remove('on'); // close sign-in modal
-  }
-});
+/* Legal modal */
+const MD={ p:{t:'Privacy Policy', b:'<p><strong>Last updated 2026.</strong></p><p style="margin-top:9px">GRADEO stores your Google user ID, name and email in Firebase when you sign in. We do not sell or share this data. No ads.</p><p style="margin-top:9px">Questions: <a href="mailto:info@gradeo.in" style="color:#FF6A00">info@gradeo.in</a></p>'}, t:{t:'Terms of Use', b:'<p>GRADEO is free for personal educational use. Commercial use is prohibited.</p><p style="margin-top:9px">Results are estimates only. Always verify with your university\'s official evaluation.</p>'}, d:{t:'Disclaimer', b:'<p>GRADEO is independent — not affiliated with any university. Calculations are estimates. Actual grades may vary.</p>'} };
+function om(k){ const m=MD[k]; if(!m) return; $('#mt').textContent=m.t; $('#mb').innerHTML=m.b; $('#mbd').classList.add('on'); }
+function cm(){ $('#mbd').classList.remove('on'); }
+[['#fp','p'],['#ft','t'],['#fd','d'],['#mFp','p'],['#mFt','t'],['#mFd','d']].forEach(([sel,k])=>{ $(sel)?.addEventListener('click',e=>{ e.preventDefault(); om(k); }); });
+document.addEventListener('keydown',e=>{ if(e.key==='Escape'){ cm(); $('#siModal')?.classList.remove('on'); } });
 
-/* ─── MODE TILES ─── */
-function pr(m){const a=JSON.parse(localStorage.getItem(RK)||'[]'),n=[m,...a.filter(x=>x!==m)].slice(0,3);localStorage.setItem(RK,JSON.stringify(n));localStorage.setItem('gradeo_last_mode',m);rr();}
-function rr(){
-  ['#rl','#mRl'].forEach(sel=>{
-    const b=$(sel);if(!b)return;
-    const a=JSON.parse(localStorage.getItem(RK)||'[]');b.innerHTML='';
-    if(!a.length){b.innerHTML='<span style="font-size:11px;color:var(--muted2)">No recents yet</span>';return;}
-    const l={m1:'Planner',m2:'SGPA',m3:'CGPA'};
-    a.forEach(m=>{const x=document.createElement('button');x.className='rc';x.type='button';x.innerHTML=`<span class="rd"></span>${l[m]||m}`;x.addEventListener('click',()=>om2(m));b.appendChild(x);});
-  });
-}
-function om2(m){if(m)pr(m);navTo(MU[m]||MU.m2);}
-// Desktop tiles
-$$('.tile[data-mode]').forEach(el=>{el.addEventListener('click',()=>om2(el.dataset.mode));el.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();om2(el.dataset.mode);}});});
-// Mobile tiles
+/* Recents + tiles */
+function rr(){ ['#rl','#mRl'].forEach(sel=>{ const b=$(sel); if(!b) return; const a=JSON.parse(localStorage.getItem(RK) ?? '[]'); b.innerHTML=''; if(!a.length){ b.innerHTML='<span style="font-size:11px;color:var(--muted2)">No recents yet</span>'; return; } const l={m1:'Planner',m2:'SGPA',m3:'CGPA'}; a.forEach(m=>{ const x=document.createElement('button'); x.className='rc'; x.type='button'; x.innerHTML=`<span class="rd"></span>${l[m] ?? m}`; x.addEventListener('click',()=>om2(m)); b.appendChild(x); }); }); }
+function pr(m){ const a=JSON.parse(localStorage.getItem(RK) ?? '[]'); const n=[m, ...a.filter(x=>x!==m)].slice(0,3); localStorage.setItem(RK, JSON.stringify(n)); localStorage.setItem('gradeo_last_mode', m); rr(); }
+function om2(m){ if(m) pr(m); navTo(MU[m] ?? MU.m2); }
+$$('.tile[data-mode]').forEach(el=>{ el.addEventListener('click',()=>om2(el.dataset.mode)); el.addEventListener('keydown',e=>{ if(e.key==='Enter' || e.key===' '){ e.preventDefault(); om2(el.dataset.mode); }}); });
 $$('.mTile[data-mode]').forEach(el=>el.addEventListener('click',()=>om2(el.dataset.mode)));
 
-/* copy link */
-async function copyLink(){
-  try{
-    if(navigator.clipboard&&window.isSecureContext){await navigator.clipboard.writeText(MU.m2);toast('Link copied!');}
-    else{const t=document.createElement('textarea');t.value=MU.m2;t.style.cssText='position:fixed;left:-9999px';document.body.appendChild(t);t.select();document.execCommand('copy');t.remove();toast('Link copied!');}
-  }catch{toast('Copy failed');}
-  vib([4,10,4]);
-}
-$('#cpb')?.addEventListener('click',copyLink);
-$('#mCpb')?.addEventListener('click',copyLink);
-$('#rcl')?.addEventListener('click',()=>{localStorage.removeItem(RK);localStorage.removeItem('gradeo_last_mode');rr();toast('Recents cleared');});
-$('#mRcl')?.addEventListener('click',()=>{localStorage.removeItem(RK);localStorage.removeItem('gradeo_last_mode');rr();toast('Recents cleared');});
+/* Copy link */
+async function copyLink(){ try{ if(navigator.clipboard && isSecureContext){ await navigator.clipboard.writeText(MU.m2);} else { const t=document.createElement('textarea'); t.value=MU.m2; t.style.cssText='position:fixed;left:-9999px'; document.body.appendChild(t); t.select(); document.execCommand('copy'); t.remove(); } toast('Link copied!'); } catch{ toast('Copy failed'); } vib([4,10,4]); }
+$('#cpb')?.addEventListener('click',copyLink); $('#mCpb')?.addEventListener('click',copyLink);
+$('#rcl')?.addEventListener('click',()=>{ localStorage.removeItem(RK); localStorage.removeItem('gradeo_last_mode'); rr(); toast('Recents cleared'); });
+$('#mRcl')?.addEventListener('click',()=>{ localStorage.removeItem(RK); localStorage.removeItem('gradeo_last_mode'); rr(); toast('Recents cleared'); });
 
-/* offer */
-$('#offb')?.addEventListener('click',()=>navTo(SITE+'/offer'));
-$('#mOffb')?.addEventListener('click',()=>navTo(SITE+'/offer'));
+/* Offer */
+$('#offb')?.addEventListener('click',()=>navTo(SITE+'/offer')); $('#mOffb')?.addEventListener('click',()=>navTo(SITE+'/offer'));
+function goM(){ if(isMob()){ goTab(1);} else { $('#modes')?.scrollIntoView({behavior:'smooth',block:'start'});} }
 
-function goM(){if(isMob()){goTab(1);}else{$('#modes')?.scrollIntoView({behavior:'smooth',block:'start'});}}
-let ps=false;
+/* AUTH */
+let ps=false; // post-signin
+function sIn(u){ const n=u.displayName || 'Student', e=u.email||'', p=u.photoURL||''; const hsl=$('#hsl'); if(hsl) hsl.textContent='Sign out'; ['#gsb','#mGsb'].forEach(s=>{ const el=$(s); if(!el) return; el.textContent='Open calculator →'; el.onclick=()=>goM(); el.style.display=''; }); const hw=$('#mHowCard'); if(hw) hw.style.display='none'; ['#pout'].forEach(s=>{ const el=$(s); if(el) el.style.display='none';}); ['#pin','#mPin'].forEach(s=>{ const el=$(s); if(el) el.style.display='';}); ['#prec','#mPrec'].forEach(s=>{ const el=$(s); if(el) el.style.display='';}); ['#offp','#mOffp'].forEach(s=>{ const el=$(s); if(el) el.style.display='none';}); const lm=localStorage.getItem('gradeo_last_mode'); ['#olb','#mOlb'].forEach(s=>{ const el=$(s); if(el) el.style.display=lm?'':'none';}); ['#un','#mUn'].forEach(s=>{ const el=$(s); if(el) el.textContent=n;}); ['#ue','#mUe'].forEach(s=>{ const el=$(s); if(el) el.textContent=e;}); [['#avi2','#avii'],['#mAvi2','#mAvii']].forEach(([imgSel,iniSel])=>{ const img=$(imgSel), ini=$(iniSel); if(!img||!ini) return; if(p){ img.src=p; img.style.display='block'; ini.style.display='none'; } else { ini.textContent=n[0].toUpperCase(); ini.style.display=''; img.style.display='none'; } }); rr(); }
+function sOut(){ const hsl=$('#hsl'); if(hsl) hsl.textContent='Sign in'; ['#gsb','#mGsb'].forEach(s=>{ const el=$(s); if(!el) return; el.textContent='Get started →'; el.onclick=()=>{ if(window.__a?.currentUser){ goM(); return;} doSI(()=>{ ps=true;}); }; el.style.display=''; }); const hw=$('#mHowCard'); if(hw) hw.style.display=''; if(typeof window._howRestart==='function') window._howRestart(); ['#pout'].forEach(s=>{ const el=$(s); if(el) el.style.display='';}); ['#pin','#mPin'].forEach(s=>{ const el=$(s); if(el) el.style.display='none';}); ['#prec','#mPrec'].forEach(s=>{ const el=$(s); if(el) el.style.display='none';}); ['#offp','#mOffp'].forEach(s=>{ const el=$(s); if(el) el.style.display='';}); if(isMob()) goTab(0); }
 
-/* ─── AUTH ─── */
-function sIn(u){
-  const n=u.displayName||'Student',e=u.email||'',p=u.photoURL||'';
-  const hsl=$('#hsl');if(hsl)hsl.textContent='Sign out';
-  // Swap "Get started" → "Open calculator →" and rewire to goM
-  ['#gsb','#mGsb'].forEach(s=>{
-    const el=$(s);if(!el)return;
-    el.textContent='Open calculator →';
-    el.onclick=()=>goM();
-    el.style.display='';
-  });
-  // Hide "how it works" — signed-in users don't need onboarding
-  const hw=$('#mHowCard');if(hw)hw.style.display='none';
-  // Show signed-in profile card, hide placeholder
-  ['#pout'].forEach(s=>{const el=$(s);if(el)el.style.display='none';});
-  ['#pin','#mPin'].forEach(s=>{const el=$(s);if(el)el.style.display='';});
-  ['#prec','#mPrec'].forEach(s=>{const el=$(s);if(el)el.style.display='';});
-  // Hide offer — user already has access
-  ['#offp','#mOffp'].forEach(s=>{const el=$(s);if(el)el.style.display='none';});
-  const lm=localStorage.getItem('gradeo_last_mode');
-  ['#olb','#mOlb'].forEach(s=>{const el=$(s);if(el)el.style.display=lm?'':'none';});
-  ['#un','#mUn'].forEach(s=>{const el=$(s);if(el)el.textContent=n;});
-  ['#ue','#mUe'].forEach(s=>{const el=$(s);if(el)el.textContent=e;});
-  [['#avi2','#avii'],['#mAvi2','#mAvii']].forEach(([imgSel,iniSel])=>{
-    const img=$(imgSel),ini=$(iniSel);if(!img||!ini)return;
-    if(p){img.src=p;img.style.display='block';ini.style.display='none';}
-    else{ini.textContent=n[0].toUpperCase();ini.style.display='';img.style.display='none';}
-  });
-  rr();
-}
-function sOut(){
-  const hsl=$('#hsl');if(hsl)hsl.textContent='Sign in';
-  // Restore "Get started" and rewire back to doSI
-  ['#gsb','#mGsb'].forEach(s=>{
-    const el=$(s);if(!el)return;
-    el.textContent='Get started →';
-    el.onclick=()=>{if(window.__a?.currentUser){goM();return;}doSI(()=>{ps=true;});};
-    el.style.display='';
-  });
-  // Restore how-it-works card for returning signed-out users
-  const hw=$('#mHowCard');if(hw)hw.style.display='';
-  // Restart the animation from step 1
-  if(typeof window._howRestart==='function')window._howRestart();
-  // Hide signed-in profile card, show placeholder
-  ['#pout'].forEach(s=>{const el=$(s);if(el)el.style.display='';});
-  ['#pin','#mPin'].forEach(s=>{const el=$(s);if(el)el.style.display='none';});
-  ['#prec','#mPrec'].forEach(s=>{const el=$(s);if(el)el.style.display='none';});
-  // Show offer again
-  ['#offp','#mOffp'].forEach(s=>{const el=$(s);if(el)el.style.display='';});
-  // Go back to home tab on mobile so state is clean
-  if(isMob())goTab(0);
-}
-function doSI(after){
-  if(!window.__a||!window.__p){toast('Sign-in unavailable');return;}
-  if(window.__a.currentUser){if(after)after();return;}
-  // Store callback for after sign-in
-  window._siAfter=after||null;
-  // Open the sign-in picker modal
-  $('#siModal').classList.add('on');
-  // Reset email form
-  const ef=$('#siEmailForm');if(ef)ef.style.display='none';
-}
+function doSI(after){ if(!window.__a || !window.__p){ toast('Sign-in unavailable'); return; } if(window.__a.currentUser){ if(after) after(); return; } window._siAfter = after ?? null; $('#siModal')?.classList.add('on'); const ef=$('#siEmailForm'); if(ef) ef.style.display='none'; }
 
-/* ─── SIGN-IN PROVIDERS ─── */
-function _doProviderSI(provider,btnId){
-  const btn=$(btnId);
-  if(btn)btn.classList.add('loading');
-  const bs=[$('#hsi'),$('#gsb'),$('#mGsb')];
-  bs.forEach(b=>{if(b)b.disabled=true;});
-  window.__a.signInWithPopup(provider).then(()=>{
-    if(btn)btn.classList.remove('loading');
-    bs.forEach(b=>{if(b)b.disabled=false;});
-    $('#siModal').classList.remove('on');
-    vib(HV.success);
-    if(window._siAfter){window._siAfter();window._siAfter=null;}
-    else if(ps){ps=false;setTimeout(goM,160);}
-  }).catch(e=>{
-    console.error(e);
-    if(btn)btn.classList.remove('loading');
-    bs.forEach(b=>{if(b)b.disabled=false;});
-    const msg=e.code==='auth/popup-closed-by-user'?'Sign-in cancelled':
-               e.code==='auth/account-exists-with-different-credential'?'Account already exists with a different provider':
-               'Sign-in failed. Try again.';
-    toast(msg);
-  });
-}
+function _doProviderSI(provider, btnId){ const btn=$(btnId); if(btn) btn.classList.add('loading'); const bs=[$('#hsi'),$('#gsb'),$('#mGsb')].filter(Boolean); bs.forEach(b=>b.disabled=true); window.__a.signInWithPopup(provider).then(()=>{ if(btn) btn.classList.remove('loading'); bs.forEach(b=>b.disabled=false); $('#siModal')?.classList.remove('on'); vib(HV.success); if(window._siAfter){ window._siAfter(); window._siAfter=null; } else if(ps){ ps=false; setTimeout(goM,160);} }).catch(e=>{ console.error(e); if(btn) btn.classList.remove('loading'); bs.forEach(b=>b.disabled=false); const msg = e.code==='auth/popup-closed-by-user'?'Sign-in cancelled' : e.code==='auth/account-exists-with-different-credential'?'Account already exists with a different provider' : 'Sign-in failed. Try again.'; toast(msg); }); }
 
-// Google
-$('#siBtnGoogle')?.addEventListener('click',()=>{
-  if(!window.__a||!window.__p)return;
-  _doProviderSI(window.__p,'#siBtnGoogle');
-});
+$('#siBtnGoogle')?.addEventListener('click',()=>{ if(!window.__a || !window.__p) return; _doProviderSI(window.__p, '#siBtnGoogle'); });
+$('#siBtnGithub')?.addEventListener('click',()=>{ if(!window.__a) return; try{ const ghp=new firebase.auth.GithubAuthProvider(); ghp.addScope('read:user'); ghp.addScope('user:email'); _doProviderSI(ghp, '#siBtnGithub'); } catch(e){ toast('GitHub sign-in unavailable. Use Google or Email.'); } });
+$('#siBtnEmailToggle')?.addEventListener('click',()=>{ const ef=$('#siEmailForm'); if(!ef) return; const showing=ef.style.display!=='none'; ef.style.display=showing?'none':'flex'; if(!showing) setTimeout(()=>$('#siEmail')?.focus(),80); });
+$('#siBtnEmailSignIn')?.addEventListener('click',()=>{ const email=$('#siEmail')?.value?.trim(); const pass=$('#siPass')?.value; if(!email || !pass){ toast('Enter your email and password.'); return;} const btn=$('#siBtnEmailSignIn'); if(btn) btn.disabled=true; window.__a.signInWithEmailAndPassword(email,pass).then(()=>{ $('#siModal')?.classList.remove('on'); vib(HV.success); if(window._siAfter){ window._siAfter(); window._siAfter=null; } }).catch(e=>{ if(btn) btn.disabled=false; const msg = e.code==='auth/wrong-password'?'Incorrect password' : e.code==='auth/user-not-found'?'No account found — try Create account' : e.code==='auth/invalid-email'?'Invalid email address' : 'Sign-in failed. Check your details.'; toast(msg); }); });
+$('#siBtnEmailCreate')?.addEventListener('click',()=>{ const email=$('#siEmail')?.value?.trim(); const pass=$('#siPass')?.value; if(!email || !pass){ toast('Enter your email and password.'); return;} if(pass.length<6){ toast('Password must be 6+ characters.'); return;} const btn=$('#siBtnEmailCreate'); if(btn) btn.disabled=true; window.__a.createUserWithEmailAndPassword(email,pass).then(()=>{ $('#siModal')?.classList.remove('on'); vib(HV.success); toast('Account created! Welcome to GRADEO.'); if(window._siAfter){ window._siAfter(); window._siAfter=null; } }).catch(e=>{ if(btn) btn.disabled=false; const msg = e.code==='auth/email-already-in-use'?'Email already in use — try Sign in' : e.code==='auth/invalid-email'?'Invalid email address' : e.code==='auth/weak-password'?'Password too weak — use 6+ characters' : 'Could not create account. Try again.'; toast(msg); }); });
+$('#siBtnForgot')?.addEventListener('click',()=>{ const email=$('#siEmail')?.value?.trim(); if(!email){ toast('Enter your email first.'); $('#siEmail')?.focus(); return;} window.__a.sendPasswordResetEmail(email).then(()=>toast('Reset email sent — check your inbox.')).catch(()=>toast('Could not send reset email.')); });
+$('#siModal')?.addEventListener('click',e=>{ if(e.target===$('#siModal')) $('#siModal').classList.remove('on'); });
 
-// GitHub — set up provider on first use (requires GitHub OAuth in Firebase console)
-$('#siBtnGithub')?.addEventListener('click',()=>{
-  if(!window.__a)return;
-  try{
-    const ghp=new firebase.auth.GithubAuthProvider();
-    ghp.addScope('read:user');
-    ghp.addScope('user:email');
-    _doProviderSI(ghp,'#siBtnGithub');
-  }catch(e){
-    toast('GitHub sign-in unavailable. Use Google or Email.');
-  }
-});
+$('#hsi')?.addEventListener('click',()=>{ if(window.__a?.currentUser){ window.__a.signOut().then(()=>{ toast('Signed out'); sOut(); }); return;} doSI(); });
+$('#mSignOutBtn')?.addEventListener('click',()=>{ if(window.__a?.currentUser) window.__a.signOut().then(()=>{ toast('Signed out'); sOut(); }); });
+$('#dskSignOut')?.addEventListener('click',()=>{ if(window.__a?.currentUser) window.__a.signOut().then(()=>{ toast('Signed out'); sOut(); }); });
+$('#gsb')?.addEventListener('click',()=>{ if(window.__a?.currentUser){ goM(); return;} doSI(()=>{ ps=true; }); });
+$('#mGsb')?.addEventListener('click',()=>{ if(window.__a?.currentUser){ goM(); return;} doSI(()=>{ ps=true; }); });
+$('#olb')?.addEventListener('click',()=>om2(localStorage.getItem('gradeo_last_mode') ?? 'm2'));
+$('#mOlb')?.addEventListener('click',()=>om2(localStorage.getItem('gradeo_last_mode') ?? 'm2'));
+$('#brd')?.addEventListener('click',e=>{ if(e.ctrlKey || e.metaKey){ window.open(SITE+'/calculator/','_blank'); return;} if(location.hostname===new URL(SITE).hostname) window.scrollTo({top:0,behavior:'smooth'}); else navTo(SITE+'/'); });
 
-// Email toggle
-$('#siBtnEmailToggle')?.addEventListener('click',()=>{
-  const ef=$('#siEmailForm');
-  if(!ef)return;
-  const showing=ef.style.display!=='none';
-  ef.style.display=showing?'none':'flex';
-  if(!showing)setTimeout(()=>$('#siEmail')?.focus(),80);
-});
-
-// Email sign-in
-$('#siBtnEmailSignIn')?.addEventListener('click',()=>{
-  const email=$('#siEmail')?.value?.trim();
-  const pass=$('#siPass')?.value;
-  if(!email||!pass){toast('Enter your email and password.');return;}
-  const btn=$('#siBtnEmailSignIn');
-  if(btn)btn.disabled=true;
-  window.__a.signInWithEmailAndPassword(email,pass).then(()=>{
-    $('#siModal').classList.remove('on');
-    vib(HV.success);
-    if(window._siAfter){window._siAfter();window._siAfter=null;}
-  }).catch(e=>{
-    if(btn)btn.disabled=false;
-    const msg=e.code==='auth/wrong-password'?'Incorrect password':
-               e.code==='auth/user-not-found'?'No account found — try Create account':
-               e.code==='auth/invalid-email'?'Invalid email address':
-               'Sign-in failed. Check your details.';
-    toast(msg);
-  });
-});
-
-// Email create account
-$('#siBtnEmailCreate')?.addEventListener('click',()=>{
-  const email=$('#siEmail')?.value?.trim();
-  const pass=$('#siPass')?.value;
-  if(!email||!pass){toast('Enter your email and password.');return;}
-  if(pass.length<6){toast('Password must be 6+ characters.');return;}
-  const btn=$('#siBtnEmailCreate');
-  if(btn)btn.disabled=true;
-  window.__a.createUserWithEmailAndPassword(email,pass).then(()=>{
-    $('#siModal').classList.remove('on');
-    vib(HV.success);
-    toast('Account created! Welcome to GRADEO.');
-    if(window._siAfter){window._siAfter();window._siAfter=null;}
-  }).catch(e=>{
-    if(btn)btn.disabled=false;
-    const msg=e.code==='auth/email-already-in-use'?'Email already in use — try Sign in':
-               e.code==='auth/invalid-email'?'Invalid email address':
-               e.code==='auth/weak-password'?'Password too weak — use 6+ characters':
-               'Could not create account. Try again.';
-    toast(msg);
-  });
-});
-
-// Forgot password
-$('#siBtnForgot')?.addEventListener('click',()=>{
-  const email=$('#siEmail')?.value?.trim();
-  if(!email){toast('Enter your email first.');$('#siEmail')?.focus();return;}
-  window.__a.sendPasswordResetEmail(email).then(()=>{
-    toast('Reset email sent — check your inbox.');
-  }).catch(()=>toast('Could not send reset email.'));
-});
-
-// Close modal on backdrop click
-$('#siModal')?.addEventListener('click',e=>{if(e.target===$('#siModal'))$('#siModal').classList.remove('on');});
-$('#hsi')?.addEventListener('click',()=>{if(window.__a?.currentUser){window.__a.signOut().then(()=>{toast('Signed out');sOut();});return;}doSI();});
-$('#mSignOutBtn')?.addEventListener('click',()=>{
-  if(window.__a?.currentUser){window.__a.signOut().then(()=>{toast('Signed out');sOut();});}
-});
-$('#dskSignOut')?.addEventListener('click',()=>{
-  if(window.__a?.currentUser){window.__a.signOut().then(()=>{toast('Signed out');sOut();});}
-});
-// Single sign-in CTA — Get started handles everything
-$('#gsb')?.addEventListener('click',()=>{if(window.__a?.currentUser){goM();return;}doSI(()=>{ps=true;});});
-$('#mGsb')?.addEventListener('click',()=>{if(window.__a?.currentUser){goM();return;}doSI(()=>{ps=true;});});
-$('#olb')?.addEventListener('click',()=>om2(localStorage.getItem('gradeo_last_mode')||'m2'));
-$('#mOlb')?.addEventListener('click',()=>om2(localStorage.getItem('gradeo_last_mode')||'m2'));
-
-$('#brd')?.addEventListener('click',e=>{
-  if(e.ctrlKey||e.metaKey){window.open(SITE+'/calculator/','_blank');return;}
-  if(location.hostname===new URL(SITE).hostname)window.scrollTo({top:0,behavior:'smooth'});
-  else navTo(SITE+'/');
-});
-
-/* ─── HOW IT WORKS ANIMATION ─── */
-(()=>{
-  if(!isMob())return;
-  const steps=[
-    'Enter your internal marks and credits for each subject — takes about 30 seconds.',
-    'Set your target CGPA and your current CGPA so GRADEO knows the gap.',
-    'Instantly see the minimum marks you need in each final exam. Zero guesswork.'
-  ];
-  const cgpaFrom=['7.4','7.8','8.1'];
-  const cgpaTo=  ['7.8','8.1','8.5'];
-  const barW=[[.72,.58,.85],[.60,.74,.68],[.82,.65,.91]];
-  const pcts=[['72%','58%','85%'],['60%','74%','68%'],['82%','65%','91%']];
-  let curStep=0,running=true;
-
-  // Animate bars on load
-  setTimeout(()=>{
-    $$('.mHowBarFill').forEach((b,i)=>{
-      b.style.transition='transform .9s cubic-bezier(.22,.68,0,1.1) '+(i*120)+'ms';
-      b.style.transform='scaleX('+barW[0][i]+')';
-    });
-  },900);
-
-  function animateCGPA(from,to,el){
-    const s=performance.now(),fN=parseFloat(from),tN=parseFloat(to),dur=900;
-    (function f(now){
-      const p=Math.min((now-s)/dur,1),e=1-Math.pow(1-p,3);
-      el.textContent=(fN+(tN-fN)*e).toFixed(1);
-      if(p<1)requestAnimationFrame(f);else el.textContent=to;
-    })(performance.now());
-  }
-
-  function goStep(n){
-    curStep=((n%3)+3)%3;
-    const desc=$('#mHowDesc'),cgpa=$('#mHowCGPA');
-    if(!desc||!cgpa)return;
-    $$('.mHowStep').forEach((s,i)=>s.classList.toggle('active',i===curStep));
-    desc.style.opacity='0';
-    setTimeout(()=>{desc.textContent=steps[curStep];desc.style.transition='opacity .22s';desc.style.opacity='1';},200);
-    animateCGPA(cgpaFrom[curStep],cgpaTo[curStep],cgpa);
-    $$('.mHowBarFill').forEach((b,i)=>{
-      b.style.transition='transform .7s cubic-bezier(.22,.68,0,1.1) '+(i*80)+'ms';
-      b.style.transform='scaleX('+barW[curStep][i]+')';
-    });
-    $$('.mHowBarPct').forEach((el,i)=>{el.textContent=pcts[curStep][i];});
-    if(typeof vib==='function')vib([5,5,5]);
-  }
-
-  let auto=setInterval(()=>{if(running)goStep(curStep+1);},2800);
-  $$('.mHowStep').forEach((s,i)=>{
-    s.addEventListener('click',()=>{
-      clearInterval(auto);goStep(i);
-      auto=setInterval(()=>{if(running)goStep(curStep+1);},2800);
-    });
-  });
-  // Pause/resume on visibility change
-  document.addEventListener('visibilitychange',()=>{
-    running=!document.hidden;
-    // Restart interval when tab becomes visible again
-    if(running){clearInterval(auto);auto=setInterval(()=>{if(running)goStep(curStep+1);},2800);}
-  });
-  // Expose restart for sOut() — card reappears when signed out
-  window._howRestart=()=>{
-    curStep=0;running=true;
-    clearInterval(auto);
-    if($('#mHowDesc'))$('#mHowDesc').textContent=steps[0];
-    $$('.mHowStep').forEach((s,i)=>s.classList.toggle('active',i===0));
-    auto=setInterval(()=>{if(running)goStep(curStep+1);},2800);
-  };
+/* HOW IT WORKS animation */
+(()=>{ if(!isMob()) return; const steps=[ 'Enter your internal marks and credits for each subject — takes about 30 seconds.', 'Set your target CGPA and your current CGPA so GRADEO knows the gap.', 'Instantly see the minimum marks you need in each final exam. Zero guesswork.' ]; const cgpaFrom=['7.4','7.8','8.1']; const cgpaTo=['7.8','8.1','8.5']; const barW=[[.72,.58,.85],[.60,.74,.68],[.82,.65,.91]]; const pcts=[['72%','58%','85%'],['60%','74%','68%'],['82%','65%','91%']]; let curStep=0, running=true; setTimeout(()=>{ $$('.mHowBarFill').forEach((b,i)=>{ b.style.transition='transform .9s cubic-bezier(.22,.68,0,1.1) '+(i*120)+'ms'; b.style.transform='scaleX('+barW[0][i]+')'; }); },900); function animateCGPA(from,to,el){ const s=performance.now(), fN=parseFloat(from), tN=parseFloat(to), dur=900; (function f(now){ const p=Math.min((now-s)/dur,1), e=1-Math.pow(1-p,3); el.textContent=(fN+(tN-fN)*e).toFixed(1); if(p<1) requestAnimationFrame(f); else el.textContent=to; })(performance.now()); }
+  function goStep(n){ curStep=((n%3)+3)%3; const desc=$('#mHowDesc'), cgpa=$('#mHowCGPA'); if(!desc || !cgpa) return; $$('.mHowStep').forEach((s,i)=>s.classList.toggle('active',i===curStep)); desc.style.opacity='0'; setTimeout(()=>{ desc.textContent=steps[curStep]; desc.style.transition='opacity .22s'; desc.style.opacity='1'; },200); animateCGPA(cgpaFrom[curStep], cgpaTo[curStep], cgpa); $$('.mHowBarFill').forEach((b,i)=>{ b.style.transition='transform .7s cubic-bezier(.22,.68,0,1.1) '+(i*80)+'ms'; b.style.transform='scaleX('+barW[curStep][i]+')'; }); $$('.mHowBarPct').forEach((el,i)=>{ el.textContent=pcts[curStep][i]; }); vib(HV.soft); }
+  let auto=setInterval(()=>{ if(running) goStep(curStep+1); },2800);
+  $$('.mHowStep').forEach((s,i)=>{ s.addEventListener('click',()=>{ clearInterval(auto); goStep(i); auto=setInterval(()=>{ if(running) goStep(curStep+1); },2800); }); });
+  document.addEventListener('visibilitychange',()=>{ running=!document.hidden; if(running){ clearInterval(auto); auto=setInterval(()=>{ if(running) goStep(curStep+1); },2800);} });
+  window._howRestart=()=>{ curStep=0; running=true; clearInterval(auto); if($('#mHowDesc')) $('#mHowDesc').textContent=steps[0]; $$('.mHowStep').forEach((s,i)=>s.classList.toggle('active',i===0)); auto=setInterval(()=>{ if(running) goStep(curStep+1); },2800); };
 })();
 
-/* battery saver */
-document.addEventListener('visibilitychange',()=>{
-  $$('.gr').forEach(el=>{el.style.animationPlayState=document.hidden?'paused':'running';});
-});
-
-if(location.protocol==='file:'){
-  sOut();
-  ['#hsi','#gsb','#mGsb'].forEach(s=>{const el=$(s);if(el)el.disabled=true;});
-  $('#gsb')?.addEventListener('click',goM);
-  $('#mGsb')?.addEventListener('click',goM);
-}else{
-  try{
-    firebase.initializeApp({apiKey:'AIzaSyDB_FK8-3ATZBpuvfL34EMp9WHTTd5sfIo',authDomain:'gradeo-in.firebaseapp.com',projectId:'gradeo-in',storageBucket:'gradeo-in.firebasestorage.app',messagingSenderId:'784963451684',appId:'1:784963451684:web:9d57beed639d488e4891b1',measurementId:'G-JSNGKKMJEH'});
-    const a=firebase.auth(),p=new firebase.auth.GoogleAuthProvider();
-    a.setPersistence(firebase.auth.Auth.Persistence.LOCAL).catch(()=>{});
-    window.__a=a;window.__p=p;
-    a.onAuthStateChanged(u=>{if(u){sIn(u);if(ps){ps=false;setTimeout(goM,160);}}else sOut();});
-  }catch(e){console.error(e);sOut();}
-}
+/* File vs hosted */
+if(location.protocol==='file:'){ sOut(); ['#hsi','#gsb','#mGsb'].forEach(s=>{ const el=$(s); if(el) el.disabled=true; }); $('#gsb')?.addEventListener('click',goM); $('#mGsb')?.addEventListener('click',goM); }
+else { try{ firebase.initializeApp({apiKey:'AIzaSyDB_FK8-3ATZBpuvfL34EMp9WHTTd5sfIo',authDomain:'gradeo-in.firebaseapp.com',projectId:'gradeo-in',storageBucket:'gradeo-in.firebasestorage.app',messagingSenderId:'784963451684',appId:'1:784963451684:web:9d57beed639d488e4891b1',measurementId:'G-JSNGKKMJEH'}); const a=firebase.auth(), p=new firebase.auth.GoogleAuthProvider(); a.setPersistence(firebase.auth.Auth.Persistence.LOCAL).catch(()=>{}); window.__a=a; window.__p=p; a.onAuthStateChanged(u=>{ if(u){ sIn(u); if(ps){ ps=false; setTimeout(goM,160);} } else sOut(); }); }catch(e){ console.error(e); sOut(); } }
 </script>
+
+<!-- ═══ PWA INSTALL BANNER ═══ -->
+<div id="pwaBanner" style="
+  display:none;position:fixed;bottom:0;left:0;right:0;z-index:8000;
+  padding:14px 16px 20px;
+  background:var(--surface);
+  border-top:1px solid var(--cb);
+  box-shadow:0 -4px 24px rgba(0,0,0,.08);
+  border-radius:20px 20px 0 0;
+  animation:slideUp .32s cubic-bezier(.16,1,.3,1) both;
+">
+<style>
+@keyframes slideUp{from{transform:translateY(100%);opacity:0}to{transform:none;opacity:1}}
+#pwaBanner .pwa-inner{display:flex;align-items:center;gap:12px;max-width:480px;margin:0 auto;}
+#pwaBanner .pwa-icon{width:48px;height:48px;border-radius:12px;flex-shrink:0;background:var(--o);display:flex;align-items:center;justify-content:center;font-size:22px;}
+#pwaBanner .pwa-text{flex:1;min-width:0;}
+#pwaBanner .pwa-title{font-size:14px;font-weight:700;color:var(--text);}
+#pwaBanner .pwa-sub{font-size:12px;color:var(--muted);margin-top:2px;}
+#pwaBanner .pwa-btns{display:flex;gap:8px;margin-top:12px;max-width:480px;margin-left:auto;margin-right:auto;}
+#pwaBanner .pwa-install{flex:1;background:var(--o);color:#fff;border:none;border-radius:12px;padding:11px 0;font-size:14px;font-weight:700;cursor:pointer;}
+#pwaBanner .pwa-dismiss{background:transparent;border:1.5px solid var(--cb);color:var(--muted);border-radius:12px;padding:11px 18px;font-size:14px;cursor:pointer;}
+
+/* iOS install tip */
+#iosInstallTip{display:none;position:fixed;bottom:0;left:0;right:0;z-index:8000;
+  padding:16px 16px 28px;background:var(--surface);border-top:1px solid var(--cb);
+  border-radius:20px 20px 0 0;box-shadow:0 -4px 24px rgba(0,0,0,.08);
+  animation:slideUp .32s cubic-bezier(.16,1,.3,1) both;}
+#iosInstallTip .ios-inner{max-width:480px;margin:0 auto;}
+#iosInstallTip .ios-title{font-size:14px;font-weight:700;margin-bottom:8px;}
+#iosInstallTip .ios-steps{font-size:13px;color:var(--muted);line-height:1.8;}
+#iosInstallTip .ios-close{position:absolute;top:14px;right:16px;background:none;border:none;font-size:20px;cursor:pointer;color:var(--muted);}
+
+/* Push notification prompt */
+#pushPrompt{display:none;position:fixed;top:72px;right:16px;z-index:7500;
+  background:var(--surface);border:1px solid var(--cb);border-radius:16px;
+  padding:16px;width:min(280px, calc(100vw - 32px));
+  box-shadow:0 8px 32px rgba(0,0,0,.12);
+  animation:fadeInDown .28s cubic-bezier(.16,1,.3,1) both;}
+@keyframes fadeInDown{from{opacity:0;transform:translateY(-10px)}to{opacity:1;transform:none}}
+#pushPrompt .pp-title{font-size:14px;font-weight:700;margin-bottom:6px;}
+#pushPrompt .pp-body{font-size:12px;color:var(--muted);line-height:1.5;margin-bottom:12px;}
+#pushPrompt .pp-btns{display:flex;gap:8px;}
+#pushPrompt .pp-yes{flex:1;background:var(--o);color:#fff;border:none;border-radius:10px;padding:9px 0;font-size:13px;font-weight:700;cursor:pointer;}
+#pushPrompt .pp-no{background:transparent;border:1px solid var(--cb);color:var(--muted);border-radius:10px;padding:9px 14px;font-size:13px;cursor:pointer;}
+
+/* SW update banner */
+#swUpdate{display:none;position:fixed;top:16px;left:50%;transform:translateX(-50%);z-index:9000;
+  background:var(--o);color:#fff;border-radius:12px;padding:10px 20px;
+  font-size:13px;font-weight:600;cursor:pointer;white-space:nowrap;
+  box-shadow:0 4px 16px rgba(255,106,0,.35);
+  animation:fadeInDown .28s cubic-bezier(.16,1,.3,1) both;}
+</style>
+
+<!-- Banner body -->
+<div class="pwa-inner">
+  <div class="pwa-icon">📊</div>
+  <div class="pwa-text">
+    <div class="pwa-title">Add GRADEO to Home Screen</div>
+    <div class="pwa-sub">Free, instant access — works offline too</div>
+  </div>
+</div>
+<div class="pwa-btns">
+  <button class="pwa-install" id="pwaInstallBtn">Install App</button>
+  <button class="pwa-dismiss" id="pwaDismissBtn">Not now</button>
+</div>
+</div>
+
+<!-- iOS install tip -->
+<div id="iosInstallTip">
+<div class="ios-inner">
+  <div class="ios-title">📱 Install GRADEO on iPhone</div>
+  <div class="ios-steps">
+    1. Tap the <strong>Share</strong> button at the bottom of Safari<br>
+    2. Scroll down and tap <strong>"Add to Home Screen"</strong><br>
+    3. Tap <strong>Add</strong> — done!
+  </div>
+</div>
+<button class="ios-close" id="iosClose">✕</button>
+</div>
+
+<!-- Push notification prompt -->
+<div id="pushPrompt">
+<div class="pp-title">🔔 Get exam reminders</div>
+<div class="pp-body">Let GRADEO remind you about upcoming exams and when to start calculating your minimum marks.</div>
+<div class="pp-btns">
+  <button class="pp-yes" id="ppYes">Allow</button>
+  <button class="pp-no" id="ppNo">Skip</button>
+</div>
+</div>
+
+<!-- SW update toast -->
+<div id="swUpdate" onclick="window.location.reload(true)">
+  🎉 GRADEO updated — tap to reload
+</div>
+
+<script>
+/* ═══════════════════════════════════════
+   GRADEO PWA Manager
+   - Service worker registration
+   - Install prompt (Android + iOS)
+   - Push notification subscription
+   - SW update notification
+═══════════════════════════════════════ */
+(function(){
+  if(location.protocol === 'file:') return;
+
+  /* ── Detect iOS ── */
+  const isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent) && !window.MSStream;
+  const isInStandaloneMode = window.matchMedia('(display-mode: standalone)').matches
+    || window.navigator.standalone === true;
+
+  /* ── Register Service Worker ── */
+  let swReg = null;
+  if('serviceWorker' in navigator){
+    navigator.serviceWorker.register('/sw.js', { scope: '/' }).then(reg => {
+      swReg = reg;
+
+      /* Listen for SW updates */
+      reg.addEventListener('updatefound', () => {
+        const newWorker = reg.installing;
+        newWorker?.addEventListener('statechange', () => {
+          if(newWorker.state === 'installed' && navigator.serviceWorker.controller){
+            /* Show update banner */
+            const upd = document.getElementById('swUpdate');
+            if(upd) upd.style.display = 'block';
+          }
+        });
+      });
+
+      /* Tell new SW to activate immediately when user clicks update banner */
+      document.getElementById('swUpdate')?.addEventListener('click', () => {
+        reg.waiting?.postMessage({ type: 'SKIP_WAITING' });
+      });
+
+    }).catch(e => console.warn('[GRADEO SW]', e));
+
+    /* Reload when new SW takes over */
+    navigator.serviceWorker.addEventListener('controllerchange', () => {
+      if(!window._swReloading){ window._swReloading = true; location.reload(); }
+    });
+  }
+
+  /* ── Install Prompt (Android / Chrome) ── */
+  let deferredPrompt = null;
+  const banner = document.getElementById('pwaBanner');
+  const installBtn = document.getElementById('pwaInstallBtn');
+  const dismissBtn = document.getElementById('pwaDismissBtn');
+
+  /* Don't show if already installed or dismissed recently */
+  const dismissed = parseInt(localStorage.getItem('gradeo_pwa_dismissed') || '0');
+  const daysSinceDismiss = (Date.now() - dismissed) / 86400000;
+  const alreadyInstalled = isInStandaloneMode;
+
+  window.addEventListener('beforeinstallprompt', e => {
+    e.preventDefault();
+    deferredPrompt = e;
+    if(!alreadyInstalled && daysSinceDismiss > 3){
+      /* Show banner after 2.5s */
+      setTimeout(() => { if(banner) banner.style.display = 'block'; }, 2500);
+    }
+  });
+
+  installBtn?.addEventListener('click', () => {
+    if(!deferredPrompt) return;
+    deferredPrompt.prompt();
+    deferredPrompt.userChoice.then(choice => {
+      if(choice.outcome === 'accepted'){
+        if(typeof toast === 'function') toast('App installed! 🎉');
+      }
+      deferredPrompt = null;
+      if(banner) banner.style.display = 'none';
+    });
+  });
+
+  dismissBtn?.addEventListener('click', () => {
+    if(banner) banner.style.display = 'none';
+    localStorage.setItem('gradeo_pwa_dismissed', Date.now().toString());
+  });
+
+  /* Track install event */
+  window.addEventListener('appinstalled', () => {
+    if(typeof toast === 'function') toast('GRADEO installed! 🎉');
+    if(banner) banner.style.display = 'none';
+    deferredPrompt = null;
+    localStorage.setItem('gradeo_pwa_installed', '1');
+    /* Analytics event if available */
+    if(window.gtag) gtag('event', 'pwa_install', { event_category: 'PWA' });
+  });
+
+  /* ── iOS Install Tip ── */
+  if(isIOS && !isInStandaloneMode){
+    const iosTip = document.getElementById('iosInstallTip');
+    const iosClose = document.getElementById('iosClose');
+    const iosDismissed = parseInt(localStorage.getItem('gradeo_ios_tip') || '0');
+    const daysSinceIos = (Date.now() - iosDismissed) / 86400000;
+
+    if(daysSinceIos > 5){
+      setTimeout(() => { if(iosTip) iosTip.style.display = 'block'; }, 3000);
+    }
+    iosClose?.addEventListener('click', () => {
+      if(iosTip) iosTip.style.display = 'none';
+      localStorage.setItem('gradeo_ios_tip', Date.now().toString());
+    });
+  }
+
+  /* ── Push Notification Subscription ── */
+  const PUSH_DISMISSED_KEY = 'gradeo_push_dismissed';
+  const ppEl = document.getElementById('pushPrompt');
+  const ppYes = document.getElementById('ppYes');
+  const ppNo = document.getElementById('ppNo');
+
+  function showPushPrompt(){
+    if(!('Notification' in window) || !('PushManager' in window)) return;
+    if(Notification.permission !== 'default') return;
+    const dis = parseInt(localStorage.getItem(PUSH_DISMISSED_KEY) || '0');
+    if((Date.now() - dis) < 7 * 86400000) return; /* 7 day cooldown */
+    setTimeout(() => { if(ppEl) ppEl.style.display = 'block'; }, 8000);
+  }
+
+  ppYes?.addEventListener('click', () => {
+    if(ppEl) ppEl.style.display = 'none';
+    Notification.requestPermission().then(perm => {
+      if(perm === 'granted'){
+        subscribeToPush();
+        if(typeof toast === 'function') toast('Notifications enabled ✓');
+      }
+    });
+  });
+
+  ppNo?.addEventListener('click', () => {
+    if(ppEl) ppEl.style.display = 'none';
+    localStorage.setItem(PUSH_DISMISSED_KEY, Date.now().toString());
+  });
+
+  function subscribeToPush(){
+    if(!swReg) return;
+    /* NOTE: Replace with your actual VAPID public key from web-push library */
+    const VAPID_PUBLIC_KEY = 'YOUR_VAPID_PUBLIC_KEY_HERE';
+    if(VAPID_PUBLIC_KEY === 'YOUR_VAPID_PUBLIC_KEY_HERE') return; /* Skip if not configured */
+
+    const appServerKey = urlBase64ToUint8Array(VAPID_PUBLIC_KEY);
+    swReg.pushManager.subscribe({ userVisibleOnly: true, applicationServerKey: appServerKey })
+      .then(sub => {
+        /* Send subscription to your server */
+        fetch('/api/push-subscribe', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(sub)
+        }).catch(() => {});
+      }).catch(e => console.warn('[GRADEO Push]', e));
+  }
+
+  function urlBase64ToUint8Array(base64String){
+    const padding = '='.repeat((4 - base64String.length % 4) % 4);
+    const base64 = (base64String + padding).replace(/-/g,'+').replace(/_/g,'/');
+    const raw = atob(base64);
+    return Uint8Array.from([...raw].map(c => c.charCodeAt(0)));
+  }
+
+  /* Show push prompt after user has been on site a bit */
+  if(!isInStandaloneMode){
+    setTimeout(showPushPrompt, 1500);
+  } else {
+    /* If running as installed app, ask sooner */
+    setTimeout(showPushPrompt, 500);
+  }
+
+  /* ── Background sync registration ── */
+  window.addEventListener('online', () => {
+    swReg?.sync?.register('gradeo-sync').catch(() => {});
+  });
+
+  /* ── Expose helper for manual notification test ── */
+  window.gradeoNotify = function(title, body, url){
+    if(Notification.permission === 'granted' && swReg){
+      swReg.showNotification(title || 'GRADEO', {
+        body: body || 'Time to plan your grades!',
+        icon: 'https://res.cloudinary.com/djy3mjtsz/image/upload/v1770296454/Untitled-2_i2ezfh.png',
+        badge: 'https://res.cloudinary.com/djy3mjtsz/image/upload/v1770296454/Untitled-2_i2ezfh.png',
+        data: { url: url || '/' }
+      });
+    }
+  };
+
+})();
+</script>
+
 <script defer src="https://static.cloudflareinsights.com/beacon.min.js/vcd15cbe7772f49c399c6a5babf22c1241717689176015" integrity="sha512-ZpsOmlRQV6y907TI0dKBHq9Md29nnaEIPlkf84rnaERnq6zvWvPUqr2ft8M1aS28oN72PdrCzSjY4U6VaAw1EQ==" data-cf-beacon='{"rayId":"","version":"2024.10.5","token":"f4fc10b46af24912ac04d9a23d8a9f74"}' crossorigin="anonymous"></script>
 </body>
 </html>
