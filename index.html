@@ -2326,7 +2326,7 @@ else { try{ firebase.initializeApp({apiKey:'AIzaSyDB_FK8-3ATZBpuvfL34EMp9WHTTd5s
 
   function subscribeToPush(){
     if(!swReg) return;
-    const VAPID_PUBLIC_KEY = 'BGwcazDRVGBgZz-CJNBQa7riAwt-HUsA0HSjELSmC4qAxtcslt8JzairfnEmCDKCn5FDDRyrfr3oSxcmghCZCuM';
+    const VAPID_PUBLIC_KEY = 'BEUA4cj1wUQYwLebF11DPZEyjV21EKsHIVNavl4g80qXmjTyFjjwcSTl4nMfuSZqXxqFCkH3agSJBZvMGlVU4UQ';
     const appServerKey = urlBase64ToUint8Array(VAPID_PUBLIC_KEY);
     swReg.pushManager.subscribe({ userVisibleOnly: true, applicationServerKey: appServerKey })
       .then(sub => {
