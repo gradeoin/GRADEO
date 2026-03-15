@@ -1,8 +1,18 @@
 
 
+
 <!doctype html>
-<html lang="en" data-theme="light">
+<html lang="en">
 <head>
+<script>
+/* Instant theme — runs before CSS to prevent flash */
+(function(){
+  var t=localStorage.getItem('gradeo_theme');
+  if(!t) t=window.matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light';
+  document.documentElement.setAttribute('data-theme',t);
+  document.documentElement.style.colorScheme=t;
+})();
+</script>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=5,viewport-fit=cover"/>
 <meta name="theme-color" id="tcMeta" content="#FFF6ED" media="(prefers-color-scheme: light)"/>
@@ -169,10 +179,12 @@ body{
   color:var(--text);background:var(--bg);
   -webkit-font-smoothing:antialiased;
   -webkit-text-size-adjust:100%;
-  transition:background var(--td) var(--sm),color var(--td) var(--sm);
+  transition:none;
   overflow-x:hidden;
-  /* Block pull-to-refresh on iOS Safari */
   overscroll-behavior-y:none;
+}
+body.theme-ready{
+  transition:background var(--td) var(--sm),color var(--td) var(--sm);
 }
 a{color:inherit;text-decoration:none;}
 
@@ -246,7 +258,7 @@ body.ch #curRing{width:52px;height:52px;border-color:rgba(255,106,0,.35);border-
 @keyframes b2{to{transform:translate(-4%,5%)scale(1.05)}}
 @keyframes b3{to{transform:translate(3%,-4%)scale(1.07)}}
 @keyframes b4{to{transform:translate(-5%,3%)scale(1.04)}}
-@media(max-width:767px){.bgs{display:none;}}
+@media(max-width:767px){.bgs{display:none!important;}}
 
 /* ════════════════════════════════════════
    ▌▌ DESKTOP LAYOUT (≥768px)
@@ -1868,6 +1880,8 @@ function applyTheme(t, animate){
   localStorage.setItem('gradeo_theme', t);
 }
 (()=>{ const s=localStorage.getItem('gradeo_theme'); if(s) applyTheme(s,false); else if(window.matchMedia('(prefers-color-scheme:dark)').matches) applyTheme('dark',false); })();
+/* Enable transitions after page load to prevent flash */
+setTimeout(()=>document.body.classList.add('theme-ready'), 100);
 const toggleTheme=()=>{ applyTheme(htmlEl.dataset.theme==='dark'?'light':'dark',true); vib(HV.light); };
 $('#thBtn')?.addEventListener('click',toggleTheme); $('#mThBtn')?.addEventListener('click',toggleTheme);
 window.matchMedia('(prefers-color-scheme:dark)').addEventListener('change',e=>{ if(!localStorage.getItem('gradeo_theme')) applyTheme(e.matches?'dark':'light',false); });
@@ -2276,8 +2290,8 @@ else { try{ firebase.initializeApp({apiKey:'AIzaSyDB_FK8-3ATZBpuvfL34EMp9WHTTd5s
     if(!isInStandaloneMode && daysSince > 0.04){
       document.getElementById('sheetAndroid').style.display = 'block';
       document.getElementById('sheetIOS').style.display = 'none';
-      /* Show after user has been on the page 2 seconds */
-      setTimeout(openSheet, 2000);
+      /* Show after user has been on the page 3 seconds */
+      setTimeout(openSheet, 3000);
     }
   });
 
@@ -2323,7 +2337,16 @@ else { try{ firebase.initializeApp({apiKey:'AIzaSyDB_FK8-3ATZBpuvfL34EMp9WHTTd5s
 
   /* ── Push Notification Subscription ── */
   const WORKER_URL = 'https://gradeo-push.gradeo-in.workers.dev';
-  const PUSH_KEY   = 'gradeo_push_dismissed';
+  const PUSH_KEY = 'gradeo_push_dismissed';
+  /* Reset prompts on new version — so users see install/notification prompts again */
+  (function(){
+    if(localStorage.getItem('gradeo_pwa_ver') !== 'v5'){
+      localStorage.removeItem('gradeo_pwa_dismissed');
+      localStorage.removeItem('gradeo_ios_tip');
+      localStorage.removeItem('gradeo_push_dismissed');
+      localStorage.setItem('gradeo_pwa_ver','v5');
+    }
+  })();
 
   /* Reset dismissed timestamps if user cleared site data or first visit after key change */
   (function resetIfNeeded(){
