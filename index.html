@@ -2012,239 +2012,317 @@ else { try{ firebase.initializeApp({apiKey:'AIzaSyDB_FK8-3ATZBpuvfL34EMp9WHTTd5s
 </script>
 
 <!-- ═══ PWA INSTALL BANNER ═══ -->
-<div id="pwaBanner" style="
-  display:none;position:fixed;bottom:0;left:0;right:0;z-index:8000;
-  padding:14px 16px 20px;
-  background:var(--surface);
-  border-top:1px solid var(--cb);
-  box-shadow:0 -4px 24px rgba(0,0,0,.08);
-  border-radius:20px 20px 0 0;
-  animation:slideUp .32s cubic-bezier(.16,1,.3,1) both;
-">
 <style>
-@keyframes slideUp{from{transform:translateY(100%);opacity:0}to{transform:none;opacity:1}}
-#pwaBanner .pwa-inner{display:flex;align-items:center;gap:12px;max-width:480px;margin:0 auto;}
-#pwaBanner .pwa-icon{width:48px;height:48px;border-radius:12px;flex-shrink:0;background:var(--o);display:flex;align-items:center;justify-content:center;font-size:22px;}
-#pwaBanner .pwa-text{flex:1;min-width:0;}
-#pwaBanner .pwa-title{font-size:14px;font-weight:700;color:var(--text);}
-#pwaBanner .pwa-sub{font-size:12px;color:var(--muted);margin-top:2px;}
-#pwaBanner .pwa-btns{display:flex;gap:8px;margin-top:12px;max-width:480px;margin-left:auto;margin-right:auto;}
-#pwaBanner .pwa-install{flex:1;background:var(--o);color:#fff;border:none;border-radius:12px;padding:11px 0;font-size:14px;font-weight:700;cursor:pointer;}
-#pwaBanner .pwa-dismiss{background:transparent;border:1.5px solid var(--cb);color:var(--muted);border-radius:12px;padding:11px 18px;font-size:14px;cursor:pointer;}
-
-/* iOS install tip */
-#iosInstallTip{display:none;position:fixed;bottom:0;left:0;right:0;z-index:8000;
-  padding:16px 16px 28px;background:var(--surface);border-top:1px solid var(--cb);
-  border-radius:20px 20px 0 0;box-shadow:0 -4px 24px rgba(0,0,0,.08);
-  animation:slideUp .32s cubic-bezier(.16,1,.3,1) both;}
-#iosInstallTip .ios-inner{max-width:480px;margin:0 auto;}
-#iosInstallTip .ios-title{font-size:14px;font-weight:700;margin-bottom:8px;}
-#iosInstallTip .ios-steps{font-size:13px;color:var(--muted);line-height:1.8;}
-#iosInstallTip .ios-close{position:absolute;top:14px;right:16px;background:none;border:none;font-size:20px;cursor:pointer;color:var(--muted);}
-
-/* Push notification prompt */
-#pushPrompt{display:none;position:fixed;top:72px;right:16px;z-index:7500;
-  background:var(--surface);border:1px solid var(--cb);border-radius:16px;
-  padding:16px;width:min(280px, calc(100vw - 32px));
-  box-shadow:0 8px 32px rgba(0,0,0,.12);
-  animation:fadeInDown .28s cubic-bezier(.16,1,.3,1) both;}
-@keyframes fadeInDown{from{opacity:0;transform:translateY(-10px)}to{opacity:1;transform:none}}
-#pushPrompt .pp-title{font-size:14px;font-weight:700;margin-bottom:6px;}
-#pushPrompt .pp-body{font-size:12px;color:var(--muted);line-height:1.5;margin-bottom:12px;}
-#pushPrompt .pp-btns{display:flex;gap:8px;}
-#pushPrompt .pp-yes{flex:1;background:var(--o);color:#fff;border:none;border-radius:10px;padding:9px 0;font-size:13px;font-weight:700;cursor:pointer;}
-#pushPrompt .pp-no{background:transparent;border:1px solid var(--cb);color:var(--muted);border-radius:10px;padding:9px 14px;font-size:13px;cursor:pointer;}
-
-/* SW update banner */
-#swUpdate{display:none;position:fixed;top:16px;left:50%;transform:translateX(-50%);z-index:9000;
-  background:var(--o);color:#fff;border-radius:12px;padding:10px 20px;
-  font-size:13px;font-weight:600;cursor:pointer;white-space:nowrap;
+/* ── Pull-to-refresh indicator ── */
+#ptrBar{
+  position:fixed;top:0;left:0;right:0;z-index:9500;
+  height:3px;background:var(--o);
+  transform:scaleX(0);transform-origin:left;
+  transition:transform .15s,opacity .3s;opacity:0;pointer-events:none;
+}
+#ptrHint{
+  position:fixed;top:0;left:50%;transform:translate(-50%,-100%);z-index:9500;
+  background:var(--o);color:#fff;font-size:12px;font-weight:700;
+  padding:8px 18px;border-radius:0 0 14px 14px;
+  transition:transform .25s cubic-bezier(.34,1.56,.64,1);
+  pointer-events:none;white-space:nowrap;letter-spacing:.2px;
   box-shadow:0 4px 16px rgba(255,106,0,.35);
-  animation:fadeInDown .28s cubic-bezier(.16,1,.3,1) both;}
+}
+#ptrHint.show{transform:translate(-50%,0);}
+#ptrHint.refreshing{background:var(--od);}
+
+/* ── Single bottom sheet ── */
+#pwaSheet{
+  display:none;position:fixed;bottom:0;left:0;right:0;z-index:8500;
+  background:var(--surface);border-top:1px solid var(--cb);
+  border-radius:24px 24px 0 0;
+  box-shadow:0 -8px 40px rgba(0,0,0,.18);
+  padding:0 0 env(safe-area-inset-bottom,0);
+  transform:translateY(100%);transition:transform .35s cubic-bezier(.16,1,.3,1);
+}
+#pwaSheet.open{transform:translateY(0);}
+#pwaSheet .sheet-handle{
+  width:36px;height:4px;border-radius:2px;background:var(--muted2);
+  margin:12px auto 0;
+}
+#pwaSheet .sheet-body{padding:20px 20px 24px;}
+#pwaSheet .sheet-row{display:flex;align-items:center;gap:14px;margin-bottom:18px;}
+#pwaSheet .sheet-icon{
+  width:52px;height:52px;border-radius:14px;flex-shrink:0;overflow:hidden;
+  border:1px solid var(--cb);
+}
+#pwaSheet .sheet-icon img{width:100%;height:100%;object-fit:cover;display:block;}
+#pwaSheet .sheet-name{font-size:16px;font-weight:800;color:var(--text);letter-spacing:-.3px;}
+#pwaSheet .sheet-tagline{font-size:13px;color:var(--muted);margin-top:2px;}
+
+/* Steps for iOS */
+#pwaSheet .steps{margin-bottom:20px;}
+#pwaSheet .step{
+  display:flex;align-items:flex-start;gap:12px;
+  padding:10px 0;border-bottom:1px solid var(--cb);
+}
+#pwaSheet .step:last-child{border-bottom:none;}
+#pwaSheet .step-num{
+  width:24px;height:24px;border-radius:50%;background:rgba(255,106,0,.12);
+  color:var(--o);font-size:12px;font-weight:800;display:flex;align-items:center;
+  justify-content:center;flex-shrink:0;margin-top:1px;
+}
+#pwaSheet .step-text{font-size:13px;color:var(--text);line-height:1.5;}
+#pwaSheet .step-text b{color:var(--o);}
+#pwaSheet .step-text .icon-inline{
+  display:inline-block;width:16px;height:16px;vertical-align:middle;
+  background:var(--o);border-radius:4px;margin:0 2px;
+}
+
+#pwaSheet .sheet-btn-primary{
+  width:100%;padding:14px;background:var(--o);color:#fff;border:none;
+  border-radius:14px;font-size:15px;font-weight:700;cursor:pointer;
+  font-family:inherit;transition:opacity .15s,transform .15s;
+  box-shadow:0 4px 16px rgba(255,106,0,.28);
+}
+#pwaSheet .sheet-btn-primary:active{opacity:.85;transform:scale(.98);}
+#pwaSheet .sheet-btn-secondary{
+  width:100%;padding:12px;background:transparent;color:var(--muted);
+  border:none;border-radius:14px;font-size:14px;cursor:pointer;
+  font-family:inherit;margin-top:6px;
+}
+
+/* Backdrop */
+#pwaBackdrop{
+  display:none;position:fixed;inset:0;z-index:8400;
+  background:rgba(0,0,0,.45);opacity:0;transition:opacity .3s;
+  backdrop-filter:blur(2px);
+}
+#pwaBackdrop.show{opacity:1;}
+
+/* SW update pill */
+#swUpdate{
+  display:none;position:fixed;top:14px;left:50%;transform:translate(-50%,-80px);
+  z-index:9000;background:var(--o);color:#fff;border-radius:20px;
+  padding:10px 20px;font-size:13px;font-weight:700;cursor:pointer;
+  white-space:nowrap;box-shadow:0 4px 20px rgba(255,106,0,.4);
+  transition:transform .35s cubic-bezier(.34,1.56,.64,1);
+}
+#swUpdate.show{transform:translate(-50%,0);}
+
+@keyframes pwaSlideUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
 </style>
 
-<!-- Banner body -->
-<div class="pwa-inner">
-  <div class="pwa-icon">📊</div>
-  <div class="pwa-text">
-    <div class="pwa-title">Add GRADEO to Home Screen</div>
-    <div class="pwa-sub">Free, instant access — works offline too</div>
+<!-- Pull-to-refresh indicator -->
+<div id="ptrBar"></div>
+<div id="ptrHint">Release to refresh</div>
+
+<!-- Single unified PWA sheet -->
+<div id="pwaBackdrop"></div>
+<div id="pwaSheet">
+  <div class="sheet-handle"></div>
+  <div class="sheet-body">
+    <div class="sheet-row">
+      <div class="sheet-icon">
+        <img src="https://res.cloudinary.com/djy3mjtsz/image/upload/v1770296454/Untitled-2_i2ezfh.png" alt="GRADEO"/>
+      </div>
+      <div>
+        <div class="sheet-name">GRADEO</div>
+        <div class="sheet-tagline">Free SGPA &amp; CGPA Planner</div>
+      </div>
+    </div>
+    <!-- Android content (shown by JS) -->
+    <div id="sheetAndroid">
+      <button class="sheet-btn-primary" id="pwaInstallBtn">Add to Home Screen</button>
+      <button class="sheet-btn-secondary" id="pwaDismissBtn">Maybe later</button>
+    </div>
+    <!-- iOS content (shown by JS) -->
+    <div id="sheetIOS" style="display:none;">
+      <div class="steps">
+        <div class="step">
+          <div class="step-num">1</div>
+          <div class="step-text">Tap the <b>Share</b> button <span style="display:inline-block;width:16px;height:16px;vertical-align:middle;margin:0 2px;background:var(--o);border-radius:4px;"></span> at the bottom of your screen</div>
+        </div>
+        <div class="step">
+          <div class="step-num">2</div>
+          <div class="step-text">Scroll down and tap <b>"Add to Home Screen"</b></div>
+        </div>
+        <div class="step">
+          <div class="step-num">3</div>
+          <div class="step-text">Tap <b>Add</b> — GRADEO will appear on your home screen!</div>
+        </div>
+      </div>
+      <button class="sheet-btn-secondary" id="iosClose">Got it</button>
+    </div>
   </div>
 </div>
-<div class="pwa-btns">
-  <button class="pwa-install" id="pwaInstallBtn">Install App</button>
-  <button class="pwa-dismiss" id="pwaDismissBtn">Not now</button>
-</div>
-</div>
 
-<!-- iOS install tip -->
-<div id="iosInstallTip">
-<div class="ios-inner">
-  <div class="ios-title">📱 Install GRADEO on iPhone</div>
-  <div class="ios-steps">
-    1. Tap the <strong>Share</strong> button at the bottom of Safari<br>
-    2. Scroll down and tap <strong>"Add to Home Screen"</strong><br>
-    3. Tap <strong>Add</strong> — done!
-  </div>
-</div>
-<button class="ios-close" id="iosClose">✕</button>
-</div>
-
-<!-- Push notification prompt -->
-<div id="pushPrompt">
-<div class="pp-title">🔔 Get exam reminders</div>
-<div class="pp-body">Let GRADEO remind you about upcoming exams and when to start calculating your minimum marks.</div>
-<div class="pp-btns">
-  <button class="pp-yes" id="ppYes">Allow</button>
-  <button class="pp-no" id="ppNo">Skip</button>
-</div>
-</div>
-
-<!-- SW update toast -->
-<div id="swUpdate" onclick="window.location.reload(true)">
-  🎉 GRADEO updated — tap to reload
+<!-- SW update pill -->
+<div id="swUpdate" onclick="document.getElementById('swUpdate')._doUpdate && document.getElementById('swUpdate')._doUpdate()">
+  GRADEO updated — tap to reload
 </div>
 
 <script>
-/* ═══════════════════════════════════════
-   GRADEO PWA Manager
-   - Service worker registration
-   - Install prompt (Android + iOS)
-   - Push notification subscription
-   - SW update notification
-═══════════════════════════════════════ */
 (function(){
   if(location.protocol === 'file:') return;
 
-  /* ── Detect iOS ── */
   const isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent) && !window.MSStream;
-  const isInStandaloneMode = window.matchMedia('(display-mode: standalone)').matches
-    || window.navigator.standalone === true;
+  const isInStandaloneMode = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
+  const ICON = 'https://res.cloudinary.com/djy3mjtsz/image/upload/v1770296454/Untitled-2_i2ezfh.png';
 
-  /* ── Register Service Worker ── */
+  /* ── Sheet helpers ── */
+  const sheet     = document.getElementById('pwaSheet');
+  const backdrop  = document.getElementById('pwaBackdrop');
+
+  function openSheet(){
+    backdrop.style.display = 'block';
+    sheet.style.display = 'block';
+    requestAnimationFrame(() => {
+      backdrop.classList.add('show');
+      sheet.classList.add('open');
+    });
+  }
+  function closeSheet(){
+    sheet.classList.remove('open');
+    backdrop.classList.remove('show');
+    setTimeout(() => {
+      sheet.style.display = 'none';
+      backdrop.style.display = 'none';
+    }, 360);
+  }
+  backdrop.addEventListener('click', closeSheet);
+
+  /* ── Service Worker ── */
   let swReg = null;
   if('serviceWorker' in navigator){
-    navigator.serviceWorker.register('/sw.js', { scope: '/' }).then(reg => {
+    navigator.serviceWorker.register('/sw.js', { scope:'/' }).then(reg => {
       swReg = reg;
-
-      /* Listen for SW updates */
       reg.addEventListener('updatefound', () => {
-        const newWorker = reg.installing;
-        newWorker?.addEventListener('statechange', () => {
-          if(newWorker.state === 'installed' && navigator.serviceWorker.controller){
-            /* Show update banner */
+        const nw = reg.installing;
+        nw?.addEventListener('statechange', () => {
+          if(nw.state === 'installed' && navigator.serviceWorker.controller){
             const upd = document.getElementById('swUpdate');
-            if(upd) upd.style.display = 'block';
+            if(upd){
+              upd.style.display = 'block';
+              requestAnimationFrame(() => upd.classList.add('show'));
+              upd._doUpdate = () => reg.waiting?.postMessage({ type: 'SKIP_WAITING' });
+            }
           }
         });
       });
-
-      /* Tell new SW to activate immediately when user clicks update banner */
-      document.getElementById('swUpdate')?.addEventListener('click', () => {
-        reg.waiting?.postMessage({ type: 'SKIP_WAITING' });
-      });
-
     }).catch(e => console.warn('[GRADEO SW]', e));
 
-    /* Reload when new SW takes over */
     navigator.serviceWorker.addEventListener('controllerchange', () => {
       if(!window._swReloading){ window._swReloading = true; location.reload(); }
     });
   }
 
-  /* ── Install Prompt (Android / Chrome) ── */
-  let deferredPrompt = null;
-  const banner = document.getElementById('pwaBanner');
-  const installBtn = document.getElementById('pwaInstallBtn');
-  const dismissBtn = document.getElementById('pwaDismissBtn');
+  /* ── Pull-to-refresh ── */
+  if(isInStandaloneMode || isIOS){
+    const hint = document.getElementById('ptrHint');
+    let startY = 0, pulling = false, triggered = false, passedThreshold = false;
+    const THRESHOLD = 72;
 
-  /* Don't show if already installed or dismissed recently */
-  const dismissed = parseInt(localStorage.getItem('gradeo_pwa_dismissed') || '0');
-  const daysSinceDismiss = (Date.now() - dismissed) / 86400000;
-  const alreadyInstalled = isInStandaloneMode;
+    document.addEventListener('touchstart', e => {
+      if(window.scrollY === 0) startY = e.touches[0].clientY;
+    }, { passive: true });
+
+    document.addEventListener('touchmove', e => {
+      if(!startY) return;
+      const dy = e.touches[0].clientY - startY;
+      if(dy > 10 && window.scrollY === 0){
+        pulling = true;
+        const progress = Math.min(dy / THRESHOLD, 1);
+        if(dy > 20){
+          hint.style.display = 'block';
+          hint.classList.add('show');
+          if(dy >= THRESHOLD){
+            if(!passedThreshold){
+              passedThreshold = true;
+              hint.textContent = 'Release to refresh';
+              if(navigator.vibrate) navigator.vibrate(8);
+            }
+          } else {
+            passedThreshold = false;
+            hint.textContent = 'Pull down to refresh';
+            hint.classList.remove('refreshing');
+          }
+        }
+      }
+    }, { passive: true });
+
+    document.addEventListener('touchend', e => {
+      if(!pulling) return;
+      pulling = false;
+      const dy = e.changedTouches[0].clientY - startY;
+      startY = 0;
+      if(dy >= THRESHOLD && !triggered){
+        triggered = true;
+        hint.textContent = 'Refreshing...';
+        hint.classList.add('refreshing');
+        setTimeout(() => location.reload(), 400);
+      } else {
+        hint.classList.remove('show');
+        setTimeout(() => { hint.style.display = 'none'; hint.textContent = 'Pull down to refresh'; hint.classList.remove('refreshing'); }, 300);
+        passedThreshold = false;
+      }
+    }, { passive: true });
+  }
+
+  /* ── Android Install Prompt ── */
+  let deferredPrompt = null;
+  const dismissed     = parseInt(localStorage.getItem('gradeo_pwa_dismissed') || '0');
+  const daysSince     = (Date.now() - dismissed) / 86400000;
 
   window.addEventListener('beforeinstallprompt', e => {
     e.preventDefault();
     deferredPrompt = e;
-    if(!alreadyInstalled && daysSinceDismiss > 3){
-      /* Show banner after 2.5s */
-      setTimeout(() => { if(banner) banner.style.display = 'block'; }, 2500);
+    if(!isInStandaloneMode && daysSince > 3){
+      document.getElementById('sheetAndroid').style.display = 'block';
+      document.getElementById('sheetIOS').style.display = 'none';
+      /* Show after user has been on the page 4 seconds */
+      setTimeout(openSheet, 4000);
     }
   });
 
-  installBtn?.addEventListener('click', () => {
+  document.getElementById('pwaInstallBtn')?.addEventListener('click', () => {
     if(!deferredPrompt) return;
+    closeSheet();
     deferredPrompt.prompt();
     deferredPrompt.userChoice.then(choice => {
-      if(choice.outcome === 'accepted'){
-        if(typeof toast === 'function') toast('App installed! 🎉');
-      }
       deferredPrompt = null;
-      if(banner) banner.style.display = 'none';
+      if(choice.outcome === 'accepted' && typeof toast === 'function'){
+        toast('GRADEO installed!');
+      }
     });
   });
 
-  dismissBtn?.addEventListener('click', () => {
-    if(banner) banner.style.display = 'none';
+  document.getElementById('pwaDismissBtn')?.addEventListener('click', () => {
+    closeSheet();
     localStorage.setItem('gradeo_pwa_dismissed', Date.now().toString());
   });
 
-  /* Track install event */
   window.addEventListener('appinstalled', () => {
-    if(typeof toast === 'function') toast('GRADEO installed! 🎉');
-    if(banner) banner.style.display = 'none';
+    closeSheet();
     deferredPrompt = null;
     localStorage.setItem('gradeo_pwa_installed', '1');
-    /* Analytics event if available */
+    if(typeof toast === 'function') toast('GRADEO installed!');
     if(window.gtag) gtag('event', 'pwa_install', { event_category: 'PWA' });
   });
 
   /* ── iOS Install Tip ── */
   if(isIOS && !isInStandaloneMode){
-    const iosTip = document.getElementById('iosInstallTip');
-    const iosClose = document.getElementById('iosClose');
     const iosDismissed = parseInt(localStorage.getItem('gradeo_ios_tip') || '0');
     const daysSinceIos = (Date.now() - iosDismissed) / 86400000;
-
     if(daysSinceIos > 5){
-      setTimeout(() => { if(iosTip) iosTip.style.display = 'block'; }, 3000);
+      document.getElementById('sheetAndroid').style.display = 'none';
+      document.getElementById('sheetIOS').style.display = 'block';
+      setTimeout(openSheet, 5000);
     }
-    iosClose?.addEventListener('click', () => {
-      if(iosTip) iosTip.style.display = 'none';
+    document.getElementById('iosClose')?.addEventListener('click', () => {
+      closeSheet();
       localStorage.setItem('gradeo_ios_tip', Date.now().toString());
     });
   }
 
   /* ── Push Notification Subscription ── */
-  const PUSH_DISMISSED_KEY = 'gradeo_push_dismissed';
-  const ppEl = document.getElementById('pushPrompt');
-  const ppYes = document.getElementById('ppYes');
-  const ppNo = document.getElementById('ppNo');
-
-  function showPushPrompt(){
-    if(!('Notification' in window) || !('PushManager' in window)) return;
-    if(Notification.permission !== 'default') return;
-    const dis = parseInt(localStorage.getItem(PUSH_DISMISSED_KEY) || '0');
-    if((Date.now() - dis) < 7 * 86400000) return; /* 7 day cooldown */
-    setTimeout(() => { if(ppEl) ppEl.style.display = 'block'; }, 8000);
-  }
-
-  ppYes?.addEventListener('click', () => {
-    if(ppEl) ppEl.style.display = 'none';
-    Notification.requestPermission().then(perm => {
-      if(perm === 'granted'){
-        subscribeToPush();
-        if(typeof toast === 'function') toast('Notifications enabled ✓');
-      }
-    });
-  });
-
-  ppNo?.addEventListener('click', () => {
-    if(ppEl) ppEl.style.display = 'none';
-    localStorage.setItem(PUSH_DISMISSED_KEY, Date.now().toString());
-  });
-
   const WORKER_URL = 'https://gradeo-push.gradeo-in.workers.dev';
+  const PUSH_KEY   = 'gradeo_push_dismissed';
 
   function subscribeToPush(){
     if(!swReg) return;
@@ -2257,10 +2335,30 @@ else { try{ firebase.initializeApp({apiKey:'AIzaSyDB_FK8-3ATZBpuvfL34EMp9WHTTd5s
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(sub)
         }).then(() => {
-          if(typeof toast === 'function') toast('Notifications enabled \u2713');
+          if(typeof toast === 'function') toast('Notifications enabled');
         }).catch(() => {});
       }).catch(e => console.warn('[GRADEO Push]', e));
   }
+
+  /* Show push prompt only ONCE — 12s after page load, only if NOT already in standalone */
+  /* and only if notifications haven't been asked before */
+  function maybeAskPush(){
+    if(!('Notification' in window) || !('PushManager' in window)) return;
+    if(Notification.permission !== 'default') return;
+    const dis = parseInt(localStorage.getItem(PUSH_KEY) || '0');
+    if((Date.now() - dis) < 14 * 86400000) return; /* 14 day cooldown */
+    /* Don't show push AND install sheet at the same time — wait for sheet to close */
+    const delay = (!isInStandaloneMode && (deferredPrompt || isIOS)) ? 20000 : 12000;
+    setTimeout(() => {
+      if(Notification.permission !== 'default') return;
+      /* Use native browser prompt directly — no custom UI popup */
+      Notification.requestPermission().then(p => {
+        localStorage.setItem(PUSH_KEY, Date.now().toString());
+        if(p === 'granted') subscribeToPush();
+      });
+    }, delay);
+  }
+  maybeAskPush();
 
   function urlBase64ToUint8Array(base64String){
     const padding = '='.repeat((4 - base64String.length % 4) % 4);
@@ -2269,32 +2367,24 @@ else { try{ firebase.initializeApp({apiKey:'AIzaSyDB_FK8-3ATZBpuvfL34EMp9WHTTd5s
     return Uint8Array.from([...raw].map(c => c.charCodeAt(0)));
   }
 
-  /* Show push prompt after user has been on site a bit */
-  if(!isInStandaloneMode){
-    setTimeout(showPushPrompt, 1500);
-  } else {
-    /* If running as installed app, ask sooner */
-    setTimeout(showPushPrompt, 500);
-  }
-
-  /* ── Background sync registration ── */
+  /* ── Background sync ── */
   window.addEventListener('online', () => {
     swReg?.sync?.register('gradeo-sync').catch(() => {});
   });
 
-  /* ── Expose helper for manual notification test ── */
+  /* ── Manual notify helper ── */
   window.gradeoNotify = function(title, body, url){
     if(Notification.permission === 'granted' && swReg){
       swReg.showNotification(title || 'GRADEO', {
         body: body || 'Time to plan your grades!',
-        icon: 'https://res.cloudinary.com/djy3mjtsz/image/upload/v1770296454/Untitled-2_i2ezfh.png',
-        badge: 'https://res.cloudinary.com/djy3mjtsz/image/upload/v1770296454/Untitled-2_i2ezfh.png',
-        data: { url: url || '/' }
+        icon: ICON, badge: ICON, data: { url: url || '/' }
       });
     }
   };
 
 })();
+</script>
+
 </script>
 
 <script defer src="https://static.cloudflareinsights.com/beacon.min.js/vcd15cbe7772f49c399c6a5babf22c1241717689176015" integrity="sha512-ZpsOmlRQV6y907TI0dKBHq9Md29nnaEIPlkf84rnaERnq6zvWvPUqr2ft8M1aS28oN72PdrCzSjY4U6VaAw1EQ==" data-cf-beacon='{"rayId":"","version":"2024.10.5","token":"f4fc10b46af24912ac04d9a23d8a9f74"}' crossorigin="anonymous"></script>
