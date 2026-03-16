@@ -43,7 +43,7 @@ try {
   const result = await getRedirectResult(auth);
   if (result?.user) {
     // If user came back from redirect flow, intent already set before redirect
-    location.href = "/success";
+    location.href = "/success/";
   }
 } catch (e) {
   // ignore
@@ -59,7 +59,7 @@ btn?.addEventListener("click", async () => {
   try {
     await signInWithPopup(auth, provider);
     setStatus("Signed in ✅ Redirecting…");
-    location.href = "/success";
+    location.href = "/success/";
   } catch (e) {
     setStatus("Popup blocked. Using redirect sign-in…");
     await signInWithRedirect(auth, provider);
@@ -72,6 +72,6 @@ btn?.addEventListener("click", async () => {
 onAuthStateChanged(auth, (user) => {
   if (user) {
     setStatus(`Welcome ${user.displayName || ""}! Redirecting…`);
-    setTimeout(() => (location.href = "/success"), 400);
+    setTimeout(() => (location.href = "/success/"), 400);
   }
 });
