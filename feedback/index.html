@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
+  <meta name="robots" content="index,follow"/>
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Gradeo — Feedback</title>
 
@@ -173,7 +174,7 @@
 
         if (res.ok) {
           status.textContent = 'Sent ✅ Redirecting…';
-          setTimeout(() => location.href = '/thanks/', 600);
+          setTimeout(() => location.href = 'https://gradeo.in/thanks', 600);
         } else {
           status.textContent = 'Could not send. Please try again.';
           btn.disabled = false;
