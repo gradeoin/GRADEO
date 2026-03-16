@@ -9,7 +9,7 @@ import {
 
 // ====== CONFIG ======
 const NEXT_URL = "https://gradeo.in/"; // main website
-const BACK_URL = "/offer";
+const BACK_URL = "/offer/";
 
 // ✅ EmailJS (provided by you)
 const EMAILJS_PUBLIC_KEY = "Bqz25zWIjiSRHomv3";
