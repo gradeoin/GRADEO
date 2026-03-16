@@ -2192,11 +2192,14 @@ h2 {
           <div class="fb-n">GRADEO</div>
           <div class="fb-t">Free grade planner for engineering students.</div>
           <div class="mFLinks">
+            <a href="/blog/">Blog</a>
+            <a href="/about/">About</a>
             <a href="/offer/">Student offer</a>
             <a href="/feedback/">Feedback</a>
-            <a href="#" id="mFp">Privacy</a>
-            <a href="#" id="mFt">Terms</a>
-            <a href="#" id="mFd">Disclaimer</a>
+            <a href="/app/">Get app</a>
+            <a href="/privacy/">Privacy</a>
+            <a href="/terms/">Terms</a>
+            <a href="/security/">Security</a>
           </div>
           <div class="mCopyright">© <span id="mYr"></span> GRADEO · Made for students.</div>
         </div>
@@ -2248,6 +2251,8 @@ h2 {
           <button class="nl" onclick="ss('#modes')">Calculator</button>
           <button class="nl" onclick="ss('#features')">Features</button>
           <button class="nl" onclick="ss('#faq')">FAQ</button>
+          <a class="nl" href="/blog/" style="text-decoration:none;">Blog</a>
+          <a class="nl" href="/about/" style="text-decoration:none;">About</a>
           <button class="thBtn" id="thBtn" aria-label="Toggle theme">
             <div class="thIcon">
               <svg class="sunI" viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
@@ -2325,7 +2330,7 @@ h2 {
 
     <section class="dsk" id="faq"><div class="sh"><h2>Questions</h2></div><div class="fl"><div class="fi2"><div class="fq" role="button" tabindex="0" aria-expanded="false" onclick="faq(this)">What is GRADEO?<span class="fa2"><svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></span></div><div class="fan">A free academic planner for engineering students. Replaces manual SGPA calculations and helps you plan exactly what you need to score to hit your target CGPA.</div></div><div class="fi2"><div class="fq" role="button" tabindex="0" aria-expanded="false" onclick="faq(this)">How does the Planner work?<span class="fa2"><svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></span></div><div class="fan">Enter your current CGPA, target CGPA, and internal marks. GRADEO calculates the exact minimum final exam score needed per subject.</div></div><div class="fi2"><div class="fq" role="button" tabindex="0" aria-expanded="false" onclick="faq(this)">Does it support NSS and activity subjects?<span class="fa2"><svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></span></div><div class="fan">Yes. Activity subjects carry 1 fixed credit and a single final grade. GRADEO handles this correctly so your SGPA is accurate.</div></div><div class="fi2"><div class="fq" role="button" tabindex="0" aria-expanded="false" onclick="faq(this)">Is GRADEO free?<span class="fa2"><svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></span></div><div class="fan">Completely free. No sign-in needed to calculate. Sign in with Google to unlock cloud autosave and PDF export. No ads, ever.</div></div><div class="fi2"><div class="fq" role="button" tabindex="0" aria-expanded="false" onclick="faq(this)">What is the student offer?<span class="fa2"><svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></span></div><div class="fan">Sign up with Google and GRADEO unlocks cloud save + PDF export free. No payment required — permanent free offer for students.</div></div></div></section>
 
-    <div class="fw rv"><div class="fc"><div class="ftop"><div><div class="fb-n">GRADEO</div><div class="fb-t">Free grade planner for engineering students.</div></div><div class="fcols"><div class="fco"><div class="fch">Calculator</div><a href="https://gradeo.in/calculator/#m1">Planner</a><a href="https://gradeo.in/calculator/#m2">SGPA</a><a href="https://gradeo.in/calculator/#m3">CGPA</a></div><div class="fco"><div class="fch">Company</div><a href="/offer/">Student offer</a><a href="/feedback/">Feedback</a></div><div class="fco"><div class="fch">Legal</div><a href="#" id="fp">Privacy</a><a href="#" id="ft">Terms</a><a href="#" id="fd">Disclaimer</a></div></div></div><div class="fbot"><span>© <span id="yr"></span> GRADEO · Made for students.</span><button class="fbtn2" onclick="window.scrollTo({top:0,behavior:'smooth'})">Back to top ↑</button></div></div></div>
+    <div class="fw rv"><div class="fc"><div class="ftop"><div><div class="fb-n">GRADEO</div><div class="fb-t">Free grade planner for engineering students.</div></div><div class="fcols"><div class="fco"><div class="fch">Calculator</div><a href="https://gradeo.in/calculator/#m1">Planner</a><a href="https://gradeo.in/calculator/#m2">SGPA</a><a href="https://gradeo.in/calculator/#m3">CGPA</a></div><div class="fco"><div class="fch">Company</div><a href="/blog/">Blog</a><a href="/about/">About</a><a href="https://gradeo.in/offer/">Student offer</a><a href="/feedback/">Feedback</a><a href="/app/">Get the app</a></div><div class="fco"><div class="fch">Legal</div><a href="/privacy/">Privacy</a><a href="/terms/">Terms</a><a href="/security/">Disclaimer</a></div></div></div><div class="fbot"><span>© <span id="yr"></span> GRADEO · Made for students.</span><button class="fbtn2" onclick="window.scrollTo({top:0,behavior:'smooth'})">Back to top ↑</button></div></div></div>
   </div>
 </div><!-- /dskLayout -->
 
@@ -2550,7 +2555,9 @@ let _tt; function toast(msg){ const t=$('#toast'); if(!t) return; $('#tm').textC
 const MD={ p:{t:'Privacy Policy', b:'<p><strong>Last updated 2026.</strong></p><p style="margin-top:9px">GRADEO stores your Google user ID, name and email in Firebase when you sign in. We do not sell or share this data. No ads.</p><p style="margin-top:9px">Questions: <a href="mailto:info@gradeo.in" style="color:#FF6A00">info@gradeo.in</a></p>'}, t:{t:'Terms of Use', b:'<p>GRADEO is free for personal educational use. Commercial use is prohibited.</p><p style="margin-top:9px">Results are estimates only. Always verify with your university\'s official evaluation.</p>'}, d:{t:'Disclaimer', b:'<p>GRADEO is independent — not affiliated with any university. Calculations are estimates. Actual grades may vary.</p>'} };
 function om(k){ const m=MD[k]; if(!m) return; $('#mt').textContent=m.t; $('#mb').innerHTML=m.b; $('#mbd').classList.add('on'); }
 function cm(){ $('#mbd').classList.remove('on'); }
-[['#fp','p'],['#ft','t'],['#fd','d'],['#mFp','p'],['#mFt','t'],['#mFd','d']].forEach(([sel,k])=>{ $(sel)?.addEventListener('click',e=>{ e.preventDefault(); om(k); }); });
+// Legal links now point to real pages - no modal needed for privacy/terms
+// Keeping modal only for security page footer
+[['#fd','d']].forEach(([sel,k])=>{ $(sel)?.addEventListener('click',e=>{ e.preventDefault(); om(k); }); });
 document.addEventListener('keydown',e=>{ if(e.key==='Escape'){ cm(); $('#siModal')?.classList.remove('on'); } });
 
 /* Recents + tiles */
