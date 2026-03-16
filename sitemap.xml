@@ -4,195 +4,99 @@
         xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9
         http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
 
-  <!-- ═══ CORE PAGES ═══ -->
+  <!-- ═══ TIER 1 — Core app pages (highest SEO value) ═══ -->
 
   <url>
     <loc>https://gradeo.in/</loc>
-    <lastmod>2025-03-16</lastmod>
+    <lastmod>2025-03-17</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
 
   <url>
     <loc>https://gradeo.in/calculator/</loc>
-    <lastmod>2025-03-16</lastmod>
+    <lastmod>2025-03-17</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.95</priority>
   </url>
 
   <url>
     <loc>https://gradeo.in/blog/</loc>
-    <lastmod>2025-03-16</lastmod>
+    <lastmod>2025-03-17</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.85</priority>
   </url>
 
+  <!-- ═══ TIER 2 — Important supporting pages ═══ -->
+
   <url>
     <loc>https://gradeo.in/about/</loc>
-    <lastmod>2025-03-16</lastmod>
+    <lastmod>2025-03-17</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.70</priority>
   </url>
 
   <url>
     <loc>https://gradeo.in/offer/</loc>
-    <lastmod>2025-03-16</lastmod>
+    <lastmod>2025-03-17</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.65</priority>
   </url>
 
   <url>
     <loc>https://gradeo.in/app/</loc>
-    <lastmod>2025-03-16</lastmod>
+    <lastmod>2025-03-17</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.60</priority>
+    <priority>0.55</priority>
   </url>
 
   <url>
     <loc>https://gradeo.in/feedback/</loc>
-    <lastmod>2025-03-16</lastmod>
+    <lastmod>2025-03-17</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.50</priority>
+    <priority>0.45</priority>
+  </url>
+
+  <!-- ═══ TIER 3 — Legal / info pages ═══ -->
+
+  <url>
+    <loc>https://gradeo.in/security/</loc>
+    <lastmod>2025-03-17</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.40</priority>
   </url>
 
   <url>
     <loc>https://gradeo.in/privacy/</loc>
-    <lastmod>2025-03-16</lastmod>
+    <lastmod>2025-03-17</lastmod>
     <changefreq>yearly</changefreq>
-    <priority>0.40</priority>
+    <priority>0.35</priority>
   </url>
 
-  <url>
-    <loc>https://gradeo.in/terms/</loc>
-    <lastmod>2025-03-16</lastmod>
-    <changefreq>yearly</changefreq>
-    <priority>0.40</priority>
-  </url>
-
-  <url>
-    <loc>https://gradeo.in/security/</loc>
-    <lastmod>2025-03-16</lastmod>
-    <changefreq>yearly</changefreq>
-    <priority>0.40</priority>
-  </url>
-
-  <!-- ═══ BLOG ARTICLES ═══ -->
+  <!-- ═══ TIER 4 — Blog articles (add each one as you publish) ═══ -->
 
   <url>
     <loc>https://gradeo.in/blog/how-to-calculate-sgpa/</loc>
-    <lastmod>2025-03-16</lastmod>
+    <lastmod>2025-03-17</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.90</priority>
   </url>
 
+  <!-- Add more blog articles here as you publish them:
   <url>
     <loc>https://gradeo.in/blog/sgpa-to-cgpa-conversion/</loc>
-    <lastmod>2025-03-16</lastmod>
+    <lastmod>2025-03-17</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.88</priority>
   </url>
+  -->
 
-  <url>
-    <loc>https://gradeo.in/blog/how-to-improve-cgpa/</loc>
-    <lastmod>2025-03-16</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.85</priority>
-  </url>
-
-  <url>
-    <loc>https://gradeo.in/blog/minimum-marks-strategy/</loc>
-    <lastmod>2025-03-16</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.85</priority>
-  </url>
-
-  <url>
-    <loc>https://gradeo.in/blog/vtu-sgpa-calculation/</loc>
-    <lastmod>2025-03-16</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.83</priority>
-  </url>
-
-  <url>
-    <loc>https://gradeo.in/blog/ktu-cgpa-guide/</loc>
-    <lastmod>2025-03-16</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.82</priority>
-  </url>
-
-  <url>
-    <loc>https://gradeo.in/blog/cgpa-to-percentage/</loc>
-    <lastmod>2025-03-16</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.82</priority>
-  </url>
-
-  <url>
-    <loc>https://gradeo.in/blog/what-is-sgpa/</loc>
-    <lastmod>2025-03-16</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.78</priority>
-  </url>
-
-  <url>
-    <loc>https://gradeo.in/blog/what-is-cgpa/</loc>
-    <lastmod>2025-03-16</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.78</priority>
-  </url>
-
-  <url>
-    <loc>https://gradeo.in/blog/grade-points-explained/</loc>
-    <lastmod>2025-03-16</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.76</priority>
-  </url>
-
-  <url>
-    <loc>https://gradeo.in/blog/credits-in-engineering/</loc>
-    <lastmod>2025-03-16</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.75</priority>
-  </url>
-
-  <!-- ═══ UNIVERSITY PAGES (planned) ═══ -->
-
-  <url>
-    <loc>https://gradeo.in/university/vtu/</loc>
-    <lastmod>2025-06-01</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.88</priority>
-  </url>
-
-  <url>
-    <loc>https://gradeo.in/university/ktu/</loc>
-    <lastmod>2025-06-01</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.86</priority>
-  </url>
-
-  <url>
-    <loc>https://gradeo.in/university/aktu/</loc>
-    <lastmod>2025-07-01</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.84</priority>
-  </url>
-
-  <url>
-    <loc>https://gradeo.in/university/mumbai/</loc>
-    <lastmod>2025-07-01</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.83</priority>
-  </url>
-
-  <url>
-    <loc>https://gradeo.in/university/anna-university/</loc>
-    <lastmod>2025-08-01</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.83</priority>
-  </url>
-
-  <!-- ═══ NOINDEX — excluded from sitemap ═══ -->
-  <!-- /success/, /thanks/, /roadmap.html — noindex pages not included -->
+  <!-- ═══ INTENTIONALLY EXCLUDED — do NOT add these ═══
+    /success/   — post sign-in page, no SEO value
+    /thanks/    — post-feedback page, no SEO value
+    /offers/    — video redirect page, no SEO value
+    /offline/   — service worker fallback, not a real page
+    /roadmap/   — internal doc, has noindex meta tag
+  ═══ -->
 
 </urlset>
