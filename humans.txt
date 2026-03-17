@@ -1,0 +1,16 @@
+/* TEAM */
+GRADEO Team
+Contact: info@gradeo.in
+Twitter: @gradeo_in
+Location: India
+
+/* SITE */
+Last update: 2025-03-17
+Language: English
+Doctype: HTML5
+IDE: VS Code
+Standards: HTML5, CSS3, ES2022
+Components: Firebase Auth, Firestore, Cloudflare Pages, PWA
+
+/* THANKS */
+Built for 6 million engineering students in India 🇮🇳

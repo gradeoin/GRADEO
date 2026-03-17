@@ -1,0 +1,501 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <!-- Security: CSP meta fallback (primary CSP set in _headers) -->
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://www.gstatic.com https://www.googletagmanager.com https://static.cloudflareinsights.com https://cdn.emailjs.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob: https://res.cloudinary.com https://lh3.googleusercontent.com https://avatars.githubusercontent.com; connect-src 'self' https://firestore.googleapis.com https://firebase.googleapis.com https://identitytoolkit.googleapis.com https://securetoken.googleapis.com wss:; frame-src 'none'; object-src 'none'; base-uri 'self';">
+  <meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=5,viewport-fit=cover"/>
+<title>Get Gradeo App — Free SGPA & CGPA Planner</title>
+<meta name="description" content="Install Gradeo on your phone for free. Calculate SGPA, plan your CGPA target and find minimum marks needed. Works on Android and iPhone. No app store required."/>
+<meta name="robots" content="index,follow"/>
+<link rel="canonical" href="/app/"/>
+
+<!-- OG -->
+<meta property="og:type" content="website"/>
+<meta property="og:url" content="https://gradeo.in/app"/>
+<meta property="og:title" content="Get Gradeo — Free Grade Planner App"/>
+<meta property="og:description" content="Install Gradeo on your phone for free. No app store needed. Works on Android and iPhone."/>
+<meta property="og:image" content="https://res.cloudinary.com/djy3mjtsz/image/upload/v1770296454/Untitled-2_i2ezfh.png"/>
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:title" content="Get Gradeo — Free Grade Planner App"/>
+<meta name="twitter:description" content="Install free on Android and iPhone. Calculate SGPA, plan your CGPA."/>
+<meta name="twitter:image" content="https://res.cloudinary.com/djy3mjtsz/image/upload/v1770296454/Untitled-2_i2ezfh.png"/>
+
+<link rel="icon" href="https://res.cloudinary.com/djy3mjtsz/image/upload/v1770296454/Untitled-2_i2ezfh.png" type="image/png"/>
+<link rel="manifest" href="/manifest.webmanifest"/>
+
+<script>
+(function(){
+  var t=localStorage.getItem('gradeo_theme');
+  if(!t) t=window.matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light';
+  document.documentElement.setAttribute('data-theme',t);
+})();
+</script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+:root{
+  --o:#FF6A00;--od:#CC4400;--o2:#FF9040;
+  --bg:#FFF6ED;--surface:#fff;--card:#fff;
+  --text:#0D0C0B;--muted:#6B6560;--muted2:#A8A29E;
+  --cb:rgba(255,106,0,.12);--cb2:rgba(255,106,0,.22);
+  --r:18px;
+}
+[data-theme="dark"]{
+  --bg:#080604;--surface:#161210;--card:#1A1410;
+  --text:#F5E8D8;--muted:#8A7E74;--muted2:#5A5450;
+  --cb:rgba(255,106,0,.16);--cb2:rgba(255,106,0,.28);
+}
+html{scroll-behavior:smooth;}
+body{
+  font-family:ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+  background:var(--bg);color:var(--text);
+  -webkit-font-smoothing:antialiased;
+  -moz-osx-font-smoothing:grayscale;
+  overflow-x:hidden;
+  background:
+    radial-gradient(ellipse 120% 50% at 5% 0%,rgba(255,100,0,.11) 0%,transparent 55%),
+    radial-gradient(ellipse 80% 40% at 95% 100%,rgba(255,160,60,.07) 0%,transparent 50%),
+    var(--bg);
+}
+
+/* ── Header ── */
+header{
+  position:sticky;top:0;z-index:100;
+  background:rgba(255,246,237,.92);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
+  border-bottom:1px solid var(--cb);
+  padding:12px 20px;
+  display:flex;align-items:center;justify-content:space-between;
+  max-width:100%;
+}
+[data-theme="dark"] header{background:rgba(8,6,4,.92);}
+.hlogo{display:flex;align-items:center;gap:9px;text-decoration:none;}
+.hlogo-img{width:32px;height:32px;border-radius:9px;border:1.5px solid var(--cb2);overflow:hidden;}
+.hlogo-img img{width:100%;height:100%;object-fit:cover;display:block;}
+.hlogo-name{font-size:15px;font-weight:900;letter-spacing:-.3px;color:var(--text);}
+.hopen{
+  background:var(--o);color:#fff;border:none;border-radius:10px;
+  padding:9px 16px;font-size:13px;font-weight:800;cursor:pointer;
+  font-family:inherit;box-shadow:0 2px 10px rgba(255,106,0,.28);
+  transition:transform .15s,opacity .15s;
+}
+.hopen:active{transform:scale(.96);opacity:.88;}
+
+/* ── Hero ── */
+.hero{
+  text-align:center;padding:52px 20px 40px;
+  max-width:540px;margin:0 auto;
+}
+.hero-badge{
+  display:inline-flex;align-items:center;gap:6px;
+  background:rgba(255,106,0,.10);border:1px solid rgba(255,106,0,.22);
+  color:var(--o);font-size:11px;font-weight:800;letter-spacing:.06em;
+  text-transform:uppercase;padding:5px 12px;border-radius:99px;
+  margin-bottom:20px;
+}
+.hero-badge-dot{width:6px;height:6px;border-radius:50%;background:var(--o);}
+.app-icon{
+  width:96px;height:96px;border-radius:24px;margin:0 auto 20px;
+  overflow:hidden;border:2px solid var(--cb2);
+  box-shadow:0 12px 36px rgba(255,100,0,.20),0 2px 8px rgba(0,0,0,.08);
+}
+.app-icon img{width:100%;height:100%;object-fit:cover;display:block;}
+h1{
+  font-size:clamp(28px,7vw,42px);font-weight:900;
+  letter-spacing:-.8px;line-height:1.1;margin-bottom:12px;
+}
+.hero-sub{
+  font-size:16px;color:var(--muted);line-height:1.6;
+  font-weight:500;margin-bottom:32px;
+  max-width:420px;margin-left:auto;margin-right:auto;
+  margin-bottom:32px;
+}
+.hero-rating{
+  display:flex;align-items:center;justify-content:center;gap:10px;
+  font-size:13px;color:var(--muted);font-weight:600;margin-bottom:32px;
+}
+.stars{color:#FF9040;letter-spacing:1px;}
+
+/* ── Install buttons ── */
+.install-btns{display:flex;flex-direction:column;gap:12px;max-width:360px;margin:0 auto 12px;}
+.btn-android{
+  display:flex;align-items:center;justify-content:center;gap:10px;
+  background:var(--o);color:#fff;border:none;border-radius:14px;
+  padding:16px 24px;font-size:15px;font-weight:800;cursor:pointer;
+  font-family:inherit;
+  box-shadow:0 4px 20px rgba(255,106,0,.30),0 2px 0 var(--od);
+  transition:transform .15s,box-shadow .15s;
+  position:relative;overflow:hidden;
+}
+.btn-android::after{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(105deg,transparent 30%,rgba(255,255,255,.15) 55%,transparent 80%);
+  transform:skewX(-15deg) translateX(-120%);
+  animation:shine 3s ease-in-out infinite 1s;
+}
+@keyframes shine{0%{transform:skewX(-15deg) translateX(-120%);}50%,100%{transform:skewX(-15deg) translateX(180%);}}
+.btn-android:active{transform:scale(.97) translateY(1px);box-shadow:0 2px 12px rgba(255,106,0,.25);}
+.btn-android svg,.btn-ios svg{width:20px;height:20px;flex-shrink:0;}
+.btn-ios{
+  display:flex;align-items:center;justify-content:center;gap:10px;
+  background:var(--card);color:var(--text);
+  border:1.5px solid var(--cb2);border-radius:14px;
+  padding:15px 24px;font-size:15px;font-weight:800;cursor:pointer;
+  font-family:inherit;
+  box-shadow:0 2px 10px rgba(0,0,0,.06);
+  transition:transform .15s,border-color .15s;
+}
+.btn-ios:active{transform:scale(.97);}
+.btn-label{display:flex;flex-direction:column;align-items:flex-start;}
+.btn-label-small{font-size:10px;font-weight:600;opacity:.7;letter-spacing:.02em;}
+.btn-label-main{font-size:15px;font-weight:800;line-height:1;}
+.btn-free{
+  font-size:11px;color:var(--muted);text-align:center;
+  font-weight:600;margin-top:4px;
+}
+
+/* ── Features grid ── */
+.features{
+  max-width:640px;margin:48px auto;padding:0 20px;
+  display:grid;grid-template-columns:repeat(2,1fr);gap:12px;
+}
+@media(max-width:400px){.features{grid-template-columns:1fr;}}
+.feat-card{
+  background:var(--card);border:1.5px solid var(--cb);
+  border-radius:var(--r);padding:18px 16px;
+  transition:border-color .2s;
+}
+.feat-card:hover{border-color:var(--cb2);}
+.feat-icon{
+  width:40px;height:40px;border-radius:12px;
+  background:rgba(255,106,0,.10);border:1px solid rgba(255,106,0,.18);
+  display:flex;align-items:center;justify-content:center;margin-bottom:12px;
+}
+.feat-icon svg{width:18px;height:18px;stroke:var(--o);stroke-width:2.2;fill:none;stroke-linecap:round;stroke-linejoin:round;}
+.feat-title{font-size:14px;font-weight:800;letter-spacing:-.2px;margin-bottom:4px;}
+.feat-desc{font-size:12px;color:var(--muted);line-height:1.5;font-weight:500;}
+
+/* ── Steps ── */
+.steps-section{max-width:480px;margin:0 auto 52px;padding:0 20px;}
+.section-title{font-size:22px;font-weight:900;letter-spacing:-.4px;margin-bottom:6px;text-align:center;}
+.section-sub{font-size:14px;color:var(--muted);text-align:center;margin-bottom:28px;line-height:1.5;}
+
+/* Android steps */
+.steps{display:flex;flex-direction:column;gap:0;}
+.step{
+  display:flex;gap:14px;padding:14px 0;
+  border-bottom:1px solid var(--cb);position:relative;
+}
+.step:last-child{border-bottom:none;}
+.step-num{
+  width:28px;height:28px;border-radius:50%;flex-shrink:0;
+  background:var(--o);color:#fff;
+  font-size:13px;font-weight:900;
+  display:flex;align-items:center;justify-content:center;
+  margin-top:1px;
+}
+.step-text{font-size:14px;font-weight:600;color:var(--text);line-height:1.5;}
+.step-text span{color:var(--o);}
+
+/* Platform tabs */
+.ptabs{display:flex;gap:8px;margin-bottom:24px;background:var(--card);border:1.5px solid var(--cb);border-radius:12px;padding:4px;}
+.ptab{
+  flex:1;padding:9px;border-radius:9px;border:none;background:transparent;
+  font-size:13px;font-weight:700;color:var(--muted);cursor:pointer;
+  font-family:inherit;transition:background .15s,color .15s;display:flex;align-items:center;justify-content:center;gap:6px;
+}
+.ptab.active{background:var(--o);color:#fff;}
+.ptab svg{width:14px;height:14px;fill:currentColor;}
+
+/* iOS steps panel */
+#iosSteps{display:none;}
+
+/* ── Trust badges ── */
+.trust{max-width:480px;margin:0 auto 48px;padding:0 20px;text-align:center;}
+.trust-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:20px;}
+.trust-card{
+  background:var(--card);border:1.5px solid var(--cb);
+  border-radius:14px;padding:16px 10px;
+}
+.trust-num{font-size:22px;font-weight:900;color:var(--o);letter-spacing:-.5px;margin-bottom:2px;}
+.trust-label{font-size:11px;color:var(--muted);font-weight:600;line-height:1.3;}
+
+/* ── QR section ── */
+.qr-section{
+  max-width:420px;margin:0 auto 52px;padding:0 20px;text-align:center;
+}
+.qr-card{
+  background:var(--card);border:1.5px solid var(--cb);
+  border-radius:20px;padding:28px 20px;
+}
+.qr-box{
+  width:160px;height:160px;margin:0 auto 16px;
+  background:#fff;border-radius:12px;padding:10px;
+  display:flex;align-items:center;justify-content:center;
+  border:1.5px solid var(--cb);
+}
+.qr-label{font-size:13px;color:var(--muted);font-weight:500;line-height:1.5;}
+.qr-url{font-size:15px;font-weight:800;color:var(--o);margin-top:6px;}
+
+/* Copy link */
+.copy-row{display:flex;gap:8px;margin-top:16px;}
+.copy-input{
+  flex:1;padding:11px 14px;border-radius:11px;
+  border:1.5px solid var(--cb);background:var(--bg);
+  color:var(--muted);font-size:13px;font-family:inherit;
+  outline:none;
+}
+.copy-btn{
+  padding:11px 16px;background:var(--o);color:#fff;
+  border:none;border-radius:11px;font-size:13px;font-weight:800;
+  cursor:pointer;font-family:inherit;white-space:nowrap;
+  transition:transform .12s,opacity .12s;
+}
+.copy-btn:active{transform:scale(.95);opacity:.85;}
+
+/* ── Footer ── */
+footer{
+  text-align:center;padding:28px 20px max(28px,env(safe-area-inset-bottom));
+  border-top:1px solid var(--cb);
+  font-size:12px;color:var(--muted2);font-weight:600;
+}
+footer a{color:var(--o);text-decoration:none;}
+footer a:hover{text-decoration:underline;}
+
+/* ── Animate in ── */
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:none}}
+.hero,.features,.steps-section,.trust,.qr-section{animation:fadeUp .5s cubic-bezier(.16,1,.3,1) both;}
+.features{animation-delay:.1s;}
+.steps-section{animation-delay:.15s;}
+.trust{animation-delay:.2s;}
+.qr-section{animation-delay:.25s;}
+</style>
+</head>
+<body>
+
+<header>
+  <a class="hlogo" href="https://gradeo.in">
+    <div class="hlogo-img"><img src="https://res.cloudinary.com/djy3mjtsz/image/upload/v1770296454/Untitled-2_i2ezfh.png" alt="Gradeo" decoding="async"/></div>
+    <span class="hlogo-name">Gradeo</span>
+  </a>
+  <button class="hopen" onclick="location.href='https://gradeo.in'">Open app</button>
+</header>
+
+<!-- Hero -->
+<section class="hero">
+  <div class="hero-badge"><span class="hero-badge-dot"></span> Free forever · No sign-in to calculate</div>
+  <div class="app-icon">
+    <img src="https://res.cloudinary.com/djy3mjtsz/image/upload/v1770296454/Untitled-2_i2ezfh.png" alt="Gradeo app icon" decoding="async"/>
+  </div>
+  <h1>Your grades,<br/>planned perfectly</h1>
+  <p class="hero-sub">Calculate SGPA, plan your CGPA target and find minimum marks needed — all in one free app. No ads, ever.</p>
+
+  <div class="hero-rating">
+    <span class="stars">★★★★★</span>
+    <span>4.9 · 1,200+ students</span>
+  </div>
+
+  <div class="install-btns">
+    <button class="btn-android" id="installBtn" onclick="installApp()">
+      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.523 15.341L19.9 19.35a.5.5 0 0 1-.87.5l-2.4-4.05a7.94 7.94 0 0 1-9.26 0L5 19.85a.5.5 0 0 1-.87-.5l2.377-3.909A8 8 0 1 1 17.523 15.34zM12 6a6 6 0 1 0 0 12A6 6 0 0 0 12 6z"/></svg>
+      <div class="btn-label">
+        <span class="btn-label-small">Install on</span>
+        <span class="btn-label-main">Android</span>
+      </div>
+    </button>
+    <button class="btn-ios" id="iosBtn" onclick="showIOSGuide()">
+      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
+      <div class="btn-label">
+        <span class="btn-label-small">Install on</span>
+        <span class="btn-label-main">iPhone / iPad</span>
+      </div>
+    </button>
+  </div>
+  <p class="btn-free">Free forever · No app store · No download fees</p>
+</section>
+
+<!-- Features -->
+<div class="features">
+  <div class="feat-card">
+    <div class="feat-icon"><svg viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg></div>
+    <div class="feat-title">Instant SGPA</div>
+    <div class="feat-desc">Type marks and get results as you go. No submit button.</div>
+  </div>
+  <div class="feat-card">
+    <div class="feat-icon"><svg viewBox="0 0 24 24"><path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="2"/><line x1="9" y1="12" x2="15" y2="12"/><line x1="9" y1="16" x2="12" y2="16"/></svg></div>
+    <div class="feat-title">CGPA Planner</div>
+    <div class="feat-desc">Set a target CGPA — get exact minimum marks per subject.</div>
+  </div>
+  <div class="feat-card">
+    <div class="feat-icon"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div>
+    <div class="feat-title">PDF Export</div>
+    <div class="feat-desc">Download your grade card as a clean PDF instantly.</div>
+  </div>
+  <div class="feat-card">
+    <div class="feat-icon"><svg viewBox="0 0 24 24"><path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"/></svg></div>
+    <div class="feat-title">Cloud Sync</div>
+    <div class="feat-desc">Sign in once — your data syncs across all devices.</div>
+  </div>
+  <div class="feat-card">
+    <div class="feat-icon"><svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
+    <div class="feat-title">No ads, ever</div>
+    <div class="feat-desc">Completely free. Your data is never sold. Private.</div>
+  </div>
+  <div class="feat-card">
+    <div class="feat-icon"><svg viewBox="0 0 24 24"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg></div>
+    <div class="feat-title">All subject types</div>
+    <div class="feat-desc">Theory, labs, practicals, NSS, activity subjects.</div>
+  </div>
+</div>
+
+<!-- How to install -->
+<section class="steps-section">
+  <h2 class="section-title">How to install</h2>
+  <p class="section-sub">Takes 30 seconds. No app store needed.</p>
+
+  <div class="ptabs">
+    <button class="ptab active" id="tabAndroid" onclick="switchTab('android')">
+      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.523 15.341L19.9 19.35a.5.5 0 0 1-.87.5l-2.4-4.05a7.94 7.94 0 0 1-9.26 0L5 19.85a.5.5 0 0 1-.87-.5l2.377-3.909A8 8 0 1 1 17.523 15.34z"/></svg>
+      Android
+    </button>
+    <button class="ptab" id="tabIOS" onclick="switchTab('ios')">
+      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
+      iPhone
+    </button>
+  </div>
+
+  <div id="androidSteps" class="steps">
+    <div class="step"><div class="step-num">1</div><div class="step-text">Open <span>gradeo.in</span> in <span>Chrome</span> on your Android phone</div></div>
+    <div class="step"><div class="step-num">2</div><div class="step-text">Tap the <span>three dots menu</span> (⋮) at the top right</div></div>
+    <div class="step"><div class="step-num">3</div><div class="step-text">Tap <span>"Add to Home screen"</span> or <span>"Install app"</span></div></div>
+    <div class="step"><div class="step-num">4</div><div class="step-text">Tap <span>Install</span> — Gradeo appears on your home screen instantly</div></div>
+  </div>
+
+  <div id="iosSteps" class="steps">
+    <div class="step"><div class="step-num">1</div><div class="step-text">Open <span>gradeo.in</span> in <span>Safari</span> on your iPhone or iPad</div></div>
+    <div class="step"><div class="step-num">2</div><div class="step-text">Tap the <span>Share button</span> (the square with an arrow) at the bottom</div></div>
+    <div class="step"><div class="step-num">3</div><div class="step-text">Scroll down and tap <span>"Add to Home Screen"</span></div></div>
+    <div class="step"><div class="step-num">4</div><div class="step-text">Tap <span>Add</span> — Gradeo appears on your home screen instantly</div></div>
+  </div>
+</section>
+
+<!-- Trust numbers -->
+<div class="trust">
+  <h2 class="section-title">Trusted by students</h2>
+  <p class="section-sub">Engineering students across India use Gradeo every day.</p>
+  <div class="trust-grid">
+    <div class="trust-card">
+      <div class="trust-num">1200+</div>
+      <div class="trust-label">Active students</div>
+    </div>
+    <div class="trust-card">
+      <div class="trust-num">4.9★</div>
+      <div class="trust-label">Average rating</div>
+    </div>
+    <div class="trust-card">
+      <div class="trust-num">Free</div>
+      <div class="trust-label">Forever. No catch.</div>
+    </div>
+  </div>
+</div>
+
+<!-- Share / QR -->
+<div class="qr-section">
+  <div class="qr-card">
+    <h3 style="font-size:17px;font-weight:900;margin-bottom:6px;">Share with friends</h3>
+    <p style="font-size:13px;color:var(--muted);margin-bottom:20px;line-height:1.5;">Share this link and your friends can install Gradeo in seconds.</p>
+    <div class="copy-row">
+      <input class="copy-input" id="shareUrl" value="https://gradeo.in/app" readonly onclick="this.select()"/>
+      <button class="copy-btn" id="copyBtn" onclick="copyLink()">Copy</button>
+    </div>
+    <div style="display:flex;gap:10px;margin-top:12px;">
+      <button onclick="shareApp()" style="flex:1;padding:11px;background:var(--o);color:#fff;border:none;border-radius:11px;font-size:13px;font-weight:800;cursor:pointer;font-family:inherit;transition:transform .12s;" onactive="this.style.transform='scale(.96)'">
+        Share →
+      </button>
+      <button onclick="location.href='https://gradeo.in'" style="flex:1;padding:11px;background:var(--card);color:var(--text);border:1.5px solid var(--cb);border-radius:11px;font-size:13px;font-weight:800;cursor:pointer;font-family:inherit;">
+        Open app
+      </button>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <p>© 2026 Gradeo · <a href="https://gradeo.in">gradeo.in</a> · Made for engineering students</p>
+  <p style="margin-top:6px;"><a href="https://gradeo.in">Home</a> &nbsp;·&nbsp; <a href="/calculator/">Calculator</a> &nbsp;·&nbsp; <a href="/feedback/">Feedback</a></p>
+</footer>
+
+<script>
+const isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent);
+const isAndroid = /android/i.test(navigator.userAgent);
+const isInstalled = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
+
+/* Auto-select correct platform tab */
+if(isIOS) switchTab('ios');
+
+/* Install button */
+let deferredPrompt = null;
+window.addEventListener('beforeinstallprompt', e => {
+  e.preventDefault();
+  deferredPrompt = e;
+  const btn = document.getElementById('installBtn');
+  btn.style.display = 'flex';
+});
+
+function installApp(){
+  if(deferredPrompt){
+    deferredPrompt.prompt();
+    deferredPrompt.userChoice.then(choice => {
+      deferredPrompt = null;
+      if(choice.outcome === 'accepted'){
+        document.getElementById('installBtn').textContent = 'Installed!';
+      }
+    });
+  } else {
+    location.href = 'https://gradeo.in';
+  }
+}
+
+function showIOSGuide(){ switchTab('ios'); document.querySelector('.steps-section').scrollIntoView({behavior:'smooth'}); }
+
+function switchTab(tab){
+  document.getElementById('androidSteps').style.display = tab === 'android' ? 'flex' : 'none';
+  document.getElementById('iosSteps').style.display    = tab === 'ios'     ? 'flex' : 'none';
+  document.getElementById('tabAndroid').classList.toggle('active', tab === 'android');
+  document.getElementById('tabIOS').classList.toggle('active', tab === 'ios');
+}
+
+function copyLink(){
+  const url = 'https://gradeo.in/app';
+  const btn = document.getElementById('copyBtn');
+  if(navigator.clipboard){
+    navigator.clipboard.writeText(url).then(() => {
+      btn.textContent = 'Copied!';
+      setTimeout(() => btn.textContent = 'Copy', 2000);
+    });
+  } else {
+    document.getElementById('shareUrl').select();
+    document.execCommand('copy');
+    btn.textContent = 'Copied!';
+    setTimeout(() => btn.textContent = 'Copy', 2000);
+  }
+}
+
+function shareApp(){
+  if(navigator.share){
+    navigator.share({
+      title: 'Gradeo — Free Grade Planner',
+      text: 'Calculate your SGPA and plan your CGPA for free with Gradeo!',
+      url: 'https://gradeo.in/app'
+    }).catch(() => {});
+  } else {
+    copyLink();
+  }
+}
+
+/* If already installed, show open app instead */
+if(isInstalled){
+  document.getElementById('installBtn').innerHTML = '<svg viewBox="0 0 24 24" fill="currentColor" style="width:20px;height:20px"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 14.5v-9l6 4.5-6 4.5z"/></svg><div class="btn-label"><span class="btn-label-small">Already installed</span><span class="btn-label-main">Open Gradeo</span></div>';
+  document.getElementById('installBtn').onclick = () => location.href = 'https://gradeo.in';
+}
+</script>
+</body>
+</html>

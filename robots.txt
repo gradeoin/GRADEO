@@ -1,24 +1,33 @@
-# robots.txt for https://gradeo.in/
-# Updated March 2025
+# ============================================================
+#  GRADEO robots.txt — Updated 2025-03-17
+#  https://gradeo.in/
+# ============================================================
 
-# ─── Allow all search engines ───
+# ── Allow all legitimate search engines ──
 User-agent: *
 Allow: /
 
-# Block pages that should never appear in Google
+# Block utility/internal pages (not useful in search results)
 Disallow: /success/
 Disallow: /offline/
 Disallow: /roadmap/
+Disallow: /thanks/
 Disallow: /__/
 Disallow: /cdn-cgi/
+Disallow: /functions/
 
-# Sitemap location — Google reads this automatically
+# Crawl-delay for polite bots
+Crawl-delay: 10
+
+# Sitemap location
 Sitemap: https://gradeo.in/sitemap.xml
 
 
-# ─── Block AI training bots (keep search bots allowed) ───
-
+# ── Block AI training scrapers (opt-out) ──
 User-agent: GPTBot
+Disallow: /
+
+User-agent: ChatGPT-User
 Disallow: /
 
 User-agent: Google-Extended
@@ -40,4 +49,29 @@ User-agent: meta-externalagent
 Disallow: /
 
 User-agent: ClaudeBot
+Disallow: /
+
+User-agent: anthropic-ai
+Disallow: /
+
+User-agent: PerplexityBot
+Disallow: /
+
+User-agent: cohere-ai
+Disallow: /
+
+User-agent: YouBot
+Disallow: /
+
+# ── Block bad/aggressive crawlers ──
+User-agent: AhrefsBot
+Crawl-delay: 30
+
+User-agent: SemrushBot
+Crawl-delay: 30
+
+User-agent: MJ12bot
+Disallow: /
+
+User-agent: DotBot
 Disallow: /

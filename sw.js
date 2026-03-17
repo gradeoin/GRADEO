@@ -4,10 +4,12 @@
    - Stale-while-revalidate for pages
    - Cache-first for images and fonts
    - Offline fallback
-   - No push notifications (coming later)
+   - Push notification support
+   - Background sync
+   - Pull-to-refresh cache clear
 ================================================================ */
 
-const V           = 'v5';
+const V           = 'v6';
 const SHELL_CACHE = 'gradeo-shell-' + V;
 const PAGE_CACHE  = 'gradeo-pages-' + V;
 const ASSET_CACHE = 'gradeo-assets-' + V;
