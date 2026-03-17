@@ -1,77 +1,120 @@
-import { auth } from "../firebase.js";
-import {
-  GoogleAuthProvider,
-  signInWithPopup,
-  signInWithRedirect,
-  getRedirectResult,
-  onAuthStateChanged
-} from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+  <!-- Security: CSP meta fallback (primary CSP set in _headers) -->
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://www.gstatic.com https://www.googletagmanager.com https://static.cloudflareinsights.com https://cdn.emailjs.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob: https://res.cloudinary.com https://lh3.googleusercontent.com https://avatars.githubusercontent.com; connect-src 'self' https://firestore.googleapis.com https://firebase.googleapis.com https://identitytoolkit.googleapis.com https://securetoken.googleapis.com wss:; frame-src 'none'; object-src 'none'; base-uri 'self';">
+  <meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=5"/>
+<title>Page Not Found — GRADEO</title>
+<meta name="description" content="This page doesn't exist. Head back to GRADEO to calculate your SGPA and plan your CGPA."/>
+<meta name="robots" content="noindex,follow"/>
+<link rel="canonical" href="https://gradeo.in/"/>
+<link rel="icon" href="https://res.cloudinary.com/djy3mjtsz/image/upload/v1770296454/Untitled-2_i2ezfh.png" type="image/png"/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<script>
+(function(){
+  var t=localStorage.getItem('gradeo_theme');
+  if(!t) t=window.matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light';
+  document.documentElement.setAttribute('data-theme',t);
+})();
+</script>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@400;500;600&display=swap');
+:root{--o:#FF5C00;--bg:#080604;--text:#F5E8D8;--muted:#8A7E74;--card:#1A1410;--border:rgba(255,92,0,.14);--fd:'Syne',system-ui,sans-serif;--fb:'DM Sans',system-ui,sans-serif;--spring:cubic-bezier(.34,1.56,.64,1);}
+[data-theme="light"]{--bg:#FFF6ED;--text:#0D0C0B;--muted:#6B6560;--card:#fff;--border:rgba(255,92,0,.12);}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html,body{height:100%;}
+body{font-family:var(--fb);background:var(--bg);color:var(--text);-webkit-font-smoothing:antialiased;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;padding:24px;overflow:hidden;}
+body::before{content:'';position:fixed;inset:0;z-index:-1;background:radial-gradient(ellipse 80% 60% at 50% 50%,rgba(255,80,0,.12) 0%,transparent 65%);}
 
-const btn = document.getElementById("googleClaimBtn");
-const statusEl = document.getElementById("status");
-const offerCodeEl = document.getElementById("offerCode");
-const campaignEl = document.getElementById("campaign");
+/* Floating orb */
+.orb{position:fixed;width:400px;height:400px;border-radius:50%;background:radial-gradient(circle,rgba(255,92,0,.08) 0%,transparent 70%);top:50%;left:50%;transform:translate(-50%,-50%);animation:breathe 4s ease-in-out infinite;pointer-events:none;z-index:-1;}
+@keyframes breathe{0%,100%{transform:translate(-50%,-50%) scale(1);}50%{transform:translate(-50%,-50%) scale(1.15);}}
 
-function setStatus(msg) {
-  statusEl.textContent = msg || "";
+/* Grid */
+body::after{content:'';position:fixed;inset:0;z-index:-1;background-image:linear-gradient(rgba(255,92,0,.03) 1px,transparent 1px),linear-gradient(90deg,rgba(255,92,0,.03) 1px,transparent 1px);background-size:50px 50px;}
+
+.wrap{text-align:center;max-width:480px;position:relative;z-index:1;}
+
+/* 404 big number */
+.num{
+  font-family:var(--fd);font-weight:800;
+  font-size:clamp(100px,25vw,160px);
+  letter-spacing:-6px;line-height:.9;
+  background:linear-gradient(135deg,#FF2200 0%,#FF5C00 40%,#FFB370 80%,#FF4400 100%);
+  background-size:300% auto;
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+  animation:gS 5s ease-in-out infinite alternate;
+  margin-bottom:8px;
 }
+@keyframes gS{0%{background-position:0%}100%{background-position:100%}}
 
-function readParams() {
-  const url = new URL(location.href);
-  return {
-    offer: url.searchParams.get("offer") || "FREE1YEAR",
-    campaign: url.searchParams.get("campaign") || "students",
-    src: url.searchParams.get("src") || "email",
-    // Fixed redirect target requested
-    next: "https://gradeo.in/"
-  };
+.title{font-family:var(--fd);font-weight:800;font-size:clamp(20px,5vw,28px);letter-spacing:-.5px;margin-bottom:10px;}
+.sub{font-size:15px;color:var(--muted);line-height:1.6;max-width:36ch;margin:0 auto 32px;}
+
+.btns{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;}
+.btn-p{
+  font-family:var(--fd);font-weight:700;font-size:14px;
+  background:linear-gradient(135deg,#FF5C00,#FF3800);
+  color:#fff;padding:13px 24px;border-radius:14px;
+  box-shadow:0 4px 0 #A82800,0 8px 24px rgba(255,60,0,.32);
+  transition:transform .2s var(--spring),box-shadow .15s;
+  display:inline-flex;align-items:center;gap:7px;
 }
-
-const promo = readParams();
-
-// Update UI chips
-if (offerCodeEl) offerCodeEl.textContent = promo.offer;
-if (campaignEl) campaignEl.textContent = promo.campaign;
-
-// Store for success page
-sessionStorage.setItem("promoParams", JSON.stringify(promo));
-
-const provider = new GoogleAuthProvider();
-
-// Handle redirect sign-in return (mobile/popup blocked)
-try {
-  const result = await getRedirectResult(auth);
-  if (result?.user) {
-    // If user came back from redirect flow, intent already set before redirect
-    location.href = "/success/";
-  }
-} catch (e) {
-  // ignore
+.btn-p:hover{transform:translateY(-3px);box-shadow:0 6px 0 #A82800,0 12px 30px rgba(255,60,0,.42);}
+.btn-p:active{transform:translateY(1px);box-shadow:0 2px 0 #A82800;}
+.btn-s{
+  font-family:var(--fd);font-weight:700;font-size:14px;
+  color:var(--text);padding:13px 24px;border-radius:14px;
+  border:1.5px solid rgba(255,255,255,.12);
+  transition:border-color .15s,background .15s;
+  display:inline-flex;align-items:center;gap:7px;
 }
+.btn-s:hover{border-color:rgba(255,92,0,.36);background:rgba(255,92,0,.06);}
 
-btn?.addEventListener("click", async () => {
-  btn.disabled = true;
-  setStatus("Opening Google sign-in…");
+/* Quick links */
+.links{margin-top:36px;display:flex;gap:6px;flex-wrap:wrap;justify-content:center;}
+.link{font-size:13px;font-weight:600;color:var(--muted);padding:6px 13px;border-radius:10px;border:1px solid var(--border);transition:color .14s,background .14s,border-color .14s;}
+.link:hover{color:var(--o);background:rgba(255,92,0,.08);border-color:rgba(255,92,0,.24);}
+.link .arrow{color:var(--o);margin-left:2px;}
 
-  // ✅ Mark intent only when user actually clicks Claim
-  sessionStorage.setItem("offer_claim_intent", "1");
+/* Logo top */
+.logo-wrap{display:flex;align-items:center;gap:8px;margin-bottom:36px;justify-content:center;}
+.logo-img{width:36px;height:36px;border-radius:11px;overflow:hidden;border:1.5px solid rgba(255,92,0,.22);box-shadow:0 2px 10px rgba(255,60,0,.16);}
+.logo-img img{width:100%;height:100%;object-fit:cover;}
+.logo-name{font-family:var(--fd);font-weight:800;font-size:17px;letter-spacing:-.4px;}
+</style>
+</head>
+<body>
+<div class="orb"></div>
+<div class="wrap">
+  <a class="logo-wrap" href="https://gradeo.in/" style="text-decoration:none;color:inherit;">
+    <div class="logo-img"><img src="https://res.cloudinary.com/djy3mjtsz/image/upload/v1770296454/Untitled-2_i2ezfh.png" alt="GRADEO" width="36" height="36"/></div>
+    <span class="logo-name">GRADEO</span>
+  </a>
 
-  try {
-    await signInWithPopup(auth, provider);
-    setStatus("Signed in ✅ Redirecting…");
-    location.href = "/success/";
-  } catch (e) {
-    setStatus("Popup blocked. Using redirect sign-in…");
-    await signInWithRedirect(auth, provider);
-  } finally {
-    btn.disabled = false;
-  }
-});
+  <div class="num">404</div>
+  <h1 class="title">Page not found</h1>
+  <p class="sub">This URL doesn't exist — maybe it was moved, deleted, or you followed a broken link.</p>
 
-// If already logged in on gradeo.in, skip (DO NOT set claim intent here)
-onAuthStateChanged(auth, (user) => {
-  if (user) {
-    setStatus(`Welcome ${user.displayName || ""}! Redirecting…`);
-    setTimeout(() => (location.href = "/success/"), 400);
-  }
-});
+  <div class="btns">
+    <a class="btn-p" href="https://gradeo.in/">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+      Go home
+    </a>
+    <a class="btn-s" href="https://gradeo.in/calculator/">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="2"/></svg>
+      Open calculator
+    </a>
+  </div>
+
+  <nav class="links" aria-label="Quick links">
+    <a class="link" href="https://gradeo.in/blog/">Blog <span class="arrow">→</span></a>
+    <a class="link" href="https://gradeo.in/about/">About <span class="arrow">→</span></a>
+    <a class="link" href="https://gradeo.in/offer/">Student offer <span class="arrow">→</span></a>
+    <a class="link" href="https://gradeo.in/feedback/">Feedback <span class="arrow">→</span></a>
+  </nav>
+</div>
+</body>
+</html>
