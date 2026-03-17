@@ -28,7 +28,7 @@
     script-src 'self' 'unsafe-inline' https://www.gstatic.com https://www.googletagmanager.com https://static.cloudflareinsights.com https://cdn.jsdelivr.net https://cdn.emailjs.com https://cdn-cgi.gradeo.in; 
     style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; 
     font-src 'self' https://fonts.gstatic.com; 
-    img-src 'self' data: blob: https://res.cloudinary.com/djy3mjtsz https://lh3.googleusercontent.com https://avatars.githubusercontent.com; 
+    img-src 'self' data: blob: https://res.cloudinary.com/djy3mjtsz https://lh3.googleusercontent.com https://avatars.githubusercontent.com https://firebasestorage.googleapis.com; 
     connect-src 'self' https://firestore.googleapis.com https://firebase.googleapis.com https://identitytoolkit.googleapis.com https://securetoken.googleapis.com https://cloudflareinsights.com https://gradeo-push.gradeo-in.workers.dev wss:; 
     frame-src 'none'; object-src 'none'; base-uri 'self'; form-action 'self'; upgrade-insecure-requests; block-all-mixed-content;
 
