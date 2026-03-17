@@ -1,6 +1,6 @@
 # ============================================================
 #  GRADEO — Cloudflare Pages HTTP Security Headers
-#  Updated: 2025-03-17
+#  Updated: 2026-03-18
 #  Follows OWASP recommendations + Google/Mozilla Observatory A+
 # ============================================================
 
@@ -24,10 +24,15 @@
   Strict-Transport-Security: max-age=63072000; includeSubDomains; preload
 
   # ── Content Security Policy ──
-  # Prevents XSS, data injection and clickjacking at the browser level
-  Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' https://www.gstatic.com https://www.googletagmanager.com https://static.cloudflareinsights.com https://cdn.jsdelivr.net https://cdn.emailjs.com https://cdn-cgi.gradeo.in; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob: https://res.cloudinary.com https://lh3.googleusercontent.com https://avatars.githubusercontent.com; connect-src 'self' https://firestore.googleapis.com https://firebase.googleapis.com https://identitytoolkit.googleapis.com https://securetoken.googleapis.com https://cloudflareinsights.com https://gradeo-push.gradeo-in.workers.dev wss:; frame-src 'none'; object-src 'none'; base-uri 'self'; form-action 'self'; upgrade-insecure-requests; block-all-mixed-content;
+  Content-Security-Policy: default-src 'self'; 
+    script-src 'self' 'unsafe-inline' https://www.gstatic.com https://www.googletagmanager.com https://static.cloudflareinsights.com https://cdn.jsdelivr.net https://cdn.emailjs.com https://cdn-cgi.gradeo.in; 
+    style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; 
+    font-src 'self' https://fonts.gstatic.com; 
+    img-src 'self' data: blob: https://res.cloudinary.com/djy3mjtsz https://lh3.googleusercontent.com https://avatars.githubusercontent.com; 
+    connect-src 'self' https://firestore.googleapis.com https://firebase.googleapis.com https://identitytoolkit.googleapis.com https://securetoken.googleapis.com https://cloudflareinsights.com https://gradeo-push.gradeo-in.workers.dev wss:; 
+    frame-src 'none'; object-src 'none'; base-uri 'self'; form-action 'self'; upgrade-insecure-requests; block-all-mixed-content;
 
-  # ── Cross-Origin policies (required for SharedArrayBuffer / advanced APIs) ──
+  # ── Cross-Origin policies ──
   Cross-Origin-Opener-Policy: same-origin-allow-popups
   Cross-Origin-Resource-Policy: same-site
   Cross-Origin-Embedder-Policy: unsafe-none
