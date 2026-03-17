@@ -16,9 +16,7 @@
   document.documentElement.classList.add('loading');
 })();
 </script>
-  <!-- Security: CSP meta fallback (primary CSP set in _headers) -->
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://www.gstatic.com https://www.googletagmanager.com https://static.cloudflareinsights.com https://cdn.emailjs.com https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob: https://res.cloudinary.com https://lh3.googleusercontent.com https://avatars.githubusercontent.com; connect-src 'self' https://firestore.googleapis.com https://firebase.googleapis.com https://identitytoolkit.googleapis.com https://securetoken.googleapis.com https://cloudflareinsights.com https://gradeo-push.gradeo-in.workers.dev wss:; frame-src 'none'; object-src 'none'; base-uri 'self'; form-action 'self'; upgrade-insecure-requests;">
-  <meta charset="utf-8"/>
+<meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=5,viewport-fit=cover,user-scalable=yes"/>
 <meta name="theme-color" id="tcMeta" content="#FFF6ED" media="(prefers-color-scheme: light)"/>
 <meta name="theme-color" content="#080604" media="(prefers-color-scheme: dark)"/>
@@ -142,13 +140,9 @@
 <!-- ═══ PERFORMANCE ═══ -->
 <link rel="preconnect" href="https://www.gstatic.com" crossorigin/>
 <link rel="preconnect" href="https://res.cloudinary.com" crossorigin/>
-<link rel="preconnect" href="https://fonts.googleapis.com" crossorigin/>
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
 <link rel="dns-prefetch" href="https://www.gstatic.com"/>
 <link rel="dns-prefetch" href="https://firestore.googleapis.com"/>
 <link rel="dns-prefetch" href="https://res.cloudinary.com"/>
-<link rel="dns-prefetch" href="https://static.cloudflareinsights.com"/>
-<link rel="dns-prefetch" href="https://www.googletagmanager.com"/>
 <link rel="preload" as="image" href="https://res.cloudinary.com/djy3mjtsz/image/upload/v1770296454/Untitled-2_i2ezfh.png" fetchpriority="high"/>
 <style>
 /* ── App loading — suppress all transitions until ready ── */
@@ -2590,7 +2584,7 @@ function sOut(){ const hsl=$('#hsl'); if(hsl) hsl.textContent='Sign in'; ['#gsb'
 
 function doSI(after){ if(!window.__a || !window.__p){ toast('Sign-in unavailable'); return; } if(window.__a.currentUser){ if(after) after(); return; } window._siAfter = after ?? null; $('#siModal')?.classList.add('on'); const ef=$('#siEmailForm'); if(ef) ef.style.display='none'; }
 
-function _doProviderSI(provider, btnId){ const btn=$(btnId); if(btn) btn.classList.add('loading'); const bs=[$('#hsi'),$('#gsb'),$('#mGsb')].filter(Boolean); bs.forEach(b=>b.disabled=true); window.__a.signInWithPopup(provider).then(()=>{ if(btn) btn.classList.remove('loading'); bs.forEach(b=>b.disabled=false); $('#siModal')?.classList.remove('on'); vib(HV.success); if(window._siAfter){ window._siAfter(); window._siAfter=null; } else if(ps){ ps=false; setTimeout(goM,160);} }).catch(e=>{ if(btn) btn.classList.remove('loading'); bs.forEach(b=>b.disabled=false); const msg = e.code==='auth/popup-closed-by-user'?'Sign-in cancelled' : e.code==='auth/account-exists-with-different-credential'?'Account already exists with a different provider' : 'Sign-in failed. Try again.'; toast(msg); }); }
+function _doProviderSI(provider, btnId){ const btn=$(btnId); if(btn) btn.classList.add('loading'); const bs=[$('#hsi'),$('#gsb'),$('#mGsb')].filter(Boolean); bs.forEach(b=>b.disabled=true); window.__a.signInWithPopup(provider).then(()=>{ if(btn) btn.classList.remove('loading'); bs.forEach(b=>b.disabled=false); $('#siModal')?.classList.remove('on'); vib(HV.success); if(window._siAfter){ window._siAfter(); window._siAfter=null; } else if(ps){ ps=false; setTimeout(goM,160);} }).catch(e=>{ console.error(e); if(btn) btn.classList.remove('loading'); bs.forEach(b=>b.disabled=false); const msg = e.code==='auth/popup-closed-by-user'?'Sign-in cancelled' : e.code==='auth/account-exists-with-different-credential'?'Account already exists with a different provider' : 'Sign-in failed. Try again.'; toast(msg); }); }
 
 $('#siBtnGoogle')?.addEventListener('click',()=>{ if(!window.__a || !window.__p) return; _doProviderSI(window.__p, '#siBtnGoogle'); });
 $('#siBtnGithub')?.addEventListener('click',()=>{ if(!window.__a) return; try{ const ghp=new firebase.auth.GithubAuthProvider(); ghp.addScope('read:user'); ghp.addScope('user:email'); _doProviderSI(ghp, '#siBtnGithub'); } catch(e){ toast('GitHub sign-in unavailable. Use Google or Email.'); } });
@@ -2620,7 +2614,7 @@ $('#brd')?.addEventListener('click',e=>{ if(e.ctrlKey || e.metaKey){ window.open
 
 /* File vs hosted */
 if(location.protocol==='file:'){ sOut(); ['#hsi','#gsb','#mGsb'].forEach(s=>{ const el=$(s); if(el) el.disabled=true; }); $('#gsb')?.addEventListener('click',goM); $('#mGsb')?.addEventListener('click',goM); }
-else { try{ firebase.initializeApp({apiKey:'AIzaSyDB_FK8-3ATZBpuvfL34EMp9WHTTd5sfIo',authDomain:'gradeo-in.firebaseapp.com',projectId:'gradeo-in',storageBucket:'gradeo-in.firebasestorage.app',messagingSenderId:'784963451684',appId:'1:784963451684:web:9d57beed639d488e4891b1',measurementId:'G-JSNGKKMJEH'}); const a=firebase.auth(), p=new firebase.auth.GoogleAuthProvider(); a.setPersistence(firebase.auth.Auth.Persistence.LOCAL).catch(()=>{}); window.__a=a; window.__p=p; a.onAuthStateChanged(u=>{ if(u){ sIn(u); if(ps){ ps=false; setTimeout(goM,160);} } else sOut(); }); }catch(e){ sOut(); } }
+else { try{ firebase.initializeApp({apiKey:'AIzaSyDB_FK8-3ATZBpuvfL34EMp9WHTTd5sfIo',authDomain:'gradeo-in.firebaseapp.com',projectId:'gradeo-in',storageBucket:'gradeo-in.firebasestorage.app',messagingSenderId:'784963451684',appId:'1:784963451684:web:9d57beed639d488e4891b1',measurementId:'G-JSNGKKMJEH'}); const a=firebase.auth(), p=new firebase.auth.GoogleAuthProvider(); a.setPersistence(firebase.auth.Auth.Persistence.LOCAL).catch(()=>{}); window.__a=a; window.__p=p; a.onAuthStateChanged(u=>{ if(u){ sIn(u); if(ps){ ps=false; setTimeout(goM,160);} } else sOut(); }); }catch(e){ console.error(e); sOut(); } }
 </script>
 
 <!-- ═══ PWA INSTALL BANNER ═══ -->
@@ -2838,7 +2832,7 @@ else { try{ firebase.initializeApp({apiKey:'AIzaSyDB_FK8-3ATZBpuvfL34EMp9WHTTd5s
         }
       }, 3000);
 
-    }).catch(() => {});
+    }).catch(e => console.warn('[GRADEO SW]', e));
 
     navigator.serviceWorker.addEventListener('controllerchange', () => {
       if(!window._swReloading){ window._swReloading = true; location.reload(); }
@@ -3031,7 +3025,7 @@ else { try{ firebase.initializeApp({apiKey:'AIzaSyDB_FK8-3ATZBpuvfL34EMp9WHTTd5s
         }).then(() => {
           if(typeof toast === 'function') toast('Notifications enabled');
         }).catch(() => {});
-      }).catch(() => {});
+      }).catch(e => console.warn('[GRADEO Push]', e));
   }
 
   /* Show push prompt only ONCE — 12s after page load, only if NOT already in standalone */

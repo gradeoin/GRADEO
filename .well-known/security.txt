@@ -1,7 +1,0 @@
-Contact: mailto:security@gradeo.in
-Expires: 2026-03-17T00:00:00.000Z
-Encryption: https://gradeo.in/.well-known/pgp-key.txt
-Acknowledgments: https://gradeo.in/security/
-Policy: https://gradeo.in/security/
-Preferred-Languages: en
-Canonical: https://gradeo.in/.well-known/security.txt
