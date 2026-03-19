@@ -4,6 +4,7 @@
 
 
 
+
 <!doctype html>
 <html lang="en">
 <head>
@@ -1929,6 +1930,7 @@ h2 {
 <!-- Shared: theme ripple, page transition, cursor, progress -->
 <div id="thRipple"></div>
 <div id="ptOv"></div>
+<div id="ldOv" role="status" aria-live="polite" aria-hidden="true"><div class="ldWrap"><div class="ldBrand"><img src="https://res.cloudinary.com/djy3mjtsz/image/upload/v1770296454/Untitled-2_i2ezfh.png" alt="GRADEO" width="36" height="36" loading="eager"/><span class="ldTitle">GRADEO</span></div><div class="ldSpin" aria-hidden="true"></div><div id="ldMsg" class="ldMsg">Opening…</div></div></div>
 <div id="cur"></div>
 <div id="curRing"></div>
 <div id="prog" aria-hidden="true"><span id="pb"></span></div>
@@ -2347,6 +2349,16 @@ h2 {
 
 <script>
 /* ========= helpers ========= */
+
+
+// === Minimal loader helpers (safe patch) ===
+function __gd_showLoader(msg){
+  try{const ov=document.getElementById('ldOv'); if(!ov) return; const m=document.getElementById('ldMsg'); if(m&&msg) m.textContent=msg; ov.classList.add('on'); ov.setAttribute('aria-hidden','false');}catch(e){}
+}
+function __gd_hideLoader(){
+  try{const ov=document.getElementById('ldOv'); if(!ov) return; ov.classList.remove('on'); ov.setAttribute('aria-hidden','true');}catch(e){}
+}
+window.addEventListener('pageshow', function(){ __gd_hideLoader(); });
 const $  = (s) => document.querySelector(s);
 const $$ = (s) => document.querySelectorAll(s);
 const SITE='https://gradeo.in';
@@ -2445,7 +2457,7 @@ window.addEventListener('pageshow', function(){
   const ov = $('#ptOv');
   if(ov) ov.classList.remove('lift');
 });
-function navTo(url){
+window.__oldNavTo = window.__oldNavTo || navTo; function navTo(url){ __gd_showLoader("Opening…"); setTimeout(function(){ window.__oldNavTo(url); }, 80);
   if(window._navigating) return;
   window._navigating = true;
   /* Safety reset after 2s in case navigation fails */
@@ -2715,6 +2727,19 @@ else { try{ firebase.initializeApp({apiKey:'AIzaSyDB_FK8-3ATZBpuvfL34EMp9WHTTd5s
 #swUpdate.show{transform:translate(-50%,0);}
 
 @keyframes pwaSlideUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
+
+/* === Minimal Loader Overlay (safe patch) === */
+#ldOv{position:fixed;inset:0;z-index:9100;display:none;place-items:center;opacity:0;transition:opacity .22s var(--sm);} 
+#ldOv.on{display:grid;opacity:1;}
+[data-theme="light"] #ldOv{background:radial-gradient(100% 60% at 50% 30%, rgba(255,92,0,.08) 0%, transparent 60%), #FFF6ED;}
+[data-theme="dark"]  #ldOv{background:radial-gradient(100% 60% at 50% 30%, rgba(255,92,0,.10) 0%, transparent 60%), #080604;}
+.ldWrap{display:flex;flex-direction:column;align-items:center;gap:10px;padding:14px 16px;border-radius:16px;background:var(--surface);border:1.5px solid var(--cb);box-shadow:0 8px 40px rgba(0,0,0,.18);} 
+.ldBrand{display:flex;align-items:center;gap:8px;}
+.ldTitle{font-family:var(--font-display, ui-sans-serif);font-weight:800;letter-spacing:-.3px;color:var(--text);font-size:13px;}
+.ldSpin{width:36px;height:36px;border-radius:50%;border:3px solid rgba(255,92,0,.20);border-top-color:var(--o);animation:ldspin .9s linear infinite;}
+.ldMsg{font-size:12px;font-weight:700;color:var(--muted);} 
+@keyframes ldspin{to{transform:rotate(360deg);}}
+@media(prefers-reduced-motion:reduce){.ldSpin{animation:none;border-top-color:rgba(255,92,0,.55);} }
 </style>
 
 <!-- Pull-to-refresh indicator -->
