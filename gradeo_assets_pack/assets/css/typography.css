@@ -1,0 +1,66 @@
+
+/* GRADEO — self-hosted fonts & mobile boldness overrides */
+/* 1) Drop your .woff2 files into /assets/fonts (names below) */
+/* 2) Link this file once in your site <head>: <link rel="stylesheet" href="/assets/css/typography.css"> */
+
+/* --- Syne (variable preferred) --- */
+@font-face {
+  font-family: 'Syne';
+  src: url('/assets/fonts/syne-var.woff2') format('woff2-variations');
+  font-weight: 400 900;
+  font-style: normal;
+  font-display: swap;
+}
+/* Fixed-weight fallbacks if you don't have variable font */
+@font-face {
+  font-family: 'Syne';
+  src: url('/assets/fonts/syne-800.woff2') format('woff2');
+  font-weight: 800;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Syne';
+  src: url('/assets/fonts/syne-900.woff2') format('woff2');
+  font-weight: 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* --- DM Sans --- */
+@font-face {
+  font-family: 'DM Sans';
+  src: url('/assets/fonts/dmsans-400.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'DM Sans';
+  src: url('/assets/fonts/dmsans-600.woff2') format('woff2');
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'DM Sans';
+  src: url('/assets/fonts/dmsans-700.woff2') format('woff2');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Apply families */
+:root {
+  --font-display: 'Syne', ui-sans-serif, system-ui, sans-serif;
+  --font-body: 'DM Sans', ui-sans-serif, system-ui, sans-serif;
+  font-synthesis-weight: none; /* avoid fake-thin bold on Android */
+}
+body { font-family: var(--font-body); }
+
+/* Mobile boldness tuning */
+@media (max-width: 767px) {
+  .mH1, .mBN, .mSecHdr h2 { font-weight: 900 !important; }
+  .mFeatName, .mTileName { font-weight: 800 !important; }
+  .mTab .mTabLbl { font-weight: 700 !important; }
+}
