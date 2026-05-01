@@ -21,6 +21,27 @@
   </url>
 
   <url>
+    <loc>https://gradeo.in/calculator/planner/</loc>
+    <lastmod>2026-05-01</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.90</priority>
+  </url>
+
+  <url>
+    <loc>https://gradeo.in/calculator/sgpa/</loc>
+    <lastmod>2026-05-01</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.90</priority>
+  </url>
+
+  <url>
+    <loc>https://gradeo.in/calculator/cgpa/</loc>
+    <lastmod>2026-05-01</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.90</priority>
+  </url>
+
+  <url>
     <loc>https://gradeo.in/blog/</loc>
     <lastmod>2025-03-17</lastmod>
     <changefreq>weekly</changefreq>

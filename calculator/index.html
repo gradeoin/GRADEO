@@ -747,6 +747,8 @@ html, body{color-scheme: light;}
 .menuHeader .s{font-weight:850; font-size:12px; color:var(--muted);}
 .menuItem{width:100%; text-align:left; border:none; background:transparent; color:var(--text);
   padding:12px 12px; cursor:pointer; font-weight:920; display:flex; align-items:center; gap:10px;}
+a.menuItem{color:inherit; text-decoration:none;}
+a.menuItem:visited{color:inherit;}
 .menuItem:hover{background:rgba(11,87,208,.10);} 
 .menuItem:active{background:rgba(11,87,208,.16);} 
 .menuSep{height:1px; background:var(--stroke); opacity:.8;}
@@ -1179,8 +1181,18 @@ body.appOpen #notesAcc, body.appOpen #accountAcc{display:none !important;}
 <script>
 (function(){
   try{
+    var params = new URLSearchParams(location.search || '');
+    var rawMode = (params.get('mode') || '').toLowerCase();
+    var modeMap = { planner:'m1', target:'m1', m1:'m1', sgpa:'m2', marks:'m2', m2:'m2', cgpa:'m3', m3:'m3' };
+    var urlMode = modeMap[rawMode] || '';
     var h=(location.hash||'').toLowerCase();
-    if(h!=='#m1' && h!=='#m2' && h!=='#m3') location.hash='#m1';
+    if(urlMode){
+      if(h !== '#' + urlMode) location.hash = '#' + urlMode;
+    } else if(h!=='#m1' && h!=='#m2' && h!=='#m3') {
+      location.hash='#m1';
+    }
+    var modeFromHash = (location.hash || '').replace('#','').toLowerCase();
+    window.__initialMode = urlMode || ((modeFromHash === 'm1' || modeFromHash === 'm2' || modeFromHash === 'm3') ? modeFromHash : '');
     document.addEventListener('DOMContentLoaded', function(){
       try{ document.body.classList.add('appOpen'); }catch(e){}
     });
@@ -1229,6 +1241,17 @@ body.appOpen #notesAcc, body.appOpen #accountAcc{display:none !important;}
   <button class="menuItem sharePrimary" id="sharePlanBtn" role="menuitem">🔗 Share plan <span class="tag">HOT</span></button>
 <button class="menuItem" id="shareGradeBtn" role="menuitem" style="display:none">📄 Share grade card</button>
 <button class="menuItem" id="exportGradePdfBtn" role="menuitem">🖨️ Print & Share grade card</button>
+<div class="menuSep"></div>
+<a class="menuItem" href="/" role="menuitem">🏠 Home</a>
+<a class="menuItem" href="/calculator/" role="menuitem">🧮 All calculators</a>
+<a class="menuItem" href="/calculator/planner/" role="menuitem">🎯 Target planner</a>
+<a class="menuItem" href="/calculator/sgpa/" role="menuitem">🧾 SGPA calculator</a>
+<a class="menuItem" href="/calculator/cgpa/" role="menuitem">📊 CGPA converter</a>
+<a class="menuItem" href="/blog/" role="menuitem">📰 Blog</a>
+<a class="menuItem" href="/about/" role="menuitem">ℹ️ About</a>
+<a class="menuItem" href="/feedback/" role="menuitem">✉️ Feedback</a>
+<a class="menuItem" href="/app/" role="menuitem">📲 Get the app</a>
+<a class="menuItem" href="/offer/" role="menuitem">🎁 Student offer</a>
 <div class="menuSep"></div>
 <button class="menuItem" id="studyModeBtn" role="menuitem" style="display:none">🎧 Study Mode (Pomodoro)</button>
 <button class="menuItem" id="attendanceBtn" role="menuitem" style="display:none">📅 Attendance planner</button>
@@ -3558,7 +3581,10 @@ function setMode(mode, opts={push:true}){
 
 // Respect hash on first load
 (function(){
-  let mode = (location.hash || '').replace('#','');
+  let mode = (window.__initialMode || '').replace('#','');
+  if(!(mode === 'm1' || mode === 'm2' || mode === 'm3')){
+    mode = (location.hash || '').replace('#','');
+  }
   if(!(mode === 'm1' || mode === 'm2' || mode === 'm3')){
     try{ mode = localStorage.getItem(LS_MODE_KEY) || ''; }catch(_e){}
   }
@@ -7199,10 +7225,6 @@ auth.onAuthStateChanged(async user => {
 </script>
 </body>
 </html>
-
-
-
-
 
 
 
