@@ -3581,14 +3581,15 @@ function setMode(mode, opts={push:true}){
 
 // Respect hash on first load
 (function(){
+  const isMode = (value)=> value === 'm1' || value === 'm2' || value === 'm3';
   let mode = (window.__initialMode || '').replace('#','');
-  if(!(mode === 'm1' || mode === 'm2' || mode === 'm3')){
+  if(!isMode(mode)){
     mode = (location.hash || '').replace('#','');
+    if(!isMode(mode)){
+      try{ mode = localStorage.getItem(LS_MODE_KEY) || ''; }catch(_e){}
+    }
   }
-  if(!(mode === 'm1' || mode === 'm2' || mode === 'm3')){
-    try{ mode = localStorage.getItem(LS_MODE_KEY) || ''; }catch(_e){}
-  }
-  if(mode === 'm1' || mode === 'm2' || mode === 'm3'){
+  if(isMode(mode)){
     state.mode = mode;
   }
 })();
@@ -7225,7 +7226,6 @@ auth.onAuthStateChanged(async user => {
 </script>
 </body>
 </html>
-
 
 
 
