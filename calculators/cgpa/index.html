@@ -3,6 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5, viewport-fit=cover">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://www.gstatic.com https://accounts.google.com https://unpkg.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' data: https://res.cloudinary.com https://api.qrserver.com https://api.dicebear.com https://lh3.googleusercontent.com; font-src 'self' https://fonts.gstatic.com; connect-src 'self' https://*.firebaseio.com https://*.googleapis.com;">
+    <meta name="referrer" content="strict-origin-when-cross-origin"/>
+    <meta http-equiv="X-Content-Type-Options" content="nosniff"/>
     <title>CGPA Calculator — GRADEO | Cumulative Engineering Grade History</title>
     <meta name="description" content="Track your cumulative engineering CGPA across all semesters. Export professional grade history reports and plan your academic journey with GRADEO.">
     <meta name="keywords" content="CGPA calculator, engineering grade tracker, semester history, CGPA report, GPA to CGPA conversion">
@@ -16,141 +19,15 @@
     }
     </script>
     <link rel="icon" href="https://res.cloudinary.com/djy3mjtsz/image/upload/v1770296454/Untitled-2_i2ezfh.png" type="image/png"/>
+    <link rel="stylesheet" href="../../assets/css/gradeo.css">
     <script src="https://unpkg.com/lucide@latest"></script>
     <style>
-        :root {
-            --o: #FF6A00; --od: #E05500;
-            --bg: #FFF6ED; --surface: #fff;
-            --text: #0D0C0B; --muted: #6B6560; --muted2: #A8A29E;
-            --cb: rgba(255,106,0,.11);
-            --ib: rgba(255,130,30,.11); --id: rgba(255,106,0,.18);
-            --r: 20px; --r2: 16px;
-            --sp: cubic-bezier(.34, 1.56, .64, 1);
-        }
-        [data-theme="dark"] {
-            --bg: #080604; --surface: #161210;
-            --text: #F5E8D8; --muted: #8A7E74; --muted2: #5A5450;
-            --cb: rgba(255,106,0,.22);
-            --ib: rgba(255,106,0,.14); --id: rgba(255,106,0,.28);
-        }
-        * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
-        body { background-color: var(--bg); color: var(--text); font-family: ui-sans-serif, system-ui, sans-serif; min-height: 100vh; }
-        header { position: sticky; top: 0; z-index: 100; background: var(--bg); backdrop-filter: blur(20px); border-bottom: 1px solid var(--cb); padding: 12px 1.5rem; display: flex; align-items: center; justify-content: space-between; }
-        .brand { display: flex; align-items: center; gap: 10px; text-decoration: none; color: var(--text); }
-        .lw { width: 32px; height: 32px; border-radius: 10px; overflow: hidden; border: 1.5px solid var(--id); box-shadow: 0 2px 8px rgba(255,106,0,.14); transition: transform .3s var(--sp); }
-        .lw:hover { transform: rotate(8deg) scale(1.1); }
-        .lw img { width: 100%; height: 100%; object-fit: cover; }
-        .bn { font-size: 14px; font-weight: 900; letter-spacing: -.4px; }
-        .container { max-width: 1120px; margin: 0 auto; padding: 2rem 1.5rem; }
-        .page-title { font-size: clamp(24px, 8vw, 42px); font-weight: 950; letter-spacing: -1.5px; margin-bottom: 8px; }
-        .app-grid { display: grid; grid-template-columns: 1fr 340px; gap: 2rem; }
-        @media (max-width: 1024px) { .app-grid { grid-template-columns: 1fr; } }
-        .card { background: var(--surface); border: 1.5px solid var(--cb); border-radius: var(--r); padding: 1.5rem; }
         .sem-row { display: grid; grid-template-columns: 100px 1fr 1fr auto; gap: 1rem; align-items: center; background: var(--bg); border: 1.5px solid var(--cb); border-radius: 16px; padding: 1rem; margin-bottom: 12px; }
-        .input-group { display: flex; flex-direction: column; gap: 4px; }
-        .label { font-size: 10px; font-weight: 800; text-transform: uppercase; color: var(--muted); }
-        input { background: var(--surface); border: 1.5px solid var(--cb); border-radius: 8px; padding: 8px 12px; color: var(--text); font-weight: 700; font-size: 14px; width: 100%; outline: none; }
-        input:focus { border-color: var(--o); }
         .student-details { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.5rem; }
         .res-card { background: linear-gradient(135deg, var(--surface), var(--bg)); text-align: center; padding: 2.5rem 1.5rem; }
         .res-val { font-size: 4.5rem; font-weight: 950; color: var(--o); letter-spacing: -3px; line-height: 1; }
         .res-lbl { font-size: 11px; font-weight: 800; color: var(--muted); text-transform: uppercase; letter-spacing: 2px; margin-top: 8px; }
-        .btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding: 12px 20px; border-radius: 12px; font-weight: 800; font-size: 14px; cursor: pointer; border: none; transition: all .2s var(--sp); font-family: inherit; }
-        .bp { background: var(--o); color: #fff; box-shadow: 0 4px 12px rgba(255,106,0,.25); }
-        .bs { background: transparent; border: 1.5px solid var(--id); color: var(--o); }
-
-        /* ── PRINT STYLES FOR OFFICIAL CGPA REPORT ── */
-        #print-area { display: none; }
-        @media print {
-            body * { visibility: hidden; }
-            body { background: #fff !important; }
-            #print-area, #print-area * { visibility: visible; }
-            #print-area {
-                display: block; position: absolute; left: 0; top: 0; width: 100%;
-                padding: 20px; font-family: "Times New Roman", Times, serif; color: #000;
-            }
-            .gc-header { text-align: center; margin-bottom: 30px; border-bottom: 2px solid #000; padding-bottom: 10px; }
-            .gc-title { font-size: 24px; font-weight: bold; margin: 0; text-transform: uppercase; }
-            .gc-subtitle { font-size: 16px; margin: 5px 0 0 0; }
-            .gc-student { display: flex; justify-content: space-between; margin-bottom: 20px; font-size: 16px; }
-            .gc-table { width: 100%; border-collapse: collapse; margin-bottom: 30px; }
-            .gc-table th, .gc-table td { border: 1px solid #000; padding: 10px; text-align: center; }
-            .gc-table th { background-color: #f0f0f0; font-weight: bold; }
-            .gc-result { display: flex; justify-content: flex-end; font-size: 20px; font-weight: bold; margin-bottom: 40px; }
-            .gc-footer { display: flex; justify-content: space-between; margin-top: 50px; }
-            .gc-sign { border-top: 1px solid #000; width: 200px; text-align: center; padding-top: 5px; }
-            #print-area::before {
-                content: "GRADEO";
-                position: fixed;
-                top: 50%; left: 50%;
-                transform: translate(-50%, -50%) rotate(-30deg);
-                font-size: 120px;
-                font-weight: 950;
-                color: rgba(0,0,0,0.03);
-                z-index: -1;
-                white-space: nowrap;
-                pointer-events: none;
-            }
-        }
         @media (max-width: 640px) { .sem-row { grid-template-columns: 1fr 1fr; } .sem-num { grid-column: span 2; } .student-details { grid-template-columns: 1fr; } }
-
-        /* ── SIGN-IN MODAL (GRADEO THEME) ── */
-        .mbd { display: none; position: fixed; inset: 0; background: rgba(0,0,0,.4); z-index: 9000; align-items: center; justify-content: center; padding: 14px; backdrop-filter: blur(8px); }
-        [data-theme="dark"] .mbd { background: rgba(0,0,0,.66); }
-        .mbd.on { display: flex; animation: bdIn .16s ease both; }
-        @keyframes bdIn { from { opacity: 0 } to { opacity: 1 } }
-        .mbox { background: var(--surface); border: 1.5px solid var(--cb); border-radius: 24px; max-width: 400px; width: 100%; max-height: 85vh; overflow: hidden; display: flex; flex-direction: column; box-shadow: 0 20px 60px rgba(0,0,0,.18); animation: popIn .26s var(--sp) both; }
-        @keyframes popIn { from { transform: scale(.90) translateY(14px); opacity: 0 } to { transform: none; opacity: 1 } }
-        .mhd { padding: 12px 15px; border-bottom: 1px solid var(--cb); display: flex; justify-content: space-between; align-items: center; }
-        .mhd strong { font-size: 14px; font-weight: 900; color: var(--text); }
-        .mhd button { background: transparent; border: none; cursor: pointer; font-size: 17px; color: var(--muted); transition: color .2s; }
-        .mhd button:hover { color: var(--o); }
-        .siBody { padding: 20px 20px 24px; display: flex; flex-direction: column; gap: 10px; }
-        .siSub { font-size: 13px; color: var(--muted); font-weight: 500; line-height: 1.45; margin-bottom: 2px; }
-        .siBtn { width: 100%; display: flex; align-items: center; justify-content: center; gap: 10px; padding: 13px 16px; border-radius: 14px; border: 1.5px solid var(--cb); background: var(--surface); color: var(--text); font-family: inherit; font-size: 14px; font-weight: 700; cursor: pointer; transition: all .18s var(--sp); box-shadow: 0 1px 3px rgba(0,0,0,.06); position: relative; overflow: hidden; }
-        .siBtn:hover { border-color: var(--o); transform: translateY(-2px); box-shadow: 0 4px 14px rgba(0,0,0,.10); }
-        .siBtn:active { transform: scale(.97); }
-        .siEmailForm { display: flex; flex-direction: column; gap: 8px; }
-        .siDivider { display: flex; align-items: center; gap: 10px; color: var(--muted2); font-size: 11px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; margin: 2px 0; }
-        .siDivider::before, .siDivider::after { content: ""; flex: 1; height: 1px; background: var(--cb); }
-        .siInput { width: 100%; padding: 11px 14px; border-radius: 12px; border: 1.5px solid var(--cb); background: var(--bg); color: var(--text); font-family: inherit; font-size: 14px; outline: none; transition: border-color .14s; }
-        .siInput:focus { border-color: var(--o); }
-        .siEmailBtns { display: flex; gap: 8px; }
-        .siEmailAction { flex: 1; padding: 11px 14px !important; font-size: 13px !important; }
-        .siForgot { background: none; border: none; cursor: pointer; color: var(--muted); font-size: 12px; font-weight: 600; text-align: left; padding: 0; }
-        .siFootNote { font-size: 11px; color: var(--muted2); font-weight: 500; line-height: 1.5; margin-top: 4px; }
-        .siFootNote a { color: var(--o); text-decoration: underline; }
-        .siBtn.loading { opacity: .6; pointer-events: none; }
-        .siBtn.loading::before { content: ""; position: absolute; inset: 0; background: linear-gradient(90deg, transparent, rgba(255,255,255,.15), transparent); animation: siBtnLoad 1.1s ease-in-out infinite; }
-        @keyframes siBtnLoad { 0% { transform: translateX(-100%); } 100% { transform: translateX(100%); } }
-    </style>
-    <style>
-        /* ── SIGN-IN MODAL (GRADEO THEME) ── */
-        .mbd { display: none; position: fixed; inset: 0; background: rgba(0,0,0,.4); z-index: 9000; align-items: center; justify-content: center; padding: 14px; backdrop-filter: blur(8px); }
-        [data-theme="dark"] .mbd { background: rgba(0,0,0,.66); }
-        .mbd.on { display: flex; animation: bdIn .16s ease both; }
-        @keyframes bdIn { from { opacity: 0 } to { opacity: 1 } }
-        .mbox { background: var(--surface); border: 1.5px solid var(--cb); border-radius: 24px; max-width: 400px; width: 100%; max-height: 85vh; overflow: hidden; display: flex; flex-direction: column; box-shadow: 0 20px 60px rgba(0,0,0,.18); animation: popIn .26s var(--sp) both; }
-        @keyframes popIn { from { transform: scale(.90) translateY(14px); opacity: 0 } to { transform: none; opacity: 1 } }
-        .mhd { padding: 12px 15px; border-bottom: 1px solid var(--cb); display: flex; justify-content: space-between; align-items: center; }
-        .mhd strong { font-size: 14px; font-weight: 900; color: var(--text); }
-        .mhd button { background: transparent; border: none; cursor: pointer; font-size: 17px; color: var(--muted); transition: color .2s; }
-        .mhd button:hover { color: var(--o); }
-        .siBody { padding: 20px 20px 24px; display: flex; flex-direction: column; gap: 10px; }
-        .siSub { font-size: 13px; color: var(--muted); font-weight: 500; line-height: 1.45; margin-bottom: 2px; }
-        .siBtn { width: 100%; display: flex; align-items: center; justify-content: center; gap: 10px; padding: 13px 16px; border-radius: 14px; border: 1.5px solid var(--cb); background: var(--surface); color: var(--text); font-family: inherit; font-size: 14px; font-weight: 700; cursor: pointer; transition: all .18s var(--sp); box-shadow: 0 1px 3px rgba(0,0,0,.06); position: relative; overflow: hidden; }
-        .siBtn:hover { border-color: var(--o); transform: translateY(-2px); box-shadow: 0 4px 14px rgba(0,0,0,.10); }
-        .siBtn:active { transform: scale(.97); }
-        .siEmailForm { display: flex; flex-direction: column; gap: 8px; }
-        .siDivider { display: flex; align-items: center; gap: 10px; color: var(--muted2); font-size: 11px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; margin: 2px 0; }
-        .siDivider::before, .siDivider::after { content: ""; flex: 1; height: 1px; background: var(--cb); }
-        .siInput { width: 100%; padding: 11px 14px; border-radius: 12px; border: 1.5px solid var(--cb); background: var(--bg); color: var(--text); font-family: inherit; font-size: 14px; outline: none; transition: border-color .14s; }
-        .siInput:focus { border-color: var(--o); }
-        .siEmailBtns { display: flex; gap: 8px; }
-        .siEmailAction { flex: 1; padding: 11px 14px !important; font-size: 13px !important; }
-        .siForgot { background: none; border: none; cursor: pointer; color: var(--muted); font-size: 12px; font-weight: 600; text-align: left; padding: 0; }
-        .siFootNote { font-size: 11px; color: var(--muted2); font-weight: 500; line-height: 1.5; margin-top: 4px; }
-        .siFootNote a { color: var(--o); text-decoration: underline; }
     </style>
 </head>
 <body>
@@ -299,14 +176,17 @@
 
     <script src="https://accounts.google.com/gsi/client" async defer></script>
     <script type="module">
-        import { auth } from '../../firebase.js';
+        import { auth } from '../../core/firebase.js';
         import { onAuthStateChanged, GoogleAuthProvider, GithubAuthProvider, signInWithPopup, signInWithEmailAndPassword, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+        import { escapeHTML, initAuthUI, syncUserUI } from '../../assets/js/gradeo-core.js';
 
-        const provider = new GoogleAuthProvider();
-        window._gradeoUser = null;
+        const providers = {
+            google: new GoogleAuthProvider(),
+            github: new GithubAuthProvider(),
+            signInWithPopup, signInWithEmailAndPassword, createUserWithEmailAndPassword
+        };
 
-        const openAuthModal = () => document.getElementById('siModal').classList.add('on');
-        const closeAuthModal = () => document.getElementById('siModal').classList.remove('on');
+        const { openAuthModal, closeAuthModal } = initAuthUI(auth, providers);
 
         document.getElementById('account-btn').onclick = () => {
             if(window._gradeoUser) {
@@ -317,42 +197,15 @@
                 openAuthModal();
             }
         };
-        document.getElementById('close-auth').onclick = closeAuthModal;
-        document.getElementById('siBtnGoogle').onclick = () => {
-            signInWithPopup(auth, provider).then(closeAuthModal).catch(e => alert("Sign-in failed: " + e.message));
-        };
-        document.getElementById('siBtnGithub').onclick = () => {
-            const gh = new GithubAuthProvider();
-            signInWithPopup(auth, gh).then(closeAuthModal).catch(e => alert("GitHub sign-in failed. Try Google."));
-        };
-        document.getElementById('siBtnEmailToggle').onclick = () => {
-            const ef = document.getElementById('siEmailForm');
-            ef.style.display = ef.style.display === 'none' ? 'flex' : 'none';
-        };
-        document.getElementById('siBtnEmailSignIn').onclick = () => {
-            const email = document.getElementById('siEmail').value;
-            const pass = document.getElementById('siPass').value;
-            signInWithEmailAndPassword(auth, email, pass).then(closeAuthModal).catch(e => alert(e.message));
-        };
-        document.getElementById('siBtnEmailCreate').onclick = () => {
-            const email = document.getElementById('siEmail').value;
-            const pass = document.getElementById('siPass').value;
-            createUserWithEmailAndPassword(auth, email, pass).then(closeAuthModal).catch(e => alert(e.message));
-        };
 
         onAuthStateChanged(auth, user => { 
-            window._gradeoUser = user; 
-            const btn = document.getElementById('account-btn');
-            if(user) {
-                btn.innerHTML = `<img src="${user.photoURL || 'https://api.dicebear.com/7.x/avataaars/svg?seed=' + user.email}" style="width:20px; height:20px; border-radius:50%; border: 1.5px solid var(--o);"> <span>${user.displayName || 'Account'}</span>`;
-                closeAuthModal();
-            } else {
-                btn.innerHTML = `<i data-lucide="user" size="18"></i> <span>Account</span>`;
-                if(window.lucide) lucide.createIcons();
-            }
+            syncUserUI(user, window.lucide);
+            if(user) closeAuthModal();
         });
         let state = { sems: [{ id: 1, sgpa: 9.2, credits: 24 }, { id: 2, sgpa: 8.8, credits: 24 }] };
         const listEl = document.getElementById('sem-list');
+
+
 
         const renderList = () => {
             listEl.innerHTML = '';

@@ -1,0 +1,215 @@
+/* 
+  GRADEO Centralized Design System
+  Professional CSS Modularization
+*/
+
+:root {
+    --o: #FF6A00; --od: #E05500;
+    --bg: #FFF6ED; --surface: #fff;
+    --text: #0D0C0B; --muted: #6B6560; --muted2: #A8A29E;
+    --cb: rgba(255,106,0,.11);
+    --ib: rgba(255,130,30,.11); --id: rgba(255,106,0,.18);
+    --r: 20px; --r2: 16px;
+    --sp: cubic-bezier(.34, 1.56, .64, 1);
+    --sm: cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+[data-theme="dark"] {
+    --bg: #080604; --surface: #161210;
+    --text: #F5E8D8; --muted: #8A7E74; --muted2: #5A5450;
+    --cb: rgba(255,106,0,.22);
+    --ib: rgba(255,106,0,.14); --id: rgba(255,106,0,.28);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+
+body { 
+    background-color: var(--bg); 
+    color: var(--text); 
+    font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; 
+    min-height: 100vh;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+}
+
+/* ── NAVIGATION ── */
+header.nav { 
+    position: sticky; top: 0; z-index: 100; 
+    background: var(--bg); backdrop-filter: blur(20px); 
+    border-bottom: 1px solid var(--cb); 
+    padding: 12px 1.5rem; 
+    display: flex; align-items: center; justify-content: space-between; 
+}
+
+.brand { display: flex; align-items: center; gap: 10px; text-decoration: none; color: var(--text); }
+.lw { width: 32px; height: 32px; border-radius: 10px; overflow: hidden; border: 1.5px solid var(--id); box-shadow: 0 2px 8px rgba(255,106,0,.14); transition: transform .3s var(--sp); }
+.lw:hover { transform: rotate(8deg) scale(1.1); }
+.lw img { width: 100%; height: 100%; object-fit: cover; }
+.bn { font-size: 14px; font-weight: 900; letter-spacing: -.4px; }
+
+/* ── LAYOUT ── */
+.container { max-width: 1120px; margin: 0 auto; padding: 2rem 1.5rem; }
+.page-title { font-size: clamp(28px, 8vw, 42px); font-weight: 950; letter-spacing: -2px; margin-bottom: 8px; }
+.page-sub { color: var(--muted); font-size: 14.5px; margin-bottom: 2.5rem; }
+
+.app-grid { display: grid; grid-template-columns: 1fr 360px; gap: 2rem; }
+@media (max-width: 1024px) { .app-grid { grid-template-columns: 1fr; } }
+
+.card { background: var(--surface); border: 1.5px solid var(--cb); border-radius: var(--r); padding: 1.5rem; }
+
+/* ── COMPONENTS ── */
+.input-group { display: flex; flex-direction: column; gap: 6px; }
+.label { font-size: 11px; font-weight: 800; text-transform: uppercase; color: var(--muted); letter-spacing: .05em; }
+
+input, select { 
+    background: var(--bg); border: 1.5px solid var(--cb); border-radius: 10px;
+    padding: 10px 12px; color: var(--text); font-weight: 700; font-size: 15px;
+    outline: none; transition: border-color .2s; width: 100%;
+}
+input:focus { border-color: var(--o); }
+
+.btn { 
+    display: inline-flex; align-items: center; justify-content: center; gap: 8px; 
+    padding: 12px 20px; border-radius: 12px; font-weight: 800; 
+    cursor: pointer; border: none; transition: all .2s var(--sp); 
+    font-family: inherit; user-select: none;
+}
+.bp { background: var(--o);
+    color: #fff;
+    box-shadow: 0 4px 14px rgba(255, 106, 0, 0.3);
+}
+
+/* ── Grade Card (Print) ── */
+@media screen { #print-area { display: none; } }
+@media print {
+    body * { visibility: hidden; }
+    #print-area, #print-area * { visibility: visible; }
+    #print-area { position: absolute; left: 0; top: 0; width: 100%; }
+}
+
+.gc-container {
+    width: 1000px; height: 700px;
+    padding: 60px; position: relative;
+    background: #fff; border: 20px solid var(--o);
+    font-family: 'Syne', sans-serif; overflow: hidden;
+    color: #000;
+}
+.gc-watermark {
+    position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(-45deg);
+    font-size: 180px; font-weight: 950; color: rgba(255, 106, 0, 0.03); pointer-events: none;
+}
+.gc-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 40px; }
+.gc-brand { display: flex; align-items: center; gap: 15px; }
+.gc-logo { width: 60px; height: 60px; border-radius: 12px; }
+.gc-bn { font-size: 24px; font-weight: 950; letter-spacing: -1px; }
+.gc-bt { font-size: 10px; font-weight: 700; color: var(--o); letter-spacing: 2px; }
+.gc-stamp { 
+    padding: 10px 20px; border: 3px double var(--o); color: var(--o);
+    font-weight: 900; transform: rotate(-15deg); font-size: 18px;
+}
+.gc-main-title { font-size: 48px; font-weight: 950; letter-spacing: -2px; margin-bottom: 30px; }
+.gc-student-info { display: flex; gap: 60px; margin-bottom: 40px; }
+.gc-field label { display: block; font-size: 12px; font-weight: 700; color: #666; text-transform: uppercase; margin-bottom: 5px; }
+.gc-field span { font-size: 20px; font-weight: 800; border-bottom: 2px solid #eee; min-width: 200px; display: inline-block; }
+
+.gc-stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-bottom: 40px; }
+.gc-stat-card { padding: 20px; background: #f9f9f9; border-radius: 15px; }
+.gc-stat-card.highlight { background: var(--o); color: #fff; }
+.gc-stat-card label { font-size: 11px; font-weight: 700; text-transform: uppercase; opacity: 0.8; }
+.gc-stat-val { font-size: 32px; font-weight: 950; margin-top: 5px; }
+
+.gc-table { width: 100%; border-collapse: collapse; margin-bottom: 40px; }
+.gc-table th { text-align: left; padding: 12px; border-bottom: 2px solid #000; font-size: 14px; font-weight: 800; }
+.gc-table td { padding: 12px; border-bottom: 1px solid #eee; font-size: 15px; font-weight: 600; }
+
+.gc-footer { display: flex; justify-content: space-between; align-items: flex-end; position: absolute; bottom: 60px; left: 60px; right: 60px; }
+.gc-meta { font-size: 12px; color: #666; font-weight: 600; line-height: 1.6; }
+.gc-qr-area img { width: 80px; height: 80px; border: 1px solid #eee; padding: 5px; }
+
+.bs { background: transparent; border: 1.5px solid var(--id); color: var(--o); }
+.btn:hover { transform: translateY(-2px); }
+.btn:active { transform: scale(.96); }
+
+/* ── MODALS ── */
+.mbd { display: none; position: fixed; inset: 0; background: rgba(0,0,0,.4); z-index: 9000; align-items: center; justify-content: center; padding: 14px; backdrop-filter: blur(8px); }
+[data-theme="dark"] .mbd { background: rgba(0,0,0,.66); }
+.mbd.on { display: flex; animation: bdIn .16s ease both; }
+
+.mbox { 
+    background: var(--surface); border: 1.5px solid var(--cb); border-radius: 24px; 
+    max-width: 400px; width: 100%; max-height: 85vh; overflow: hidden; 
+    display: flex; flex-direction: column; box-shadow: 0 20px 60px rgba(0,0,0,.18); 
+    animation: popIn .26s var(--sp) both; 
+}
+
+@keyframes bdIn { from { opacity: 0 } to { opacity: 1 } }
+@keyframes popIn { from { transform: scale(.90) translateY(14px); opacity: 0 } to { transform: none; opacity: 1 } }
+
+.mhd { padding: 12px 15px; border-bottom: 1px solid var(--cb); display: flex; justify-content: space-between; align-items: center; }
+.mhd strong { font-size: 14px; font-weight: 900; color: var(--text); }
+.mhd button { background: transparent; border: none; cursor: pointer; font-size: 17px; color: var(--muted); }
+
+/* ── SIGN IN MODAL SPECIFICS ── */
+.siBody { padding: 20px 20px 24px; display: flex; flex-direction: column; gap: 10px; }
+.siSub { font-size: 13px; color: var(--muted); font-weight: 500; line-height: 1.45; margin-bottom: 2px; }
+.siBtn { 
+    width: 100%; display: flex; align-items: center; justify-content: center; gap: 10px; 
+    padding: 13px 16px; border-radius: 14px; border: 1.5px solid var(--cb); 
+    background: var(--surface); color: var(--text); font-family: inherit; font-size: 14px; 
+    font-weight: 700; cursor: pointer; transition: all .18s var(--sp); 
+    box-shadow: 0 1px 3px rgba(0,0,0,.06); position: relative; overflow: hidden; 
+}
+.siBtn:hover { border-color: var(--o); transform: translateY(-2px); box-shadow: 0 4px 14px rgba(0,0,0,.10); }
+
+.siEmailForm { display: flex; flex-direction: column; gap: 8px; }
+.siDivider { display: flex; align-items: center; gap: 10px; color: var(--muted2); font-size: 11px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; margin: 2px 0; }
+.siDivider::before, .siDivider::after { content: ""; flex: 1; height: 1px; background: var(--cb); }
+.siInput { width: 100%; padding: 11px 14px; border-radius: 12px; border: 1.5px solid var(--cb); background: var(--bg); color: var(--text); font-family: inherit; font-size: 14px; outline: none; transition: border-color .14s; }
+.siEmailBtns { display: flex; gap: 8px; }
+.siEmailAction { flex: 1; padding: 11px 14px !important; font-size: 13px !important; }
+.siFootNote { font-size: 11px; color: var(--muted2); font-weight: 500; line-height: 1.5; margin-top: 4px; }
+.siFootNote a { color: var(--o); text-decoration: underline; }
+
+.siBtn.loading { opacity: .6; pointer-events: none; }
+.siBtn.loading::before { 
+    content: ""; position: absolute; inset: 0; 
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,.15), transparent); 
+    animation: siBtnLoad 1.1s ease-in-out infinite; 
+}
+@keyframes siBtnLoad { 0% { transform: translateX(-100%); } 100% { transform: translateX(100%); } }
+
+/* ── PRINTING ── */
+#print-area { display: none; }
+@media print {
+    body * { visibility: hidden; }
+    body { background: #fff !important; }
+    #print-area, #print-area * { visibility: visible; }
+    #print-area {
+        display: block; position: absolute; left: 0; top: 0; width: 100%;
+        padding: 20px; font-family: "Times New Roman", Times, serif; color: #000;
+    }
+    .gc-header { text-align: center; margin-bottom: 30px; border-bottom: 2px solid #000; padding-bottom: 10px; }
+    .gc-logo { width: 60px; height: 60px; margin-bottom: 10px; }
+    .gc-title { font-size: 24px; font-weight: bold; margin: 0; text-transform: uppercase; }
+    .gc-subtitle { font-size: 16px; margin: 5px 0 0 0; }
+    .gc-student { display: flex; justify-content: space-between; margin-bottom: 20px; font-size: 16px; }
+    .gc-table { width: 100%; border-collapse: collapse; margin-bottom: 30px; }
+    .gc-table th, .gc-table td { border: 1px solid #000; padding: 10px; text-align: center; }
+    .gc-table th { background-color: #f0f0f0; font-weight: bold; }
+    .gc-table td.text-left { text-align: left; }
+    .gc-result { display: flex; justify-content: flex-end; font-size: 16px; font-weight: bold; margin-bottom: 40px; gap: 20px; }
+    .gc-footer { display: flex; justify-content: space-between; margin-top: 50px; }
+    .gc-sign { border-top: 1px solid #000; width: 200px; text-align: center; padding-top: 5px; }
+    #print-area::before {
+        content: "GRADEO";
+        position: fixed;
+        top: 50%; left: 50%;
+        transform: translate(-50%, -50%) rotate(-30deg);
+        font-size: 120px;
+        font-weight: 950;
+        color: rgba(0,0,0,0.03);
+        z-index: -1;
+        white-space: nowrap;
+        pointer-events: none;
+    }
+}

@@ -22,8 +22,10 @@
 </script>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=5,viewport-fit=cover,user-scalable=yes"/>
-<meta name="theme-color" id="tcMeta" content="#FFF6ED" media="(prefers-color-scheme: light)"/>
-<meta name="theme-color" content="#080604" media="(prefers-color-scheme: dark)"/>
+<!-- ═══ SECURITY ═══ -->
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://www.gstatic.com https://accounts.google.com https://unpkg.com https://www.google-analytics.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' data: https://res.cloudinary.com https://api.qrserver.com https://api.dicebear.com https://lh3.googleusercontent.com; font-src 'self' https://fonts.gstatic.com; connect-src 'self' https://*.firebaseio.com https://*.googleapis.com https://www.google-analytics.com;">
+<meta name="referrer" content="strict-origin-when-cross-origin"/>
+<meta http-equiv="X-Content-Type-Options" content="nosniff"/>
 
 <!-- ═══ CORE SEO ═══ -->
 <title>GRADEO — Free SGPA &amp; CGPA Planner for Engineering Students</title>
@@ -148,98 +150,17 @@
 <link rel="dns-prefetch" href="https://firestore.googleapis.com"/>
 <link rel="dns-prefetch" href="https://res.cloudinary.com"/>
 <link rel="preload" as="image" href="https://res.cloudinary.com/djy3mjtsz/image/upload/v1770296454/Untitled-2_i2ezfh.png" fetchpriority="high"/>
+<link rel="stylesheet" href="assets/css/gradeo.css">
+<link rel="stylesheet" href="assets/css/landing.css">
+<script src="https://unpkg.com/lucide@latest"></script>
 <style>
-/* ── App loading — suppress all transitions until ready ── */
-html.loading *{transition:none!important;animation-duration:0.01ms!important;}
-html.loading .bgs{opacity:0;}
+    /* Critical Inline Styles for Layout Integrity during Load */
+    #dskLayout, #mApp { opacity: 0; }
+    @media (max-width: 767px) { #mApp { opacity: 1; display: flex; } #dskLayout { display: none; } }
+    @media (min-width: 768px) { #dskLayout { opacity: 1; display: block; } #mApp { display: none; } }
 
-/* Skip link — keyboard/screen reader nav */
-.skip-link{position:absolute;top:-100px;left:12px;z-index:99999;padding:8px 16px;background:var(--o);color:#fff;font-weight:800;font-size:13px;border-radius:0 0 10px 10px;transition:top .16s;}
-.skip-link:focus{top:0;outline:none;}
 
-/* ════════════ TOKENS ════════════ */
-:root{
-  --o:#FF6A00;--od:#E05500;--o2:#FF9040;--o3:#FFB870;
-  --bg:#FFF6ED;--surface:#fff;
-  --text:#0D0C0B;--muted:#6B6560;--muted2:#A8A29E;
-  --hdrBg:rgba(255,246,237,.92);
-  --cardBg:#fff;--cb:rgba(255,106,0,.11);
-  --footBg:rgba(255,250,245,.96);
-  --shBg:#FFFAF4;
-  --ib:rgba(255,130,30,.11);--id:rgba(255,106,0,.18);
-  --o1:#FFF5EB;--o2c:#FFD5A8;
-  --sp:cubic-bezier(.34,1.56,.64,1);
-  --sm:cubic-bezier(.16,1,.3,1);
-  --ease:cubic-bezier(.4,0,.2,1);
-  --r:20px;--r2:16px;--r3:12px;
-  --max:1120px;--g:16px;
-  --td:.44s;
-  color-scheme:light;
-}
-[data-theme="dark"]{
-  --bg:#080604;--surface:#161210;
-  --text:#F5E8D8;--muted:#8A7E74;--muted2:#5A5450;
-  --hdrBg:rgba(8,6,4,.94);
-  --cardBg:#1A1410;--cb:rgba(255,106,0,.22);
-  --footBg:rgba(10,7,4,.96);
-  --shBg:#161210;
-  --ib:rgba(255,106,0,.14);--id:rgba(255,106,0,.28);
-  --o1:#221608;--o2c:#341E08;
-  color-scheme:dark;
-}
 
-/* ════════════ RESET ════════════ */
-*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
-
-/* ── Mobile tap feedback ── */
-@media(hover:none){
-  .tile:active,.mTile:active,.btn:active,button:active,.fq:active{
-    opacity:.75;transform:scale(.97)!important;
-    transition:opacity .08s,transform .08s!important;
-  }
-  .mTab:active{opacity:.7;}
-}
-@media(prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important;}}
-
-/* Reduce animations on low-end devices (save-data mode) */
-@media(prefers-reduced-data:reduce){
-  .bgs,.offerShimmer,.offerCTA::after{display:none!important;}
-  .gr{animation:none;background:var(--o);-webkit-background-clip:initial;background-clip:initial;color:var(--o);}
-}
-html{
-  /* Block pull-to-refresh on Chrome Android */
-  overscroll-behavior:none;
-  touch-action:pan-x pan-y;
-}
-body{
-  font-family:ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
-  color:var(--text);background:var(--bg);
-  -webkit-font-smoothing:antialiased;
-  -moz-osx-font-smoothing:grayscale;
-  -webkit-text-size-adjust:100%;
-  text-rendering:optimizeSpeed;
-  transition:none;
-  overflow-x:hidden;
-  overscroll-behavior-y:none;
-  -webkit-overflow-scrolling:touch;
-}
-body.theme-ready{
-  transition:background var(--td) var(--sm),color var(--td) var(--sm);
-}
-a{color:inherit;text-decoration:none;}
-
-/* ════════════ THEME RIPPLE ════════════ */
-#thRipple{position:fixed;inset:0;z-index:8900;pointer-events:none;border-radius:50%;transform:scale(0);opacity:0;}
-#thRipple.go{animation:trX var(--td) var(--sm) forwards;}
-@keyframes trX{0%{transform:scale(0);opacity:.22;}60%{opacity:.13;}100%{transform:scale(5);opacity:0;}}
-
-/* ════════════ PAGE TRANSITION ════════════ */
-#ptOv{position:fixed;inset:0;z-index:7000;background:var(--o);opacity:0;pointer-events:none;}
-#ptOv.lift{animation:ptL .42s var(--sm) forwards;}
-@keyframes ptL{0%{opacity:0;transform:translateY(100%)}15%{opacity:1;transform:none}100%{opacity:1;transform:translateY(-100%)}}
-@media(max-width:767px){
-  #ptOv.lift{animation-duration:.3s!important;}
-}
 
 /* ════════════ DESKTOP CURSOR ════════════ */
 #cur{
@@ -2779,13 +2700,6 @@ else { try{ firebase.initializeApp({apiKey:'AIzaSyDB_FK8-3ATZBpuvfL34EMp9WHTTd5s
 @keyframes ldLogoIn{ 60%{ transform:scale(1.18) rotate(4deg);} 100%{ transform:scale(1) rotate(0);} }
 @keyframes ldLogoPulse{ 0%,100%{ transform: scale(1) } 50%{ transform: scale(1.04) } }
 
-/* Spinner glow */
-.ldSpin{ position:relative; box-shadow: 0 0 0 1px rgba(255,92,0,.15) inset, 0 0 30px rgba(255,100,0,.15); }
-.ldSpin::after{ content:""; position:absolute; inset:-8px; border-radius:inherit; 
-  background: radial-gradient(circle at 50% 50%, rgba(255,120,0,.15), transparent 60%);
-  filter: blur(6px); z-index:-1; }
-
-/* Hover (for desktop) */
 @media(hover:hover){
   #ldOv .ldWrap{ transition: transform .25s var(--sp), box-shadow .25s var(--sp); }
   #ldOv .ldWrap:hover{ transform: translateY(-2px) scale(1.02); box-shadow:0 14px 44px rgba(0,0,0,.28); }
@@ -3239,63 +3153,5 @@ body.intro-glitch .sub{ animation: glitchIn 1.6s var(--sm) .25s both; }
 })();
 </script>
 
-<script>
-
-// GRADEO back navigation hotfix
-// - Resets loader/transition overlays on browser back/forward & BFCache restores
-// - Makes navTo() back-friendly and single-fire
-// - Seeds history so Back won’t close standalone PWA immediately
-(function(){
-  window.addEventListener('popstate', function(){
-    try {
-      window._navigating = false;
-      document.getElementById('ptOv')?.classList.remove('lift');
-      if (typeof window.__gd_hideLoader === 'function') window.__gd_hideLoader();
-    } catch(_) {}
-  });
-  window.addEventListener('pageshow', function(e){
-    if (e && e.persisted) {
-      try {
-        window._navigating = false;
-        document.getElementById('ptOv')?.classList.remove('lift');
-        if (typeof window.__gd_hideLoader === 'function') window.__gd_hideLoader();
-      } catch(_) {}
-    }
-  });
-  window.navTo = function(url){
-    if (window._navigating) return;
-    window._navigating = true;
-    if (typeof window.__gd_showLoader === 'function') {
-      window.__gd_showLoader('Opening…');
-    }
-    const ov = document.getElementById('ptOv');
-    if (ov) ov.classList.add('lift');
-    try { history.pushState({ _gd: 'leaving' }, '', location.href); } catch(_) {}
-    setTimeout(function(){ location.assign(url); }, 280);
-    setTimeout(function(){ window._navigating = false; }, 2000);
-  };
-  window.addEventListener('load', function(){
-    try { if (history.length <= 1) history.pushState({ _gd: 'home' }, '', location.href); } catch(_) {}
-  });
-})();
-
-</script>
-
-
-<script>
-// Handle loading state
-(function(){
-  function ready(){ 
-    document.documentElement.classList.remove('loading');
-    // Keep intro-glitch for a few seconds to let animation finish
-    setTimeout(() => {
-        document.body.classList.remove('intro-glitch');
-    }, 3000);
-  }
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', ready, {once:true});
-  } else { ready(); }
-})();
-</script>
-
+    <script type="module" src="assets/js/gradeo-landing.js"></script>
 </body></html>
