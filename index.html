@@ -2797,27 +2797,26 @@ else { try{ firebase.initializeApp({apiKey:'AIzaSyDB_FK8-3ATZBpuvfL34EMp9WHTTd5s
   body.intro-glitch .lw img, body.intro-glitch .bn, body.intro-glitch h1, body.intro-glitch .sub{ animation:none!important; opacity:1!important; transform:none!important; filter:none!important; }
 }
 
-/* Glitch keyframes: quick skew + rgb split flicker */
+/* Glitch keyframes: smoother entry with cinematic split */
 @keyframes glitchIn{
-  0%{opacity:0; transform: translateY(8px) skewX(0deg); filter: none;}
-  15%{opacity:1; transform: translateY(0) skewX(6deg); text-shadow: -2px 0 #FF2200, 2px 0 #00FFFF;}
-  30%{transform: translateY(-2px) skewX(-6deg); text-shadow: 2px 0 #FF2200, -2px 0 #00FFFF;}
-  45%{transform: translateY(1px) skewX(3deg); text-shadow: -1px 0 #FF2200, 1px 0 #00FFFF;}
-  60%{transform: none; text-shadow: 0 0 transparent;}
+  0%{opacity:0; transform: translateY(12px) skewX(0deg); filter: blur(4px);}
+  20%{opacity:1; transform: translateY(0) skewX(4deg); text-shadow: -1.5px 0 #FF2200, 1.5px 0 #00FFFF; filter: none;}
+  40%{transform: translateY(-1px) skewX(-4deg); text-shadow: 1.5px 0 #FF2200, -1.5px 0 #00FFFF;}
+  70%{transform: translateY(0) skewX(0deg); text-shadow: 0 0 transparent;}
   100%{transform:none; text-shadow: none;}
 }
 @keyframes glitchLogo{
-  0%{transform: translateY(8px) scale(.95) rotate(-3deg); filter: hue-rotate(0) saturate(1); opacity:0;}
-  25%{transform: translateY(-2px) scale(1.06) rotate(2deg); filter: hue-rotate(-12deg) saturate(1.2); opacity:1;}
-  60%{transform: translateY(0) scale(1) rotate(0); filter: none;}
+  0%{transform: translateY(12px) scale(.92) rotate(-2deg); filter: hue-rotate(0) opacity(0);}
+  30%{transform: translateY(-2px) scale(1.04) rotate(1deg); filter: hue-rotate(-10deg) opacity(1);}
+  65%{transform: translateY(0) scale(1) rotate(0); filter: none;}
   100%{transform:none;}
 }
 
-/* Apply during intro */
-body.intro-glitch .lw img{ animation: glitchLogo .75s cubic-bezier(.36,1.2,.36,1) .05s both; }
-body.intro-glitch .bn{ animation: glitchIn .85s steps(18) .08s both; }
-body.intro-glitch h1{ animation: glitchIn .95s steps(22) .08s both; }
-body.intro-glitch .sub{ animation: glitchIn 1s steps(24) .12s both; }
+/* Apply during intro - slowed down for premium feel */
+body.intro-glitch .lw img{ animation: glitchLogo 1.2s cubic-bezier(.22,1,.36,1) .1s both; }
+body.intro-glitch .bn{ animation: glitchIn 1.4s var(--sm) .15s both; }
+body.intro-glitch h1{ animation: glitchIn 1.5s var(--sm) .18s both; }
+body.intro-glitch .sub{ animation: glitchIn 1.6s var(--sm) .25s both; }
 </style>
 
 <!-- Pull-to-refresh indicator -->
@@ -3282,27 +3281,20 @@ body.intro-glitch .sub{ animation: glitchIn 1s steps(24) .12s both; }
 
 </script>
 
-<style>
-/* Neutralize any intro glitch visuals immediately */
-body.intro-glitch { animation: none !important; filter: none !important; }
-/* In case any children are targeted */
-body.intro-glitch * { animation: none !important; }
-</style>
+
 <script>
-// Remove any intro-glitch class ASAP and prevent it being added again
+// Handle loading state
 (function(){
-  function kill(){ try{ document.body && document.body.classList.remove('intro-glitch'); }catch(e){} }
+  function ready(){ 
+    document.documentElement.classList.remove('loading');
+    // Keep intro-glitch for a few seconds to let animation finish
+    setTimeout(() => {
+        document.body.classList.remove('intro-glitch');
+    }, 3000);
+  }
   if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', kill, {once:true});
-  } else { kill(); }
-  // Monkey-patch classList.add so 'intro-glitch' is ignored
-  try{
-    const add = DOMTokenList.prototype.add;
-    DOMTokenList.prototype.add = function(){
-      const args = Array.from(arguments).filter(x => x !== 'intro-glitch');
-      return add.apply(this, args);
-    };
-  }catch(_){}
+    document.addEventListener('DOMContentLoaded', ready, {once:true});
+  } else { ready(); }
 })();
 </script>
 
