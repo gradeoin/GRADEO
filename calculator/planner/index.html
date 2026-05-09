@@ -24,89 +24,200 @@
         }
         * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
         body { background-color: var(--bg); color: var(--text); font-family: ui-sans-serif, system-ui, sans-serif; min-height: 100vh; }
-        header { position: sticky; top: 0; z-index: 100; background: var(--bg); backdrop-filter: blur(20px); border-bottom: 1px solid var(--cb); padding: 12px 1.5rem; display: flex; align-items: center; justify-content: space-between; }
+        header.nav { position: sticky; top: 0; z-index: 100; background: var(--bg); backdrop-filter: blur(20px); border-bottom: 1px solid var(--cb); padding: 12px 1.5rem; display: flex; align-items: center; justify-content: space-between; }
         .brand { display: flex; align-items: center; gap: 10px; text-decoration: none; color: var(--text); }
         .lw { width: 32px; height: 32px; border-radius: 10px; overflow: hidden; border: 1.5px solid var(--id); box-shadow: 0 2px 8px rgba(255,106,0,.14); transition: transform .3s var(--sp); }
         .lw:hover { transform: rotate(8deg) scale(1.1); }
         .lw img { width: 100%; height: 100%; object-fit: cover; }
         .bn { font-size: 14px; font-weight: 900; letter-spacing: -.4px; }
+        
         .container { max-width: 1120px; margin: 0 auto; padding: 2rem 1.5rem; }
-        .page-title { font-size: clamp(24px, 8vw, 42px); font-weight: 950; letter-spacing: -1.5px; margin-bottom: 8px; }
-        .app-grid { display: grid; grid-template-columns: 1fr 340px; gap: 2rem; }
+        .page-title { font-size: clamp(28px, 8vw, 42px); font-weight: 950; letter-spacing: -2px; margin-bottom: 8px; }
+        .page-sub { color: var(--muted); font-size: 14.5px; margin-bottom: 2.5rem; }
+
+        .app-grid { display: grid; grid-template-columns: 1fr 360px; gap: 2rem; }
         @media (max-width: 1024px) { .app-grid { grid-template-columns: 1fr; } }
+
         .card { background: var(--surface); border: 1.5px solid var(--cb); border-radius: var(--r); padding: 1.5rem; }
-        .subject-card { background: var(--bg); border: 1.5px solid var(--cb); border-radius: 16px; padding: 1.25rem; margin-bottom: 12px; display: grid; grid-template-columns: 1fr 100px 100px auto; gap: 1rem; align-items: center; }
-        .input-group { display: flex; flex-direction: column; gap: 4px; }
-        .label { font-size: 10px; font-weight: 800; text-transform: uppercase; color: var(--muted); }
-        input { background: var(--surface); border: 1.5px solid var(--cb); border-radius: 8px; padding: 8px 12px; color: var(--text); font-weight: 700; font-size: 14px; width: 100%; outline: none; }
+        
+        /* ── Input Groups ── */
+        .input-group { display: flex; flex-direction: column; gap: 6px; }
+        .label { font-size: 11px; font-weight: 800; text-transform: uppercase; color: var(--muted); letter-spacing: .05em; }
+        input, select { 
+            background: var(--bg); border: 1.5px solid var(--cb); border-radius: 10px;
+            padding: 10px 12px; color: var(--text); font-weight: 700; font-size: 15px;
+            outline: none; transition: border-color .2s; width: 100%;
+        }
         input:focus { border-color: var(--o); }
-        .res-card { background: linear-gradient(135deg, var(--surface), var(--bg)); text-align: center; padding: 2.5rem 1.5rem; }
-        .res-val { font-size: 4.5rem; font-weight: 950; color: var(--o); letter-spacing: -3px; line-height: 1; }
-        .res-lbl { font-size: 11px; font-weight: 800; color: var(--muted); text-transform: uppercase; letter-spacing: 2px; margin-top: 8px; }
-        .btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding: 12px 20px; border-radius: 12px; font-weight: 800; font-size: 14px; cursor: pointer; border: none; transition: all .2s var(--sp); }
+
+        /* ── Subject Cards ── */
+        .subject-card {
+            background: var(--bg); border: 1.5px solid var(--cb); border-radius: 18px;
+            padding: 1.25rem; margin-bottom: 12px; display: grid;
+            grid-template-columns: 1fr 100px 100px 120px auto; gap: 1rem; align-items: center;
+        }
+        @media (max-width: 640px) {
+            .subject-card { grid-template-columns: 1fr 1fr; }
+            .name-col { grid-column: span 2; }
+        }
+
+        /* ── Dashboard (Sidebar) ── */
+        .sidebar { position: sticky; top: 100px; display: flex; flex-direction: column; gap: 1.5rem; }
+        .res-card { background: linear-gradient(135deg, var(--surface), var(--bg)); text-align: center; padding: 2.5rem 1.5rem; border: 2px solid var(--o); }
+        .res-val { font-size: 4rem; font-weight: 950; color: var(--o); letter-spacing: -3px; line-height: 1; }
+        .res-lbl { font-size: 11px; font-weight: 800; color: var(--muted); text-transform: uppercase; margin-top: 10px; letter-spacing: 2px; }
+
+        .prob-bar { height: 8px; border-radius: 99px; background: rgba(0,0,0,0.05); margin-top: 12px; overflow: hidden; }
+        .prob-fill { height: 100%; background: var(--o); width: 0%; transition: width 0.8s var(--sp); }
+
+        /* ── Buttons ── */
+        .btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding: 12px 20px; border-radius: 12px; font-weight: 800; cursor: pointer; border: none; transition: all .2s var(--sp); font-family: inherit; }
         .bp { background: var(--o); color: #fff; box-shadow: 0 4px 12px rgba(255,106,0,.25); }
         .bs { background: transparent; border: 1.5px solid var(--id); color: var(--o); }
-        .req-tag { background: rgba(255,106,0,.08); color: var(--o); padding: 4px 10px; border-radius: 8px; font-size: 13px; font-weight: 900; }
-        @media (max-width: 640px) { .subject-card { grid-template-columns: 1fr 1fr; } .name-col { grid-column: span 2; } }
+        .btn:hover { transform: translateY(-2px); }
+
+        .diff-tag { font-size: 10px; font-weight: 900; padding: 4px 8px; border-radius: 6px; text-transform: uppercase; cursor: pointer; }
+        .diff-easy { background: rgba(34,197,94,0.1); color: #16a34a; }
+        .diff-hard { background: rgba(239,68,68,0.1); color: #dc2626; }
+        .req-box { text-align: right; }
+        .req-val { font-size: 18px; font-weight: 950; color: var(--o); }
     </style>
 </head>
 <body>
-    <header>
+    <header class="nav">
         <a href="/" class="brand">
             <div class="lw"><img src="https://res.cloudinary.com/djy3mjtsz/image/upload/v1770296454/Untitled-2_i2ezfh.png" alt="Gradeo"/></div>
             <span class="bn">GRADEO</span>
         </a>
         <button class="btn bs" style="padding: 8px;"><i data-lucide="user" size="18"></i></button>
     </header>
+
     <main class="container">
         <h1 class="page-title">TARGET <span style="color: var(--o);">PLANNER</span></h1>
-        <p style="color: var(--muted); font-size: 14px; margin-bottom: 2rem;">Calculate the minimum marks you need in final exams.</p>
+        <p class="page-sub">The ultimate academic USP. Plan your CGPA target and find your minimum effort.</p>
+
         <div class="app-grid">
             <div class="calc-area">
+                <!-- Academic Standing -->
+                <div class="card" style="margin-bottom: 1.5rem; display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem;">
+                    <div class="input-group">
+                        <label class="label">Current CGPA</label>
+                        <input type="number" step="0.01" value="8.5" id="curr-cgpa" onchange="render()">
+                    </div>
+                    <div class="input-group">
+                        <label class="label">Total Credits Earned</label>
+                        <input type="number" value="48" id="total-credits" onchange="render()">
+                    </div>
+                    <div class="input-group">
+                        <label class="label">Target CGPA</label>
+                        <input type="number" step="0.1" value="9.0" id="target-cgpa" onchange="render()">
+                    </div>
+                </div>
+
+                <!-- Subjects -->
                 <div class="card">
                     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
-                        <h2 style="font-weight: 900; font-size: 18px;">Upcoming Exams</h2>
+                        <h2 style="font-weight: 900; font-size: 18px;">Semester Subjects</h2>
                         <button class="btn bs" id="add-sub" style="padding: 8px 14px; font-size: 12px;"><i data-lucide="plus" size="14"></i> Add Subject</button>
                     </div>
                     <div id="sub-list"></div>
                 </div>
             </div>
+
             <div class="sidebar">
-                <div class="card res-card" style="margin-bottom: 1.5rem;">
-                    <div class="res-val" id="result">0.00</div>
-                    <div class="res-lbl">Predicted SGPA</div>
+                <div class="card res-card">
+                    <div class="res-val" id="req-sgpa">0.00</div>
+                    <div class="res-lbl">Required Sem SGPA</div>
+                    <div style="margin-top: 1.5rem; text-align: left;">
+                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                            <span class="label">Feasibility</span>
+                            <span class="label" id="feas-val">0%</span>
+                        </div>
+                        <div class="prob-bar"><div class="prob-fill" id="prob-fill"></div></div>
+                    </div>
                 </div>
+
                 <div class="card">
-                    <label class="label">Target CGPA</label>
-                    <input type="number" step="0.1" value="9.0" id="target" onchange="render()" style="margin-top: 6px;">
-                    <div id="summary" style="font-size: 13px; color: var(--muted); margin-top: 1rem; line-height: 1.6;"></div>
+                    <h3 style="font-weight: 900; font-size: 14px; margin-bottom: 10px;">PLANNING TIPS</h3>
+                    <ul style="font-size: 13px; color: var(--muted); padding-left: 18px; line-height: 1.6;">
+                        <li>"Hard" subjects require lower scores in our distribution.</li>
+                        <li>High CIE significantly reduces your SEE burden.</li>
+                        <li>Aiming for >9.5 SGPA is high risk but possible.</li>
+                    </ul>
                 </div>
+
+                <button class="btn bp" style="width: 100%; height: 56px;"><i data-lucide="shield-check" size="20"></i> Lock My Goal</button>
             </div>
         </div>
     </main>
+
     <script>
-        const state = { subjects: [{ id: 1, name: 'Eng. Math', credits: 4, cie: 42 }] };
-        const calcReq = (cie, tg) => {
-            const minT = tg === 10 ? 90 : (tg + 3) * 10;
-            return Math.max(40, Math.min(100, (minT - cie) * 2));
+        const state = {
+            subjects: [
+                { id: 1, name: 'Eng. Math IV', credits: 4, cie: 45, difficulty: 'hard' },
+                { id: 2, name: 'Computer Architecture', credits: 4, cie: 42, difficulty: 'easy' },
+                { id: 3, name: 'OS Design', credits: 3, cie: 48, difficulty: 'easy' }
+            ]
         };
+
+        const calculateLogic = () => {
+            const currCgpa = parseFloat(document.getElementById('curr-cgpa').value) || 0;
+            const totalCreds = parseFloat(document.getElementById('total-credits').value) || 0;
+            const targetCgpa = parseFloat(document.getElementById('target-cgpa').value) || 0;
+            const semCreds = state.subjects.reduce((a, b) => a + b.credits, 0);
+
+            // Required SGPA = (Target * TotalNew - Current * TotalOld) / SemCredits
+            const totalNew = totalCreds + semCreds;
+            const reqSgpa = ((targetCgpa * totalNew) - (currCgpa * totalCreds)) / semCreds;
+            
+            return Math.min(10, Math.max(0, reqSgpa)).toFixed(2);
+        };
+
         const render = () => {
-            const list = document.getElementById('sub-list'); list.innerHTML = '';
-            const tg = parseFloat(document.getElementById('target').value);
+            const list = document.getElementById('sub-list');
+            list.innerHTML = '';
+            const reqSgpa = parseFloat(calculateLogic());
+            document.getElementById('req-sgpa').innerText = reqSgpa;
+
+            // Feasibility
+            const feas = Math.max(0, Math.min(100, 100 - (reqSgpa - 8) * 40));
+            document.getElementById('feas-val').innerText = Math.round(feas) + '%';
+            document.getElementById('prob-fill').style.width = feas + '%';
+
             state.subjects.forEach(s => {
-                const req = calcReq(s.cie, Math.floor(tg));
-                const card = document.createElement('div'); card.className = 'subject-card';
-                card.innerHTML = `<div class="name-col"><label class="label">Subject</label><input type="text" value="${s.name}" onchange="upd(${s.id},'name',this.value)"></div><div class="input-group"><label class="label">Credits</label><input type="number" value="${s.credits}" onchange="upd(${s.id},'credits',parseFloat(this.value))"></div><div class="input-group"><label class="label">CIE (50)</label><input type="number" value="${s.cie}" onchange="upd(${s.id},'cie',parseFloat(this.value))"></div><div style="text-align: right;"><label class="label">Req. SEE</label><div class="req-tag">${req}/100</div></div>`;
+                // Heuristic: Hard subjects target 1 grade point lower than easy ones
+                const weight = s.difficulty === 'hard' ? -0.5 : 0.5;
+                const targetGp = Math.round(reqSgpa + weight);
+                const minTotal = targetGp >= 10 ? 90 : (targetGp + 3) * 10;
+                const reqSee = Math.max(40, Math.min(100, (minTotal - s.cie) * 2));
+
+                const card = document.createElement('div');
+                card.className = 'subject-card';
+                card.innerHTML = `
+                    <div class="name-col"><label class="label">Subject</label><input type="text" value="${s.name}" onchange="upd(${s.id},'name',this.value)"></div>
+                    <div class="input-group"><label class="label">Credits</label><input type="number" value="${s.credits}" onchange="upd(${s.id},'credits',parseFloat(this.value))"></div>
+                    <div class="input-group"><label class="label">CIE</label><input type="number" value="${s.cie}" onchange="upd(${s.id},'cie',parseFloat(this.value))"></div>
+                    <div class="input-group"><label class="label">Difficulty</label>
+                        <span class="diff-tag ${s.difficulty === 'hard' ? 'diff-hard' : 'diff-easy'}" onclick="toggleDiff(${s.id})">${s.difficulty}</span>
+                    </div>
+                    <div class="req-box"><label class="label">Min. SEE</label><div class="req-val">${reqSee}</div></div>
+                `;
                 list.appendChild(card);
             });
-            document.getElementById('summary').innerHTML = `To reach <b>${tg} CGPA</b>, aim for <b>${Math.floor(tg)} Grade Points</b> per subject.`;
             lucide.createIcons();
         };
-        const upd = (id,f,v) => { state.subjects.find(s=>s.id===id)[f]=v; render(); };
-        document.getElementById('add-sub').addEventListener('click', () => { state.subjects.push({ id: Date.now(), name: 'New Subject', credits: 4, cie: 40 }); render(); });
-        lucide.createIcons(); render();
+
+        const upd = (id, f, v) => { state.subjects.find(s => s.id === id)[f] = v; render(); };
+        const toggleDiff = (id) => { const s = state.subjects.find(x => x.id === id); s.difficulty = s.difficulty === 'hard' ? 'easy' : 'hard'; render(); };
+        
+        document.getElementById('add-sub').addEventListener('click', () => {
+            state.subjects.push({ id: Date.now(), name: 'New Course', credits: 4, cie: 40, difficulty: 'easy' });
+            render();
+        });
+
         const theme = localStorage.getItem('gradeo_theme') || 'light';
         document.documentElement.setAttribute('data-theme', theme);
+        lucide.createIcons(); render();
     </script>
 </body>
 </html>
