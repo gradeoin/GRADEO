@@ -43,9 +43,24 @@
         .res-card { background: linear-gradient(135deg, var(--surface), var(--bg)); text-align: center; padding: 2.5rem 1.5rem; }
         .res-val { font-size: 4.5rem; font-weight: 950; color: var(--o); letter-spacing: -3px; line-height: 1; }
         .res-lbl { font-size: 11px; font-weight: 800; color: var(--muted); text-transform: uppercase; letter-spacing: 2px; margin-top: 8px; }
-        .btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding: 12px 20px; border-radius: 12px; font-weight: 800; font-size: 14px; cursor: pointer; border: none; transition: all .2s var(--sp); }
+        .btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding: 12px 20px; border-radius: 12px; font-weight: 800; font-size: 14px; cursor: pointer; border: none; transition: all .2s var(--sp); font-family: inherit; }
         .bp { background: var(--o); color: #fff; box-shadow: 0 4px 12px rgba(255,106,0,.25); }
         .bs { background: transparent; border: 1.5px solid var(--id); color: var(--o); }
+
+        /* ── PRINT STYLES ── */
+        @media print {
+            header, .sidebar, #add-sem, button { display: none !important; }
+            body { background: #fff !important; color: #000 !important; }
+            .container { padding: 0; max-width: 100%; }
+            .card { border: none !important; box-shadow: none !important; padding: 0 !important; }
+            .sem-row { 
+                background: #fff !important; border: 1px solid #eee !important; 
+                grid-template-columns: 1fr 100px 100px;
+                page-break-inside: avoid;
+            }
+            .res-card { border: 2px solid #000 !important; margin-top: 20px; display: block !important; }
+            .page-title::after { content: " | CUMULATIVE GRADE REPORT"; font-size: 14px; color: #FF6A00; margin-left: 10px; }
+        }
         @media (max-width: 640px) { .sem-row { grid-template-columns: 1fr 1fr; } .sem-num { grid-column: span 2; } }
     </style>
 </head>
@@ -64,7 +79,7 @@
             <div class="calc-area">
                 <div class="card">
                     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
-                        <h2 style="font-weight: 900; font-size: 18px;">Semesters</h2>
+                        <h2 style="font-weight: 900; font-size: 18px;">Semester History</h2>
                         <button class="btn bs" id="add-sem" style="padding: 8px 14px; font-size: 12px;"><i data-lucide="plus" size="14"></i> Add Semester</button>
                     </div>
                     <div id="sem-list"></div>
@@ -75,7 +90,12 @@
                     <div class="res-val" id="result">0.00</div>
                     <div class="res-lbl">Cumulative CGPA</div>
                 </div>
-                <button class="btn bp" style="width: 100%;"><i data-lucide="save" size="18"></i> Save History</button>
+                <button class="btn bp" id="share-btn" style="width: 100%; margin-bottom: 10px;">
+                    <i data-lucide="share-2" size="18"></i> Share Results
+                </button>
+                <button class="btn bs" id="print-btn" style="width: 100%;">
+                    <i data-lucide="printer" size="18"></i> Print Report
+                </button>
             </div>
         </div>
     </main>
@@ -87,15 +107,36 @@
             state.sems.forEach((s, i) => {
                 tp += s.sgpa * s.credits; tc += s.credits;
                 const row = document.createElement('div'); row.className = 'sem-row';
-                row.innerHTML = `<div class="sem-num" style="font-weight: 900; color: var(--o);">SEM ${i+1}</div><div class="input-group"><label class="label">SGPA</label><input type="number" step="0.01" value="${s.sgpa}" onchange="upd(${s.id},'sgpa',parseFloat(this.value))"></div><div class="input-group"><label class="label">Credits</label><input type="number" value="${s.credits}" onchange="upd(${s.id},'credits',parseFloat(this.value))"></div><button class="btn bs" style="padding: 8px; border: none;" onclick="rem(${s.id})"><i data-lucide="trash-2" size="18" color="#FF4444"></i></button>`;
+                row.innerHTML = `
+                    <div class="sem-num" style="font-weight: 900; color: var(--o);">SEM ${i+1}</div>
+                    <div class="input-group"><label class="label">SGPA</label><input type="number" step="0.01" value="${s.sgpa}" onchange="upd(${s.id}, 'sgpa', parseFloat(this.value))"></div>
+                    <div class="input-group"><label class="label">Credits</label><input type="number" value="${s.credits}" onchange="upd(${s.id}, 'credits', parseFloat(this.value))"></div>
+                    <button class="btn bs" style="padding: 8px; border: none;" onclick="rem(${s.id})"><i data-lucide="trash-2" size="18" color="#FF4444"></i></button>
+                `;
                 list.appendChild(row);
             });
             document.getElementById('result').innerText = tc ? (tp/tc).toFixed(2) : '0.00';
             lucide.createIcons();
         };
-        const upd = (id,f,v) => { state.sems.find(s=>s.id===id)[f]=v; render(); };
-        const rem = (id) => { state.sems=state.sems.filter(s=>s.id!==id); render(); };
+        const upd = (id, f, v) => { state.sems.find(s => s.id === id)[f] = v; render(); };
+        const rem = (id) => { state.sems = state.sems.filter(s => s.id !== id); render(); };
         document.getElementById('add-sem').addEventListener('click', () => { state.sems.push({ id: Date.now(), sgpa: 9.0, credits: 24 }); render(); });
+
+        // ── MODERN ACTIONS ──
+        const shareResult = async () => {
+            const cgpa = document.getElementById('result').innerText;
+            const text = `📈 My Cumulative CGPA on GRADEO is ${cgpa}!\nCheck your academic progress here: ${window.location.href}`;
+            if (navigator.share) {
+                try { await navigator.share({ title: 'My CGPA', text: text, url: window.location.href }); } catch(e) {}
+            } else {
+                navigator.clipboard.writeText(text);
+                alert('Result copied to clipboard!');
+            }
+        };
+
+        document.getElementById('share-btn').addEventListener('click', shareResult);
+        document.getElementById('print-btn').addEventListener('click', () => window.print());
+
         lucide.createIcons(); render();
         const theme = localStorage.getItem('gradeo_theme') || 'light';
         document.documentElement.setAttribute('data-theme', theme);
