@@ -1,40 +1,104 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1"/>
-  <title>GRADEO CGPA Converter</title>
-  <meta name="description" content="CGPA converter to combine semester SGPAs into a running CGPA."/>
-  <meta name="robots" content="index,follow"/>
-  <link rel="canonical" href="https://gradeo.in/calculator/cgpa/"/>
-  <meta http-equiv="refresh" content="0; url=../?mode=cgpa"/>
-  <style>
-    body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,"Helvetica Neue",Arial,sans-serif;background:#f8fafc;color:#0f172a;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px;}
-    .card{background:#fff;border:1px solid #e2e8f0;border-radius:18px;box-shadow:0 12px 30px rgba(15,23,42,.08);padding:28px;max-width:720px;width:100%;}
-    h1{margin:0 0 8px;font-size:24px;}
-    p{margin:0 0 16px;color:#475569;line-height:1.5;}
-    .btn{display:inline-flex;align-items:center;gap:8px;padding:10px 16px;border-radius:999px;background:linear-gradient(135deg,#14b8a6,#7c3aed);color:#fff;text-decoration:none;font-weight:700;}
-    .links{margin-top:18px;display:flex;flex-wrap:wrap;gap:10px;font-size:14px;}
-    .links a{color:#0f172a;text-decoration:none;border-bottom:1px solid rgba(15,23,42,.18);}
-    .links a:hover{color:#7c3aed;border-bottom-color:#7c3aed;}
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5, viewport-fit=cover">
+    <title>CGPA Calculator — GRADEO</title>
+    <link rel="icon" href="https://res.cloudinary.com/djy3mjtsz/image/upload/v1770296454/Untitled-2_i2ezfh.png" type="image/png"/>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        :root {
+            --o: #FF6A00; --od: #E05500;
+            --bg: #FFF6ED; --surface: #fff;
+            --text: #0D0C0B; --muted: #6B6560; --muted2: #A8A29E;
+            --cb: rgba(255,106,0,.11);
+            --ib: rgba(255,130,30,.11); --id: rgba(255,106,0,.18);
+            --r: 20px; --r2: 16px;
+            --sp: cubic-bezier(.34, 1.56, .64, 1);
+        }
+        [data-theme="dark"] {
+            --bg: #080604; --surface: #161210;
+            --text: #F5E8D8; --muted: #8A7E74; --muted2: #5A5450;
+            --cb: rgba(255,106,0,.22);
+            --ib: rgba(255,106,0,.14); --id: rgba(255,106,0,.28);
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+        body { background-color: var(--bg); color: var(--text); font-family: ui-sans-serif, system-ui, sans-serif; min-height: 100vh; }
+        header { position: sticky; top: 0; z-index: 100; background: var(--bg); backdrop-filter: blur(20px); border-bottom: 1px solid var(--cb); padding: 12px 1.5rem; display: flex; align-items: center; justify-content: space-between; }
+        .brand { display: flex; align-items: center; gap: 10px; text-decoration: none; color: var(--text); }
+        .lw { width: 32px; height: 32px; border-radius: 10px; overflow: hidden; border: 1.5px solid var(--id); box-shadow: 0 2px 8px rgba(255,106,0,.14); transition: transform .3s var(--sp); }
+        .lw:hover { transform: rotate(8deg) scale(1.1); }
+        .lw img { width: 100%; height: 100%; object-fit: cover; }
+        .bn { font-size: 14px; font-weight: 900; letter-spacing: -.4px; }
+        .container { max-width: 1120px; margin: 0 auto; padding: 2rem 1.5rem; }
+        .page-title { font-size: clamp(24px, 8vw, 42px); font-weight: 950; letter-spacing: -1.5px; margin-bottom: 8px; }
+        .app-grid { display: grid; grid-template-columns: 1fr 340px; gap: 2rem; }
+        @media (max-width: 1024px) { .app-grid { grid-template-columns: 1fr; } }
+        .card { background: var(--surface); border: 1.5px solid var(--cb); border-radius: var(--r); padding: 1.5rem; }
+        .sem-row { display: grid; grid-template-columns: 100px 1fr 1fr auto; gap: 1rem; align-items: center; background: var(--bg); border: 1.5px solid var(--cb); border-radius: 16px; padding: 1rem; margin-bottom: 12px; }
+        .input-group { display: flex; flex-direction: column; gap: 4px; }
+        .label { font-size: 10px; font-weight: 800; text-transform: uppercase; color: var(--muted); }
+        input { background: var(--surface); border: 1.5px solid var(--cb); border-radius: 8px; padding: 8px 12px; color: var(--text); font-weight: 700; font-size: 14px; width: 100%; outline: none; }
+        input:focus { border-color: var(--o); }
+        .res-card { background: linear-gradient(135deg, var(--surface), var(--bg)); text-align: center; padding: 2.5rem 1.5rem; }
+        .res-val { font-size: 4.5rem; font-weight: 950; color: var(--o); letter-spacing: -3px; line-height: 1; }
+        .res-lbl { font-size: 11px; font-weight: 800; color: var(--muted); text-transform: uppercase; letter-spacing: 2px; margin-top: 8px; }
+        .btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding: 12px 20px; border-radius: 12px; font-weight: 800; font-size: 14px; cursor: pointer; border: none; transition: all .2s var(--sp); }
+        .bp { background: var(--o); color: #fff; box-shadow: 0 4px 12px rgba(255,106,0,.25); }
+        .bs { background: transparent; border: 1.5px solid var(--id); color: var(--o); }
+        @media (max-width: 640px) { .sem-row { grid-template-columns: 1fr 1fr; } .sem-num { grid-column: span 2; } }
+    </style>
 </head>
 <body>
-  <main class="card">
-    <h1>CGPA Converter</h1>
-    <p>Redirecting you to the full calculator experience.</p>
-    <a class="btn" href="../?mode=cgpa">Open CGPA converter</a>
-    <div class="links" aria-label="Site links">
-      <a href="/calculator/planner/">Target planner</a>
-      <a href="/calculator/sgpa/">SGPA calculator</a>
-      <a href="/calculator/">All calculators</a>
-      <a href="/">Home</a>
-      <a href="/blog/">Blog</a>
-      <a href="/about/">About</a>
-      <a href="/feedback/">Feedback</a>
-      <a href="/app/">Get the app</a>
-      <a href="/offer/">Student offer</a>
-    </div>
-  </main>
+    <header>
+        <a href="/" class="brand">
+            <div class="lw"><img src="https://res.cloudinary.com/djy3mjtsz/image/upload/v1770296454/Untitled-2_i2ezfh.png" alt="Gradeo"/></div>
+            <span class="bn">GRADEO</span>
+        </a>
+        <button class="btn bs" style="padding: 8px;"><i data-lucide="user" size="18"></i></button>
+    </header>
+    <main class="container">
+        <h1 class="page-title">CGPA <span style="color: var(--o);">HISTORY</span></h1>
+        <p style="color: var(--muted); font-size: 14px; margin-bottom: 2rem;">Track your cumulative progress across all semesters.</p>
+        <div class="app-grid">
+            <div class="calc-area">
+                <div class="card">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+                        <h2 style="font-weight: 900; font-size: 18px;">Semesters</h2>
+                        <button class="btn bs" id="add-sem" style="padding: 8px 14px; font-size: 12px;"><i data-lucide="plus" size="14"></i> Add Semester</button>
+                    </div>
+                    <div id="sem-list"></div>
+                </div>
+            </div>
+            <div class="sidebar">
+                <div class="card res-card" style="margin-bottom: 1.5rem;">
+                    <div class="res-val" id="result">0.00</div>
+                    <div class="res-lbl">Cumulative CGPA</div>
+                </div>
+                <button class="btn bp" style="width: 100%;"><i data-lucide="save" size="18"></i> Save History</button>
+            </div>
+        </div>
+    </main>
+    <script>
+        const state = { sems: [{ id: 1, sgpa: 9.2, credits: 24 }, { id: 2, sgpa: 8.8, credits: 24 }] };
+        const render = () => {
+            const list = document.getElementById('sem-list'); list.innerHTML = '';
+            let tp = 0, tc = 0;
+            state.sems.forEach((s, i) => {
+                tp += s.sgpa * s.credits; tc += s.credits;
+                const row = document.createElement('div'); row.className = 'sem-row';
+                row.innerHTML = `<div class="sem-num" style="font-weight: 900; color: var(--o);">SEM ${i+1}</div><div class="input-group"><label class="label">SGPA</label><input type="number" step="0.01" value="${s.sgpa}" onchange="upd(${s.id},'sgpa',parseFloat(this.value))"></div><div class="input-group"><label class="label">Credits</label><input type="number" value="${s.credits}" onchange="upd(${s.id},'credits',parseFloat(this.value))"></div><button class="btn bs" style="padding: 8px; border: none;" onclick="rem(${s.id})"><i data-lucide="trash-2" size="18" color="#FF4444"></i></button>`;
+                list.appendChild(row);
+            });
+            document.getElementById('result').innerText = tc ? (tp/tc).toFixed(2) : '0.00';
+            lucide.createIcons();
+        };
+        const upd = (id,f,v) => { state.sems.find(s=>s.id===id)[f]=v; render(); };
+        const rem = (id) => { state.sems=state.sems.filter(s=>s.id!==id); render(); };
+        document.getElementById('add-sem').addEventListener('click', () => { state.sems.push({ id: Date.now(), sgpa: 9.0, credits: 24 }); render(); });
+        lucide.createIcons(); render();
+        const theme = localStorage.getItem('gradeo_theme') || 'light';
+        document.documentElement.setAttribute('data-theme', theme);
+    </script>
 </body>
 </html>
