@@ -22,11 +22,18 @@
     <link rel="stylesheet" href="../../assets/css/gradeo.css">
     <script src="https://unpkg.com/lucide@latest"></script>
     <style>
-        .sem-row { display: grid; grid-template-columns: 100px 1fr 1fr auto; gap: 1rem; align-items: center; background: var(--bg); border: 1.5px solid var(--cb); border-radius: 16px; padding: 1rem; margin-bottom: 12px; }
+        .sem-row { display: grid; grid-template-columns: 80px 1fr 1fr auto; gap: 1rem; align-items: center; background: var(--surface); border: 1.5px solid var(--cb); border-radius: 16px; padding: 16px 20px; margin-bottom: 12px; transition: all 0.2s ease; box-shadow: 0 4px 12px rgba(0,0,0,0.02); }
+        .sem-row:hover { border-color: var(--o); box-shadow: 0 6px 16px rgba(255,106,0,0.08); transform: translateY(-2px); }
         .student-details { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.5rem; }
-        .res-card { background: linear-gradient(135deg, var(--surface), var(--bg)); text-align: center; padding: 2.5rem 1.5rem; }
-        .res-val { font-size: 4.5rem; font-weight: 950; color: var(--o); letter-spacing: -3px; line-height: 1; }
+        .res-card { background: linear-gradient(135deg, var(--surface), var(--bg)); text-align: center; padding: 2.5rem 1.5rem; border: 1.5px solid var(--cb); border-radius: 20px; }
+        .res-val { font-size: 4.5rem; font-weight: 950; color: var(--o); letter-spacing: -3px; line-height: 1; text-shadow: 0 4px 20px rgba(255,106,0,0.2); }
         .res-lbl { font-size: 11px; font-weight: 800; color: var(--muted); text-transform: uppercase; letter-spacing: 2px; margin-top: 8px; }
+        
+        .conv-card { background: var(--surface); border: 1.5px solid var(--cb); border-radius: 20px; padding: 1.5rem; margin-bottom: 1.5rem; box-shadow: 0 8px 24px rgba(0,0,0,0.04); }
+        .conv-card h3 { font-size: 16px; font-weight: 900; margin-bottom: 1rem; display: flex; align-items: center; gap: 8px; }
+        .conv-res { font-size: 2.5rem; font-weight: 900; color: var(--text); line-height: 1; margin: 1rem 0; }
+        .conv-formula { font-size: 12px; color: var(--muted); background: var(--bg); padding: 8px 12px; border-radius: 8px; margin-top: 1rem; border: 1px solid var(--cb); }
+        
         @media (max-width: 640px) { .sem-row { grid-template-columns: 1fr 1fr; } .sem-num { grid-column: span 2; } .student-details { grid-template-columns: 1fr; } }
     </style>
 </head>
@@ -73,12 +80,30 @@
                     <div class="res-val" id="result">0.00</div>
                     <div class="res-lbl">Cumulative CGPA</div>
                 </div>
-                <button class="btn bp" id="share-btn" style="width: 100%; margin-bottom: 10px;">
-                    <i data-lucide="share-2" size="18"></i> Share Results
-                </button>
-                <button class="btn bs" id="print-btn" style="width: 100%;">
-                    <i data-lucide="printer" size="18"></i> Print Report
-                </button>
+
+                <!-- CGPA Converter Widget -->
+                <div class="conv-card">
+                    <h3><i data-lucide="calculator" size="18" style="color:var(--o)"></i> Percentage Converter</h3>
+                    <div class="input-group" style="margin-bottom: 1rem;">
+                        <label class="label">Formula Type</label>
+                        <select id="conv-type" class="sgpa-input" style="width: 100%; padding: 10px; border-radius: 10px; border: 1.5px solid var(--cb); background: var(--bg); color: var(--text);">
+                            <option value="vtu">(CGPA - 0.75) × 10  [VTU / Default]</option>
+                            <option value="ten">CGPA × 10  [Direct 10-Point]</option>
+                            <option value="nine-five">CGPA × 9.5  [CBSE / Other]</option>
+                        </select>
+                    </div>
+                    <div class="conv-res" id="conv-result">0.00%</div>
+                    <div class="conv-formula" id="conv-formula-text">(0.00 - 0.75) × 10 = 0%</div>
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 1.5rem;">
+                    <button class="btn bp" id="share-btn" style="width: 100%;">
+                        <i data-lucide="share-2" size="18"></i> Share
+                    </button>
+                    <button class="btn bs" id="print-btn" style="width: 100%;">
+                        <i data-lucide="printer" size="18"></i> Print
+                    </button>
+                </div>
             </div>
         </div>
 
@@ -169,7 +194,7 @@
                         <button class="btn bs siEmailAction" id="siBtnEmailCreate">Create</button>
                     </div>
                 </div>
-                <p class="siFootNote">By continuing you agree to GRADEO's <a href="/legal/terms/">Terms</a> & <a href="/legal/privacy/">Privacy Policy</a>.</p>
+                <p class="siFootNote">By continuing you agree to GRADEO's <a href="../../legal/terms/index.html">Terms</a> & <a href="../../legal/privacy/index.html">Privacy Policy</a>.</p>
             </div>
         </div>
     </div>
@@ -214,16 +239,16 @@
                 row.className = 'sem-row';
                 row.dataset.id = s.id;
                 row.innerHTML = `
-                    <div class="sem-num" style="font-weight: 900; color: var(--o);">SEM ${i+1}</div>
+                    <div class="sem-num" style="font-weight: 900; color: var(--o); font-size: 13px;">SEM ${i+1}</div>
                     <div class="input-group">
                         <label class="label">SGPA</label>
-                        <input type="number" step="0.01" class="sgpa-input" value="${s.sgpa}">
+                        <input type="number" step="0.01" class="sgpa-input" value="${s.sgpa}" style="padding: 10px; border-radius: 10px; border: 1.5px solid var(--cb); background: var(--bg); color: var(--text);">
                     </div>
                     <div class="input-group">
                         <label class="label">Credits</label>
-                        <input type="number" class="credits-input" value="${s.credits}">
+                        <input type="number" class="credits-input" value="${s.credits}" style="padding: 10px; border-radius: 10px; border: 1.5px solid var(--cb); background: var(--bg); color: var(--text);">
                     </div>
-                    <button class="btn bs del-btn" style="padding: 8px; border: none;">
+                    <button class="btn bs del-btn" style="padding: 10px; border: none; background: rgba(255,68,68,0.08); border-radius: 12px; display: grid; place-items: center; align-self: flex-end; margin-bottom: 2px;">
                         <i data-lucide="trash-2" size="18" color="#FF4444"></i>
                     </button>
                 `;
@@ -239,8 +264,36 @@
                 tp += s.sgpa * s.credits;
                 tc += s.credits;
             });
-            document.getElementById('result').innerText = tc ? (tp/tc).toFixed(2) : '0.00';
+            const finalCgpa = tc ? (tp/tc).toFixed(2) : '0.00';
+            document.getElementById('result').innerText = finalCgpa;
+            updateConverter(finalCgpa);
         };
+
+        const updateConverter = (cgpaStr) => {
+            const cgpa = parseFloat(cgpaStr) || 0;
+            const type = document.getElementById('conv-type').value;
+            let percentage = 0;
+            let formulaText = '';
+
+            if(type === 'vtu') {
+                percentage = (cgpa - 0.75) * 10;
+                formulaText = `(${cgpa.toFixed(2)} - 0.75) × 10 = ${Math.max(0, percentage).toFixed(2)}%`;
+            } else if(type === 'ten') {
+                percentage = cgpa * 10;
+                formulaText = `${cgpa.toFixed(2)} × 10 = ${Math.max(0, percentage).toFixed(2)}%`;
+            } else if(type === 'nine-five') {
+                percentage = cgpa * 9.5;
+                formulaText = `${cgpa.toFixed(2)} × 9.5 = ${Math.max(0, percentage).toFixed(2)}%`;
+            }
+
+            percentage = Math.max(0, Math.min(100, percentage));
+            document.getElementById('conv-result').innerText = percentage.toFixed(2) + '%';
+            document.getElementById('conv-formula-text').innerText = formulaText;
+        };
+
+        document.getElementById('conv-type').addEventListener('change', () => {
+            updateConverter(document.getElementById('result').innerText);
+        });
 
         // Event Delegation for Inputs
         listEl.addEventListener('input', (e) => {
