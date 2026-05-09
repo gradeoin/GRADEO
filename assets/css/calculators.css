@@ -1,0 +1,16 @@
+/* GRADEO Calculator Styles v2.0 */
+
+.app-grid { display: grid; grid-template-columns: 1fr 340px; gap: 1.5rem; }
+.subject-card { 
+    background: var(--surface); border: 1.5px solid var(--id); border-radius: 16px; 
+    padding: 1rem; display: grid; grid-template-columns: 1fr auto auto auto auto; 
+    gap: 1rem; align-items: center; margin-bottom: 12px; transition: transform .2s var(--sp); 
+    box-shadow: 0 4px 12px var(--cb); 
+}
+.subject-card:hover { transform: translateY(-2px); border-color: var(--o); }
+.res-card { background: linear-gradient(135deg, var(--surface), var(--bg)); text-align: center; padding: 2.5rem 1.5rem; }
+.res-val { font-size: 4.5rem; font-weight: 950; color: var(--o); letter-spacing: -3px; line-height: 1; }
+.res-lbl { font-size: 11px; font-weight: 800; color: var(--muted); text-transform: uppercase; letter-spacing: 2px; margin-top: 8px; }
+
+@media (max-width: 1024px) { .app-grid { grid-template-columns: 1fr; } .sidebar { order: -1; } }
+@media (max-width: 640px) { .subject-card { grid-template-columns: 1fr 1fr; } .name-col { grid-column: span 2; } }
