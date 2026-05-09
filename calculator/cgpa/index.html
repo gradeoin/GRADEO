@@ -3,7 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5, viewport-fit=cover">
-    <title>CGPA Calculator — GRADEO</title>
+    <title>CGPA Calculator — GRADEO | Cumulative Engineering Grade History</title>
+    <meta name="description" content="Track your cumulative engineering CGPA across all semesters. Export professional grade history reports and plan your academic journey with GRADEO.">
+    <meta name="keywords" content="CGPA calculator, engineering grade tracker, semester history, CGPA report, GPA to CGPA conversion">
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      "name": "GRADEO CGPA Tracker",
+      "description": "Multi-semester cumulative GPA tracking tool for engineers.",
+      "applicationCategory": "EducationalApplication"
+    }
+    </script>
     <link rel="icon" href="https://res.cloudinary.com/djy3mjtsz/image/upload/v1770296454/Untitled-2_i2ezfh.png" type="image/png"/>
     <script src="https://unpkg.com/lucide@latest"></script>
     <style>
@@ -98,6 +109,19 @@
                 </button>
             </div>
         </div>
+
+        <!-- ── CGPA ENGINE DATA ── -->
+        <section style="margin-top: 4rem; padding-top: 2rem; border-top: 1.5px solid var(--cb);">
+            <h2 style="font-weight: 950; letter-spacing: -1px; font-size: 22px; margin-bottom: 1.5rem;">Understanding <span style="color: var(--o);">CGPA</span></h2>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem;">
+                <div style="font-size: 13px; color: var(--muted); line-height: 1.6;">
+                    <p><b>CGPA (Cumulative Grade Point Average)</b> is the overall average of all your SGPAs. However, it is a <b>Weighted Average</b> based on credits per semester. A semester with 25 credits affects your CGPA more than one with 18 credits.</p>
+                </div>
+                <div style="font-size: 13px; color: var(--muted); line-height: 1.6;">
+                    <p><b>Percentage Conversion:</b> Most Indian engineering universities (VTU, KTU) use the formula <code>(CGPA - 0.75) × 10</code> or <code>CGPA × 9.5</code> to convert your grade to a percentage for job applications.</p>
+                </div>
+            </div>
+        </section>
     </main>
     <script>
         const state = { sems: [{ id: 1, sgpa: 9.2, credits: 24 }, { id: 2, sgpa: 8.8, credits: 24 }] };

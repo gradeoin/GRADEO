@@ -3,7 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5, viewport-fit=cover">
-    <title>SGPA Calculator — GRADEO</title>
+    <title>SGPA Calculator — GRADEO | Engineering Semester Grade Tool</title>
+    <meta name="description" content="Calculate your engineering SGPA with high precision. Our engine handles credit-weighting and automated grade mapping for VTU, KTU, and AICTE standards.">
+    <meta name="keywords" content="SGPA calculator, engineering GPA, marks to SGPA, university grade calculator, VTU SGPA tool">
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      "name": "GRADEO SGPA Calculator",
+      "description": "Professional engineering SGPA calculator with automated grade mapping.",
+      "applicationCategory": "EducationalApplication"
+    }
+    </script>
     
     <!-- Site Favicons -->
     <link rel="icon" href="https://res.cloudinary.com/djy3mjtsz/image/upload/v1770296454/Untitled-2_i2ezfh.png" type="image/png"/>
@@ -176,6 +187,23 @@
                 </button>
             </div>
         </div>
+
+        <!-- ── ENGINE DATA ── -->
+        <section style="margin-top: 4rem; padding-top: 2rem; border-top: 1.5px solid var(--cb);">
+            <h2 style="font-weight: 950; letter-spacing: -1px; font-size: 22px; margin-bottom: 1.5rem;">How to <span style="color: var(--o);">Calculate SGPA</span></h2>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem;">
+                <div style="font-size: 13px; color: var(--muted); line-height: 1.6;">
+                    <p><b>SGPA (Semester Grade Point Average)</b> is calculated by taking the weighted average of your grade points. The formula is:</p>
+                    <div style="background: var(--surface); padding: 1rem; border-radius: 12px; margin: 10px 0; font-family: monospace; font-weight: 800; color: var(--text);">
+                        SGPA = Σ(Grade Points × Credits) / Σ(Total Credits)
+                    </div>
+                    <p>Our engine automates this by converting your marks (CIE + SEE/2) into grade points based on your university's specific 10-point scale.</p>
+                </div>
+                <div style="font-size: 13px; color: var(--muted); line-height: 1.6;">
+                    <p><b>Internal vs External:</b> In most engineering systems, CIE (Continuous Internal Evaluation) is out of 50, and SEE (Semester End Exam) is out of 100. The final marks are <code>CIE + (SEE / 2)</code>.</p>
+                </div>
+            </div>
+        </section>
     </main>
 
     <script>

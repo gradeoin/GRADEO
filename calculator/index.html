@@ -2,207 +2,72 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Calculators — GRADEO</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300..700&family=Inter:wght@400..900&display=swap" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5, viewport-fit=cover">
+    <title>Engineering Calculators Hub — GRADEO | SGPA, CGPA & Target Planner</title>
+    <meta name="description" content="Access GRADEO's suite of engineering academic tools. Calculate SGPA, track CGPA history, and use our USP Target Planner to predict your final exam marks.">
+    <meta name="keywords" content="engineering calculators, SGPA calculator, CGPA tracker, marks planner, VTU calculator, KTU grade tool">
+    <link rel="icon" href="https://res.cloudinary.com/djy3mjtsz/image/upload/v1770296454/Untitled-2_i2ezfh.png" type="image/png"/>
     <script src="https://unpkg.com/lucide@latest"></script>
     <style>
         :root {
-            --bg: #050505;
-            --surface: #0a0a0a;
-            --panel: #111111;
-            --accent: #ff6a00;
-            --accent-rgb: 255, 106, 0;
-            --text: #ffffff;
-            --text-muted: #888888;
-            --border: rgba(255, 255, 255, 0.08);
-            --ease: cubic-bezier(0.23, 1, 0.32, 1);
+            --o: #FF6A00; --bg: #FFF6ED; --surface: #fff;
+            --text: #0D0C0B; --muted: #6B6560; --cb: rgba(255,106,0,.11);
+            --r: 20px; --sp: cubic-bezier(.34, 1.56, .64, 1);
         }
-
+        [data-theme="dark"] { --bg: #080604; --surface: #161210; --text: #F5E8D8; --muted: #8A7E74; }
         * { box-sizing: border-box; margin: 0; padding: 0; }
-        body {
-            background-color: var(--bg);
-            color: var(--text);
-            font-family: 'Inter', sans-serif;
-            display: flex;
-            flex-direction: column;
-            min-height: 100vh;
-            overflow-x: hidden;
+        body { background: var(--bg); color: var(--text); font-family: ui-sans-serif, system-ui, sans-serif; min-height: 100vh; display: flex; flex-direction: column; }
+        header { padding: 20px 1.5rem; border-bottom: 1px solid var(--cb); display: flex; justify-content: space-between; align-items: center; }
+        .brand { display: flex; align-items: center; gap: 10px; text-decoration: none; color: var(--text); font-weight: 900; }
+        .container { max-width: 1120px; margin: 0 auto; padding: 4rem 1.5rem; flex: 1; }
+        h1 { font-size: clamp(32px, 8vw, 52px); font-weight: 950; letter-spacing: -2.5px; line-height: 1; margin-bottom: 1rem; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; margin-top: 3rem; }
+        .hub-card { 
+            background: var(--surface); border: 1.5px solid var(--cb); border-radius: var(--r); padding: 2rem;
+            text-decoration: none; color: inherit; transition: all .3s var(--sp); display: flex; flex-direction: column; gap: 1rem;
         }
-
-        .glow {
-            position: fixed;
-            inset: 0;
-            background: radial-gradient(circle at 50% -20%, rgba(var(--accent-rgb), 0.1), transparent 70%);
-            z-index: -1;
-        }
-
-        nav {
-            padding: 1.5rem;
-            border-bottom: 1px solid var(--border);
-            backdrop-filter: blur(20px);
-            background: rgba(5, 5, 5, 0.8);
-            position: sticky;
-            top: 0;
-            z-index: 100;
-        }
-
-        .container {
-            max-width: 1000px;
-            margin: 0 auto;
-            padding: 4rem 1.5rem;
-            flex: 1;
-        }
-
-        header {
-            text-align: center;
-            margin-bottom: 4rem;
-        }
-
-        h1 {
-            font-family: 'Space Grotesk', sans-serif;
-            font-size: 3.5rem;
-            font-weight: 900;
-            letter-spacing: -2px;
-            margin-bottom: 1rem;
-        }
-
-        p {
-            color: var(--text-muted);
-            font-size: 1.125rem;
-            max-width: 600px;
-            margin: 0 auto;
-        }
-
-        .calc-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 1.5rem;
-        }
-
-        .calc-card {
-            background: var(--surface);
-            border: 1px solid var(--border);
-            border-radius: 24px;
-            padding: 2.5rem;
-            text-decoration: none;
-            color: var(--text);
-            transition: all 0.4s var(--ease);
-            display: flex;
-            flex-direction: column;
-            gap: 1.5rem;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .calc-card::after {
-            content: "";
-            position: absolute;
-            inset: 0;
-            background: radial-gradient(circle at top right, rgba(var(--accent-rgb), 0.1), transparent 70%);
-            opacity: 0;
-            transition: opacity 0.4s var(--ease);
-        }
-
-        .calc-card:hover {
-            transform: translateY(-8px);
-            border-color: rgba(var(--accent-rgb), 0.3);
-            background: var(--panel);
-        }
-
-        .calc-card:hover::after {
-            opacity: 1;
-        }
-
-        .icon-box {
-            width: 56px;
-            height: 56px;
-            background: rgba(var(--accent-rgb), 0.1);
-            border: 1px solid rgba(var(--accent-rgb), 0.2);
-            border-radius: 16px;
-            display: grid;
-            place-items: center;
-            color: var(--accent);
-        }
-
-        .calc-title {
-            font-family: 'Space Grotesk', sans-serif;
-            font-size: 1.5rem;
-            font-weight: 700;
-        }
-
-        .calc-desc {
-            color: var(--text-muted);
-            font-size: 0.9375rem;
-            line-height: 1.6;
-        }
-
-        .arrow {
-            margin-top: auto;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-weight: 700;
-            font-size: 0.875rem;
-            color: var(--accent);
-            opacity: 0;
-            transform: translateX(-10px);
-            transition: all 0.3s var(--ease);
-        }
-
-        .calc-card:hover .arrow {
-            opacity: 1;
-            transform: translateX(0);
-        }
+        .hub-card:hover { transform: translateY(-8px); border-color: var(--o); box-shadow: 0 20px 40px rgba(255,106,0,0.1); }
+        .icon-box { width: 48px; height: 48px; border-radius: 14px; background: rgba(255,106,0,0.1); display: grid; place-items: center; color: var(--o); }
+        h3 { font-size: 20px; font-weight: 900; letter-spacing: -0.5px; }
+        p { color: var(--muted); font-size: 14.5px; line-height: 1.6; }
+        .btn { margin-top: auto; color: var(--o); font-weight: 800; font-size: 14px; display: flex; align-items: center; gap: 6px; }
     </style>
 </head>
 <body>
-    <div class="glow"></div>
-    <nav>
-        <div style="max-width: 1200px; margin: 0 auto; display: flex; align-items: center; gap: 12px;">
-            <div style="width: 32px; height: 32px; background: var(--accent); border-radius: 8px; display: grid; place-items: center;"><i data-lucide="zap" size="18" fill="#000"></i></div>
-            <span style="font-family: 'Space Grotesk'; font-weight: 800; font-size: 1.25rem;">GRADEO</span>
-        </div>
-    </nav>
-
+    <header>
+        <a href="/" class="brand">
+            <img src="https://res.cloudinary.com/djy3mjtsz/image/upload/v1770296454/Untitled-2_i2ezfh.png" width="32" height="32" style="border-radius:8px">
+            <span>GRADEO</span>
+        </a>
+    </header>
     <main class="container">
-        <header>
-            <h1>CALCULATORS</h1>
-            <p>Select a specialized tool to manage your academic performance with precision.</p>
-        </header>
-
-        <div class="calc-grid">
-            <a href="/calculator/planner/" class="calc-card">
-                <div class="icon-box"><i data-lucide="target" size="24"></i></div>
-                <div>
-                    <h3 class="calc-title">Target Planner</h3>
-                    <p class="calc-desc">Calculate exactly what you need in final exams to hit your target CGPA.</p>
-                </div>
-                <div class="arrow">Open Planner <i data-lucide="arrow-right" size="16"></i></div>
+        <h1>Engineering <span style="color:var(--o)">Calculators</span></h1>
+        <p style="max-width: 600px;">Professional academic tools designed for the modern engineering student. High-precision logic, cloud sync, and instant PDF exports.</p>
+        
+        <div class="grid">
+            <a href="/calculator/planner/" class="hub-card">
+                <div class="icon-box"><i data-lucide="target"></i></div>
+                <h3>Target Planner</h3>
+                <p>The USP engine. Calculate exactly what marks you need in final exams to hit your target CGPA.</p>
+                <div class="btn">Open Planner <i data-lucide="arrow-right" size="16"></i></div>
             </a>
-
-            <a href="/calculator/sgpa/" class="calc-card">
-                <div class="icon-box"><i data-lucide="calculator" size="24"></i></div>
-                <div>
-                    <h3 class="calc-title">SGPA Calculator</h3>
-                    <p class="calc-desc">Convert your marks and credits into semester grade points instantly.</p>
-                </div>
-                <div class="arrow">Open Calculator <i data-lucide="arrow-right" size="16"></i></div>
+            <a href="/calculator/sgpa/" class="hub-card">
+                <div class="icon-box"><i data-lucide="calculator"></i></div>
+                <h3>SGPA Calculator</h3>
+                <p>Fast, credit-weighted SGPA calculation with automated grade point mapping for all major universities.</p>
+                <div class="btn">Calculate SGPA <i data-lucide="arrow-right" size="16"></i></div>
             </a>
-
-            <a href="/calculator/cgpa/" class="calc-card">
-                <div class="icon-box"><i data-lucide="trending-up" size="24"></i></div>
-                <div>
-                    <h3 class="calc-title">CGPA History</h3>
-                    <p class="calc-desc">Track your performance across all semesters and see your cumulative growth.</p>
-                </div>
-                <div class="arrow">View History <i data-lucide="arrow-right" size="16"></i></div>
+            <a href="/calculator/cgpa/" class="hub-card">
+                <div class="icon-box"><i data-lucide="history"></i></div>
+                <h3>CGPA Tracker</h3>
+                <p>Maintain your complete semester history. Track your cumulative progress and export professional grade cards.</p>
+                <div class="btn">Track CGPA <i data-lucide="arrow-right" size="16"></i></div>
             </a>
         </div>
     </main>
-
-    <script>lucide.createIcons();</script>
+    <script>
+        lucide.createIcons();
+        if(localStorage.getItem('gradeo_theme')==='dark') document.documentElement.setAttribute('data-theme','dark');
+    </script>
 </body>
 </html>
