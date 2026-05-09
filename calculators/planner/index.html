@@ -28,10 +28,13 @@
     <style>
         .student-details { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.5rem; }
         .subject-card {
-            background: var(--bg); border: 1.5px solid var(--cb); border-radius: 18px;
+            background: var(--surface); border: 1.5px solid var(--id); border-radius: 18px;
             padding: 1.25rem; margin-bottom: 12px; display: grid;
             grid-template-columns: 1fr 100px 100px 120px auto auto; gap: 1rem; align-items: center;
+            box-shadow: 0 4px 12px var(--border);
+            transition: all 0.2s ease;
         }
+        .subject-card:hover { border-color: var(--o); transform: translateY(-2px); }
         @media (max-width: 640px) {
             .subject-card { grid-template-columns: 1fr 1fr; }
             .name-col { grid-column: span 2; }

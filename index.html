@@ -28,14 +28,13 @@
 <meta http-equiv="X-Content-Type-Options" content="nosniff"/>
 
 <!-- ═══ CORE SEO ═══ -->
-<title>GRADEO — Free SGPA &amp; CGPA Planner for Engineering Students</title>
-<meta name="description" content="GRADEO is a free SGPA calculator, CGPA converter and grade planner for engineering students. Calculate minimum marks, plan your CGPA target and export your grade card — completely free, no sign-in required."/>
-<meta name="keywords" content="SGPA calculator,CGPA calculator,grade planner,engineering marks calculator,VTU SGPA,KTU CGPA,minimum marks calculator,CGPA planner,SGPA to CGPA,grade point calculator,free SGPA tool"/>
+<title>GRADEO — Best SGPA &amp; CGPA Calculator for Engineering Students (VTU, KTU, AICTE)</title>
+<meta name="description" content="GRADEO is India's leading SGPA calculator and CGPA tracker for engineering students. Plan your target CGPA, calculate minimum marks needed in exams, and export professional grade cards. Optimized for VTU, KTU, and AICTE standards."/>
+<meta name="keywords" content="SGPA calculator India, CGPA tracker, engineering grade planner, VTU SGPA calculator, KTU CGPA converter, minimum marks calculator, AICTE grade tool, engineering academic planner"/>
+<meta name="geo.region" content="IN" />
+<meta name="geo.placename" content="India" />
 <meta name="robots" content="index,follow,max-snippet:-1,max-image-preview:large,max-video-preview:-1"/>
 <meta name="author" content="GRADEO"/>
-<meta name="generator" content="GRADEO v10"/>
-<meta name="rating" content="general"/>
-<meta name="revisit-after" content="7 days"/>
 <link rel="canonical" href="https://gradeo.in/"/>
 
 <!-- ═══ PWA / APP META ═══ -->
@@ -1600,16 +1599,15 @@ h2 {
 /* ── FEATURE CARDS ── */
 .feat {
   border-radius: 20px !important;
-  border: 1px solid rgba(255,92,0,.09) !important;
+  border: 1.5px solid var(--id) !important;
   transition: transform .28s cubic-bezier(.34,1.56,.64,1), box-shadow .18s, border-color .18s !important;
+  box-shadow: 0 4px 12px var(--border) !important;
 }
 [data-theme="dark"] .feat {
-  background: linear-gradient(140deg, rgba(22,16,8,.9) 0%, rgba(16,10,4,.9) 100%) !important;
-  box-shadow: 0 2px 12px rgba(0,0,0,.25), inset 0 1px 0 rgba(255,120,0,.05) !important;
+  background: linear-gradient(140deg, #141414 0%, #0A0A0A 100%) !important;
 }
 [data-theme="light"] .feat {
   background: #fff !important;
-  box-shadow: 0 2px 10px rgba(255,60,0,.05) !important;
 }
 @media(hover:hover) and (pointer:fine) {
   .feat:hover { transform: translateY(-5px) scale(1.012) !important; border-color: rgba(255,92,0,.22) !important; box-shadow: 0 14px 36px rgba(255,60,0,.12) !important; }
@@ -1619,9 +1617,9 @@ h2 {
 /* ── FAQ redesign ── */
 .fi2 {
   border-radius: 18px !important;
-  border: 1px solid rgba(255,92,0,.10) !important;
+  border: 1.5px solid var(--cb) !important;
 }
-[data-theme="dark"] .fi2 { background: rgba(20,14,8,.8) !important; }
+[data-theme="dark"] .fi2 { background: #141414 !important; }
 [data-theme="light"] .fi2 { background: #fff !important; }
 .fq { font-family: var(--font-display) !important; font-weight: 600 !important; }
 .fi2.open { border-color: rgba(255,92,0,.28) !important; box-shadow: 0 8px 28px rgba(255,60,0,.10) !important; }
@@ -1629,25 +1627,23 @@ h2 {
 /* ── FOOTER redesign ── */
 .fc {
   border-radius: 24px !important;
-  border: 1px solid rgba(255,92,0,.12) !important;
+  border: 1.5px solid var(--id) !important;
 }
-[data-theme="dark"] .fc { background: rgba(14,10,4,.9) !important; }
+[data-theme="dark"] .fc { background: #141414 !important; }
 [data-theme="light"] .fc { background: rgba(255,250,244,.97) !important; }
 .fb-n { font-family: var(--font-display) !important; font-weight: 800 !important; font-size: 16px !important; }
 
 /* ── MOBILE tiles (mTile) redesign ── */
 .mTile {
   border-radius: 20px !important;
-  border: 1px solid rgba(255,92,0,.12) !important;
+  border: 1.5px solid var(--id) !important;
   position: relative; overflow: hidden;
 }
 [data-theme="dark"] .mTile {
-  background: linear-gradient(135deg, rgba(26,18,8,.95) 0%, rgba(18,12,4,.95) 100%) !important;
-  box-shadow: 0 4px 20px rgba(0,0,0,.3), inset 0 1px 0 rgba(255,120,0,.07) !important;
+  background: linear-gradient(135deg, #141414 0%, #0A0A0A 100%) !important;
 }
 [data-theme="light"] .mTile {
   background: #fff !important;
-  box-shadow: 0 2px 14px rgba(255,60,0,.07) !important;
 }
 .mTileName { font-family: var(--font-display) !important; font-weight: 700 !important; }
 
@@ -2552,7 +2548,7 @@ $('#gsb')?.addEventListener('click',()=>{ if(window.__a?.currentUser){ goM(); re
 $('#mGsb')?.addEventListener('click',()=>{ if(window.__a?.currentUser){ goM(); return;} doSI(()=>{ ps=true; }); });
 $('#olb')?.addEventListener('click',()=>om2(localStorage.getItem('gradeo_last_mode') ?? 'm2'));
 $('#mOlb')?.addEventListener('click',()=>om2(localStorage.getItem('gradeo_last_mode') ?? 'm2'));
-$('#brd')?.addEventListener('click',e=>{ if(e.ctrlKey || e.metaKey){ window.open(SITE+'/calculator/','_blank'); return;} if(location.hostname===new URL(SITE).hostname) window.scrollTo({top:0,behavior:'smooth'}); else navTo(SITE+'/'); });
+$('#brd')?.addEventListener('click',e=>{ if(e.ctrlKey || e.metaKey){ window.open('calculators/index.html','_blank'); return;} if(location.hostname===new URL(SITE).hostname) window.scrollTo({top:0,behavior:'smooth'}); else navTo('calculators/index.html'); });
 
 /* HOW IT WORKS animation */
 (()=>{ if(!isMob()) return; const steps=[ 'Enter your internal marks and credits for each subject — takes about 30 seconds.', 'Set your target CGPA and your current CGPA so GRADEO knows the gap.', 'Instantly see the minimum marks you need in each final exam. Zero guesswork.' ]; const cgpaFrom=['7.4','7.8','8.1']; const cgpaTo=['7.8','8.1','8.5']; const barW=[[.72,.58,.85],[.60,.74,.68],[.82,.65,.91]]; const pcts=[['72%','58%','85%'],['60%','74%','68%'],['82%','65%','91%']]; let curStep=0, running=true; setTimeout(()=>{ $$('.mHowBarFill').forEach((b,i)=>{ b.style.transition='transform .9s cubic-bezier(.22,.68,0,1.1) '+(i*120)+'ms'; b.style.transform='scaleX('+barW[0][i]+')'; }); },900); function animateCGPA(from,to,el){ const s=performance.now(), fN=parseFloat(from), tN=parseFloat(to), dur=900; (function f(now){ const p=Math.min((now-s)/dur,1), e=1-Math.pow(1-p,3); el.textContent=(fN+(tN-fN)*e).toFixed(1); if(p<1) requestAnimationFrame(f); else el.textContent=to; })(performance.now()); }

@@ -16,12 +16,13 @@
     <script src="https://unpkg.com/lucide@latest"></script>
     <style>
         .subject-card {
-            background: var(--bg); border: 1.5px solid var(--cb); border-radius: 16px;
+            background: var(--surface); border: 1.5px solid var(--id); border-radius: 16px;
             padding: 1rem; display: grid; grid-template-columns: 1fr auto auto auto auto;
             gap: 1rem; align-items: center; margin-bottom: 12px;
             transition: transform .2s var(--sp);
+            box-shadow: 0 4px 12px var(--border);
         }
-        .subject-card:hover { transform: translateY(-2px); }
+        .subject-card:hover { transform: translateY(-2px); border-color: var(--o); }
         .student-details { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.5rem; }
         .student-details input { width: 100%; }
         .res-card {

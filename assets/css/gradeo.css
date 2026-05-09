@@ -6,19 +6,23 @@
 :root {
     --o: #FF6A00; --od: #E05500;
     --bg: #FFF6ED; --surface: #fff;
+    --cardBg: #ffffff;
     --text: #0D0C0B; --muted: #6B6560; --muted2: #A8A29E;
     --cb: rgba(255,106,0,.11);
     --ib: rgba(255,130,30,.11); --id: rgba(255,106,0,.18);
+    --border: rgba(0,0,0,0.06);
     --r: 20px; --r2: 16px;
     --sp: cubic-bezier(.34, 1.56, .64, 1);
     --sm: cubic-bezier(0.23, 1, 0.32, 1);
 }
 
 [data-theme="dark"] {
-    --bg: #080604; --surface: #161210;
-    --text: #F5E8D8; --muted: #8A7E74; --muted2: #5A5450;
-    --cb: rgba(255,106,0,.22);
-    --ib: rgba(255,106,0,.14); --id: rgba(255,106,0,.28);
+    --bg: #0A0A0A; --surface: #141414;
+    --cardBg: #1A1A1A;
+    --text: #FFFFFF; --muted: #B0B0B0; --muted2: #666666;
+    --cb: rgba(255,106,0,.3);
+    --ib: rgba(255,106,0,.18); --id: rgba(255,106,0,.4);
+    --border: rgba(255,255,255,0.1);
 }
 
 * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
