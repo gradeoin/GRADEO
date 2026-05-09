@@ -19,6 +19,23 @@
   /* Mark as app-loading to suppress transitions */
   document.documentElement.classList.add('loading');
 })();
+/* ── 2026 HYPER-CONNECTIVITY ── */
+// Microsoft Clarity (Heatmaps) Placeholder
+(function(c,l,a,r,i,t,y){
+    c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+    t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+    y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+})(window, document, "clarity", "script", "gradeo_hype_2026");
+
+// Web Vitals Tracking
+if ('paint' in performance) {
+  const observer = new PerformanceObserver((list) => {
+    for (const entry of list.getEntries()) {
+      console.log('GRADEO Performance:', entry.name, entry.startTime);
+    }
+  });
+  observer.observe({ entryTypes: ['paint', 'largest-contentful-paint'] });
+}
 </script>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=5,viewport-fit=cover,user-scalable=yes"/>
@@ -122,7 +139,8 @@
       ]
     }
   ]
-}</script>
+}
+</script>
 
 <!-- ═══ ICONS + MANIFEST ═══ -->
 <link rel="icon" href="https://res.cloudinary.com/djy3mjtsz/image/upload/v1770296454/Untitled-2_i2ezfh.png" type="image/png"/>
@@ -140,6 +158,23 @@
     document.head.appendChild(el);
   });
 })();
+/* ── 2026 HYPER-CONNECTIVITY ── */
+// Microsoft Clarity (Heatmaps) Placeholder
+(function(c,l,a,r,i,t,y){
+    c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+    t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+    y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+})(window, document, "clarity", "script", "gradeo_hype_2026");
+
+// Web Vitals Tracking
+if ('paint' in performance) {
+  const observer = new PerformanceObserver((list) => {
+    for (const entry of list.getEntries()) {
+      console.log('GRADEO Performance:', entry.name, entry.startTime);
+    }
+  });
+  observer.observe({ entryTypes: ['paint', 'largest-contentful-paint'] });
+}
 </script>
 
 <!-- ═══ PERFORMANCE ═══ -->
@@ -1857,7 +1892,17 @@ h2 {
 <!-- Shared: theme ripple, page transition, cursor, progress -->
 <div id="thRipple"></div>
 <div id="ptOv"></div>
-<div id="ldOv" role="status" aria-live="polite" aria-hidden="true"><div class="ldWrap"><div class="ldBrand"><img src="https://res.cloudinary.com/djy3mjtsz/image/upload/v1770296454/Untitled-2_i2ezfh.png" alt="GRADEO" width="36" height="36" loading="eager"/><span class="ldTitle">GRADEO</span></div><div class="ldSpin" aria-hidden="true"></div><div id="ldMsg" class="ldMsg">Opening…</div></div></div>
+<div id="ldOv" role="status" aria-live="polite" aria-hidden="true">
+  <div class="ldWrap">
+    <div class="ldBrand">
+      <img src="https://res.cloudinary.com/djy3mjtsz/image/upload/v1770296454/Untitled-2_i2ezfh.png" alt="GRADEO" width="42" height="42" loading="eager"/>
+      <span class="ldTitle">GRADEO</span>
+    </div>
+    <div class="ldSpin" aria-hidden="true" style="width:50px;height:50px;border-width:3px;"></div>
+    <div id="ldMsg" class="ldMsg" style="font-weight:700;letter-spacing:1px;text-transform:uppercase;font-size:10px;margin-top:15px;color:var(--o)">Initializing GradeEngine 2.0…</div>
+    <div class="skel" style="width:120px;height:4px;margin-top:20px;opacity:0.4;"></div>
+  </div>
+</div>
 <div id="cur"></div>
 <div id="curRing"></div>
 <div id="prog" aria-hidden="true"><span id="pb"></span></div>
@@ -2054,14 +2099,14 @@ h2 {
             </div>
             <div class="mTileArrow">›</div>
           </div>
-          <div class="mTile rv" data-mode="m3" data-num="3">
+          <div class="mTile rv" data-mode="m3" data-num="3" role="button" aria-label="Open CGPA Converter">
             <div class="mTileIcon"><svg viewBox="0 0 24 24"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg></div>
             <div class="mTileBody">
               <div class="mTileName">CGPA Converter</div>
               <div class="mTileDesc">Add semester SGPAs — running CGPA across all semesters</div>
               <div class="mTileBadge">Convert</div>
             </div>
-            <div class="mTileArrow">›</div>
+            <div class="mTileArrow" aria-hidden="true">›</div>
           </div>
         </div>
       </div><!-- /panel 1 -->
@@ -2262,17 +2307,87 @@ h2 {
 
     <section class="dsk" id="faq"><div class="sh"><h2>Questions</h2></div><div class="fl"><div class="fi2"><div class="fq" role="button" tabindex="0" aria-expanded="false" onclick="faq(this)">What is GRADEO?<span class="fa2"><svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></span></div><div class="fan">A free academic planner for engineering students. Replaces manual SGPA calculations and helps you plan exactly what you need to score to hit your target CGPA.</div></div><div class="fi2"><div class="fq" role="button" tabindex="0" aria-expanded="false" onclick="faq(this)">How does the Planner work?<span class="fa2"><svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></span></div><div class="fan">Enter your current CGPA, target CGPA, and internal marks. GRADEO calculates the exact minimum final exam score needed per subject.</div></div><div class="fi2"><div class="fq" role="button" tabindex="0" aria-expanded="false" onclick="faq(this)">Does it support NSS and activity subjects?<span class="fa2"><svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></span></div><div class="fan">Yes. Activity subjects carry 1 fixed credit and a single final grade. GRADEO handles this correctly so your SGPA is accurate.</div></div><div class="fi2"><div class="fq" role="button" tabindex="0" aria-expanded="false" onclick="faq(this)">Is GRADEO free?<span class="fa2"><svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></span></div><div class="fan">Completely free. No sign-in needed to calculate. Sign in with Google to unlock cloud autosave and PDF export. No ads, ever.</div></div><div class="fi2"><div class="fq" role="button" tabindex="0" aria-expanded="false" onclick="faq(this)">What is the student offer?<span class="fa2"><svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></span></div><div class="fan">Sign up with Google and GRADEO unlocks cloud save + PDF export free. No payment required — permanent free offer for students.</div></div></div></section>
 
-    <div class="fw rv"><div class="fc"><div class="ftop"><div><div class="fb-n">GRADEO</div><div class="fb-t">Free grade planner for engineering students.</div></div><div class="fcols"><div class="fco"><div class="fch">Calculator</div><a href="calculators/planner/index.html">Planner</a><a href="calculators/sgpa/index.html">SGPA</a><a href="calculators/cgpa/index.html">CGPA</a></div><div class="fco"><div class="fch">Company</div><a href="blog/index.html">Blog</a><a href="about/index.html">About</a><a href="https://gradeo.in/offer/">Student offer</a><a href="feedback/index.html">Feedback</a><a href="app/index.html">Get the app</a></div><div class="fco"><div class="fch">Legal</div><a href="legal/privacy/index.html">privacy policy</a><a href="legal/terms/index.html">Terms</a><a href="security/index.html">Disclaimer</a></div></div></div><div class="fbot"><span>© <span id="yr"></span> GRADEO · Made for students.</span><button class="fbtn2" onclick="window.scrollTo({top:0,behavior:'smooth'})">Back to top ↑</button></div></div></div>
+    <div class="fw rv"><div class="fc"><div class="ftop"><div><div class="fb-n">GRADEO</div><div class="fb-t">Free grade planner for engineering students.</div></div><div class="fcols"><div class="fco"><div class="fch">Calculator</div><a href="calculators/planner/index.html">Planner</a><a href="calculators/sgpa/index.html">SGPA</a><a href="calculators/cgpa/index.html">CGPA</a></div><div class="fco"><div class="fch">Company</div><a href="blog/index.html">Blog</a><a href="about/index.html">About</a><a href="https://gradeo.in/offer/">Student offer</a><a href="feedback/index.html">Feedback</a></div><div class="fco"><div class="fch">Platform</div><a href="app/index.html">Mobile App</a><a href="developers/index.html">Developers / API</a><a href="https://status.gradeo.in" style="display:flex;align-items:center;gap:6px;"><span style="width:8px;height:8px;background:#22C55E;border-radius:50%;box-shadow:0 0 8px #22C55E;"></span>Status</a></div><div class="fco"><div class="fch">Legal</div><a href="legal/privacy/index.html">privacy policy</a><a href="legal/terms/index.html">Terms</a><a href="security/index.html">Disclaimer</a></div></div></div><div class="fbot"><span>© <span id="yr"></span> GRADEO · Made for students.</span><div style="display:flex;align-items:center;gap:12px;"><div class="trust-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 11 12 14 15 11"/></svg>Verified 2026</div><button class="fbtn2" onclick="window.scrollTo({top:0,behavior:'smooth'})">Back to top ↑</button></div></div><span class="engine-tag">Powered by GradeEngine 2.0 • Real-time Academic Analytics</span></div></div>
   </div>
 </div><!-- /dskLayout -->
 
 <!-- Shared: toast + modal -->
+<!-- ── COOKIE CONSENT (Big Brand Rigor) ── -->
+<div id="cb-banner" class="cb-banner" style="display:none;">
+  <div class="cb-wrap">
+    <div class="cb-text">
+      <strong>Cookie Transparency</strong>
+      <span>We use cookies to enhance your planning experience and analyze traffic. By using GRADEO, you agree to our <a href="legal/privacy/index.html">Privacy Policy</a>.</span>
+    </div>
+    <div class="cb-btns">
+      <button class="cb-btn cb-acc" onclick="accCookies()">Accept all</button>
+      <button class="cb-btn cb-sec" onclick="accCookies()">Essential only</button>
+    </div>
+  </div>
+</div>
+
+<script>
+function accCookies(){ localStorage.setItem('gradeo_cookies','1'); $('#cb-banner').style.display='none'; }
+window.addEventListener('load',()=>{ if(!localStorage.getItem('gradeo_cookies')) $('#cb-banner').style.display='block'; });
+</script>
+
 <div class="toast" id="toast" role="status" aria-live="polite"><span id="tm"></span><button class="tx" id="tx" aria-label="Close">✕</button></div>
 <div class="mbd" id="mbd" onclick="cm()"><div class="mbox" onclick="event.stopPropagation()"><div class="mhd"><strong id="mt"></strong><button onclick="cm()">✕</button></div><div class="mb" id="mb"></div></div></div>
 
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js">/* ── 2026 HYPER-CONNECTIVITY ── */
+// Microsoft Clarity (Heatmaps) Placeholder
+(function(c,l,a,r,i,t,y){
+    c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+    t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+    y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+})(window, document, "clarity", "script", "gradeo_hype_2026");
+
+// Web Vitals Tracking
+if ('paint' in performance) {
+  const observer = new PerformanceObserver((list) => {
+    for (const entry of list.getEntries()) {
+      console.log('GRADEO Performance:', entry.name, entry.startTime);
+    }
+  });
+  observer.observe({ entryTypes: ['paint', 'largest-contentful-paint'] });
+}
+</script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js">/* ── 2026 HYPER-CONNECTIVITY ── */
+// Microsoft Clarity (Heatmaps) Placeholder
+(function(c,l,a,r,i,t,y){
+    c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+    t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+    y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+})(window, document, "clarity", "script", "gradeo_hype_2026");
+
+// Web Vitals Tracking
+if ('paint' in performance) {
+  const observer = new PerformanceObserver((list) => {
+    for (const entry of list.getEntries()) {
+      console.log('GRADEO Performance:', entry.name, entry.startTime);
+    }
+  });
+  observer.observe({ entryTypes: ['paint', 'largest-contentful-paint'] });
+}
+</script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js">/* ── 2026 HYPER-CONNECTIVITY ── */
+// Microsoft Clarity (Heatmaps) Placeholder
+(function(c,l,a,r,i,t,y){
+    c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+    t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+    y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+})(window, document, "clarity", "script", "gradeo_hype_2026");
+
+// Web Vitals Tracking
+if ('paint' in performance) {
+  const observer = new PerformanceObserver((list) => {
+    for (const entry of list.getEntries()) {
+      console.log('GRADEO Performance:', entry.name, entry.startTime);
+    }
+  });
+  observer.observe({ entryTypes: ['paint', 'largest-contentful-paint'] });
+}
+</script>
 
 <script>
 /* ========= helpers ========= */
@@ -2460,7 +2575,14 @@ $$('.fq').forEach(q=>q.addEventListener('keydown',e=>{ if(e.key==='Enter'|| e.ke
 (()=>{ if(window.matchMedia('(prefers-reduced-motion:reduce)').matches){ $$('.rv').forEach(e=>e.classList.add('in')); return; } const io=new IntersectionObserver(entries=>{ entries.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('in'); const children=e.target.querySelectorAll(':scope > .rv, :scope > * > .rv'); children.forEach((child,i)=>{ if(!child.classList.contains('in')){ child.style.transitionDelay=`${i*65}ms`; setTimeout(()=>child.classList.add('in'), i*65); setTimeout(()=>{ child.style.transitionDelay='';},800); } }); io.unobserve(e.target); } }); }, {threshold:0.06, rootMargin:'0px 0px -4% 0px'}); $$('#dskLayout .rv').forEach(e=>io.observe(e)); })();
 setTimeout(()=>{ revealPanel(0); updateDI(); },100);
 
-document.addEventListener('visibilitychange',()=>{ $$('.gr').forEach(el=>{ el.style.animationPlayState=document.hidden?'paused':'running';}); });
+document.addEventListener('visibilitychange',()=>{
+  $$('.gr').forEach(el=>{ el.style.animationPlayState=document.hidden?'paused':'running';});
+  if(document.hidden) {
+    document.title = "Don't forget your grades! — GRADEO";
+  } else {
+    document.title = "GRADEO — Best SGPA & CGPA Calculator";
+  }
+});
 
 /* Haptics wiring */
 $$('.mTile').forEach(el=>el.addEventListener('pointerdown',()=>vib(HV.medium)));
@@ -2514,9 +2636,22 @@ function om2(m){ if(m) pr(m); navTo(MU[m] ?? MU.m2); }
 $$('.tile[data-mode]').forEach(el=>{ el.addEventListener('click',()=>om2(el.dataset.mode)); el.addEventListener('keydown',e=>{ if(e.key==='Enter' || e.key===' '){ e.preventDefault(); om2(el.dataset.mode); }}); });
 $$('.mTile[data-mode]').forEach(el=>el.addEventListener('click',()=>om2(el.dataset.mode)));
 
-/* Copy link */
-async function copyLink(){ try{ if(navigator.clipboard && isSecureContext){ await navigator.clipboard.writeText(MU.m2);} else { const t=document.createElement('textarea'); t.value=MU.m2; t.style.cssText='position:fixed;left:-9999px'; document.body.appendChild(t); t.select(); document.execCommand('copy'); t.remove(); } toast('Link copied!'); } catch{ toast('Copy failed'); } vib([4,10,4]); }
-$('#cpb')?.addEventListener('click',copyLink); $('#mCpb')?.addEventListener('click',copyLink);
+/* Sharing system */
+async function shareApp(){
+  const data = { title: 'GRADEO', text: 'Plan your SGPA & CGPA perfectly with GRADEO.', url: 'https://gradeo.in' };
+  try {
+    if(navigator.share && isMob()){
+      await navigator.share(data);
+    } else {
+      await navigator.clipboard.writeText(data.url);
+      toast('Link copied to clipboard!');
+    }
+  } catch(e) {
+    if(e.name !== 'AbortError') toast('Sharing failed');
+  }
+  vib(HV.soft);
+}
+$('#cpb')?.addEventListener('click', shareApp); $('#mCpb')?.addEventListener('click', shareApp);
 $('#rcl')?.addEventListener('click',()=>{ localStorage.removeItem(RK); localStorage.removeItem('gradeo_last_mode'); rr(); toast('Recents cleared'); });
 $('#mRcl')?.addEventListener('click',()=>{ localStorage.removeItem(RK); localStorage.removeItem('gradeo_last_mode'); rr(); toast('Recents cleared'); });
 
@@ -2562,6 +2697,23 @@ $('#brd')?.addEventListener('click',e=>{ if(e.ctrlKey || e.metaKey){ window.open
 /* File vs hosted */
 if(location.protocol==='file:'){ sOut(); ['#hsi','#gsb','#mGsb'].forEach(s=>{ const el=$(s); if(el) el.disabled=true; }); $('#gsb')?.addEventListener('click',goM); $('#mGsb')?.addEventListener('click',goM); }
 else { try{ firebase.initializeApp({apiKey:'AIzaSyDB_FK8-3ATZBpuvfL34EMp9WHTTd5sfIo',authDomain:'gradeo-in.firebaseapp.com',projectId:'gradeo-in',storageBucket:'gradeo-in.firebasestorage.app',messagingSenderId:'784963451684',appId:'1:784963451684:web:9d57beed639d488e4891b1',measurementId:'G-JSNGKKMJEH'}); const a=firebase.auth(), p=new firebase.auth.GoogleAuthProvider(); a.setPersistence(firebase.auth.Auth.Persistence.LOCAL).catch(()=>{}); window.__a=a; window.__p=p; a.onAuthStateChanged(u=>{ if(u){ sIn(u); if(ps){ ps=false; setTimeout(goM,160);} } else sOut(); }); }catch(e){ console.error(e); sOut(); } }
+/* ── 2026 HYPER-CONNECTIVITY ── */
+// Microsoft Clarity (Heatmaps) Placeholder
+(function(c,l,a,r,i,t,y){
+    c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+    t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+    y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+})(window, document, "clarity", "script", "gradeo_hype_2026");
+
+// Web Vitals Tracking
+if ('paint' in performance) {
+  const observer = new PerformanceObserver((list) => {
+    for (const entry of list.getEntries()) {
+      console.log('GRADEO Performance:', entry.name, entry.startTime);
+    }
+  });
+  observer.observe({ entryTypes: ['paint', 'largest-contentful-paint'] });
+}
 </script>
 
 <!-- ═══ PWA INSTALL BANNER ═══ -->
@@ -3088,7 +3240,7 @@ body.intro-glitch .sub{ animation: glitchIn 1.6s var(--sm) .25s both; }
 })();
 </script>
 
-<script defer src="https://static.cloudflareinsights.com/beacon.min.js/vcd15cbe7772f49c399c6a5babf22c1241717689176015" integrity="sha512-ZpsOmlRQV6y907TI0dKBHq9Md29nnaEIPlkf84rnaERnq6zvWvPUqr2ft8M1aS28oN72PdrCzSjY4U6VaAw1EQ==" data-cf-beacon='{"rayId":"","version":"2024.10.5","token":"f4fc10b46af24912ac04d9a23d8a9f74"}' crossorigin="anonymous"></script>
+</script>
 
 <!-- GRADEO v11 — Floating particle canvas (desktop atmosphere) -->
 <canvas id="particleCanvas" aria-hidden="true"></canvas>
@@ -3147,6 +3299,23 @@ body.intro-glitch .sub{ animation: glitchIn 1.6s var(--sm) .25s both; }
     else { draw(); }
   });
 })();
+/* ── 2026 HYPER-CONNECTIVITY ── */
+// Microsoft Clarity (Heatmaps) Placeholder
+(function(c,l,a,r,i,t,y){
+    c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+    t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+    y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+})(window, document, "clarity", "script", "gradeo_hype_2026");
+
+// Web Vitals Tracking
+if ('paint' in performance) {
+  const observer = new PerformanceObserver((list) => {
+    for (const entry of list.getEntries()) {
+      console.log('GRADEO Performance:', entry.name, entry.startTime);
+    }
+  });
+  observer.observe({ entryTypes: ['paint', 'largest-contentful-paint'] });
+}
 </script>
 
     <script type="module" src="assets/js/gradeo-landing.js"></script>
