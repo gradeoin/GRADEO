@@ -1,33 +1,1895 @@
-<!doctype html>
-<html lang="en-IN" data-theme="dark" class="loading">
-<head>
-  <meta charset="utf-8"/>
-  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=5,viewport-fit=cover"/>
-  <title>GRADEO — Best SGPA & CGPA Calculator</title>
-  
-  <!-- SEO & Brand Metadata -->
-  <meta name="description" content="Plan your SGPA & CGPA with GRADEO. Calculate minimum marks required for engineering subjects. Optimized for VTU, KTU, and AICTE."/>
-  <meta name="keywords" content="SGPA Calculator, CGPA Planner, VTU, KTU, AICTE, Gradeo, Grade Engine"/>
-  <meta name="theme-color" content="#FF6A00" id="tcMeta"/>
-  
-  <!-- Favicons -->
-  <link rel="icon" href="https://res.cloudinary.com/djy3mjtsz/image/upload/v1770296454/Untitled-2_i2ezfh.png" type="image/png"/>
-  <link rel="apple-touch-icon" href="https://res.cloudinary.com/djy3mjtsz/image/upload/v1770296454/Untitled-2_i2ezfh.png"/>
-  
-  <!-- ══ PERFORMANCE ══ -->
-  <link rel="preconnect" href="https://www.gstatic.com" crossorigin/>
-  <link rel="preconnect" href="https://res.cloudinary.com" crossorigin/>
-  
-  <!-- Design System & Modular Styles -->
-  <link rel="stylesheet" href="assets/css/gradeo.css">
-  <link rel="stylesheet" href="assets/css/landing.css">
-  <link rel="stylesheet" href="assets/css/app-layout.css">
-  
-  <script src="https://unpkg.com/lucide@latest"></script>
-</head>
-<body class="dark-ready">
 
-<!-- ══ UI OVERLAYS ══ -->
+
+
+
+
+
+
+<!doctype html>
+<html lang="en">
+<head>
+<link rel="image_src" href="https://res.cloudinary.com/djy3mjtsz/image/upload/v1770296454/Untitled-2_i2ezfh.png" />
+
+<script>
+(function(){
+  var t=localStorage.getItem('gradeo_theme');
+  if(!t) t=window.matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light';
+  document.documentElement.setAttribute('data-theme',t);
+  document.documentElement.style.colorScheme=t;
+  /* Mark as app-loading to suppress transitions */
+  document.documentElement.classList.add('loading');
+})();
+/* ── 2026 HYPER-CONNECTIVITY ── */
+// Microsoft Clarity (Heatmaps) Placeholder
+(function(c,l,a,r,i,t,y){
+    c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+    t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+    y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+})(window, document, "clarity", "script", "gradeo_hype_2026");
+
+// Web Vitals Tracking
+if ('paint' in performance) {
+  const observer = new PerformanceObserver((list) => {
+    for (const entry of list.getEntries()) {
+      console.log('GRADEO Performance:', entry.name, entry.startTime);
+    }
+  });
+  observer.observe({ entryTypes: ['paint', 'largest-contentful-paint'] });
+}
+</script>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=5,viewport-fit=cover,user-scalable=yes"/>
+<!-- ═══ SECURITY ═══ -->
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://www.gstatic.com https://accounts.google.com https://unpkg.com https://www.google-analytics.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' data: https://res.cloudinary.com https://api.qrserver.com https://api.dicebear.com https://lh3.googleusercontent.com; font-src 'self' https://fonts.gstatic.com; connect-src 'self' https://*.firebaseio.com https://*.googleapis.com https://www.google-analytics.com;">
+<meta name="referrer" content="strict-origin-when-cross-origin"/>
+<meta http-equiv="X-Content-Type-Options" content="nosniff"/>
+
+<!-- ═══ CORE SEO ═══ -->
+<title>GRADEO — Best SGPA &amp; CGPA Calculator for Engineering Students (VTU, KTU, AICTE)</title>
+<meta name="description" content="GRADEO is India's leading SGPA calculator and CGPA tracker for engineering students. Plan your target CGPA, calculate minimum marks needed in exams, and export professional grade cards. Optimized for VTU, KTU, and AICTE standards."/>
+<meta name="keywords" content="SGPA calculator India, CGPA tracker, engineering grade planner, VTU SGPA calculator, KTU CGPA converter, minimum marks calculator, AICTE grade tool, engineering academic planner"/>
+<meta name="geo.region" content="IN" />
+<meta name="geo.placename" content="India" />
+<meta name="robots" content="index,follow,max-snippet:-1,max-image-preview:large,max-video-preview:-1"/>
+<meta name="author" content="GRADEO"/>
+<link rel="canonical" href="https://gradeo.in/"/>
+
+<!-- ═══ PWA / APP META ═══ -->
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+<meta name="apple-mobile-web-app-title" content="Gradeo"/>
+<meta name="mobile-web-app-capable" content="yes"/>
+<meta name="application-name" content="Gradeo"/>
+<meta name="msapplication-TileColor" content="#FF6A00"/>
+<meta name="msapplication-config" content="/browserconfig.xml"/>
+<meta name="msapplication-TileImage" content="https://res.cloudinary.com/djy3mjtsz/image/upload/v1770296454/Untitled-2_i2ezfh.png"/>
+
+<!-- iOS splash screens for instant app feel -->
+<meta name="apple-touch-startup-image" content="https://res.cloudinary.com/djy3mjtsz/image/upload/v1770296454/Untitled-2_i2ezfh.png"/>
+
+<!-- Prevent iOS from making phone number links -->
+<meta name="format-detection" content="telephone=no"/>
+
+<!-- Android Chrome: show app in recents with proper theme -->
+<meta name="theme-color" content="#FF6A00" media="(prefers-color-scheme: light)"/>
+<meta name="theme-color" content="#080604" media="(prefers-color-scheme: dark)"/>
+
+<!-- ═══ SECURITY / FORMAT ═══ -->
+<meta name="format-detection" content="telephone=no,date=no,email=no,address=no"/>
+<meta name="referrer" content="strict-origin-when-cross-origin"/>
+<meta name="color-scheme" content="light dark"/>
+<meta http-equiv="X-Content-Type-Options" content="nosniff"/>
+
+<!-- ═══ OPEN GRAPH ═══ -->
+<meta property="og:type" content="website"/>
+<meta property="og:url" content="https://gradeo.in/"/>
+<meta property="og:title" content="GRADEO — Free SGPA &amp; CGPA Planner"/>
+<meta property="og:description" content="Calculate SGPA, convert to CGPA and find minimum marks needed. Free forever — no sign-in required to calculate."/>
+<meta property="og:image" content="https://res.cloudinary.com/djy3mjtsz/image/upload/v1770296454/Untitled-2_i2ezfh.png"/>
+<meta property="og:image:width" content="1200"/>
+<meta property="og:image:height" content="630"/>
+<meta property="og:image:alt" content="GRADEO — Free SGPA and CGPA Planner"/>
+<meta property="og:locale" content="en_IN"/>
+<meta property="og:locale:alternate" content="en_US"/>
+<meta property="og:site_name" content="GRADEO"/>
+
+<!-- ═══ TWITTER CARD ═══ -->
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:site" content="@gradeo_in"/>
+<meta name="twitter:creator" content="@gradeo_in"/>
+<meta name="twitter:title" content="GRADEO — Free SGPA &amp; CGPA Planner"/>
+<meta name="twitter:description" content="Calculate SGPA, plan your CGPA target and export grade cards. Free forever."/>
+<meta name="twitter:image" content="https://res.cloudinary.com/djy3mjtsz/image/upload/v1770296454/Untitled-2_i2ezfh.png"/>
+<meta name="twitter:image:alt" content="GRADEO grade planner screenshot"/>
+
+<!-- ═══ STRUCTURED DATA ═══ -->
+<script type="application/ld+json">{
+  "@context":"https://schema.org",
+  "@graph":[
+    {
+      "@type":"WebApplication",
+      "@id":"https://gradeo.in/#webapp",
+      "name":"GRADEO",
+      "url":"https://gradeo.in/",
+      "applicationCategory":"EducationalApplication",
+      "applicationSubCategory":"Calculator",
+      "operatingSystem":"All",
+      "inLanguage":"en-IN",
+      "description":"Free SGPA calculator, CGPA converter and grade planner for engineering students. Calculate minimum marks needed, plan your target CGPA, and export grade cards.",
+      "offers":{"@type":"Offer","price":"0","priceCurrency":"INR","availability":"https://schema.org/InStock"},
+      "featureList":["SGPA Calculator","CGPA Converter","Minimum Marks Planner","PDF Grade Card Export","Cloud Autosave"],
+      "screenshot":"https://res.cloudinary.com/djy3mjtsz/image/upload/v1770296454/Untitled-2_i2ezfh.png",
+      "aggregateRating":{"@type":"AggregateRating","ratingValue":"4.9","ratingCount":"1200","bestRating":"5"}
+    },
+    {
+      "@type":"WebSite",
+      "@id":"https://gradeo.in/#website",
+      "name":"GRADEO",
+      "url":"https://gradeo.in/",
+      "description":"Free grade planner for engineering students",
+      "potentialAction":{"@type":"SearchAction","target":{"@type":"EntryPoint","urlTemplate":"https://gradeo.in/calculator/?q={search_term_string}"},"query-input":"required name=search_term_string"}
+    },
+    {
+      "@type":"FAQPage",
+      "@id":"https://gradeo.in/#faq",
+      "mainEntity":[
+        {"@type":"Question","name":"What is GRADEO?","acceptedAnswer":{"@type":"Answer","text":"A free academic planner for engineering students. Replaces manual SGPA calculations and helps you plan exactly what you need to score to hit your target CGPA."}},
+        {"@type":"Question","name":"How does the Planner work?","acceptedAnswer":{"@type":"Answer","text":"Enter your current CGPA, target CGPA, and internal marks. GRADEO calculates the exact minimum final exam score needed per subject."}},
+        {"@type":"Question","name":"Is GRADEO free?","acceptedAnswer":{"@type":"Answer","text":"Completely free. No sign-in needed to calculate. Sign in with Google to unlock cloud autosave and PDF export. No ads, ever."}}
+      ]
+    }
+  ]
+}
+</script>
+
+<!-- ═══ ICONS + MANIFEST ═══ -->
+<link rel="icon" href="https://res.cloudinary.com/djy3mjtsz/image/upload/v1770296454/Untitled-2_i2ezfh.png" type="image/png"/>
+<link rel="icon" href="https://res.cloudinary.com/djy3mjtsz/image/upload/v1770296454/Untitled-2_i2ezfh.png" sizes="32x32" type="image/png"/>
+<link rel="apple-touch-icon" sizes="180x180" href="https://res.cloudinary.com/djy3mjtsz/image/upload/v1770296454/Untitled-2_i2ezfh.png"/>
+<link rel="manifest" href="/manifest.webmanifest"/>
+<script>
+// Inline PWA manifest fallback — inject if server doesn't serve manifest
+(()=>{
+  const m={name:'Gradeo',short_name:'Gradeo',description:'Free SGPA & CGPA Planner for Engineering Students',start_url:'/',display:'standalone',background_color:'#FFF6ED',theme_color:'#FF6A00',orientation:'portrait-primary',icons:[{src:'https://res.cloudinary.com/djy3mjtsz/image/upload/v1770296454/Untitled-2_i2ezfh.png',sizes:'192x192',type:'image/png'},{src:'https://res.cloudinary.com/djy3mjtsz/image/upload/v1770296454/Untitled-2_i2ezfh.png',sizes:'512x512',type:'image/png',purpose:'any maskable'}]};
+  fetch('/manifest.webmanifest').catch(()=>{
+    const b=new Blob([JSON.stringify(m)],{type:'application/manifest+json'});
+    const u=URL.createObjectURL(b);
+    const el=document.createElement('link');el.rel='manifest';el.href=u;
+    document.head.appendChild(el);
+  });
+})();
+/* ── 2026 HYPER-CONNECTIVITY ── */
+// Microsoft Clarity (Heatmaps) Placeholder
+(function(c,l,a,r,i,t,y){
+    c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+    t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+    y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+})(window, document, "clarity", "script", "gradeo_hype_2026");
+
+// Web Vitals Tracking
+if ('paint' in performance) {
+  const observer = new PerformanceObserver((list) => {
+    for (const entry of list.getEntries()) {
+      console.log('GRADEO Performance:', entry.name, entry.startTime);
+    }
+  });
+  observer.observe({ entryTypes: ['paint', 'largest-contentful-paint'] });
+}
+</script>
+
+<!-- ═══ PERFORMANCE ═══ -->
+<link rel="preconnect" href="https://www.gstatic.com" crossorigin/>
+<link rel="preconnect" href="https://res.cloudinary.com" crossorigin/>
+<link rel="dns-prefetch" href="https://www.gstatic.com"/>
+<link rel="dns-prefetch" href="https://firestore.googleapis.com"/>
+<link rel="dns-prefetch" href="https://res.cloudinary.com"/>
+<link rel="preload" as="image" href="https://res.cloudinary.com/djy3mjtsz/image/upload/v1770296454/Untitled-2_i2ezfh.png" fetchpriority="high"/>
+<link rel="stylesheet" href="assets/css/gradeo.css">
+<link rel="stylesheet" href="assets/css/landing.css">
+<script src="https://unpkg.com/lucide@latest"></script>
+<style>
+    /* Critical Inline Styles for Layout Integrity during Load */
+    #dskLayout, #mApp { opacity: 0; }
+    @media (max-width: 767px) { #mApp { opacity: 1; display: flex; } #dskLayout { display: none; } }
+    @media (min-width: 768px) { #dskLayout { opacity: 1; display: block; } #mApp { display: none; } }
+
+
+
+
+/* ════════════ DESKTOP CURSOR ════════════ */
+#cur{
+  position:fixed;width:10px;height:10px;border-radius:50%;
+  background:var(--o);
+  pointer-events:none;z-index:9999;
+  /* Use transform for zero-reflow positioning */
+  top:0;left:0;
+  transform:translate(-50%,-50%);
+  transition:width .1s var(--sp),height .1s var(--sp),opacity .1s,background .2s;
+  /* Hidden until mouse enters viewport */
+  opacity:0;
+  will-change:transform;
+}
+#curRing{
+  position:fixed;width:36px;height:36px;border-radius:50%;
+  border:1.5px solid rgba(255,106,0,.55);
+  pointer-events:none;z-index:9998;
+  top:0;left:0;
+  transform:translate(-50%,-50%);
+  transition:width .18s var(--sp),height .18s var(--sp),border-color .15s,opacity .15s;
+  opacity:0;
+  will-change:transform;
+}
+/* Visible once mouse enters */
+body.cur-ready #cur{opacity:1;}
+body.cur-ready #curRing{opacity:1;}
+/* Click — dot shrinks, ring tightens */
+body.cc #cur{width:6px;height:6px;background:var(--od);}
+body.cc #curRing{width:22px;height:22px;border-color:rgba(255,106,0,.90);}
+/* Hover interactive element — dot hides, ring expands into halo */
+body.ch #cur{width:4px;height:4px;opacity:.4;}
+body.ch #curRing{width:52px;height:52px;border-color:rgba(255,106,0,.35);border-width:1px;}
+[data-theme="dark"] #cur{background:#FF6A00;}
+[data-theme="dark"] #curRing{border-color:rgba(255,120,0,.50);}
+@media(max-width:1023px){#cur,#curRing{display:none;}body{cursor:auto;}}
+@media(min-width:1024px){body,a,button,.tile,.feat,.fi2,.card,[role=button]{cursor:none;}}
+
+/* ════════════ SCROLL PROGRESS ════════════ */
+#prog{position:fixed;top:0;left:0;right:0;height:2px;z-index:9000;pointer-events:none;}
+#pb{display:block;height:100%;width:0;background:linear-gradient(90deg,#FF2200,#FF7A00,#FFAA30);box-shadow:0 0 5px rgba(255,80,0,.7);}
+
+/* ════════════ BG ORBS (desktop only) ════════════ */
+.bgs{position:fixed;inset:0;z-index:-2;overflow:hidden;pointer-events:none;}
+.bg1,.bg2,.bg3,.bg4{position:absolute;border-radius:50%;}
+[data-theme="light"] .bg1{width:80vw;height:80vw;top:-30vw;left:-20vw;background:radial-gradient(circle,rgba(255,106,0,.20),transparent 70%);}
+[data-theme="light"] .bg2{width:60vw;height:60vw;top:-10vw;right:-15vw;background:radial-gradient(circle,rgba(255,180,80,.16),transparent 72%);}
+[data-theme="light"] .bg3{width:55vw;height:55vw;bottom:-15vw;left:10%;background:radial-gradient(circle,rgba(255,100,0,.10),transparent 68%);}
+[data-theme="light"] .bg4{width:40vw;height:40vw;bottom:10%;right:5%;background:radial-gradient(circle,rgba(255,200,100,.08),transparent 65%);}
+[data-theme="dark"] .bg1{width:80vw;height:80vw;top:-30vw;left:-20vw;background:radial-gradient(circle,rgba(255,80,0,.20),transparent 65%);}
+[data-theme="dark"] .bg2{width:60vw;height:60vw;top:-10vw;right:-15vw;background:radial-gradient(circle,rgba(255,110,30,.14),transparent 68%);}
+[data-theme="dark"] .bg3{width:55vw;height:55vw;bottom:-15vw;left:10%;background:radial-gradient(circle,rgba(255,60,0,.11),transparent 65%);}
+[data-theme="dark"] .bg4{width:40vw;height:40vw;bottom:10%;right:5%;background:radial-gradient(circle,rgba(255,140,40,.09),transparent 62%);}
+.bg1{animation:b1 22s ease-in-out infinite alternate;}
+.bg2{animation:b2 26s ease-in-out infinite alternate;}
+.bg3{animation:b3 30s ease-in-out infinite alternate;}
+.bg4{animation:b4 18s ease-in-out infinite alternate;}
+@keyframes b1{to{transform:translate(5%,4%)scale(1.06)}}
+@keyframes b2{to{transform:translate(-4%,5%)scale(1.05)}}
+@keyframes b3{to{transform:translate(3%,-4%)scale(1.07)}}
+@keyframes b4{to{transform:translate(-5%,3%)scale(1.04)}}
+@media(max-width:767px){.bgs{display:none!important;}}
+
+/* ════════════════════════════════════════
+   ▌▌ DESKTOP LAYOUT (≥768px)
+   Full desktop/tablet scroll layout
+════════════════════════════════════════ */
+.wrap{max-width:var(--max);margin:0 auto;padding:0 var(--g);}
+
+/* ── Desktop header ── */
+header.dsk{
+  position:sticky;top:0;z-index:200;
+  background:var(--hdrBg);
+  backdrop-filter:blur(20px) saturate(1.8);
+  -webkit-backdrop-filter:blur(20px) saturate(1.8);
+  border-bottom:1px solid rgba(255,106,0,.10);
+  transition:box-shadow .2s var(--ease),background var(--td);
+}
+header.dsk.scrolled{box-shadow:0 2px 20px rgba(255,60,0,.10);border-bottom-color:rgba(255,106,0,.16);}
+.tb{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 0;transition:padding .28s var(--sm);}
+header.dsk.scrolled .tb{padding:7px 0;}
+.brand{display:flex;align-items:center;gap:10px;cursor:none;user-select:none;}
+.lw{width:36px;height:36px;border-radius:12px;overflow:hidden;flex:0 0 auto;border:1.5px solid rgba(255,106,0,.18);box-shadow:0 2px 8px rgba(255,106,0,.14);transition:transform .3s var(--sp),box-shadow .2s;}
+.lw:hover{transform:rotate(8deg) scale(1.10);box-shadow:0 5px 18px rgba(255,106,0,.28);}
+.lw img{width:100%;height:100%;object-fit:cover;display:block;}
+.bn{font-size:15px;font-weight:900;letter-spacing:-.4px;color:var(--text);transition:color var(--td),font-size .28s var(--sm);}
+header.dsk.scrolled .bn{font-size:14px;}
+.bt{font-size:10.5px;color:var(--muted);font-weight:600;transition:color var(--td),opacity .28s,max-height .28s var(--sm);max-height:20px;overflow:hidden;}
+header.dsk.scrolled .bt{opacity:0;max-height:0;}
+.nav{display:flex;align-items:center;gap:4px;}
+.nl{padding:6px 11px;border-radius:999px;font-size:13px;font-weight:700;color:var(--muted);background:transparent;border:none;cursor:none;transition:background .12s,color .12s,transform .12s var(--sp);}
+.nl:hover{background:rgba(255,106,0,.10);color:var(--text);transform:translateY(-1px);}
+
+/* Theme toggle — Material You M3 style: icon button, filled tonal, animated */
+.thBtn{
+  position:relative;
+  width:40px;height:40px;border-radius:50%;
+  cursor:none;border:none;
+  /* M3 filled tonal button */
+  background:var(--ib);
+  display:grid;place-items:center;
+  flex-shrink:0;overflow:hidden;
+  transition:background var(--td) var(--sm),transform .2s var(--sp),box-shadow .2s;
+}
+.thBtn:hover{
+  background:rgba(255,106,0,.18);
+  transform:scale(1.08);
+  box-shadow:0 2px 10px rgba(255,80,0,.18);
+}
+.thBtn:active{transform:scale(.90);}
+/* State layer ripple on click */
+.thBtn::after{
+  content:"";position:absolute;inset:0;border-radius:50%;
+  background:rgba(255,106,0,.20);
+  transform:scale(0);opacity:0;
+  transition:transform .3s var(--sm),opacity .3s;
+}
+.thBtn:active::after{transform:scale(1);opacity:1;}
+/* Hide the old knob */
+.thKnob{display:none!important;}
+
+/* M3 Icon container — the actual icon swaps */
+.thIcon{
+  position:relative;width:24px;height:24px;
+  display:grid;place-items:center;
+}
+.thIcon svg{
+  position:absolute;
+  width:22px;height:22px;
+  stroke:var(--o);stroke-width:2;fill:none;
+  stroke-linecap:round;stroke-linejoin:round;
+  transition:opacity .28s var(--sm),transform .36s var(--sp);
+}
+/* Sun — visible in light mode */
+.thIcon .sunI{opacity:1;transform:rotate(0) scale(1);}
+.thIcon .moonI{opacity:0;transform:rotate(-60deg) scale(.5);}
+/* Moon — visible in dark mode */
+[data-theme="dark"] .thIcon .sunI{opacity:0;transform:rotate(60deg) scale(.5);}
+[data-theme="dark"] .thIcon .moonI{opacity:1;transform:rotate(0) scale(1);}
+
+/* Mobile M3 toggle — same but 36px */
+.mThBtn{
+  position:relative;
+  width:36px;height:36px;border-radius:50%;
+  cursor:pointer;border:none;
+  background:var(--ib);
+  display:grid;place-items:center;
+  flex-shrink:0;overflow:hidden;
+  transition:background var(--td) var(--sm),transform .2s var(--sp);
+}
+.mThBtn:active{transform:scale(.86);}
+.mThBtn::after{
+  content:"";position:absolute;inset:0;border-radius:50%;
+  background:rgba(255,106,0,.20);
+  transform:scale(0);opacity:0;
+  transition:transform .25s var(--sm),opacity .25s;
+}
+.mThBtn:active::after{transform:scale(1);opacity:1;}
+/* Hide old knob */
+.mThKnob{display:none!important;}
+/* M3 icon in mobile toggle */
+.mThIcon{
+  position:relative;width:22px;height:22px;
+  display:grid;place-items:center;
+}
+.mThIcon svg{
+  position:absolute;
+  width:20px;height:20px;
+  stroke:var(--o);stroke-width:2;fill:none;
+  stroke-linecap:round;stroke-linejoin:round;
+  transition:opacity .28s var(--sm),transform .36s var(--sp);
+}
+.mThIcon .sunI{opacity:1;transform:rotate(0) scale(1);}
+.mThIcon .moonI{opacity:0;transform:rotate(-60deg) scale(.5);}
+[data-theme="dark"] .mThIcon .sunI{opacity:0;transform:rotate(60deg) scale(.5);}
+[data-theme="dark"] .mThIcon .moonI{opacity:1;transform:rotate(0) scale(1);}
+
+/* Sign-in btn desktop */
+.hsi-btn{display:inline-flex;align-items:center;gap:7px;padding:7px 13px;border-radius:10px;border:1.5px solid rgba(255,106,0,.22);background:var(--ib);color:var(--text);font-size:13px;font-weight:800;cursor:none;transition:background .12s,border-color .12s,transform .14s var(--sp),box-shadow .14s;}
+.hsi-btn:hover{background:var(--surface);border-color:rgba(255,106,0,.40);transform:translateY(-1px);box-shadow:0 4px 12px rgba(255,80,0,.12);}
+
+/* ── Buttons ── */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:none;cursor:none;font-family:inherit;font-weight:900;font-size:14.5px;letter-spacing:.02em;padding:13px 24px;border-radius:14px;user-select:none;white-space:nowrap;position:relative;overflow:hidden;transition:transform .26s var(--sp),box-shadow .18s var(--ease),filter .08s;}
+.btn:active{transform:scale(.95) translateY(2px)!important;filter:brightness(.88)!important;transition:transform 55ms,filter 55ms;}
+.btn[disabled]{opacity:.45;cursor:not-allowed;pointer-events:none;}
+.btn::before{content:"";position:absolute;top:0;left:-120%;width:55%;height:100%;background:linear-gradient(105deg,transparent 15%,rgba(255,255,255,.26) 50%,transparent 85%);transform:skewX(-18deg);transition:left .46s var(--ease);pointer-events:none;}
+.btn:hover::before{left:160%;}
+.bp{background:linear-gradient(170deg,#FF7E20,#FF4D00);color:#fff;border:1.5px solid rgba(255,50,0,.22);box-shadow:0 4px 0 #C43A00,0 7px 18px rgba(255,80,0,.30),inset 0 1px 0 rgba(255,255,255,.14);}
+.bp:hover{transform:translateY(-3px) scale(1.02);box-shadow:0 7px 0 #C43A00,0 14px 30px rgba(255,80,0,.36);}
+.bp:active{box-shadow:0 1px 0 #C43A00,0 3px 8px rgba(255,80,0,.20)!important;}
+.bs{background:var(--surface);color:var(--o);border:2px solid var(--o);box-shadow:0 3px 0 rgba(200,70,0,.18),0 4px 12px rgba(255,100,0,.07);font-weight:900;transition:transform .26s var(--sp),box-shadow .18s,background .18s,border-color .18s;}
+.bs:hover{background:rgba(255,106,0,.05);border-color:var(--od);transform:translateY(-3px) scale(1.02);}
+.bgoog{width:100%;background:var(--surface);color:var(--text);font-weight:800;font-size:14px;border:1.5px solid rgba(128,100,80,.13);border-radius:var(--r3);padding:12px 16px;gap:10px;box-shadow:0 1px 0 rgba(0,0,0,.04),0 4px 12px rgba(0,0,0,.05);cursor:pointer;transition:transform .26s var(--sp),box-shadow .18s,border-color .18s;}
+.bgoog:hover{border-color:rgba(255,106,0,.28);transform:translateY(-2px);}
+.bgoog:active{transform:scale(.97)!important;}
+.bgoog[disabled]{opacity:.5;cursor:not-allowed;}
+.bgoog svg{width:18px;height:18px;flex:0 0 auto;}
+
+/* ── Desktop cards ── */
+.card{background:var(--cardBg);border:1.5px solid var(--cb);border-radius:var(--r);box-shadow:0 1px 0 rgba(255,255,255,.5) inset,0 6px 22px rgba(255,80,0,.07),0 1px 3px rgba(0,0,0,.05);overflow:hidden;transition:transform .26s var(--sp),box-shadow .18s,border-color .18s,background var(--td);}
+@media(hover:hover) and (pointer:fine){.card:hover{transform:translateY(-3px);border-color:rgba(255,106,0,.20);box-shadow:0 1px 0 rgba(255,255,255,.6) inset,0 16px 38px rgba(255,80,0,.11);}}
+
+/* ── Desktop sections ── */
+section.dsk{padding:14px 0;}
+.sh{margin-bottom:12px;}
+.sh h2{font-size:20px;font-weight:900;letter-spacing:-.4px;color:var(--text);transition:color var(--td);}
+.sh p{margin-top:3px;color:var(--muted);font-size:13px;transition:color var(--td);}
+
+/* ── Hero ── */
+.hero{padding:20px 0 12px;}
+/* Hero cards: visible immediately, no hidden initial state */
+.hero .rv{opacity:1;transform:none;}
+.hero .rv.in{opacity:1;transform:none;transition:none;}
+.hg{display:flex;flex-direction:column;gap:14px;}
+.hp{padding:24px 22px 20px;}
+.htag{display:inline-flex;align-items:center;gap:7px;padding:5px 12px;border-radius:999px;background:rgba(255,106,0,.09);border:1.5px solid rgba(255,106,0,.20);color:var(--o);font-weight:800;font-size:10.5px;letter-spacing:.04em;animation:tagPop .55s .05s var(--sm) both;}
+@keyframes tagPop{from{opacity:0;transform:translateY(6px) scale(.92)}to{opacity:1;transform:none}}
+.hdot{width:6px;height:6px;border-radius:50%;background:var(--o);animation:hdpulse 2.2s ease-in-out infinite;}
+@keyframes hdpulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.35;transform:scale(.5)}}
+h1{margin-top:12px;font-size:clamp(28px,8vw,52px);line-height:1.02;letter-spacing:-1.8px;font-weight:950;color:var(--text);transition:color var(--td);animation:hIn .6s .08s var(--sm) both;}
+@keyframes hIn{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+.gr{background:linear-gradient(100deg,#FF4D00,var(--o) 40%,#FF9040 75%,#FF6A00);background-size:200% auto;-webkit-background-clip:text;background-clip:text;color:transparent;animation:gS 4s ease-in-out infinite alternate;will-change:background-position;}
+@keyframes gS{0%{background-position:0% center}100%{background-position:100% center}}
+.sub{margin-top:10px;color:var(--muted);font-size:14.5px;font-weight:500;line-height:1.55;max-width:40ch;transition:color var(--td);animation:hIn .6s .22s var(--sm) both;}
+.ctr{margin-top:16px;display:flex;gap:10px;animation:hIn .6s .32s var(--sm) both;}
+
+/* ── Signed-out placeholder card ── */
+.poutHdr{font-size:11px;font-weight:800;color:var(--muted);letter-spacing:.08em;text-transform:uppercase;margin-bottom:12px;transition:color var(--td);}
+.poutList{display:flex;flex-direction:column;gap:9px;margin-bottom:4px;}
+.poutRow{display:flex;align-items:center;gap:10px;font-size:13px;font-weight:600;color:var(--text);transition:color var(--td);}
+.poutIcon{width:28px;height:28px;border-radius:8px;background:rgba(255,106,0,.12);border:1.5px solid rgba(255,106,0,.22);display:grid;place-items:center;flex-shrink:0;transition:background var(--td),border-color var(--td);}
+[data-theme="dark"] .poutIcon{background:rgba(255,106,0,.16);border-color:rgba(255,106,0,.30);}
+.ap{padding:18px;}
+.si-t{font-size:14.5px;font-weight:900;letter-spacing:-.3px;margin-bottom:2px;color:var(--text);transition:color var(--td);}
+.si-s{font-size:12px;color:var(--muted);font-weight:500;margin-bottom:12px;line-height:1.4;transition:color var(--td);}
+/* Desktop signed-out "Unlock more" panel */
+.pout-label{font-size:11px;font-weight:800;color:var(--muted);letter-spacing:.08em;text-transform:uppercase;margin-bottom:12px;transition:color var(--td);}
+.pout-list{display:flex;flex-direction:column;gap:9px;margin-bottom:4px;}
+.pout-item{display:flex;align-items:center;gap:10px;font-size:13px;font-weight:600;color:var(--text);transition:color var(--td);}
+.pout-icon{width:28px;height:28px;border-radius:8px;background:rgba(255,106,0,.10);border:1.5px solid rgba(255,106,0,.20);display:grid;place-items:center;flex-shrink:0;transition:background var(--td),border-color var(--td);}
+[data-theme="dark"] .pout-icon{background:rgba(255,106,0,.14);border-color:rgba(255,106,0,.26);}
+/* ══ STUDENT OFFER CARD — standalone, compact ══ */
+.offer,.mOfferCard{
+  position:relative;overflow:hidden;
+  border-radius:18px;
+  border:1.5px solid rgba(255,106,0,.32);
+  background:linear-gradient(135deg,#1C1004 0%,#2E1A06 60%,#1A0E04 100%);
+  box-shadow:0 6px 24px rgba(255,80,0,.18),0 1px 0 rgba(255,140,0,.15) inset;
+  transition:border-color var(--td),background var(--td);
+}
+[data-theme="light"] .offer,[data-theme="light"] .mOfferCard{
+  background:linear-gradient(135deg,#FFF3E4 0%,#FFE8CE 60%,#FFFAF4 100%);
+  border-color:rgba(255,106,0,.28);
+  box-shadow:0 4px 18px rgba(255,100,0,.14),0 1px 0 rgba(255,200,100,.30) inset;
+}
+/* shimmer sweep */
+.offerShimmer{
+  position:absolute;top:0;left:-70%;width:45%;height:2px;
+  background:linear-gradient(90deg,transparent,rgba(255,170,60,.95),transparent);
+  animation:offerShim 3s ease-in-out infinite;pointer-events:none;
+}
+@keyframes offerShim{0%{left:-70%;}65%,100%{left:115%;}}
+
+/* Row layout */
+.offerRow{
+  display:flex;align-items:center;justify-content:space-between;
+  gap:12px;padding:13px 14px;
+}
+.offerLeft{flex:1;min-width:0;}
+.offerTopRow{margin-bottom:3px;}
+.offerBadge{
+  display:inline-flex;align-items:center;gap:4px;
+  font-size:9.5px;font-weight:900;letter-spacing:.07em;text-transform:uppercase;
+  color:#FF9040;background:rgba(255,120,0,.14);
+  border:1px solid rgba(255,120,0,.26);
+  padding:3px 8px;border-radius:999px;
+}
+[data-theme="light"] .offerBadge{color:#B83200;background:rgba(255,100,0,.10);border-color:rgba(255,100,0,.22);}
+.offerTitle{
+  font-size:14px;font-weight:950;letter-spacing:-.3px;
+  color:#fff;line-height:1.1;margin-bottom:1px;
+}
+[data-theme="light"] .offerTitle{color:#1A0800;}
+.offerDesc{font-size:10.5px;color:rgba(255,200,150,.60);font-weight:500;}
+[data-theme="light"] .offerDesc{color:rgba(80,40,10,.55);}
+
+/* CTA — small pill button */
+.offerCTA{
+  flex-shrink:0;
+  display:inline-flex;align-items:center;justify-content:center;
+  background:linear-gradient(160deg,#FF7720,#FF4200);
+  color:#fff;border:none;cursor:pointer;
+  font-family:inherit;font-size:12px;font-weight:900;
+  padding:9px 14px;border-radius:10px;white-space:nowrap;
+  box-shadow:0 3px 0 #A82800,0 5px 14px rgba(255,70,0,.30);
+  position:relative;overflow:hidden;
+  transition:transform .18s var(--sp),box-shadow .18s,filter .08s;
+  letter-spacing:.01em;
+}
+.offerCTA::after{
+  content:"";position:absolute;inset:0;
+  background:linear-gradient(105deg,transparent 30%,rgba(255,255,255,.18) 55%,transparent 80%);
+  transform:skewX(-15deg) translateX(-120%);
+  animation:offerCTAShine 2.8s ease-in-out infinite 1.4s;
+}
+@keyframes offerCTAShine{0%{transform:skewX(-15deg) translateX(-120%);}40%,100%{transform:skewX(-15deg) translateX(180%);}}
+.offerCTA:active{transform:scale(.94) translateY(2px)!important;filter:brightness(.88)!important;box-shadow:0 1px 0 #A82800!important;}
+
+/* Desktop offer — sits at bottom of card as full-width section */
+.dskOffer{
+  position:relative;overflow:hidden;
+  border-top:1px solid rgba(255,106,0,.14);
+}
+[data-theme="dark"] .dskOffer{
+  background:linear-gradient(135deg,#1C1004 0%,#2A1606 60%,#181004 100%);
+}
+[data-theme="light"] .dskOffer{
+  background:linear-gradient(135deg,#FFF0E0 0%,#FFE8CE 55%,#FFFAF4 100%);
+}
+.dskOffer .offerRow{padding:16px 18px;}
+.dskOffer .offerTitle{font-size:15px;}
+
+/* Desktop sign-out button */
+.dskSignOutBtn{
+  display:inline-flex;align-items:center;gap:5px;
+  padding:6px 12px;border-radius:8px;
+  border:1.5px solid rgba(255,106,0,.18);
+  background:transparent;color:var(--muted);
+  font-size:11px;font-weight:700;cursor:none;
+  transition:background .12s,color .12s,border-color .12s;flex-shrink:0;white-space:nowrap;
+}
+.dskSignOutBtn:hover{background:rgba(255,80,0,.07);color:var(--o);border-color:rgba(255,106,0,.32);}
+.dskSignOutBtn svg{width:13px;height:13px;stroke:currentColor;stroke-width:2;fill:none;stroke-linecap:round;stroke-linejoin:round;}
+
+/* Mobile sign-out button */
+.mSignOutBtn{
+  display:inline-flex;align-items:center;gap:5px;
+  padding:6px 11px;border-radius:8px;
+  border:1.5px solid rgba(255,106,0,.18);
+  background:transparent;color:var(--muted);
+  font-size:11px;font-weight:700;cursor:pointer;
+  transition:background .12s,color .12s;flex-shrink:0;
+}
+.mSignOutBtn:active{background:rgba(255,80,0,.08);color:var(--o);}
+.mSignOutBtn svg{width:13px;height:13px;stroke:currentColor;stroke-width:2;fill:none;stroke-linecap:round;stroke-linejoin:round;}
+.ur{display:flex;align-items:center;gap:10px;margin-bottom:10px;}
+.av{width:40px;height:40px;border-radius:13px;background:linear-gradient(135deg,rgba(255,106,0,.13),rgba(255,160,80,.09));border:1.5px solid rgba(255,106,0,.20);overflow:hidden;flex:0 0 auto;display:grid;place-items:center;}
+.av img{width:40px;height:40px;object-fit:cover;display:block;}
+.avi{font-size:15px;font-weight:900;color:var(--o);}
+.un{font-size:13px;font-weight:900;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--text);transition:color var(--td);}
+.ue{font-size:11px;color:var(--muted);font-weight:500;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;transition:color var(--td);}
+.aa{display:flex;gap:7px;}
+.aa .btn{flex:1;font-size:12px;padding:8px 10px;}
+.rh{display:flex;justify-content:space-between;align-items:center;padding:12px 18px 5px;border-top:1px solid rgba(128,80,0,.08);}
+.rk{font-size:11px;font-weight:800;color:var(--muted);transition:color var(--td);}
+.rcl{background:transparent;border:none;font-size:11px;font-weight:700;color:var(--muted2);cursor:pointer;padding:3px 6px;border-radius:7px;transition:background .12s,color .12s;}
+.rcl:hover{background:rgba(128,80,0,.06);color:var(--text);}
+.rl{display:flex;gap:6px;flex-wrap:wrap;padding:4px 18px 14px;}
+.rc{display:inline-flex;align-items:center;gap:5px;padding:5px 11px;border-radius:999px;border:1.5px solid rgba(255,106,0,.16);background:var(--ib);font-size:11.5px;font-weight:800;cursor:pointer;color:var(--text);transition:border-color .12s,background .12s,transform .2s var(--sp),color var(--td);}
+.rc:hover{border-color:var(--o);transform:translateY(-2px);}
+.rd{width:5px;height:5px;border-radius:50%;background:var(--o);}
+.ic{display:inline-flex;align-items:center;justify-content:center;width:42px;height:42px;border-radius:13px;flex:0 0 auto;background:transparent;border:none;transition:transform .5s var(--sp);}
+.ic svg{width:22px;height:22px;stroke:var(--o);stroke-width:2;fill:none;stroke-linecap:round;stroke-linejoin:round;}
+.fi{display:inline-flex;align-items:center;justify-content:center;width:38px;height:38px;border-radius:11px;flex:0 0 auto;background:var(--ib);border:1.5px solid var(--id);transition:transform .3s var(--sp),box-shadow .18s,background var(--td);}
+.fi svg{width:18px;height:18px;stroke:var(--o);stroke-width:2.2;fill:none;stroke-linecap:round;stroke-linejoin:round;}
+.oi{display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:11px;flex:0 0 auto;background:var(--ib);border:1.5px solid var(--id);transition:background var(--td);}
+.oi svg{width:17px;height:17px;stroke:var(--o);stroke-width:2.2;fill:none;stroke-linecap:round;stroke-linejoin:round;}
+
+/* ── Tiles desktop — distinct look: numbered, accent left border ── */
+.tg{display:grid;grid-template-columns:1fr;gap:10px;margin-top:12px;}
+.tile{
+  background:var(--cardBg);border:1.5px solid var(--cb);
+  border-radius:var(--r);padding:20px 18px 16px;cursor:none;
+  min-height:106px;display:flex;flex-direction:column;justify-content:space-between;
+  position:relative;overflow:hidden;
+  box-shadow:0 1px 5px rgba(255,80,0,.05);
+  transition:transform .26s var(--sp),box-shadow .18s,border-color .18s,background var(--td);
+  -webkit-user-select:none;user-select:none;
+  /* Accent left border — makes tiles feel like action cards */
+  border-left:3px solid var(--o);
+}
+/* Each tile gets a distinct accent colour on the left */
+.tile:nth-child(1){border-left-color:#FF6A00;}
+.tile:nth-child(2){border-left-color:#FF9040;}
+.tile:nth-child(3){border-left-color:#FFB870;}
+/* Number badge top-right */
+.tile::before{
+  content:attr(data-num);
+  position:absolute;top:14px;right:14px;
+  width:24px;height:24px;border-radius:50%;
+  background:var(--ib);border:1.5px solid var(--id);
+  color:var(--o);font-size:11px;font-weight:900;
+  display:grid;place-items:center;
+  transition:background var(--td),transform .3s var(--sp);
+  z-index:1;
+}
+/* shimmer line */
+.tile::after{content:"";position:absolute;top:0;left:-100%;width:45%;height:3px;background:linear-gradient(90deg,transparent,rgba(255,106,0,.70),transparent);transition:left .5s var(--ease);pointer-events:none;}
+@media(hover:hover) and (pointer:fine){
+  .tile:hover{transform:translateY(-5px) scale(1.012);border-color:rgba(255,106,0,.28);box-shadow:0 18px 38px rgba(255,80,0,.12),0 4px 12px rgba(0,0,0,.06);}
+  .tile:hover::before{transform:scale(1.2) rotate(10deg);}
+  .tile:hover::after{left:110%;}
+  .tile:hover .ic{transform:rotate(360deg) scale(1.1);}
+}
+.tile:active{transform:scale(.96)!important;transition:transform 55ms;}
+.tile:focus-visible{outline:2.5px solid var(--o);outline-offset:3px;}
+.tt{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;position:relative;z-index:1;}
+/* Push number badge further right so it doesn't overlap */
+.tt .ic{margin-right:30px;}
+.tn{font-size:15.5px;font-weight:950;letter-spacing:-.3px;color:var(--text);transition:color var(--td);}
+.td{margin-top:4px;font-size:12px;color:var(--muted);font-weight:500;line-height:1.3;transition:color var(--td);}
+.tb2{align-self:flex-start;margin-top:8px;display:inline-block;padding:4px 10px;border-radius:999px;font-size:9.5px;font-weight:800;letter-spacing:.02em;background:var(--ib);color:var(--o);border:1px solid var(--id);position:relative;z-index:1;transition:background var(--td),border-color var(--td);}
+
+/* Features desktop — each card has a tinted icon background, subtle gradient */
+.fg{content-visibility:auto;contain-intrinsic-size:0 500px;display:grid;grid-template-columns:1fr;gap:9px;margin-top:12px;}
+.feat{
+  background:var(--cardBg);border:1.5px solid var(--cb);border-radius:var(--r);
+  padding:16px 18px;display:flex;align-items:flex-start;gap:14px;
+  transition:transform .26s var(--sp),box-shadow .18s,border-color .18s,background var(--td);
+  position:relative;overflow:hidden;
+}
+/* Subtle warm tint strip on right edge */
+.feat::after{
+  content:"";position:absolute;top:0;right:0;width:3px;height:100%;
+  background:linear-gradient(180deg,rgba(255,106,0,.18),rgba(255,180,80,.06));
+  border-radius:0 var(--r) var(--r) 0;
+}
+@media(hover:hover) and (pointer:fine){
+  .feat:hover{transform:translateY(-3px) scale(1.008);border-color:rgba(255,106,0,.22);box-shadow:0 12px 30px rgba(255,80,0,.09);}
+  .feat:hover .fi{transform:rotate(-8deg) scale(1.15);box-shadow:0 4px 14px rgba(255,90,0,.20);}
+}
+.ft{font-size:13.5px;font-weight:900;letter-spacing:-.1px;color:var(--text);transition:color var(--td);}
+.fs{margin-top:3px;font-size:12px;color:var(--muted);font-weight:500;line-height:1.45;transition:color var(--td);}
+/* Each feature icon gets a unique tinted background */
+.feat:nth-child(1) .fi{background:rgba(255,106,0,.14);border-color:rgba(255,106,0,.28);}
+.feat:nth-child(2) .fi{background:rgba(255,130,0,.12);border-color:rgba(255,130,0,.24);}
+.feat:nth-child(3) .fi{background:rgba(255,80,180,.08);border-color:rgba(255,80,180,.18);}
+.feat:nth-child(4) .fi{background:rgba(80,180,255,.09);border-color:rgba(80,180,255,.20);}
+.feat:nth-child(5) .fi{background:rgba(80,220,120,.09);border-color:rgba(80,220,120,.20);}
+.feat:nth-child(6) .fi{background:rgba(100,100,255,.08);border-color:rgba(100,100,255,.18);}
+/* Match icon stroke to background tint */
+.feat:nth-child(1) .fi svg{stroke:#FF6A00;}
+.feat:nth-child(2) .fi svg{stroke:#FF8030;}
+.feat:nth-child(3) .fi svg{stroke:#E060B0;}
+.feat:nth-child(4) .fi svg{stroke:#40A0E0;}
+.feat:nth-child(5) .fi svg{stroke:#30B860;}
+.feat:nth-child(6) .fi svg{stroke:#6060DD;}
+
+/* FAQ desktop */
+.fl{margin-top:10px;display:flex;flex-direction:column;gap:7px;}
+.fi2{background:var(--cardBg);border:1.5px solid var(--cb);border-radius:var(--r2);overflow:hidden;box-shadow:0 1px 4px rgba(255,80,0,.04);transition:border-color .18s,box-shadow .18s,transform .2s var(--sp),background var(--td);}
+@media(hover:hover) and (pointer:fine){.fi2:hover{border-color:rgba(255,106,0,.20);box-shadow:0 4px 14px rgba(255,80,0,.07);transform:translateY(-1px);}}
+.fq{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:14px 15px;cursor:pointer;font-size:13px;font-weight:800;line-height:1.3;user-select:none;color:var(--text);transition:color .12s,background .12s;}
+.fq:hover{color:var(--o);background:rgba(255,106,0,.04);}
+.fa2{width:20px;height:20px;border-radius:7px;flex:0 0 auto;display:grid;place-items:center;background:var(--ib);border:1.5px solid var(--id);transition:transform .32s var(--sp),background .18s;}
+.fi2.open .fa2{transform:rotate(180deg);background:rgba(255,106,0,.16);border-color:rgba(255,106,0,.30);}
+.fa2 svg{width:11px;height:11px;stroke:var(--o);stroke-width:2.5;fill:none;stroke-linecap:round;stroke-linejoin:round;}
+.fan{display:none;padding:9px 15px 13px;border-top:1px solid rgba(255,106,0,.08);font-size:12.5px;color:var(--muted);font-weight:500;line-height:1.6;transition:color var(--td);}
+.fi2.open .fan{display:block;animation:fanIn .24s var(--sm) both;}
+@keyframes fanIn{from{opacity:0;transform:translateY(-5px)}to{opacity:1;transform:none}}
+
+/* Footer */
+.fw{padding:8px 0 max(40px,env(safe-area-inset-bottom));}
+.fc{background:var(--footBg);border:1.5px solid rgba(255,106,0,.12);border-radius:var(--r);padding:22px 20px 18px;box-shadow:0 6px 22px rgba(255,80,0,.05);transition:background var(--td),border-color var(--td);}
+.ftop{display:grid;grid-template-columns:1fr;gap:18px;}
+.fb-n{font-size:14px;font-weight:900;letter-spacing:-.3px;margin-bottom:3px;color:var(--text);transition:color var(--td);}
+.fb-t{font-size:12px;color:var(--muted);font-weight:500;line-height:1.5;max-width:26ch;transition:color var(--td);}
+.fcols{display:flex;gap:16px 32px;flex-wrap:wrap;}
+.fch{font-size:9.5px;font-weight:900;letter-spacing:.10em;text-transform:uppercase;color:var(--muted2);margin-bottom:8px;transition:color var(--td);}
+.fco a{display:block;font-size:12.5px;color:var(--muted);font-weight:600;padding:2.5px 0;transition:color .12s,transform .18s var(--sp);}
+.fco a:hover{color:var(--o);transform:translateX(3px);}
+.fbot{margin-top:16px;padding-top:12px;border-top:1px solid rgba(255,106,0,.08);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:7px;font-size:11.5px;color:var(--muted2);font-weight:600;transition:color var(--td);}
+.fbtn2{background:transparent;border:none;cursor:pointer;font-size:12px;font-weight:700;color:var(--muted);padding:4px 8px;border-radius:8px;transition:background .12s,color .12s,transform .18s var(--sp);}
+.fbtn2:hover{background:rgba(255,106,0,.09);color:var(--o);transform:translateY(-2px);}
+
+/* Back to top */
+#btt{position:fixed;bottom:20px;right:16px;z-index:400;width:40px;height:40px;border-radius:13px;background:var(--footBg);border:1.5px solid rgba(255,106,0,.22);box-shadow:0 3px 12px rgba(255,100,0,.15);cursor:pointer;display:grid;place-items:center;opacity:0;transform:translateY(10px) scale(.88);pointer-events:none;transition:opacity .2s,transform .26s var(--sp),background var(--td);}
+#btt.on{opacity:1;transform:translateY(0) scale(1);pointer-events:auto;}
+#btt:hover{transform:translateY(-2px) scale(1.06)!important;box-shadow:0 6px 18px rgba(255,100,0,.22);}
+#btt svg{width:15px;height:15px;stroke:var(--o);stroke-width:2.5;fill:none;stroke-linecap:round;stroke-linejoin:round;}
+
+/* Toast */
+.toast{position:fixed;bottom:18px;left:50%;transform:translateX(-50%) translateY(10px);min-width:160px;max-width:min(360px,calc(100vw - 28px));background:rgba(8,6,4,.95);color:#fff;border-radius:var(--r2);padding:10px 14px;font-size:12.5px;font-weight:700;display:none;align-items:center;gap:8px;z-index:9600;box-shadow:0 6px 20px rgba(0,0,0,.22);opacity:0;transition:opacity .16s,transform .26s var(--sp);}
+[data-theme="dark"] .toast{background:rgba(255,240,220,.97);color:var(--text);}
+.toast.on{display:flex;opacity:1;transform:translateX(-50%) translateY(0);}
+/* On mobile, lift toast above Dynamic Island */
+@media(max-width:767px){
+  .toast{bottom:calc(max(20px,env(safe-area-inset-bottom)) + 76px);}
+}
+.tx{background:transparent;border:none;color:rgba(255,255,255,.45);cursor:pointer;font-size:14px;line-height:1;padding:0;margin-left:auto;transition:color .12s;}
+
+/* ── SIGN-IN MODAL ── */
+.siBox{max-width:400px;width:calc(100vw - 32px);}
+.siBody{padding:20px 20px 24px;display:flex;flex-direction:column;gap:10px;}
+.siSub{font-size:13px;color:var(--muted);font-weight:500;line-height:1.45;margin-bottom:2px;transition:color var(--td);}
+.siBtn{
+  width:100%;display:flex;align-items:center;justify-content:center;gap:10px;
+  padding:13px 16px;border-radius:14px;border:1.5px solid var(--cb);
+  background:var(--surface);color:var(--text);
+  font-family:inherit;font-size:14px;font-weight:700;cursor:pointer;
+  transition:background .14s,border-color .14s,transform .18s var(--sp),box-shadow .14s;
+  box-shadow:0 1px 3px rgba(0,0,0,.06);
+  position:relative;overflow:hidden;
+}
+.siBtn::after{content:"";position:absolute;inset:0;background:rgba(255,106,0,.06);opacity:0;transition:opacity .12s;}
+.siBtn:hover{border-color:rgba(255,106,0,.28);transform:translateY(-2px);box-shadow:0 4px 14px rgba(0,0,0,.10);}
+.siBtn:hover::after{opacity:1;}
+.siBtn:active{transform:scale(.97)!important;}
+/* Google */
+.siGoogle svg{flex-shrink:0;}
+/* GitHub */
+.siGithub{color:var(--text);}
+[data-theme="dark"] .siGithub svg{fill:#F0E8DC;}
+/* Email */
+.siEmail svg{stroke:var(--o);}
+/* Email form */
+.siDivider{display:flex;align-items:center;gap:10px;color:var(--muted2);font-size:11px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;margin:2px 0;}
+.siDivider::before,.siDivider::after{content:"";flex:1;height:1px;background:rgba(128,80,0,.10);}
+[data-theme="dark"] .siDivider::before,[data-theme="dark"] .siDivider::after{background:rgba(255,180,80,.08);}
+.siInput{
+  width:100%;padding:11px 14px;border-radius:12px;
+  border:1.5px solid var(--cb);background:var(--surface);
+  color:var(--text);font-family:inherit;font-size:14px;
+  outline:none;transition:border-color .14s,box-shadow .14s,background var(--td);
+}
+.siInput:focus{border-color:var(--o);box-shadow:0 0 0 3px rgba(255,106,0,.14);}
+.siInput::placeholder{color:var(--muted2);}
+.siEmailBtns{display:flex;gap:8px;}
+.siEmailAction{flex:1;padding:11px 14px!important;font-size:13px!important;}
+.siForgot{background:none;border:none;cursor:pointer;color:var(--muted);font-size:12px;font-weight:600;text-align:left;padding:0;transition:color .12s;}
+.siForgot:hover{color:var(--o);}
+.siEmailForm{display:flex;flex-direction:column;gap:8px;}
+.siFootNote{font-size:11px;color:var(--muted2);font-weight:500;line-height:1.5;margin-top:4px;transition:color var(--td);}
+.siFootNote a{color:var(--o);text-decoration:underline;text-underline-offset:2px;}
+/* loading state */
+.siBtn.loading{opacity:.6;pointer-events:none;}
+.siBtn.loading::before{content:"";position:absolute;inset:0;background:linear-gradient(90deg,transparent,rgba(255,255,255,.15),transparent);animation:siBtnLoad 1.1s ease-in-out infinite;}
+@keyframes siBtnLoad{0%{transform:translateX(-100%);}100%{transform:translateX(100%);}}
+.mbd{display:none;position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:9000;align-items:center;justify-content:center;padding:14px;backdrop-filter:blur(8px);}
+[data-theme="dark"] .mbd{background:rgba(0,0,0,.66);}
+.mbd.on{display:flex;animation:bdIn .16s ease both;}
+@keyframes bdIn{from{opacity:0}to{opacity:1}}
+.mbox{background:var(--shBg);border:1.5px solid rgba(255,106,0,.14);border-radius:20px;max-width:500px;width:100%;max-height:80vh;max-height:80vh;max-height:80dvh;overflow:hidden;display:flex;flex-direction:column;box-shadow:0 20px 60px rgba(0,0,0,.18);animation:popIn .26s var(--sp) both;transition:background var(--td);}
+@keyframes popIn{from{transform:scale(.90) translateY(14px);opacity:0}to{transform:none;opacity:1}}
+.mhd{padding:12px 15px;border-bottom:1px solid rgba(255,106,0,.08);display:flex;justify-content:space-between;align-items:center;}
+.mhd strong{font-size:14px;font-weight:900;color:var(--text);transition:color var(--td);}
+.mhd button{background:transparent;border:none;cursor:pointer;font-size:17px;color:var(--muted);line-height:1;transition:color .12s,transform .2s var(--sp);}
+.mhd button:hover{color:var(--o);transform:scale(1.10) rotate(90deg);}
+.mb{padding:14px;overflow-y:auto;font-size:13px;color:var(--muted);font-weight:500;line-height:1.7;transition:color var(--td);}
+
+/* Desktop scroll reveal — wheel effect using Y+scale spring (safe, no 3D stacking issues) */
+.rv{
+  opacity:0;
+  transform:translateY(28px) scale(.97);
+  transform-origin:center top;
+}
+.rv.in{
+  opacity:1;
+  transform:translateY(0) scale(1);
+  transition:
+    opacity .5s var(--sm),
+    transform .55s cubic-bezier(.22,.68,0,1.1);
+}
+/* Grid children stagger */
+.tg .rv,.fg .rv,.fl .rv{
+  opacity:0;
+  transform:translateY(20px) scale(.98);
+}
+.tg .rv.in,.fg .rv.in,.fl .rv.in{
+  opacity:1;
+  transform:translateY(0) scale(1);
+  transition:opacity .44s var(--sm),transform .48s cubic-bezier(.22,.68,0,1.1);
+}
+
+/* ════════════════════════════════════════════════════════
+   ▌▌▌ MOBILE APP LAYOUT  (≤767px)
+   Full-screen swipe navigation — like Instagram / Spotify
+   4 panels: Home | Calculators | Features | FAQ
+   Bottom tab bar navigation
+   Horizontal swipe switches panels
+════════════════════════════════════════════════════════ */
+@media(max-width:767px){
+
+  /* Prevent body scroll on mobile — app handles it */
+  html,body{height:100%;overflow:hidden;overscroll-behavior:none;}
+
+  /* Hide desktop elements on mobile */
+  header.dsk,.bgs,#btt,#prog,#cur,#curRing,.fw,footer{display:none!important;}
+
+  /* ── MOBILE SHELL ── */
+  #mApp{
+    position:fixed;inset:0;
+    display:flex;flex-direction:column;
+    background:var(--bg);
+    overscroll-behavior:none;
+    /* Prevent Chrome pull-to-refresh */
+    touch-action:pan-x pan-y;
+  }
+  [data-theme="light"] #mApp{
+    background:
+      radial-gradient(ellipse 140% 50% at 0% 0%,rgba(255,100,0,.12) 0%,transparent 55%),
+      radial-gradient(ellipse 100% 40% at 100% 0%,rgba(255,180,60,.08) 0%,transparent 50%),
+      #FFF6ED;
+  }
+  [data-theme="dark"] #mApp{
+    background:
+      radial-gradient(ellipse 140% 50% at 0% 0%,rgba(255,70,0,.14) 0%,transparent 55%),
+      radial-gradient(ellipse 80% 35% at 100% 0%,rgba(255,100,0,.07) 0%,transparent 48%),
+      #080604;
+  }
+
+  /* ── MOBILE TOP BAR ── */
+  #mBar{
+    flex:0 0 auto;
+    display:flex;align-items:center;justify-content:space-between;
+    padding:max(14px,calc(env(safe-area-inset-top) + 8px)) 16px 10px;
+    background:transparent;
+    position:relative;z-index:50;
+    transition:padding .22s var(--sm);
+  }
+  #mBar.mini{padding-top:8px;padding-bottom:7px;}
+  .mBrand{display:flex;align-items:center;gap:8px;user-select:none;}
+  .mLogo{width:32px;height:32px;border-radius:10px;overflow:hidden;border:1.5px solid rgba(255,106,0,.18);box-shadow:0 2px 8px rgba(255,106,0,.14);flex:0 0 auto;transition:width .22s var(--sm),height .22s var(--sm);}
+  #mBar.mini .mLogo{width:28px;height:28px;border-radius:9px;}
+  .mLogo img{width:100%;height:100%;object-fit:cover;display:block;}
+  .mBrandTxt{transition:opacity .22s,max-height .22s;}
+  .mBN{font-size:14.5px;font-weight:900;letter-spacing:-.4px;color:var(--text);line-height:1;transition:color var(--td);}
+  .mBT{font-size:9.5px;color:var(--muted);font-weight:600;margin-top:1px;transition:color var(--td);}
+  #mBar.mini .mBrandTxt .mBT{display:none;}
+  .mBarRight{display:flex;align-items:center;gap:8px;}
+  /* Mobile theme toggle inherits M3 style from shared CSS — just resize */
+  .mThBtn{width:36px;height:36px;}
+  .mThIcon{width:20px;height:20px;}
+  .mThIcon svg{width:18px;height:18px;}
+
+  /* ── PANEL TRACK — GPU promoted, smooth 60fps ── */
+  #mTrack{
+    display:flex;
+    height:100%;
+    -webkit-transition:-webkit-transform .36s cubic-bezier(.22,.68,0,1.2);
+    transition:transform .36s cubic-bezier(.22,.68,0,1.2);
+    will-change:transform;
+    -webkit-transform:translateZ(0);
+    transform:translateZ(0);
+    -webkit-backface-visibility:hidden;
+    backface-visibility:hidden;
+  }
+  #mTrack.no-transition{transition:none!important;}
+  .mPanel{
+    flex:0 0 100vw;
+    width:100vw;
+    height:100%;
+    overflow-y:auto;
+    overflow-x:hidden;
+    -webkit-overflow-scrolling:touch;
+    overscroll-behavior-x:none;
+    overscroll-behavior-y:contain;
+    padding:0 clamp(12px,4.5vw,20px) max(110px,env(safe-area-inset-bottom)) clamp(12px,4.5vw,20px);
+    transform:translateZ(0);
+    backface-visibility:hidden;
+    -webkit-backface-visibility:hidden;
+    contain:layout style;
+    /* Improve scroll performance */
+    scroll-behavior:auto;
+  }
+  .mPanel::-webkit-scrollbar{display:none;}
+  .mPanel{scrollbar-width:none;}
+
+  /* ══ DYNAMIC ISLAND — full-width, Apple-style ══ */
+  #mTabs{
+    flex:0 0 auto;
+    display:flex;align-items:flex-end;justify-content:center;
+    padding:8px 12px max(24px,env(safe-area-inset-bottom)) 12px;
+    background:transparent;
+    position:relative;z-index:50;
+    pointer-events:none;
+    /* Full width container */
+    width:100%;
+  }
+  /* The pill — now spans full width */
+  #diIsland{
+    display:flex;align-items:center;
+    width:100%;  /* FULL WIDTH */
+    border-radius:26px;
+    pointer-events:auto;
+    padding:5px 5px;
+    gap:0;
+    position:relative;
+    /* DARK MODE: deep black glass */
+    background:#0A0806;
+    border:1px solid rgba(255,255,255,.10);
+    box-shadow:
+      0 0 0 1px rgba(255,106,0,.14),
+      0 16px 48px rgba(0,0,0,.60),
+      0 4px 12px rgba(0,0,0,.40),
+      0 1px 0 rgba(255,255,255,.08) inset;
+    backdrop-filter:blur(40px) saturate(3);
+    -webkit-backdrop-filter:blur(40px) saturate(3);
+    transition:box-shadow .3s;
+  }
+  /* LIGHT MODE: frosted liquid glass */
+  [data-theme="light"] #diIsland{
+    background:rgba(255,252,248,.20);
+    border:1px solid rgba(255,255,255,.72);
+    box-shadow:
+      0 12px 44px rgba(160,70,0,.18),
+      0 4px 16px rgba(180,80,0,.12),
+      0 2px 0 rgba(255,255,255,.90) inset,
+      0 -1px 0 rgba(200,100,0,.08) inset;
+    backdrop-filter:blur(44px) saturate(3) brightness(1.10);
+    -webkit-backdrop-filter:blur(44px) saturate(3) brightness(1.10);
+  }
+  /* Low-end / reduced transparency fallback — solid background, no blur */
+  @media(prefers-reduced-transparency:reduce){
+    #diIsland{
+      backdrop-filter:none!important;
+      -webkit-backdrop-filter:none!important;
+      background:#0C0906!important;
+    }
+    [data-theme="light"] #diIsland{
+      backdrop-filter:none!important;
+      -webkit-backdrop-filter:none!important;
+      background:rgba(255,248,240,.96)!important;
+    }
+  }
+  /* Squeeze animation on tab change */
+  #diIsland.diPulse{animation:diPulse .28s cubic-bezier(.34,1.56,.64,1);}
+  @keyframes diPulse{0%,100%{transform:scale(1);}45%{transform:scaleX(.98) scaleY(.93);}}
+
+  /* Each tab — equal flex share of full width */
+  .mTab{
+    flex:1;  /* equal width share */
+    display:flex;flex-direction:column;align-items:center;justify-content:center;
+    gap:4px;
+    padding:11px 8px;
+    cursor:pointer;border:none;background:transparent;
+    border-radius:22px;
+    transition:
+      background .28s cubic-bezier(.34,1.56,.64,1),
+      transform .2s cubic-bezier(.34,1.56,.64,1);
+    -webkit-user-select:none;user-select:none;
+    color:rgba(255,255,255,.30);
+    min-width:0;
+  }
+  [data-theme="light"] .mTab{color:rgba(80,40,10,.32);}
+  .mTab:active{transform:scale(.82);}
+
+  /* Active tab — highlighted pill within the bar */
+  .mTab.active{
+    background:rgba(255,106,0,.24);
+    color:#fff;
+    flex:1.5; /* active tab slightly wider */
+  }
+  [data-theme="light"] .mTab.active{
+    background:rgba(255,106,0,.16);
+    color:rgba(140,45,0,.95);
+  }
+
+  /* Icon */
+  .mTab svg{
+    width:22px;height:22px;
+    stroke:currentColor;stroke-width:2;fill:none;
+    stroke-linecap:round;stroke-linejoin:round;
+    transition:transform .3s cubic-bezier(.34,1.56,.64,1),filter .26s,stroke .22s;
+    flex-shrink:0;
+  }
+  .mTab.active svg{transform:scale(1.18) translateY(-0.5px);}
+  [data-theme="dark"] .mTab.active svg{
+    stroke:#FF9040;
+    filter:drop-shadow(0 0 3px rgba(255,150,0,1)) drop-shadow(0 0 8px rgba(255,100,0,.80)) drop-shadow(0 0 16px rgba(255,70,0,.45));
+  }
+  [data-theme="dark"] .mTab:not(.active) svg{
+    /* NO filter on inactive — saves GPU */
+    opacity:.65;
+  }
+  [data-theme="light"] .mTab:not(.active) svg{
+    opacity:.45;
+  }
+
+  /* Label — tiny, below icon */
+  .mTabLbl{
+    font-size:8.5px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;
+    white-space:nowrap;line-height:1;
+    color:rgba(255,255,255,.24);
+    transition:color .22s;
+  }
+  .mTab.active .mTabLbl{color:rgba(255,160,80,.90);}
+  [data-theme="light"] .mTabLbl{color:rgba(80,40,10,.26);}
+  [data-theme="light"] .mTab.active .mTabLbl{color:rgba(160,50,0,.80);}
+
+  /* ══ PANEL WHEEL ANIMATION — compositor-safe (opacity+transform only) ══ */
+  .mPanel{transform-origin:center center;}
+  @keyframes panelWheelIn{
+    from{opacity:.6;transform:translate3d(16px,0,0) scale(.97);}
+    to{opacity:1;transform:translate3d(0,0,0) scale(1);}
+  }
+  @keyframes panelWheelInLeft{
+    from{opacity:.6;transform:translate3d(-16px,0,0) scale(.97);}
+    to{opacity:1;transform:translate3d(0,0,0) scale(1);}
+  }
+  .mPanel.entering-right{animation:panelWheelIn .32s cubic-bezier(.22,.68,0,1.2) both;}
+  .mPanel.entering-left{animation:panelWheelInLeft .32s cubic-bezier(.22,.68,0,1.2) both;}
+
+  /* ── PANEL VIEWPORT ── */
+  #mViewport{
+    flex:1 1 0;
+    overflow:hidden;
+    position:relative;
+    isolation:isolate;
+    perspective:1200px;
+  }
+
+  /* ══ PANEL 0 — HOME ══ */
+  /* Hero inside panel */
+  /* ══ HOW IT WORKS CARD ══ */
+  .mHowCard{
+    margin-top:12px;
+    background:var(--cardBg);
+    border:1.5px solid var(--cb);
+    border-radius:20px;
+    overflow:hidden;
+    box-shadow:0 2px 12px rgba(255,80,0,.06);
+    animation:mCardIn .42s .26s var(--sm) both;
+  }
+  [data-theme="dark"] .mHowCard{background:var(--cardBg);}
+
+  /* Header row */
+  .mHowHdr{
+    padding:14px 16px 0;
+    display:flex;align-items:center;justify-content:space-between;
+  }
+  .mHowTitle{
+    font-size:12px;font-weight:900;letter-spacing:.06em;text-transform:uppercase;
+    color:var(--o);
+  }
+  .mHowSkip{
+    font-size:11px;font-weight:700;color:var(--muted);
+    background:none;border:none;cursor:pointer;padding:2px 6px;
+    border-radius:6px;transition:color .12s,background .12s;
+  }
+  .mHowSkip:active{color:var(--o);background:rgba(255,106,0,.08);}
+
+  /* Live preview area — animated CGPA/marks display */
+  .mHowPreview{
+    margin:12px 16px 0;
+    background:linear-gradient(135deg,rgba(255,106,0,.07) 0%,rgba(255,160,60,.04) 100%);
+    border:1.5px solid rgba(255,106,0,.14);
+    border-radius:14px;
+    padding:16px;
+    display:flex;align-items:center;justify-content:space-between;
+    gap:12px;
+    position:relative;overflow:hidden;
+  }
+  [data-theme="dark"] .mHowPreview{
+    background:linear-gradient(135deg,rgba(255,106,0,.10) 0%,rgba(255,80,0,.05) 100%);
+    border-color:rgba(255,106,0,.20);
+  }
+  /* Animated shimmer behind preview */
+  .mHowPreview::before{
+    content:"";position:absolute;inset:0;
+    background:linear-gradient(90deg,transparent 0%,rgba(255,120,0,.06) 50%,transparent 100%);
+    animation:previewSweep 2.4s ease-in-out infinite;
+  }
+  @keyframes previewSweep{
+    0%{transform:translateX(-100%);}
+    100%{transform:translateX(100%);}
+  }
+
+  /* Counter display */
+  .mHowCounter{
+    display:flex;flex-direction:column;align-items:flex-start;gap:1px;
+    position:relative;z-index:1;
+  }
+  .mHowCounterLabel{
+    font-size:10px;font-weight:800;letter-spacing:.05em;text-transform:uppercase;
+    color:var(--muted);
+  }
+  .mHowCounterVal{
+    font-size:36px;font-weight:950;letter-spacing:-1.5px;
+    color:var(--o);line-height:1;
+    font-variant-numeric:tabular-nums;
+  }
+  .mHowCounterSub{
+    font-size:11px;font-weight:600;color:var(--muted);margin-top:2px;
+  }
+
+  /* Marks mini bars */
+  .mHowBars{
+    display:flex;flex-direction:column;gap:6px;
+    flex:1;min-width:0;
+    position:relative;z-index:1;
+  }
+  .mHowBar{display:flex;align-items:center;gap:7px;}
+  .mHowBarLabel{font-size:10px;font-weight:700;color:var(--muted);width:32px;flex-shrink:0;text-align:right;}
+  .mHowBarTrack{flex:1;height:6px;border-radius:999px;background:rgba(128,80,0,.10);overflow:hidden;}
+  [data-theme="dark"] .mHowBarTrack{background:rgba(255,180,80,.10);}
+  .mHowBarFill{height:100%;border-radius:999px;background:linear-gradient(90deg,#FF6A00,#FF9040);transform-origin:left;transform:scaleX(0);transition:transform .8s cubic-bezier(.22,.68,0,1.1);}
+  .mHowBarFill.go{transform:scaleX(1);}
+  .mHowBarPct{font-size:10px;font-weight:800;color:var(--o);width:26px;flex-shrink:0;}
+
+  /* 3 steps row */
+  .mHowSteps{
+    display:flex;gap:0;
+    padding:14px 16px 16px;
+  }
+  .mHowStep{
+    flex:1;display:flex;flex-direction:column;align-items:center;gap:6px;
+    position:relative;
+  }
+  /* connector line between steps */
+  .mHowStep:not(:last-child)::after{
+    content:"";
+    position:absolute;top:14px;left:calc(50% + 14px);
+    width:calc(100% - 28px);height:1.5px;
+    background:linear-gradient(90deg,rgba(255,106,0,.30),rgba(255,106,0,.12));
+  }
+  .mHowStepNum{
+    width:28px;height:28px;border-radius:50%;
+    background:rgba(255,106,0,.12);border:1.5px solid rgba(255,106,0,.26);
+    display:grid;place-items:center;
+    font-size:12px;font-weight:900;color:var(--o);
+    flex-shrink:0;
+    transition:background .3s,border-color .3s,transform .3s var(--sp);
+  }
+  .mHowStep.active .mHowStepNum{
+    background:var(--o);color:#fff;border-color:var(--o);
+    transform:scale(1.15);
+    box-shadow:0 4px 12px rgba(255,106,0,.38);
+  }
+  .mHowStepTxt{
+    font-size:10px;font-weight:700;color:var(--muted);text-align:center;line-height:1.3;
+    transition:color .3s;
+  }
+  .mHowStep.active .mHowStepTxt{color:var(--text);}
+
+  /* Step descriptions — one shows at a time */
+  .mHowDesc{
+    padding:0 16px 14px;
+    font-size:12.5px;font-weight:600;color:var(--muted);
+    line-height:1.5;
+    min-height:38px;
+    transition:opacity .3s;
+  }
+  .mHero{padding:8px 0 0;}
+  .mOfferCard{margin-top:10px;}
+
+  /* Cards — NO background transition on mobile (causes jank) */
+  .mHeroCard,.mAccCard,.mOfferCard{
+    /* Only animate transform and opacity — GPU composited, no repaints */
+    transition:transform .18s var(--sp),box-shadow .18s;
+  }
+
+  /* Staggered entrance — translateY+opacity only (compositor-safe) */
+  .mHeroCard,.mAccCard,.mOfferCard,.mQuickRow{animation:mCardIn .42s var(--sm) both;}
+  .mHeroCard{animation-delay:.04s;}
+  .mAccCard{animation-delay:.12s;}
+  .mOfferCard{animation-delay:.19s;}
+  .mQuickRow{animation-delay:.26s;}
+  @keyframes mCardIn{
+    from{opacity:0;transform:translate3d(0,18px,0) scale(.97);}
+    to{opacity:1;transform:translate3d(0,0,0) scale(1);}
+  }
+
+  /* Top bar padding matches panel padding */
+  #mBar{
+    padding-left:clamp(12px,4.5vw,20px);
+    padding-right:clamp(12px,4.5vw,20px);
+  }
+
+  .mHeroCard{
+    background:var(--cardBg);border:1.5px solid var(--cb);
+    border-radius:20px;padding:18px 16px 16px;
+    box-shadow:0 1px 0 rgba(255,255,255,.5) inset,0 6px 20px rgba(255,80,0,.07);
+    transition:background var(--td),border-color var(--td);
+    animation:cardPop .5s .05s var(--sm) both;
+  }
+  @keyframes cardPop{from{opacity:0;transform:translateY(14px) scale(.96)}to{opacity:1;transform:none}}
+  .mHTag{display:inline-flex;align-items:center;gap:6px;padding:4px 10px;border-radius:999px;background:rgba(255,106,0,.09);border:1.5px solid rgba(255,106,0,.18);color:var(--o);font-weight:800;font-size:10px;letter-spacing:.04em;}
+  .mH1{margin-top:10px;font-size:clamp(24px,8vw,34px);line-height:1.04;letter-spacing:-1.4px;font-weight:950;color:var(--text);transition:color var(--td);}
+  .mSub{margin-top:7px;color:var(--muted);font-size:13px;font-weight:500;line-height:1.5;transition:color var(--td);}
+  /* CTA buttons stacked */
+  .mCtr{margin-top:14px;display:flex;flex-direction:column;gap:8px;}
+  .mCtr .btn{width:100%;font-size:14.5px;padding:14px 18px;border-radius:14px;justify-content:center;}
+
+  /* Account panel mobile */
+  .mAccCard{
+    background:var(--cardBg);border:1.5px solid var(--cb);
+    border-radius:20px;margin-top:12px;overflow:hidden;
+    box-shadow:0 4px 16px rgba(255,80,0,.06);
+    transition:background var(--td),border-color var(--td);
+    animation:cardPop .5s .12s var(--sm) both;
+  }
+  /* Quick nav row below account */
+  .mQuickRow{
+    display:grid;grid-template-columns:1fr 1fr 1fr;
+    gap:8px;margin-top:12px;
+    animation:cardPop .5s .18s var(--sm) both;
+  }
+  .mQBtn{
+    display:flex;flex-direction:column;align-items:center;justify-content:center;
+    gap:5px;padding:14px 8px;
+    background:var(--cardBg);border:1.5px solid var(--cb);
+    border-radius:16px;cursor:pointer;
+    font-size:11px;font-weight:800;color:var(--text);
+    transition:background .12s,border-color .12s,transform .2s var(--sp),color var(--td);
+    box-shadow:0 2px 8px rgba(255,80,0,.05);
+    -webkit-user-select:none;user-select:none;
+  }
+  .mQBtn:active{transform:scale(.93);background:rgba(255,106,0,.07);}
+  .mQBtn svg{width:20px;height:20px;stroke:var(--o);stroke-width:2;fill:none;stroke-linecap:round;stroke-linejoin:round;}
+
+  /* ══ PANEL 1 — CALCULATORS — coloured like desktop ══ */
+  .mCalcGrid{
+    display:flex;flex-direction:column;gap:10px;
+    padding-top:10px;
+  }
+  .mTile{
+    background:var(--cardBg);border:1.5px solid var(--cb);
+    border-radius:18px;padding:16px;
+    display:flex;align-items:center;gap:14px;
+    box-shadow:0 2px 10px rgba(255,80,0,.06);
+    cursor:pointer;
+    /* Only compositor-safe transitions */
+    transition:transform .16s var(--sp),opacity .16s;
+    -webkit-user-select:none;user-select:none;
+    position:relative;overflow:hidden;
+    /* Accent left border — matches desktop */
+    border-left:3px solid var(--o);
+  }
+  /* Each tile: unique left-border colour */
+  .mTile:nth-child(1){border-left-color:#FF6A00;}
+  .mTile:nth-child(2){border-left-color:#FF9040;}
+  .mTile:nth-child(3){border-left-color:#FFB870;}
+  /* Shimmer top line */
+  .mTile::after{
+    content:"";position:absolute;top:0;left:-100%;width:45%;height:2px;
+    background:linear-gradient(90deg,transparent,rgba(255,106,0,.70),transparent);
+    transition:left .45s var(--ease);
+  }
+  .mTile:active{transform:scale(.96);opacity:.85;}
+  .mTile:active::after{left:110%;}
+  .mTileIcon{
+    width:46px;height:46px;border-radius:14px;flex:0 0 auto;
+    display:grid;place-items:center;
+    background:transparent;border:none;
+  }
+  /* Each tile icon: just the icon colour, no box */
+  .mTile:nth-child(1) .mTileIcon{background:transparent;}
+  .mTile:nth-child(2) .mTileIcon{background:transparent;}
+  .mTile:nth-child(3) .mTileIcon{background:transparent;}
+  /* Bigger icons since no box */
+  .mTile:nth-child(1) .mTileIcon svg{stroke:#FF6A00;width:26px;height:26px;}
+  .mTile:nth-child(2) .mTileIcon svg{stroke:#E07020;width:26px;height:26px;}
+  .mTile:nth-child(3) .mTileIcon svg{stroke:#C06030;width:26px;height:26px;}
+  .mTileIcon svg{width:26px;height:26px;stroke-width:2;fill:none;stroke-linecap:round;stroke-linejoin:round;}
+  /* Number badge — matches desktop */
+  .mTile::before{
+    content:attr(data-num);
+    position:absolute;top:12px;right:40px;
+    width:20px;height:20px;border-radius:50%;
+    background:var(--ib);border:1px solid var(--id);
+    color:var(--o);font-size:10px;font-weight:900;
+    display:grid;place-items:center;z-index:1;
+  }
+  .mTileBody{flex:1;min-width:0;}
+  .mTileName{font-size:15px;font-weight:950;letter-spacing:-.2px;color:var(--text);}
+  .mTileDesc{font-size:12px;color:var(--muted);font-weight:500;margin-top:2px;line-height:1.3;}
+  .mTileBadge{font-size:9px;font-weight:800;padding:3px 8px;border-radius:999px;background:var(--ib);color:var(--o);border:1px solid var(--id);margin-top:5px;display:inline-block;}
+  .mTileArrow{color:var(--muted2);font-size:18px;flex:0 0 auto;transition:transform .16s var(--sp),color .16s;}
+  .mTile:active .mTileArrow{transform:translateX(4px);color:var(--o);}
+
+  /* ══ PANEL 2 — FEATURES — unique colours like desktop ══ */
+  .mFeatGrid{
+    display:grid;grid-template-columns:1fr 1fr;
+    gap:9px;padding-top:10px;
+  }
+  .mFeatCard{
+    background:var(--cardBg);border:1.5px solid var(--cb);
+    border-radius:16px;padding:14px 12px;
+    display:flex;flex-direction:column;gap:7px;
+    box-shadow:0 2px 8px rgba(255,80,0,.05);
+    transition:transform .16s var(--sp),opacity .16s;
+    position:relative;overflow:hidden;
+  }
+  /* Right-edge tint strip — matches desktop */
+  .mFeatCard::after{
+    content:"";position:absolute;top:0;right:0;width:3px;height:100%;
+    border-radius:0 16px 16px 0;
+  }
+  .mFeatCard:nth-child(1)::after{background:linear-gradient(180deg,rgba(255,106,0,.25),rgba(255,106,0,.05));}
+  .mFeatCard:nth-child(2)::after{background:linear-gradient(180deg,rgba(255,130,0,.22),rgba(255,130,0,.04));}
+  .mFeatCard:nth-child(3)::after{background:linear-gradient(180deg,rgba(220,80,170,.20),rgba(220,80,170,.04));}
+  .mFeatCard:nth-child(4)::after{background:linear-gradient(180deg,rgba(60,160,230,.20),rgba(60,160,230,.04));}
+  .mFeatCard:nth-child(5)::after{background:linear-gradient(180deg,rgba(60,200,100,.20),rgba(60,200,100,.04));}
+  .mFeatCard:nth-child(6)::after{background:linear-gradient(180deg,rgba(100,100,240,.18),rgba(100,100,240,.04));}
+  .mFeatCard:active{transform:scale(.94);opacity:.88;}
+  .mFeatIcon{
+    width:34px;height:34px;border-radius:10px;
+    display:grid;place-items:center;
+    flex-shrink:0;
+  }
+  /* Unique colours per feature — same scheme as desktop */
+  .mFeatCard:nth-child(1) .mFeatIcon{background:rgba(255,106,0,.14);border:1.5px solid rgba(255,106,0,.28);}
+  .mFeatCard:nth-child(2) .mFeatIcon{background:rgba(255,130,0,.12);border:1.5px solid rgba(255,130,0,.24);}
+  .mFeatCard:nth-child(3) .mFeatIcon{background:rgba(255,80,180,.09);border:1.5px solid rgba(255,80,180,.20);}
+  .mFeatCard:nth-child(4) .mFeatIcon{background:rgba(80,180,255,.10);border:1.5px solid rgba(80,180,255,.22);}
+  .mFeatCard:nth-child(5) .mFeatIcon{background:rgba(80,220,120,.10);border:1.5px solid rgba(80,220,120,.22);}
+  .mFeatCard:nth-child(6) .mFeatIcon{background:rgba(100,100,255,.09);border:1.5px solid rgba(100,100,255,.20);}
+  /* Matching icon stroke colours */
+  .mFeatCard:nth-child(1) .mFeatIcon svg{stroke:#FF6A00;}
+  .mFeatCard:nth-child(2) .mFeatIcon svg{stroke:#FF8030;}
+  .mFeatCard:nth-child(3) .mFeatIcon svg{stroke:#E060B0;}
+  .mFeatCard:nth-child(4) .mFeatIcon svg{stroke:#40A0E0;}
+  .mFeatCard:nth-child(5) .mFeatIcon svg{stroke:#30B860;}
+  .mFeatCard:nth-child(6) .mFeatIcon svg{stroke:#6060DD;}
+  .mFeatIcon svg{width:16px;height:16px;stroke-width:2.2;fill:none;stroke-linecap:round;stroke-linejoin:round;}
+  .mFeatName{font-size:12.5px;font-weight:900;letter-spacing:-.1px;color:var(--text);}
+  .mFeatDesc{font-size:11px;color:var(--muted);font-weight:500;line-height:1.4;}
+
+  /* ══ PANEL 3 — FAQ ══ */
+  .mFAQ{padding-top:10px;display:flex;flex-direction:column;gap:7px;}
+  .mFItem{
+    background:var(--cardBg);border:1.5px solid var(--cb);
+    border-radius:16px;overflow:hidden;
+    box-shadow:0 1px 4px rgba(255,80,0,.04);
+    transition:background var(--td),border-color .18s;
+  }
+  .mFQ{
+    display:flex;justify-content:space-between;align-items:center;gap:10px;
+    padding:14px 14px;cursor:pointer;
+    font-size:13px;font-weight:800;line-height:1.3;
+    user-select:none;color:var(--text);
+    transition:color .12s,background .12s;
+  }
+  .mFQ:active{background:rgba(255,106,0,.06);}
+  .mFQ.open{color:var(--o);}
+  .mFArr{width:20px;height:20px;border-radius:7px;flex:0 0 auto;display:grid;place-items:center;background:var(--ib);border:1.5px solid var(--id);transition:transform .3s var(--sp),background .18s;}
+  .mFQ.open .mFArr{transform:rotate(180deg);background:rgba(255,106,0,.14);}
+  .mFArr svg{width:11px;height:11px;stroke:var(--o);stroke-width:2.5;fill:none;stroke-linecap:round;stroke-linejoin:round;}
+  .mFA{max-height:0;overflow:hidden;transition:max-height .32s var(--sm);}
+  .mFA.open{max-height:200px;}
+  .mFAIn{padding:8px 14px 14px;border-top:1px solid rgba(255,106,0,.08);font-size:12.5px;color:var(--muted);font-weight:500;line-height:1.6;transition:color var(--td);}
+
+  /* Panel section header */
+  .mSecHdr{padding:14px 0 8px;display:flex;align-items:baseline;justify-content:space-between;}
+  .mSecHdr h2{font-size:18px;font-weight:900;letter-spacing:-.4px;color:var(--text);transition:color var(--td);}
+  .mSecSub{font-size:11.5px;color:var(--muted2);font-weight:600;transition:color var(--td);}
+
+  /* Footer inside panel */
+  .mFooter{
+    margin-top:18px;padding:16px;
+    background:var(--cardBg);border:1.5px solid var(--cb);
+    border-radius:18px;
+    box-shadow:0 2px 10px rgba(255,80,0,.05);
+    transition:background var(--td),border-color var(--td);
+  }
+  .mFooter .fb-n{font-size:13px;font-weight:900;color:var(--text);margin-bottom:2px;transition:color var(--td);}
+  .mFooter .fb-t{font-size:11.5px;color:var(--muted);font-weight:500;line-height:1.4;margin-bottom:12px;transition:color var(--td);}
+  .mFLinks{display:flex;gap:8px 20px;flex-wrap:wrap;margin-bottom:10px;}
+  .mFLinks a{font-size:12px;color:var(--muted);font-weight:600;transition:color .12s;}
+  .mFLinks a:active{color:var(--o);}
+  .mCopyright{font-size:11px;color:var(--muted2);font-weight:600;border-top:1px solid rgba(255,106,0,.08);padding-top:9px;transition:color var(--td);}
+
+  /* Panel entry animation — spring Y+scale, GPU safe */
+  .mPanel .rv{
+    opacity:0;
+    transform:translateY(18px) scale(.97);
+    transform-origin:center top;
+  }
+  .mPanel .rv.in{
+    opacity:1;
+    transform:translateY(0) scale(1);
+    transition:opacity .4s var(--sm),transform .44s cubic-bezier(.22,.68,0,1.1);
+  }
+  .mPanel .rv.in:nth-child(1){transition-delay:0ms;}
+  .mPanel .rv.in:nth-child(2){transition-delay:55ms;}
+  .mPanel .rv.in:nth-child(3){transition-delay:110ms;}
+  .mPanel .rv.in:nth-child(4){transition-delay:165ms;}
+  .mPanel .rv.in:nth-child(5){transition-delay:220ms;}
+  .mPanel .rv.in:nth-child(6){transition-delay:275ms;}
+}
+
+/* ════════════ TABLET (768–1023) ════════════ */
+@media(min-width:768px) and (max-width:1023px){
+  .hg{display:grid;grid-template-columns:1fr 1fr;gap:14px;align-items:start;}
+  .hg > *{min-width:0;}
+  .tg{grid-template-columns:repeat(3,1fr);}
+  .fg{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;}
+  .feat{flex-direction:column;gap:8px;align-items:flex-start;padding:16px 16px 14px;}
+  .fi{margin-bottom:4px;}
+  .ctr .btn{width:auto;}
+  h1{font-size:clamp(30px,4vw,44px);}
+  .ftop{grid-template-columns:1fr auto;align-items:start;}
+}
+
+/* ════════════ DESKTOP (≥1024) ════════════ */
+@media(min-width:1024px){
+  /* Hero: two-column grid, cards full height */
+  .hg{
+    display:grid;
+    grid-template-columns:1.18fr .82fr;
+    gap:16px;
+    align-items:start;
+  }
+  /* Grid children never overflow */
+  .hg > *{min-width:0;}
+  .tg{grid-template-columns:repeat(3,1fr);}
+  .fg{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;}
+  .feat{flex-direction:column;gap:8px;align-items:flex-start;padding:18px 18px 16px;}
+  .fi{margin-bottom:6px;}
+  .ctr .btn{width:auto;}
+  .ftop{grid-template-columns:1fr auto;align-items:start;}
+  h1{font-size:clamp(36px,4.5vw,54px);}
+  .hp{padding:30px 26px 26px;}
+  .ap{padding:22px;}
+}
+@media(min-width:1280px){h1{font-size:clamp(44px,4vw,56px);}}
+
+/* ═══════════════════════════════════════════════════
+   GRADEO v11 — MODERN ANIMATED REDESIGN
+   Injected override block — preserves all logic
+   Font: Syne (display) + DM Sans (body)
+   Theme: Electric orange on deep cosmic dark / warm cream light
+   ═══════════════════════════════════════════════════ */
+@import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;0,9..40,800;1,9..40,400&display=swap');
+
+:root {
+  --font-display: 'Syne', ui-sans-serif, system-ui, sans-serif;
+  --font-body: 'DM Sans', ui-sans-serif, system-ui, sans-serif;
+  /* Enhanced token overrides */
+  --o: #FF5C00;
+  --od: #D94A00;
+  --o2: #FF8040;
+  --o3: #FFB370;
+  --r: 22px;
+  --r2: 18px;
+}
+
+body {
+  font-family: var(--font-body) !important;
+}
+
+/* ── Animated gradient background (desktop) ── */
+[data-theme="light"] .bgs {
+  display: block !important;
+}
+[data-theme="light"] .bg1 { background: radial-gradient(ellipse at center, rgba(255,92,0,.18) 0%, transparent 70%); animation: b1 18s ease-in-out infinite alternate; }
+[data-theme="light"] .bg2 { background: radial-gradient(ellipse at center, rgba(255,180,60,.15) 0%, transparent 70%); animation: b2 22s ease-in-out infinite alternate; }
+[data-theme="light"] .bg3 { background: radial-gradient(ellipse at center, rgba(255,80,0,.09) 0%, transparent 68%); }
+[data-theme="dark"]  .bg1 { background: radial-gradient(ellipse at center, rgba(255,70,0,.22) 0%, transparent 65%); }
+[data-theme="dark"]  .bg2 { background: radial-gradient(ellipse at center, rgba(255,120,0,.14) 0%, transparent 68%); }
+
+/* Grid noise overlay for texture */
+body::before {
+  content: '';
+  position: fixed; inset: 0; z-index: -1; pointer-events: none;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+  background-repeat: repeat;
+  background-size: 200px;
+  opacity: 0.5;
+}
+[data-theme="dark"] body::before { opacity: 0.3; }
+
+/* ── HEADER redesign ── */
+header.dsk {
+  background: transparent !important;
+  backdrop-filter: blur(20px) saturate(160%);
+  -webkit-backdrop-filter: blur(20px) saturate(160%);
+  border-bottom: 1px solid transparent;
+  transition: background .3s, border-color .3s, box-shadow .3s;
+}
+[data-theme="light"] header.dsk { background: rgba(255,246,237,.75) !important; }
+[data-theme="dark"]  header.dsk { background: rgba(8,6,4,.80) !important; }
+header.dsk.scrolled {
+  border-bottom-color: rgba(255,92,0,.12) !important;
+  box-shadow: 0 4px 32px rgba(255,60,0,.08) !important;
+}
+.bn {
+  font-family: var(--font-display) !important;
+  font-weight: 800 !important;
+  font-size: 17px !important;
+  letter-spacing: -.5px !important;
+}
+
+/* ── HERO heading redesign ── */
+h1 {
+  font-family: var(--font-display) !important;
+  font-weight: 800 !important;
+  line-height: 1.05 !important;
+  letter-spacing: -1.5px !important;
+}
+h2 {
+  font-family: var(--font-display) !important;
+  font-weight: 700 !important;
+  letter-spacing: -.5px !important;
+}
+.htag {
+  display: inline-flex; align-items: center; gap: 7px;
+  font-size: 11px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase;
+  color: var(--o); background: rgba(255,92,0,.09);
+  border: 1px solid rgba(255,92,0,.22);
+  padding: 5px 12px; border-radius: 999px;
+  margin-bottom: 18px;
+}
+.hdot {
+  width: 6px; height: 6px; border-radius: 50%; background: var(--o);
+  animation: pulse-dot 2s ease-in-out infinite;
+}
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: .5; transform: scale(.7); }
+}
+
+/* ── Gradient text ── */
+.gr {
+  background: linear-gradient(110deg, #FF2200 0%, #FF6A00 35%, #FFA040 65%, #FF5500 100%) !important;
+  background-size: 300% auto !important;
+  -webkit-background-clip: text !important;
+  background-clip: text !important;
+  color: transparent !important;
+  animation: gS 6s ease-in-out infinite alternate !important;
+}
+
+/* ── CARDS redesign ── */
+.card {
+  border-radius: 24px !important;
+  border: 1px solid rgba(255,92,0,.12) !important;
+  overflow: hidden;
+  position: relative;
+}
+[data-theme="dark"] .card {
+  background: linear-gradient(145deg, rgba(26,20,14,.9) 0%, rgba(20,14,8,.9) 100%) !important;
+  box-shadow: 0 0 0 1px rgba(255,92,0,.08), 0 24px 60px rgba(0,0,0,.4), inset 0 1px 0 rgba(255,150,50,.08) !important;
+}
+[data-theme="light"] .card {
+  background: rgba(255,255,255,.95) !important;
+  box-shadow: 0 0 0 1px rgba(255,92,0,.06), 0 16px 48px rgba(255,60,0,.08) !important;
+}
+
+/* card shimmer on hover */
+.card::before {
+  content: ''; position: absolute; inset: 0; pointer-events: none;
+  background: linear-gradient(135deg, rgba(255,120,0,.04) 0%, transparent 50%);
+  border-radius: inherit; z-index: 0;
+}
+
+/* ── TILES redesign ── */
+.tile {
+  border-radius: 20px !important;
+  border: 1px solid rgba(255,92,0,.10) !important;
+  border-left: 3px solid var(--o) !important;
+  position: relative; overflow: hidden;
+  transition: transform .3s cubic-bezier(.34,1.56,.64,1), box-shadow .2s, border-color .2s !important;
+}
+[data-theme="dark"] .tile {
+  background: linear-gradient(135deg, rgba(24,18,10,.95) 0%, rgba(18,12,6,.95) 100%) !important;
+  box-shadow: 0 4px 20px rgba(0,0,0,.3), inset 0 1px 0 rgba(255,120,0,.06) !important;
+}
+[data-theme="light"] .tile {
+  background: #fff !important;
+  box-shadow: 0 2px 12px rgba(255,60,0,.06), 0 1px 3px rgba(0,0,0,.04) !important;
+}
+.tile:nth-child(1) { border-left-color: #FF5C00 !important; }
+.tile:nth-child(2) { border-left-color: #FF8040 !important; }
+.tile:nth-child(3) { border-left-color: #FFAA60 !important; }
+@media(hover:hover) and (pointer:fine){
+  .tile:hover {
+    transform: translateY(-6px) scale(1.016) !important;
+    border-color: rgba(255,92,0,.30) !important;
+    box-shadow: 0 20px 48px rgba(255,60,0,.15), 0 4px 12px rgba(0,0,0,.08) !important;
+  }
+}
+.tn { font-family: var(--font-display) !important; font-weight: 700 !important; font-size: 15px !important; }
+.tb2 {
+  background: rgba(255,92,0,.09) !important;
+  border: 1px solid rgba(255,92,0,.18) !important;
+  color: var(--o) !important;
+  font-size: 10px !important;
+  font-weight: 700 !important;
+  letter-spacing: .04em !important;
+}
+
+/* ── BUTTONS redesign ── */
+.btn.bp {
+  background: linear-gradient(135deg, #FF5C00 0%, #FF3800 100%) !important;
+  border: none !important;
+  box-shadow: 0 4px 0 #A82800, 0 8px 24px rgba(255,60,0,.35) !important;
+  font-family: var(--font-display) !important;
+  font-weight: 700 !important;
+  font-size: 14px !important;
+  padding: 13px 22px !important;
+  border-radius: 14px !important;
+  letter-spacing: -.1px !important;
+  position: relative; overflow: hidden;
+  transition: transform .2s cubic-bezier(.34,1.56,.64,1), box-shadow .15s !important;
+}
+.btn.bp::after {
+  content: ''; position: absolute; inset: 0;
+  background: linear-gradient(110deg, transparent 30%, rgba(255,255,255,.15) 55%, transparent 80%);
+  transform: skewX(-15deg) translateX(-120%);
+  animation: btnShine 3s ease-in-out infinite 1s;
+}
+@keyframes btnShine {
+  0% { transform: skewX(-15deg) translateX(-120%); }
+  40%, 100% { transform: skewX(-15deg) translateX(200%); }
+}
+.btn.bp:hover { transform: translateY(-3px) scale(1.02) !important; box-shadow: 0 6px 0 #A82800, 0 12px 30px rgba(255,60,0,.45) !important; }
+.btn.bp:active { transform: translateY(1px) scale(.98) !important; box-shadow: 0 2px 0 #A82800 !important; }
+
+.btn.bs {
+  background: transparent !important;
+  border: 1.5px solid rgba(255,92,0,.25) !important;
+  color: var(--text) !important;
+  font-family: var(--font-display) !important;
+  font-weight: 600 !important;
+  padding: 11px 20px !important;
+  border-radius: 14px !important;
+  transition: border-color .15s, background .15s, transform .2s !important;
+}
+.btn.bs:hover { border-color: var(--o) !important; background: rgba(255,92,0,.06) !important; transform: translateY(-2px) !important; }
+
+/* ── SECTION HEADERS ── */
+.sh h2 {
+  font-family: var(--font-display) !important;
+  font-weight: 800 !important;
+  font-size: clamp(22px, 2.8vw, 32px) !important;
+  letter-spacing: -.6px !important;
+}
+.sh { position: relative; padding-left: 20px !important; }
+.sh::before {
+  content: ''; position: absolute; left: 0; top: 50%; transform: translateY(-50%);
+  width: 4px; height: 60%; min-height: 28px;
+  background: linear-gradient(180deg, var(--o), var(--o2));
+  border-radius: 999px;
+}
+
+/* ── FEATURE CARDS ── */
+.feat {
+  border-radius: 20px !important;
+  border: 1.5px solid var(--id) !important;
+  transition: transform .28s cubic-bezier(.34,1.56,.64,1), box-shadow .18s, border-color .18s !important;
+  box-shadow: 0 4px 12px var(--border) !important;
+}
+[data-theme="dark"] .feat {
+  background: linear-gradient(140deg, #141414 0%, #0A0A0A 100%) !important;
+}
+[data-theme="light"] .feat {
+  background: #fff !important;
+}
+@media(hover:hover) and (pointer:fine) {
+  .feat:hover { transform: translateY(-5px) scale(1.012) !important; border-color: rgba(255,92,0,.22) !important; box-shadow: 0 14px 36px rgba(255,60,0,.12) !important; }
+}
+.ft { font-family: var(--font-display) !important; font-weight: 700 !important; font-size: 14px !important; }
+
+/* ── FAQ redesign ── */
+.fi2 {
+  border-radius: 18px !important;
+  border: 1.5px solid var(--cb) !important;
+}
+[data-theme="dark"] .fi2 { background: #141414 !important; }
+[data-theme="light"] .fi2 { background: #fff !important; }
+.fq { font-family: var(--font-display) !important; font-weight: 600 !important; }
+.fi2.open { border-color: rgba(255,92,0,.28) !important; box-shadow: 0 8px 28px rgba(255,60,0,.10) !important; }
+
+/* ── FOOTER redesign ── */
+.fc {
+  border-radius: 24px !important;
+  border: 1.5px solid var(--id) !important;
+}
+[data-theme="dark"] .fc { background: #141414 !important; }
+[data-theme="light"] .fc { background: rgba(255,250,244,.97) !important; }
+.fb-n { font-family: var(--font-display) !important; font-weight: 800 !important; font-size: 16px !important; }
+
+/* ── MOBILE tiles (mTile) redesign ── */
+.mTile {
+  border-radius: 20px !important;
+  border: 1.5px solid var(--id) !important;
+  position: relative; overflow: hidden;
+}
+[data-theme="dark"] .mTile {
+  background: linear-gradient(135deg, #141414 0%, #0A0A0A 100%) !important;
+}
+[data-theme="light"] .mTile {
+  background: #fff !important;
+}
+.mTileName { font-family: var(--font-display) !important; font-weight: 700 !important; }
+
+/* ── MOBILE home hero card ── */
+.mHeroCard {
+  border-radius: 24px !important;
+  border: 1px solid rgba(255,92,0,.14) !important;
+}
+[data-theme="dark"] .mHeroCard {
+  background: linear-gradient(155deg, rgba(28,20,10,.95) 0%, rgba(16,10,4,.9) 100%) !important;
+  box-shadow: 0 0 0 1px rgba(255,92,0,.07), 0 20px 50px rgba(0,0,0,.4), inset 0 1px 0 rgba(255,120,0,.09) !important;
+}
+[data-theme="light"] .mHeroCard {
+  background: rgba(255,255,255,.97) !important;
+  box-shadow: 0 0 0 1px rgba(255,92,0,.06), 0 16px 44px rgba(255,60,0,.09) !important;
+}
+.mH1 { font-family: var(--font-display) !important; font-weight: 800 !important; font-size: clamp(26px,7vw,34px) !important; letter-spacing: -1px !important; line-height: 1.08 !important; }
+.mHTag {
+  display: inline-flex; align-items: center; gap: 7px;
+  font-size: 10.5px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase;
+  color: var(--o); background: rgba(255,92,0,.09);
+  border: 1px solid rgba(255,92,0,.20);
+  padding: 4px 11px; border-radius: 999px; margin-bottom: 14px;
+}
+.mCtr .btn.bp { width: 100% !important; text-align: center !important; justify-content: center !important; }
+
+/* ── MOBILE account card ── */
+.mAccCard {
+  border-radius: 22px !important;
+  border: 1px solid rgba(255,92,0,.12) !important;
+}
+[data-theme="dark"] .mAccCard { background: rgba(22,16,8,.92) !important; }
+[data-theme="light"] .mAccCard { background: rgba(255,255,255,.97) !important; }
+
+/* ── MOBILE offer card ── */
+.mOfferCard {
+  border-radius: 22px !important;
+}
+
+/* ── MOBILE section headers ── */
+.mSecHdr h2 { font-family: var(--font-display) !important; font-weight: 800 !important; letter-spacing: -.5px !important; }
+
+/* ── MOBILE feature cards ── */
+.mFeatCard {
+  border-radius: 18px !important;
+  border: 1px solid rgba(255,92,0,.10) !important;
+}
+[data-theme="dark"] .mFeatCard { background: rgba(22,14,6,.88) !important; }
+[data-theme="light"] .mFeatCard { background: rgba(255,255,255,.97) !important; box-shadow: 0 2px 10px rgba(255,60,0,.05) !important; }
+.mFeatName { font-family: var(--font-display) !important; font-weight: 700 !important; }
+
+/* ── MOBILE FAQ ── */
+.mFQ { font-family: var(--font-display) !important; font-weight: 600 !important; }
+.mFItem {
+  border-radius: 18px !important;
+  border: 1px solid rgba(255,92,0,.10) !important;
+  overflow: hidden;
+}
+[data-theme="dark"] .mFItem { background: rgba(20,14,6,.88) !important; }
+[data-theme="light"] .mFItem { background: #fff !important; }
+.mFItem.open { border-color: rgba(255,92,0,.26) !important; }
+
+/* ── MOBILE TAB BAR redesign ── */
+#mTabs {
+  z-index: 500;
+}
+#diIsland {
+  background: var(--cardBg) !important;
+  border: 1px solid rgba(255,92,0,.15) !important;
+  border-radius: 28px !important;
+  box-shadow: 0 8px 32px rgba(0,0,0,.18), 0 1px 0 rgba(255,120,0,.12) inset !important;
+  backdrop-filter: blur(20px) !important;
+  -webkit-backdrop-filter: blur(20px) !important;
+}
+[data-theme="dark"] #diIsland { background: rgba(18,12,6,.92) !important; }
+[data-theme="light"] #diIsland { background: rgba(255,252,248,.95) !important; }
+.mTab .mTabLbl { font-family: var(--font-body) !important; font-size: 10px !important; font-weight: 600 !important; }
+.mTab.active { color: var(--o) !important; }
+
+/* ── MOBILE TOP BAR ── */
+.mBN { font-family: var(--font-display) !important; font-weight: 800 !important; }
+
+/* ── SIGN IN MODAL ── */
+.mbox { border-radius: 24px !important; }
+.mhd strong { font-family: var(--font-display) !important; font-weight: 800 !important; }
+.siBtn { border-radius: 16px !important; font-family: var(--font-body) !important; }
+
+/* ── SCROLL PROGRESS BAR ── */
+#pb {
+  background: linear-gradient(90deg, #FF2200, #FF6A00, #FFAA30) !important;
+  box-shadow: 0 0 8px rgba(255,80,0,.8) !important;
+  height: 3px !important;
+}
+
+/* ── HOW IT WORKS card ── */
+.mHowCard {
+  border-radius: 22px !important;
+  border: 1px solid rgba(255,92,0,.12) !important;
+}
+[data-theme="dark"] .mHowCard { background: rgba(22,14,6,.9) !important; }
+[data-theme="light"] .mHowCard { background: #fff !important; }
+.mHowTitle { font-family: var(--font-display) !important; font-weight: 700 !important; }
+.mHowStepNum { font-family: var(--font-display) !important; font-weight: 800 !important; }
+.mHowCounterVal {
+  font-family: var(--font-display) !important; font-weight: 800 !important;
+  font-size: 28px !important; letter-spacing: -1px !important;
+}
+
+/* ── OFFER card ── */
+.offerTitle { font-family: var(--font-display) !important; font-weight: 800 !important; }
+.offerCTA {
+  font-family: var(--font-display) !important; font-weight: 800 !important;
+  border-radius: 12px !important;
+}
+
+/* ── DESKTOP HERO container improvements ── */
+.hero { padding-top: 28px !important; }
+.hg { gap: 20px !important; }
+
+/* ── ANIMATED FLOATING PARTICLES (desktop only) ── */
+@media(min-width:768px){
+  #particleCanvas {
+    position: fixed; inset: 0; pointer-events: none; z-index: -1;
+    opacity: .6;
+  }
+}
+
+/* ── LIGHT MODE tweaks ── */
+[data-theme="light"] .sh::before { background: linear-gradient(180deg, #FF5C00, #FFAA60); }
+[data-theme="light"] .htag { background: rgba(255,92,0,.08); border-color: rgba(255,92,0,.20); }
+[data-theme="light"] .mHTag { background: rgba(255,92,0,.08); border-color: rgba(255,92,0,.18); }
+
+/* ── pout/signed-out panel ── */
+.poutHdr { font-family: var(--font-display) !important; }
+.poutRow { font-family: var(--font-body) !important; }
+
+/* ── Nav links ── */
+.nl { font-family: var(--font-display) !important; font-weight: 600 !important; }
+.hsi-btn { font-family: var(--font-display) !important; font-weight: 700 !important; border-radius: 12px !important; }
+
+/* ── Scrollbar ── */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: rgba(255,92,0,.25); border-radius: 999px; }
+::-webkit-scrollbar-thumb:hover { background: rgba(255,92,0,.45); }
+
+/* ── Focus rings ── */
+:focus-visible { outline: 2px solid var(--o) !important; outline-offset: 3px !important; }
+
+/* ── Animated grid background pattern (desktop) ── */
+@media(min-width:768px){
+  #dskLayout::before {
+    content: '';
+    position: fixed; inset: 0; z-index: -3; pointer-events: none;
+    background-image:
+      linear-gradient(rgba(255,92,0,.025) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,92,0,.025) 1px, transparent 1px);
+    background-size: 60px 60px;
+    mask-image: radial-gradient(ellipse 80% 60% at 50% 30%, black 0%, transparent 80%);
+    -webkit-mask-image: radial-gradient(ellipse 80% 60% at 50% 30%, black 0%, transparent 80%);
+  }
+  [data-theme="dark"] #dskLayout::before { opacity: 1; }
+  [data-theme="light"] #dskLayout::before { opacity: .6; }
+}
+
+/* ── Mobile background enhancement ── */
+@media(max-width:767px){
+  [data-theme="light"] #mApp {
+    background:
+      radial-gradient(ellipse 140% 55% at 5% 5%, rgba(255,92,0,.14) 0%, transparent 55%),
+      radial-gradient(ellipse 90% 40% at 95% 5%, rgba(255,180,60,.10) 0%, transparent 50%),
+      radial-gradient(ellipse 60% 30% at 50% 100%, rgba(255,92,0,.06) 0%, transparent 60%),
+      #FFF6ED !important;
+  }
+  [data-theme="dark"] #mApp {
+    background:
+      radial-gradient(ellipse 140% 55% at 5% 5%, rgba(255,70,0,.18) 0%, transparent 55%),
+      radial-gradient(ellipse 80% 35% at 95% 5%, rgba(255,100,0,.09) 0%, transparent 48%),
+      radial-gradient(ellipse 60% 28% at 50% 100%, rgba(255,60,0,.07) 0%, transparent 60%),
+      #080604 !important;
+  }
+}
+
+/* ── Smooth card entrance for panels ── */
+@media(max-width:767px){
+  .mCalcGrid { display: flex !important; flex-direction: column !important; gap: 12px !important; }
+  .mFeatGrid { display: grid !important; grid-template-columns: 1fr 1fr !important; gap: 12px !important; }
+}
+
+/* ── Brand logo glow ── */
+.lw, .mLogo {
+  box-shadow: 0 0 0 1px rgba(255,92,0,.15), 0 4px 16px rgba(255,60,0,.12) !important;
+}
+
+/* ── LAYOUT FLICKER FIX ── */
+@media (max-width: 767px) {
+  #dskLayout { display: none !important; }
+  #mApp { display: flex !important; opacity: 1 !important; }
+}
+@media (min-width: 768px) {
+  #dskLayout { display: block !important; opacity: 1 !important; }
+  #mApp { display: none !important; }
+}
+
+</style>
+</head>
+<body>
+<a class="skip-link" href="#top">Skip to main content</a>
+<noscript><div style="font-family:system-ui,sans-serif;padding:32px;text-align:center;"><h1>GRADEO</h1><p style="margin-top:12px">Please enable JavaScript to use GRADEO — <a href="https://gradeo.in/calculator/">open calculator</a>.</p></div></noscript>
+
+<!-- Shared: theme ripple, page transition, cursor, progress -->
 <div id="thRipple"></div>
 <div id="ptOv"></div>
 <div id="ldOv" role="status" aria-live="polite" aria-hidden="true">
@@ -36,126 +1898,1386 @@
       <img src="https://res.cloudinary.com/djy3mjtsz/image/upload/v1770296454/Untitled-2_i2ezfh.png" alt="GRADEO" width="42" height="42" loading="eager"/>
       <span class="ldTitle">GRADEO</span>
     </div>
-    <div class="ldSpin" aria-hidden="true"></div>
-    <div id="ldMsg" class="ldMsg">Initializing GradeEngine 2.0…</div>
+    <div class="ldSpin" aria-hidden="true" style="width:50px;height:50px;border-width:3px;"></div>
+    <div id="ldMsg" class="ldMsg" style="font-weight:700;letter-spacing:1px;text-transform:uppercase;font-size:10px;margin-top:15px;color:var(--o)">Initializing GradeEngine 2.0…</div>
+    <div class="skel" style="width:120px;height:4px;margin-top:20px;opacity:0.4;"></div>
   </div>
 </div>
 <div id="cur"></div>
 <div id="curRing"></div>
 <div id="prog" aria-hidden="true"><span id="pb"></span></div>
 
-<!-- ════════════ DESKTOP LAYOUT ════════════ -->
-<div id="dskLayout">
-  <header class="dsk" id="hdr">
-    <div class="wrap tb">
-      <div class="brand" id="brd" role="link" aria-label="GRADEO Home">
-        <div class="lw"><img src="https://res.cloudinary.com/djy3mjtsz/image/upload/v1770296454/Untitled-2_i2ezfh.png" alt="Logo"/></div>
-        <div><div class="bn">GRADEO</div><div class="bt">Grade Planner</div></div>
+<!-- ── SIGN-IN METHOD PICKER MODAL ── -->
+<div class="mbd" id="siModal" aria-modal="true" role="dialog" aria-label="Sign in to GRADEO">
+  <div class="mbox siBox">
+    <div class="mhd">
+      <strong>Sign in to GRADEO</strong>
+      <button onclick="$('#siModal').classList.remove('on')" aria-label="Close">✕</button>
+    </div>
+    <div class="mb siBody">
+      <p class="siSub">Save your plans and export grade cards — free forever.</p>
+      <button class="siBtn siGoogle" id="siBtnGoogle">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>
+        Continue with Google
+      </button>
+      <button class="siBtn siGithub" id="siBtnGithub">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0 1 12 6.844a9.59 9.59 0 0 1 2.504.337c1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.02 10.02 0 0 0 22 12.017C22 6.484 17.522 2 12 2z"/></svg>
+        Continue with GitHub
+      </button>
+      <button class="siBtn siEmail" id="siBtnEmailToggle">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+        Continue with Email
+      </button>
+      <div class="siEmailForm" id="siEmailForm" style="display:none;">
+        <div class="siDivider"><span>or enter details</span></div>
+        <input class="siInput" id="siEmail" type="email" placeholder="your@email.com" autocomplete="email" inputmode="email"/>
+        <input class="siInput" id="siPass" type="password" placeholder="Password (6+ characters)" autocomplete="current-password"/>
+        <div class="siEmailBtns">
+          <button class="btn bp siEmailAction" id="siBtnEmailSignIn">Sign in</button>
+          <button class="btn bs siEmailAction" id="siBtnEmailCreate">Create account</button>
+        </div>
+        <button class="siForgot" id="siBtnForgot">Forgot password?</button>
       </div>
-      <nav class="nav">
-        <button class="nl" onclick="ss('#modes')">Calculators</button>
-        <button class="nl" onclick="ss('#features')">Features</button>
-        <button class="nl" onclick="ss('#faq')">FAQ</button>
-        <div style="width:1px;height:24px;background:var(--cb);margin:0 8px;"></div>
-        <button class="thBtn" id="thBtn" aria-label="Toggle Theme"><div class="thIcon"><svg class="sunI" viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg><svg class="moonI" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg></div></button>
-        <button class="hsi-btn" id="hsi">Sign in</button>
-      </nav>
+      <p class="siFootNote">By continuing you agree to GRADEO's <a href="legal/terms/index.html">Terms</a> &amp; <a href="legal/privacy/index.html">privacy policy</a>.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     MOBILE APP SHELL  (shown only on mobile via CSS)
+══════════════════════════════════════════ -->
+<div id="mApp" style="display:none;">
+
+  <!-- Top bar -->
+  <div id="mBar">
+    <div class="mBrand">
+      <div class="mLogo"><img src="https://res.cloudinary.com/djy3mjtsz/image/upload/v1770296454/Untitled-2_i2ezfh.png" alt="GRADEO" width="32" height="32" loading="eager"/></div>
+      <div class="mBrandTxt">
+        <div class="mBN">GRADEO</div>
+        <div class="mBT">Grade &amp; CGPA Planner</div>
+      </div>
+    </div>
+    <div class="mBarRight">
+      <button class="mThBtn" id="mThBtn" aria-label="Toggle theme">
+        <div class="mThIcon">
+          <svg class="sunI" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+          <svg class="moonI" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+        </div>
+      </button>
+    </div>
+  </div>
+
+  <!-- Panel viewport -->
+  <div id="mViewport">
+    <div id="mTrack">
+
+      <!-- ── PANEL 0: HOME ── -->
+      <div class="mPanel" id="mp0">
+        <div class="mHero">
+          <div class="mHeroCard rv">
+            <div class="mHTag"><span class="hdot"></span>SGPA · CGPA · Min. marks</div>
+            <div class="mH1">Plan your <span class="gr">grades &amp; CGPA</span>.</div>
+            <div class="mSub">Know exactly what you need to score — before your exams.</div>
+            <div class="mCtr">
+              <button class="btn bp" id="mGsb">Get started →</button>
+            </div>
+          </div>
+
+          <!-- Student offer — separate card -->
+          <div class="mOfferCard rv" id="mOffp">
+            <div class="offerShimmer"></div>
+            <div class="offerRow">
+              <div class="offerLeft">
+                <div class="offerTopRow">
+                  <span class="offerBadge">🎓 Student Offer</span>
+                </div>
+                <div class="offerTitle">Cloud Save &amp; PDF</div>
+                <div class="offerDesc">Free forever. No card needed.</div>
+              </div>
+              <button class="offerCTA" id="mOffb">Claim free →</button>
+            </div>
+          </div>
+
+          <!-- Signed-in state -->
+          <div class="mAccCard rv" id="mPin" style="display:none;">
+            <div class="ap">
+              <div class="ur">
+                <div class="av" id="mAvw"><img id="mAvi2" alt="" width="40" height="40" loading="lazy" style="display:none;"/><span class="avi" id="mAvii"></span></div>
+                <div style="min-width:0;flex:1;"><div class="un" id="mUn"></div><div class="ue" id="mUe"></div></div>
+                <button class="mSignOutBtn" id="mSignOutBtn" aria-label="Sign out">
+                  <svg viewBox="0 0 24 24" fill="none"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+                  Sign out
+                </button>
+              </div>
+              <div class="aa">
+                <button class="btn bs" id="mCpb" style="font-size:12px;padding:8px 10px;">Copy link</button>
+                <button class="btn bs" id="mOlb" style="display:none;font-size:12px;padding:8px 10px;">Open last</button>
+              </div>
+            </div>
+            <div id="mPrec" style="display:none;">
+              <div class="rh"><span class="rk">Recent</span><button class="rcl" id="mRcl">Clear</button></div>
+              <div class="rl" id="mRl"></div>
+            </div>
+          </div>
+
+          <!-- HOW IT WORKS — animated explainer for first-time users -->
+          <div class="mHowCard" id="mHowCard">
+            <div class="mHowHdr">
+              <span class="mHowTitle">⚡ How it works</span>
+              <button class="mHowSkip" onclick="document.getElementById('mHowCard').style.display='none'">Hide</button>
+            </div>
+
+            <!-- Live animated preview -->
+            <div class="mHowPreview">
+              <div class="mHowCounter">
+                <div class="mHowCounterLabel">Your CGPA</div>
+                <div class="mHowCounterVal" id="mHowCGPA">7.4</div>
+                <div class="mHowCounterSub">→ target 8.5</div>
+              </div>
+              <div class="mHowBars">
+                <div class="mHowBar">
+                  <div class="mHowBarLabel">Maths</div>
+                  <div class="mHowBarTrack"><div class="mHowBarFill" data-w=".72"></div></div>
+                  <div class="mHowBarPct">72%</div>
+                </div>
+                <div class="mHowBar">
+                  <div class="mHowBarLabel">DSA</div>
+                  <div class="mHowBarTrack"><div class="mHowBarFill" data-w=".58"></div></div>
+                  <div class="mHowBarPct">58%</div>
+                </div>
+                <div class="mHowBar">
+                  <div class="mHowBarLabel">OS</div>
+                  <div class="mHowBarTrack"><div class="mHowBarFill" data-w=".85"></div></div>
+                  <div class="mHowBarPct">85%</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- 3 steps -->
+            <div class="mHowSteps">
+              <div class="mHowStep active" data-step="0">
+                <div class="mHowStepNum">1</div>
+                <div class="mHowStepTxt">Enter<br/>marks</div>
+              </div>
+              <div class="mHowStep" data-step="1">
+                <div class="mHowStepNum">2</div>
+                <div class="mHowStepTxt">Set<br/>target</div>
+              </div>
+              <div class="mHowStep" data-step="2">
+                <div class="mHowStepNum">3</div>
+                <div class="mHowStepTxt">Get<br/>min. marks</div>
+              </div>
+            </div>
+            <div class="mHowDesc" id="mHowDesc">Enter your internal marks and credits for each subject — takes about 30 seconds.</div>
+          </div>
+
+        </div>
+      </div><!-- /panel 0 -->
+
+      <!-- ── PANEL 1: CALCULATORS ── -->
+      <div class="mPanel" id="mp1">
+        <div class="mSecHdr">
+          <h2>Calculators</h2>
+          <span class="mSecSub">Tap to open</span>
+        </div>
+        <div class="mCalcGrid">
+          <div class="mTile rv" data-mode="m1" data-num="1">
+            <div class="mTileIcon"><svg viewBox="0 0 24 24"><path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="2"/><line x1="9" y1="12" x2="15" y2="12"/><line x1="9" y1="16" x2="12" y2="16"/></svg></div>
+            <div class="mTileBody">
+              <div class="mTileName">Planner</div>
+              <div class="mTileDesc">Set a target CGPA — get exact minimum marks per subject</div>
+              <div class="mTileBadge">⭐ Recommended</div>
+            </div>
+            <div class="mTileArrow">›</div>
+          </div>
+          <div class="mTile rv" data-mode="m2" data-num="2">
+            <div class="mTileIcon"><svg viewBox="0 0 24 24"><rect x="4" y="2" width="16" height="20" rx="2"/><line x1="8" y1="6" x2="16" y2="6"/><line x1="8" y1="10" x2="10" y2="10"/><line x1="14" y1="10" x2="16" y2="10"/><line x1="8" y1="14" x2="10" y2="14"/><line x1="14" y1="14" x2="16" y2="14"/></svg></div>
+            <div class="mTileBody">
+              <div class="mTileName">SGPA Calculator</div>
+              <div class="mTileDesc">Enter marks and credits — instant SGPA with grade points</div>
+              <div class="mTileBadge">Most used</div>
+            </div>
+            <div class="mTileArrow">›</div>
+          </div>
+          <div class="mTile rv" data-mode="m3" data-num="3">
+            <div class="mTileIcon"><svg viewBox="0 0 24 24"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg></div>
+            <div class="mTileBody">
+              <div class="mTileName">CGPA Converter</div>
+              <div class="mTileDesc">Add semester SGPAs — running CGPA across all semesters</div>
+              <div class="mTileBadge">Convert</div>
+            </div>
+            <div class="mTileArrow">›</div>
+          </div>
+        </div>
+      </div><!-- /panel 1 -->
+
+      <!-- ── PANEL 2: FEATURES ── -->
+      <div class="mPanel" id="mp2">
+        <div class="mSecHdr">
+          <h2>Features</h2>
+          <span class="mSecSub">All free</span>
+        </div>
+        <div class="mFeatGrid">
+          <div class="mFeatCard rv">
+            <div class="mFeatIcon"><svg viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg></div>
+            <div class="mFeatName">Instant results</div>
+            <div class="mFeatDesc">Updates as you type — no submit needed.</div>
+          </div>
+          <div class="mFeatCard rv">
+            <div class="mFeatIcon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg></div>
+            <div class="mFeatName">Backwards planning</div>
+            <div class="mFeatDesc">Target CGPA → minimum marks per subject.</div>
+          </div>
+          <div class="mFeatCard rv">
+            <div class="mFeatIcon"><svg viewBox="0 0 24 24"><path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"/></svg></div>
+            <div class="mFeatName">Cloud autosave</div>
+            <div class="mFeatDesc">Sync across all your devices after sign-in.</div>
+          </div>
+          <div class="mFeatCard rv">
+            <div class="mFeatIcon"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div>
+            <div class="mFeatName">PDF grade card</div>
+            <div class="mFeatDesc">Export a clean grade card instantly.</div>
+          </div>
+          <div class="mFeatCard rv">
+            <div class="mFeatIcon"><svg viewBox="0 0 24 24"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg></div>
+            <div class="mFeatName">All subject types</div>
+            <div class="mFeatDesc">Theory, labs, NSS, activity subjects.</div>
+          </div>
+          <div class="mFeatCard rv">
+            <div class="mFeatIcon"><svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
+            <div class="mFeatName">Private &amp; free</div>
+            <div class="mFeatDesc">No ads. No data selling. Ever.</div>
+          </div>
+        </div>
+      </div><!-- /panel 2 -->
+
+      <!-- ── PANEL 3: FAQ ── -->
+      <div class="mPanel" id="mp3">
+        <div class="mSecHdr">
+          <h2>FAQ</h2>
+          <span class="mSecSub">Tap to expand</span>
+        </div>
+        <div class="mFAQ">
+          <div class="mFItem rv"><div class="mFQ" onclick="mFaq(this)">What is GRADEO?<span class="mFArr"><svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></span></div><div class="mFA"><div class="mFAIn">A free academic planner for engineering students. Replaces manual SGPA calculations and helps you plan exactly what you need to score to hit your target CGPA.</div></div></div>
+          <div class="mFItem rv"><div class="mFQ" onclick="mFaq(this)">How does the Planner work?<span class="mFArr"><svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></span></div><div class="mFA"><div class="mFAIn">Enter your current CGPA, target CGPA, and internal marks. GRADEO calculates the exact minimum final exam score needed per subject.</div></div></div>
+          <div class="mFItem rv"><div class="mFQ" onclick="mFaq(this)">Does it support NSS subjects?<span class="mFArr"><svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></span></div><div class="mFA"><div class="mFAIn">Yes. Activity subjects carry 1 fixed credit and a single final grade. GRADEO handles this correctly so your SGPA is accurate.</div></div></div>
+          <div class="mFItem rv"><div class="mFQ" onclick="mFaq(this)">Is GRADEO free?<span class="mFArr"><svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></span></div><div class="mFA"><div class="mFAIn">Completely free. No sign-in needed to calculate. Sign in with Google to unlock cloud autosave and PDF export. No ads, ever.</div></div></div>
+          <div class="mFItem rv"><div class="mFQ" onclick="mFaq(this)">What is the student offer?<span class="mFArr"><svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></span></div><div class="mFA"><div class="mFAIn">Sign up with Google and GRADEO unlocks cloud save + PDF export free. No payment required — permanent free offer for students.</div></div></div>
+        </div>
+        <!-- Footer in FAQ panel -->
+        <div class="mFooter rv" style="margin-top:20px;">
+          <div class="fb-n">GRADEO</div>
+          <div class="fb-t">Free grade planner for engineering students.</div>
+          <div class="mFLinks">
+            <a href="/blog/">Blog</a>
+            <a href="/about/">About</a>
+            <a href="/offer/">Student offer</a>
+            <a href="/feedback/">Feedback</a>
+            <a href="/app/">Get app</a>
+            <a href="legal/privacy/index.html">privacy policy</a>
+            <a href="/terms/">Terms</a>
+            <a href="/security/">Security</a>
+          </div>
+          <div class="mCopyright">© <span id="mYr"></span> GRADEO · Made for students.</div>
+        </div>
+      </div><!-- /panel 3 -->
+
+    </div><!-- /mTrack -->
+
+  </div><!-- /mViewport -->
+
+  <!-- Dynamic Island bottom bar — clean pill, 4 tabs, tiny labels below icons -->
+  <div id="mTabs">
+    <div id="diIsland">
+      <button class="mTab active" id="mTab0" onclick="goTab(0)" aria-label="Home">
+        <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+        <span class="mTabLbl">Home</span>
+      </button>
+      <button class="mTab" id="mTab1" onclick="goTab(1)" aria-label="Calculator">
+        <svg viewBox="0 0 24 24"><path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="2"/></svg>
+        <span class="mTabLbl">Calculate</span>
+      </button>
+      <button class="mTab" id="mTab2" onclick="goTab(2)" aria-label="Features">
+        <svg viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+        <span class="mTabLbl">Features</span>
+      </button>
+      <button class="mTab" id="mTab3" onclick="goTab(3)" aria-label="FAQ">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+        <span class="mTabLbl">FAQ</span>
+      </button>
+    </div>
+  </div>
+
+</div><!-- /mApp -->
+
+<!-- ══════════════════════════════════════════
+     DESKTOP LAYOUT (hidden on mobile via CSS)
+══════════════════════════════════════════ -->
+<div id="dskLayout">
+  <div class="bgs" aria-hidden="true"><div class="bg1"></div><div class="bg2"></div><div class="bg3"></div><div class="bg4"></div></div>
+  <button id="btt" aria-label="Back to top" onclick="window.scrollTo({top:0,behavior:'smooth'})"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18 15l-6-6-6 6"/></svg></button>
+
+  <header class="dsk" id="hdr">
+    <div class="wrap">
+      <div class="tb">
+        <div class="brand" id="brd" role="link" tabindex="0" aria-label="GRADEO home">
+          <div class="lw"><img src="https://res.cloudinary.com/djy3mjtsz/image/upload/v1770296454/Untitled-2_i2ezfh.png" decoding="async" fetchpriority="high" alt="GRADEO" width="36" height="36" loading="eager"/></div>
+          <div><div class="bn">GRADEO</div><div class="bt">Grade &amp; CGPA Planner</div></div>
+        </div>
+        <nav class="nav" aria-label="Primary">
+          <button class="nl" onclick="ss('#modes')">Calculator</button>
+          <button class="nl" onclick="ss('#features')">Features</button>
+          <button class="nl" onclick="ss('#faq')">FAQ</button>
+          <a class="nl" href="/blog/" style="text-decoration:none;">Blog</a>
+          <a class="nl" href="/about/" style="text-decoration:none;">About</a>
+          <button class="thBtn" id="thBtn" aria-label="Toggle theme">
+            <div class="thIcon">
+              <svg class="sunI" viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+              <svg class="moonI" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+            </div>
+          </button>
+          <button class="hsi-btn" id="hsi"><svg width="13" height="13" viewBox="0 0 24 24" fill="none"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg><span id="hsl">Sign in</span></button>
+        </nav>
+      </div>
     </div>
   </header>
 
   <div class="wrap">
-    <div class="bgs"><div class="bg1"></div><div class="bg2"></div><div class="bg3"></div><div class="bg4"></div></div>
-    
-    <section class="hero rv">
+    <main class="hero" id="top">
       <div class="hg">
-        <div class="card hp">
-          <div class="htag"><span class="hdot"></span>Launching 2026 Global</div>
-          <h1>Plan your <span class="gr">perfect</span> CGPA.</h1>
-          <p class="sub">Professional grade calculation & predictive planning for engineering students. Built for VTU, KTU and global AICTE standards.</p>
-          <div class="ctr">
-            <button class="btn bp" id="gsb">Get started →</button>
-            <button class="btn bs" onclick="ss('#modes')">View calculators</button>
+        <div class="card rv">
+          <div class="hp">
+            <div class="htag"><span class="hdot"></span>SGPA · CGPA · Minimum marks</div>
+            <h1>Plan your <span class="gr">grades &amp; CGPA</span>.</h1>
+            <p class="sub">Know exactly what you need to score — before your exams. No guesswork, no spreadsheets.</p>
+            <div class="ctr"><button class="btn bp" id="gsb">Get started →</button></div>
           </div>
         </div>
-        <!-- User status panel -->
-        <div class="card ap" id="pout">
-           <div class="poutHdr">Why Sign in?</div>
-           <div class="poutList">
-             <div class="poutRow"><div class="poutIcon"><i data-lucide="cloud"></i></div>Cloud Sync Across Devices</div>
-             <div class="poutRow"><div class="poutIcon"><i data-lucide="file-text"></i></div>Export PDF Grade Cards</div>
-             <div class="poutRow"><div class="poutIcon"><i data-lucide="award"></i></div>Academic Progress Badges</div>
-           </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Calculators Section -->
-    <section class="dsk" id="modes">
-      <div class="sh"><h2>Tools</h2></div>
-      <div class="tg">
-        <div class="tile rv" data-mode="m1" data-num="1" role="button" aria-label="Open SGPA Planner">
-          <div class="tt"><div class="ic"><svg viewBox="0 0 24 24"><path d="M12 2v20M2 12h20M5 5l14 14M19 5L5 14"/></svg></div></div>
-          <div><div class="tn">SGPA Planner</div><div class="td">Calculate minimum marks per subject to reach target SGPA.</div></div>
-        </div>
-        <!-- ... other tiles ... -->
-      </div>
-    </section>
-
-    <!-- Footer -->
-    <div class="fw rv">
-      <div class="fc">
-        <div class="ftop">
-          <div><div class="fb-n">GRADEO</div><div class="fb-t">Free grade planner for engineering students.</div></div>
-          <div class="fcols">
-            <div class="fco"><div class="fch">Calculator</div><a href="calculators/planner/index.html">Planner</a><a href="calculators/sgpa/index.html">SGPA</a><a href="calculators/cgpa/index.html">CGPA</a></div>
-            <div class="fco"><div class="fch">Platform</div><a href="app/index.html">Mobile App</a><a href="developers/index.html">Developers / API</a><a href="https://status.gradeo.in">Status</a></div>
-            <div class="fco"><div class="fch">Legal</div><a href="legal/privacy/index.html">Privacy</a><a href="legal/terms/index.html">Terms</a><a id="fd" href="#">Disclaimer</a></div>
+        <div class="card rv">
+          <!-- Signed-out placeholder — shows value props cleanly -->
+          <div class="ap" id="pout">
+            <div class="poutHdr">Unlock more</div>
+            <div class="poutList">
+              <div class="poutRow">
+                <span class="poutIcon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--o)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"/></svg></span>
+                Cloud save across devices
+              </div>
+              <div class="poutRow">
+                <span class="poutIcon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--o)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></span>
+                Export PDF grade card
+              </div>
+              <div class="poutRow">
+                <span class="poutIcon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--o)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></span>
+                No ads, no data selling
+              </div>
+            </div>
+          </div>
+          <!-- Signed-in state — hidden until auth fires -->
+          <div class="ap" id="pin" style="display:none;">
+            <div class="ur">
+              <div class="av" id="avw"><img id="avi2" alt="" width="40" height="40" loading="lazy" style="display:none;"/><span class="avi" id="avii"></span></div>
+              <div style="min-width:0;flex:1;"><div class="un" id="un"></div><div class="ue" id="ue"></div></div>
+              <button class="dskSignOutBtn" id="dskSignOut">
+                <svg viewBox="0 0 24 24" fill="none"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+                Sign out
+              </button>
+            </div>
+            <div class="aa"><button class="btn bs" id="cpb" style="font-size:12px;padding:8px 10px;">Copy link</button><button class="btn bs" id="olb" style="display:none;font-size:12px;padding:8px 10px;">Open last</button></div>
+          </div>
+          <div id="prec" style="display:none;"><div class="rh"><span class="rk">Recent</span><button class="rcl" id="rcl">Clear</button></div><div class="rl" id="rl"></div></div>
+          <!-- Student offer — separate section with border-top divider -->
+          <div class="dskOffer" id="offp">
+            <div class="offerShimmer"></div>
+            <div class="offerRow">
+              <div class="offerLeft">
+                <div class="offerTopRow"><span class="offerBadge">🎓 Student Offer</span></div>
+                <div class="offerTitle">Cloud Save &amp; PDF</div>
+                <div class="offerDesc">Free forever. No card needed.</div>
+              </div>
+              <button class="offerCTA" id="offb">Claim free →</button>
+            </div>
           </div>
         </div>
-        <div class="fbot"><span>© 2026 GRADEO · Made for students.</span><div class="trust-badge">Verified 2026</div></div>
       </div>
+    </main>
+
+    <section class="dsk" id="modes"><div class="sh"><h2>Choose a calculator</h2><p>Pick what you need right now.</p></div><div class="tg" role="list"><div class="tile rv" data-mode="m1" data-num="1" role="button" tabindex="0"><div class="tt"><div><div class="tn">Planner</div><div class="td">Set a target CGPA — get exact minimum marks per subject</div></div><div class="ic"><svg viewBox="0 0 24 24"><path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="2"/><line x1="9" y1="12" x2="15" y2="12"/><line x1="9" y1="16" x2="12" y2="16"/></svg></div></div><div class="tb2">⭐ Recommended</div></div><div class="tile rv" data-mode="m2" data-num="2" role="button" tabindex="0"><div class="tt"><div><div class="tn">SGPA Calculator</div><div class="td">Enter marks and credits — instant SGPA with grade points</div></div><div class="ic"><svg viewBox="0 0 24 24"><rect x="4" y="2" width="16" height="20" rx="2"/><line x1="8" y1="6" x2="16" y2="6"/><line x1="8" y1="10" x2="10" y2="10"/><line x1="14" y1="10" x2="16" y2="10"/><line x1="8" y1="14" x2="10" y2="14"/><line x1="14" y1="14" x2="16" y2="14"/></svg></div></div><div class="tb2">Most used</div></div><div class="tile rv" data-mode="m3" data-num="3" role="button" tabindex="0"><div class="tt"><div><div class="tn">CGPA Converter</div><div class="td">Add semester SGPAs — running CGPA across all semesters</div></div><div class="ic"><svg viewBox="0 0 24 24"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg></div></div><div class="tb2">Convert</div></div></div></section>
+
+    <section class="dsk" id="features"><div class="sh"><h2>Everything included. Free.</h2></div><div class="fg"><div class="feat rv"><div class="fi"><svg viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg></div><div><div class="ft">Instant results</div><div class="fs">Updates as you type. No submit, no reload.</div></div></div><div class="feat rv"><div class="fi"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg></div><div><div class="ft">Backwards planning</div><div class="fs">Work from your target CGPA to what you need to score.</div></div></div><div class="feat rv"><div class="fi"><svg viewBox="0 0 24 24"><path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"/></svg></div><div><div class="ft">Cloud autosave</div><div class="fs">Plans sync across every device after sign-in.</div></div></div><div class="feat rv"><div class="fi"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div><div><div class="ft">PDF grade card</div><div class="fs">Export and share a clean grade card instantly.</div></div></div><div class="feat rv"><div class="fi"><svg viewBox="0 0 24 24"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg></div><div><div class="ft">All subject types</div><div class="fs">Theory, labs, practicals, NSS, activity subjects.</div></div></div><div class="feat rv"><div class="fi"><svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div><div><div class="ft">Private &amp; free</div><div class="fs">No ads. No data selling. Your marks stay yours.</div></div></div></div></section>
+
+    <section class="dsk" id="faq"><div class="sh"><h2>Questions</h2></div><div class="fl"><div class="fi2"><div class="fq" role="button" tabindex="0" aria-expanded="false" onclick="faq(this)">What is GRADEO?<span class="fa2"><svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></span></div><div class="fan">A free academic planner for engineering students. Replaces manual SGPA calculations and helps you plan exactly what you need to score to hit your target CGPA.</div></div><div class="fi2"><div class="fq" role="button" tabindex="0" aria-expanded="false" onclick="faq(this)">How does the Planner work?<span class="fa2"><svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></span></div><div class="fan">Enter your current CGPA, target CGPA, and internal marks. GRADEO calculates the exact minimum final exam score needed per subject.</div></div><div class="fi2"><div class="fq" role="button" tabindex="0" aria-expanded="false" onclick="faq(this)">Does it support NSS and activity subjects?<span class="fa2"><svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></span></div><div class="fan">Yes. Activity subjects carry 1 fixed credit and a single final grade. GRADEO handles this correctly so your SGPA is accurate.</div></div><div class="fi2"><div class="fq" role="button" tabindex="0" aria-expanded="false" onclick="faq(this)">Is GRADEO free?<span class="fa2"><svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></span></div><div class="fan">Completely free. No sign-in needed to calculate. Sign in with Google to unlock cloud autosave and PDF export. No ads, ever.</div></div><div class="fi2"><div class="fq" role="button" tabindex="0" aria-expanded="false" onclick="faq(this)">What is the student offer?<span class="fa2"><svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></span></div><div class="fan">Sign up with Google and GRADEO unlocks cloud save + PDF export free. No payment required — permanent free offer for students.</div></div></div></section>
+
+    <div class="fw rv"><div class="fc"><div class="ftop"><div><div class="fb-n">GRADEO</div><div class="fb-t">Free grade planner for engineering students.</div></div><div class="fcols"><div class="fco"><div class="fch">Calculator</div><a href="calculators/planner/index.html">Planner</a><a href="calculators/sgpa/index.html">SGPA</a><a href="calculators/cgpa/index.html">CGPA</a></div><div class="fco"><div class="fch">Company</div><a href="blog/index.html">Blog</a><a href="about/index.html">About</a><a href="https://gradeo.in/offer/">Student offer</a><a href="feedback/index.html">Feedback</a><a href="app/index.html">Get the app</a></div><div class="fco"><div class="fch">Legal</div><a href="legal/privacy/index.html">privacy policy</a><a href="legal/terms/index.html">Terms</a><a href="security/index.html">Disclaimer</a></div></div></div><div class="fbot"><span>© <span id="yr"></span> GRADEO · Made for students.</span><div style="display:flex;align-items:center;gap:12px;"><div class="trust-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 11 12 14 15 11"/></svg>Verified 2026</div><button class="fbtn2" onclick="window.scrollTo({top:0,behavior:'smooth'})">Back to top ↑</button></div></div><span class="engine-tag">Powered by GradeEngine 2.0 • Real-time Academic Analytics</span></div></div>
+  </div>
+</div><!-- /dskLayout -->
+
+<!-- Shared: toast + modal -->
+<div class="toast" id="toast" role="status" aria-live="polite"><span id="tm"></span><button class="tx" id="tx" aria-label="Close">✕</button></div>
+<div class="mbd" id="mbd" onclick="cm()"><div class="mbox" onclick="event.stopPropagation()"><div class="mhd"><strong id="mt"></strong><button onclick="cm()">✕</button></div><div class="mb" id="mb"></div></div></div>
+
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js">/* ── 2026 HYPER-CONNECTIVITY ── */
+// Microsoft Clarity (Heatmaps) Placeholder
+(function(c,l,a,r,i,t,y){
+    c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+    t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+    y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+})(window, document, "clarity", "script", "gradeo_hype_2026");
+
+// Web Vitals Tracking
+if ('paint' in performance) {
+  const observer = new PerformanceObserver((list) => {
+    for (const entry of list.getEntries()) {
+      console.log('GRADEO Performance:', entry.name, entry.startTime);
+    }
+  });
+  observer.observe({ entryTypes: ['paint', 'largest-contentful-paint'] });
+}
+</script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js">/* ── 2026 HYPER-CONNECTIVITY ── */
+// Microsoft Clarity (Heatmaps) Placeholder
+(function(c,l,a,r,i,t,y){
+    c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+    t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+    y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+})(window, document, "clarity", "script", "gradeo_hype_2026");
+
+// Web Vitals Tracking
+if ('paint' in performance) {
+  const observer = new PerformanceObserver((list) => {
+    for (const entry of list.getEntries()) {
+      console.log('GRADEO Performance:', entry.name, entry.startTime);
+    }
+  });
+  observer.observe({ entryTypes: ['paint', 'largest-contentful-paint'] });
+}
+</script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js">/* ── 2026 HYPER-CONNECTIVITY ── */
+// Microsoft Clarity (Heatmaps) Placeholder
+(function(c,l,a,r,i,t,y){
+    c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+    t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+    y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+})(window, document, "clarity", "script", "gradeo_hype_2026");
+
+// Web Vitals Tracking
+if ('paint' in performance) {
+  const observer = new PerformanceObserver((list) => {
+    for (const entry of list.getEntries()) {
+      console.log('GRADEO Performance:', entry.name, entry.startTime);
+    }
+  });
+  observer.observe({ entryTypes: ['paint', 'largest-contentful-paint'] });
+}
+</script>
+
+<script>
+/* ========= helpers ========= */
+
+// === Intro glitch: run once per session ===
+(function(){
+  try{
+    if(sessionStorage.getItem('gd_intro_done')) return;
+    document.body.classList.add('intro-glitch');
+    setTimeout(function(){
+      document.body.classList.remove('intro-glitch');
+      sessionStorage.setItem('gd_intro_done','1');
+    }, 1200);
+  }catch(e){}
+})();
+
+
+// === Minimal loader helpers (safe patch) ===
+function __gd_showLoader(msg){
+  try{const ov=document.getElementById('ldOv'); if(!ov) return; const m=document.getElementById('ldMsg'); if(m&&msg) m.textContent=msg; ov.classList.add('on'); ov.setAttribute('aria-hidden','false');}catch(e){}
+}
+function __gd_hideLoader(){
+  try{const ov=document.getElementById('ldOv'); if(!ov) return; ov.classList.remove('on'); ov.setAttribute('aria-hidden','true');}catch(e){}
+}
+window.addEventListener('pageshow', function(){ __gd_hideLoader(); });
+const $  = (s) => document.querySelector(s);
+const $$ = (s) => document.querySelectorAll(s);
+const SITE='https://gradeo.in';
+const MU={m1:'calculators/planner/index.html', m2:'calculators/sgpa/index.html', m3:'calculators/cgpa/index.html'};
+const RK='gradeo_recents';
+const isMob   = () => window.innerWidth <= 767;
+const isTouch = () => window.matchMedia('(hover:none)').matches;
+
+/* Haptics */
+const HV={light:[8], medium:[14], strong:[20], tick:[6,8,6], success:[10,40,10,40,18], soft:[5,5,5]};
+function vib(ms){ if(!isMob() || !('vibrate' in navigator)) return; try{navigator.vibrate(ms);}catch{} }
+
+/* Year */
+['#yr','#mYr'].forEach(id=>{const el=$(id); if(el) el.textContent=new Date().getFullYear();});
+
+/* Layout switch using CSS entirely now */
+let _lastMob=isMob(), _resizeTimer; 
+window.addEventListener('resize',()=>{ clearTimeout(_resizeTimer); _resizeTimer=setTimeout(()=>{ const nowMob=isMob(); if(nowMob!==_lastMob){_lastMob=nowMob;} if(nowMob){ setTrackWidth(); goTab(curTab,false);} },120); }, {passive:true});
+
+/* Scroll to section */
+function ss(sel){ $(sel)?.scrollIntoView({behavior:'smooth',block:'start'}); }
+
+/* Theme */
+const htmlEl=document.documentElement, tc=$('#tcMeta');
+function applyTheme(t, animate){
+  const nextBg = (t==='dark'?'#080604':'#FFF6ED');
+  if(animate){
+    const ripple=$('#thRipple');
+    const btn = isMob()? $('#mThBtn') : $('#thBtn');
+    const rect = btn?.getBoundingClientRect?.();
+    const cx = rect ? rect.left+rect.width/2 : innerWidth/2;
+    const cy = rect ? rect.top +rect.height/2 : innerHeight/2;
+    const d  = Math.hypot(innerWidth, innerHeight)*2.6;
+    if(ripple){
+      ripple.style.cssText = `background:${nextBg};width:${d}px;height:${d}px;left:${cx-d/2}px;top:${cy-d/2}px;`;
+      ripple.classList.remove('go'); void ripple.offsetWidth; ripple.classList.add('go');
+      setTimeout(()=>ripple.classList.remove('go'),460);
+    }
+    setTimeout(()=>{ htmlEl.setAttribute('data-theme',t); tc?.setAttribute('content',nextBg); },150);
+  } else { htmlEl.setAttribute('data-theme',t); tc?.setAttribute('content',nextBg); }
+  localStorage.setItem('gradeo_theme', t);
+}
+(()=>{ const s=localStorage.getItem('gradeo_theme'); if(s) applyTheme(s,false); else if(window.matchMedia('(prefers-color-scheme:dark)').matches) applyTheme('dark',false); })();
+/* Remove loading lock after first paint — all transitions now work smoothly */
+/* Safe area polyfill for old Android */
+(function(){
+  if(CSS.supports('padding-top', 'env(safe-area-inset-top)')) return;
+  const style = document.createElement('style');
+  style.textContent = '#mBar{padding-top:20px!important;} #mTabs{padding-bottom:16px!important;}';
+  document.head.appendChild(style);
+})();
+
+requestAnimationFrame(()=>{
+  requestAnimationFrame(()=>{
+    document.documentElement.classList.remove('loading');
+    document.body.classList.add('theme-ready');
+    /* Fade in bg orbs smoothly */
+    document.querySelectorAll('.bg1,.bg2,.bg3,.bg4').forEach(function(b){
+      b.style.transition='opacity .6s ease';
+      b.style.opacity='1';
+    });
+  });
+});
+const toggleTheme=()=>{ applyTheme(htmlEl.dataset.theme==='dark'?'light':'dark',true); vib(HV.light); };
+$('#thBtn')?.addEventListener('click',toggleTheme); $('#mThBtn')?.addEventListener('click',toggleTheme);
+window.matchMedia('(prefers-color-scheme:dark)').addEventListener('change',e=>{ if(!localStorage.getItem('gradeo_theme')) applyTheme(e.matches?'dark':'light',false); });
+
+/* Intercept all internal links on mobile for smooth transition */
+if(isMob()){
+  document.addEventListener('click', function(e){
+    const a = e.target.closest('a[href]');
+    if(!a) return;
+    const href = a.getAttribute('href');
+    if(!href || href.startsWith('#') || href.startsWith('mailto:') || href.startsWith('tel:')) return;
+    if(a.target === '_blank') return;
+    try{
+      const url = new URL(href, location.origin);
+      if(url.origin !== location.origin) return;
+      e.preventDefault();
+      navTo(url.href);
+    } catch(_){}
+  }, {passive:false});
+}
+
+/* Page transition */
+/* BUG FIX: reset _navigating on back navigation (pageshow) so tiles always work after going back */
+window.addEventListener('pageshow', function(){
+  window._navigating = false;
+  const ov = $('#ptOv');
+  if(ov) ov.classList.remove('lift');
+});
+window.__oldNavTo = window.__oldNavTo || navTo; function navTo(url){ __gd_showLoader("Opening…"); setTimeout(function(){ window.__oldNavTo(url); }, 80);
+  if(window._navigating) return;
+  window._navigating = true;
+  /* Safety reset after 2s in case navigation fails */
+  setTimeout(function(){ window._navigating = false; }, 2000);
+  const ov = $('#ptOv');
+  if(ov){
+    ov.classList.add('lift');
+    setTimeout(function(){ location.href=url; },380);
+  } else {
+    location.href = url;
+  }
+}
+/* Desktop cursor */
+(()=>{
+  const prefersReduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if(isTouch() || innerWidth<1024 || prefersReduce) return;
+  const dot=$('#cur'), ring=$('#curRing'); if(!dot || !ring) return;
+  let mx=0,my=0,rx=0,ry=0, rAFid=null, moved=false;
+  function moveDot(x,y){ dot.style.transform=`translate(calc(${x}px - 50%),calc(${y}px - 50%))`; }
+  function moveRing(){ rx+=(mx-rx)*.18; ry+=(my-ry)*.18; ring.style.transform=`translate(calc(${rx.toFixed(1)}px - 50%),calc(${ry.toFixed(1)}px - 50%))`; if(Math.abs(mx-rx)>0.3 || Math.abs(my-ry)>0.3){ rAFid=requestAnimationFrame(moveRing);} else { rAFid=null; } }
+  document.addEventListener('mousemove',e=>{ mx=e.clientX; my=e.clientY; moveDot(mx,my); if(!moved){moved=true; document.body.classList.add('cur-ready');} if(!rAFid) rAFid=requestAnimationFrame(moveRing); }, {passive:true});
+  document.addEventListener('mouseleave',()=>{ document.body.classList.remove('cur-ready','ch'); moved=false; });
+  document.addEventListener('mouseenter',()=>{ if(moved) document.body.classList.add('cur-ready'); });
+  document.addEventListener('mousedown',()=>document.body.classList.add('cc'));
+  document.addEventListener('mouseup',  ()=>document.body.classList.remove('cc'));
+  let hoverCount=0; $$('a,button,.tile,.feat,.fi2,.card,[role=button]').forEach(el=>{
+    el.addEventListener('mouseenter',()=>{hoverCount++;document.body.classList.add('ch');});
+    el.addEventListener('mouseleave',()=>{hoverCount=Math.max(0,hoverCount-1); if(!hoverCount) document.body.classList.remove('ch');});
+  });
+})();
+
+/* Desktop scroll */
+const pb=$('#pb'), hdr=$('#hdr'), btt=$('#btt'); let _raf=false;
+window.addEventListener('scroll',()=>{ if(_raf) return; _raf=true; requestAnimationFrame(()=>{ _raf=false; const d=document.documentElement,s=d.scrollTop,h=d.scrollHeight-d.clientHeight; if(pb) pb.style.width=(h>0?Math.round(s/h*1000)/10:0)+'%'; if(hdr) hdr.classList.toggle('scrolled', s>20); if(btt) btt.classList.toggle('on', s>280); }); }, {passive:true});
+
+/* Parallax */
+if(!isTouch()){
+  const MAX=5; document.addEventListener('mousemove',e=>{ const cx=(e.clientX/innerWidth-.5)*MAX*2; const cy=(e.clientY/innerHeight-.5)*MAX*2; $$('.bg1,.bg2,.bg3,.bg4').forEach((b,i)=>{ const d=[1.2,1,.8,.6][i]??1; b.style.transform=`translate(${cx*d*.6}px,${cy*d*.4}px)`;}); }, {passive:true});
+}
+
+/* Tiles & buttons tilt */
+if(!isTouch()){
+  $$('.tile').forEach(tile=>{ tile.addEventListener('mousemove',e=>{ const r=tile.getBoundingClientRect(); const x=(e.clientX-r.left)/r.width-.5, y=(e.clientY-r.top)/r.height-.5; tile.style.setProperty('--tilt',`translateY(-5px) rotateX(${(-y*6).toFixed(2)}deg) rotateY(${(x*6).toFixed(2)}deg) scale(1.012)`); tile.style.transform='var(--tilt)'; }); tile.addEventListener('mouseleave',()=>{ tile.style.removeProperty('--tilt'); tile.style.transform=''; }); tile.addEventListener('mousedown',()=>tile.style.transform=''); });
+  $$('.bp,.bs').forEach(btn=>{ btn.addEventListener('mousemove',e=>{ const r=btn.getBoundingClientRect(); const dx=(e.clientX-r.left-r.width/2)/r.width, dy=(e.clientY-r.top-r.height/2)/r.height; btn.style.setProperty('--btilt',`translateY(-3px) scale(1.02) translate(${(dx*5).toFixed(2)}px,${(dy*3).toFixed(2)}px)`); btn.style.transform='var(--btilt)'; }); btn.addEventListener('mouseleave',()=>{ btn.style.removeProperty('--btilt'); btn.style.transform=''; }); btn.addEventListener('mousedown',()=>btn.style.transform=''); });
+}
+
+/* Mobile tabs */
+let curTab=0; const TABS=4; const track=$('#mTrack'); const panels=Array.from($('#mTrack')?.children ?? []);
+function setTrackWidth(){ if(track) track.style.width=(TABS*innerWidth)+'px'; } setTrackWidth();
+function updateDI(){ const di=$('#diIsland'); if(!di) return; di.classList.remove('diPulse'); void di.offsetWidth; di.classList.add('diPulse'); }
+function revealPanel(idx,dir){ const panel=panels[idx]; if(!panel) return; panel.classList.remove('entering-right','entering-left'); if(dir!=null){ void panel.offsetWidth; panel.classList.add(dir>0?'entering-right':'entering-left'); setTimeout(()=>panel.classList.remove('entering-right','entering-left'),380);} panel.querySelectorAll('.rv:not(.in)').forEach((el,i)=>{ setTimeout(()=>el.classList.add('in'), i*55); }); }
+function goTab(idx,animate=true){ if(!isMob()||!track) return; const prev=curTab; curTab=Math.max(0,Math.min(TABS-1,idx)); const w=innerWidth; if(!animate){ track.classList.add('no-transition'); track.style.transform=`translateX(-${curTab*w}px)`; setTimeout(()=>track.classList.remove('no-transition'),20);} else { track.classList.remove('no-transition'); track.style.transform=`translateX(-${curTab*w}px)`; } $$('.mTab').forEach((t,i)=>t.classList.toggle('active',i===curTab)); updateDI(); if(curTab!==prev) vib(HV.tick); const dir=curTab>prev?1:-1; revealPanel(curTab, animate?dir:null); if(curTab>0) $('#mBar')?.classList.add('mini'); else $('#mBar')?.classList.remove('mini'); }
+window.goTab=goTab;
+
+/* Swipe */
+(()=>{ const vp=$('#mViewport'); if(!vp||!track) return; let sx=0,sy=0,startTab=0,dragging=false,blocked=false,lastX=0,velX=0,lastT=0; function base(){return startTab*innerWidth;} vp.addEventListener('touchstart',e=>{ sx=e.touches[0].clientX; sy=e.touches[0].clientY; lastX=sx; lastT=Date.now(); velX=0; startTab=curTab; dragging=false; blocked=false; track.classList.add('no-transition'); }, {passive:true}); vp.addEventListener('touchmove',e=>{ const cx=e.touches[0].clientX; const dx=cx-sx; const dy=e.touches[0].clientY-sy; const now=Date.now(); velX=(cx-lastX)/Math.max(1, (now-lastT)); lastX=cx; lastT=now; if(!dragging && !blocked){ if(Math.abs(dx)>7 && Math.abs(dx)>Math.abs(dy)*1.1) dragging=true; else if(Math.abs(dy)>10) blocked=true; } if(!dragging) return; e.preventDefault(); const w=innerWidth; const raw=base()-dx; const clamp=Math.max(0, Math.min((TABS-1)*w, raw)); track.style.transform=`translateX(-${clamp}px)`; }, {passive:false}); vp.addEventListener('touchend',e=>{ track.classList.remove('no-transition'); if(!dragging) return; const dx=e.changedTouches[0].clientX - sx; let next=startTab; if(dx<-40 || velX<-0.3) next=Math.min(TABS-1, startTab+1); else if(dx>40 || velX>0.3) next=Math.max(0, startTab-1); goTab(next); }, {passive:true}); vp.addEventListener('touchcancel',()=>{ track.classList.remove('no-transition'); goTab(startTab); }, {passive:true}); })();
+
+/* Top bar compress */
+(()=>{ $$('.mPanel').forEach(panel=>{ panel.addEventListener('scroll',()=>{ const bar=$('#mBar'); if(!bar) return; if(panel.scrollTop>30) bar.classList.add('mini'); else if(curTab===0) bar.classList.remove('mini'); }, {passive:true}); }); })();
+
+/* FAQ */
+function mFaq(el){ const isOpen=el.classList.contains('open'); $$('.mFQ.open').forEach(q=>{ q.classList.remove('open'); q.nextElementSibling.classList.remove('open'); }); if(!isOpen){ el.classList.add('open'); el.nextElementSibling.classList.add('open'); vib(HV.soft);} }
+window.mFaq=mFaq;
+function faq(el){ const i=el.closest('.fi2'); if(!i) return; const o=i.classList.contains('open'); $$('.fi2.open').forEach(x=>{ x.classList.remove('open'); x.querySelector('.fq')?.setAttribute('aria-expanded','false'); }); if(!o){ i.classList.add('open'); el.setAttribute('aria-expanded','true'); vib([4,8,4]); } }
+$$('.fq').forEach(q=>q.addEventListener('keydown',e=>{ if(e.key==='Enter'|| e.key===' '){ e.preventDefault(); faq(q); }}));
+
+/* Reveal on intersection */
+(()=>{ if(window.matchMedia('(prefers-reduced-motion:reduce)').matches){ $$('.rv').forEach(e=>e.classList.add('in')); return; } const io=new IntersectionObserver(entries=>{ entries.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('in'); const children=e.target.querySelectorAll(':scope > .rv, :scope > * > .rv'); children.forEach((child,i)=>{ if(!child.classList.contains('in')){ child.style.transitionDelay=`${i*65}ms`; setTimeout(()=>child.classList.add('in'), i*65); setTimeout(()=>{ child.style.transitionDelay='';},800); } }); io.unobserve(e.target); } }); }, {threshold:0.06, rootMargin:'0px 0px -4% 0px'}); $$('#dskLayout .rv').forEach(e=>io.observe(e)); })();
+setTimeout(()=>{ revealPanel(0); updateDI(); },100);
+
+document.addEventListener('visibilitychange',()=>{ $$('.gr').forEach(el=>{ el.style.animationPlayState=document.hidden?'paused':'running';}); });
+
+/* Haptics wiring */
+$$('.mTile').forEach(el=>el.addEventListener('pointerdown',()=>vib(HV.medium)));
+$$('.btn.bp').forEach(el=>el.addEventListener('pointerdown',()=>vib(HV.strong)));
+$$('.btn.bs,.hsi-btn').forEach(el=>el.addEventListener('pointerdown',()=>vib(HV.light)));
+$$('.offerCTA').forEach(el=>el.addEventListener('pointerdown',()=>vib(HV.success)));
+$$('.mQBtn').forEach(el=>el.addEventListener('pointerdown',()=>vib(HV.light)));
+$$('.mFItem').forEach(el=>el.addEventListener('pointerdown',()=>vib(HV.soft)));
+$$('.mFeatCard').forEach(el=>el.addEventListener('pointerdown',()=>vib(HV.soft)));
+$$('.mTab').forEach(el=>el.addEventListener('pointerdown',()=>vib(HV.tick)));
+
+/* Network status */
+(function(){
+  const bar = document.getElementById('netStatus');
+  function setNet(online){
+    if(!bar) return;
+    if(online){
+      bar.style.background='#22C55E';
+      bar.textContent='Back online';
+      bar.style.display='block';
+      bar.style.transform='translateY(0)';
+      setTimeout(()=>{ bar.style.transform='translateY(-100%)'; setTimeout(()=>bar.style.display='none',300); },2000);
+    } else {
+      bar.style.background='#EF4444';
+      bar.textContent='No internet connection';
+      bar.style.display='block';
+      bar.style.transform='translateY(0)';
+    }
+  }
+  window.addEventListener('online', ()=>setNet(true));
+  window.addEventListener('offline', ()=>setNet(false));
+  if(!navigator.onLine) setNet(false);
+})();
+
+/* Toast */
+let _tt; function toast(msg){ const t=$('#toast'); if(!t) return; $('#tm').textContent=msg; t.classList.add('on'); clearTimeout(_tt); _tt=setTimeout(()=>t.classList.remove('on'),2600);} $('#tx')?.addEventListener('click',()=>$('#toast')?.classList.remove('on'));
+
+/* Legal modal */
+const MD={ p:{t:'privacy policy Policy', b:'<p><strong>Last updated 2026.</strong></p><p style="margin-top:9px">GRADEO stores your Google user ID, name and email in Firebase when you sign in. We do not sell or share this data. No ads.</p><p style="margin-top:9px">Questions: <a href="mailto:info@gradeo.in" style="color:#FF6A00">info@gradeo.in</a></p>'}, t:{t:'Terms of Use', b:'<p>GRADEO is free for personal educational use. Commercial use is prohibited.</p><p style="margin-top:9px">Results are estimates only. Always verify with your university\'s official evaluation.</p>'}, d:{t:'Disclaimer', b:'<p>GRADEO is independent — not affiliated with any university. Calculations are estimates. Actual grades may vary.</p>'} };
+function om(k){ const m=MD[k]; if(!m) return; $('#mt').textContent=m.t; $('#mb').innerHTML=m.b; $('#mbd').classList.add('on'); }
+function cm(){ $('#mbd').classList.remove('on'); }
+// Legal links now point to real pages - no modal needed for privacy policy/terms
+// Keeping modal only for security page footer
+[['#fd','d']].forEach(([sel,k])=>{ $(sel)?.addEventListener('click',e=>{ e.preventDefault(); om(k); }); });
+document.addEventListener('keydown',e=>{ if(e.key==='Escape'){ cm(); $('#siModal')?.classList.remove('on'); } });
+
+/* Recents + tiles */
+function rr(){ ['#rl','#mRl'].forEach(sel=>{ const b=$(sel); if(!b) return; const a=JSON.parse(localStorage.getItem(RK) ?? '[]'); b.innerHTML=''; if(!a.length){ b.innerHTML='<span style="font-size:11px;color:var(--muted2)">No recents yet</span>'; return; } const l={m1:'Planner',m2:'SGPA',m3:'CGPA'}; a.forEach(m=>{ const x=document.createElement('button'); x.className='rc'; x.type='button'; x.innerHTML=`<span class="rd"></span>${l[m] ?? m}`; x.addEventListener('click',()=>om2(m)); b.appendChild(x); }); }); }
+function pr(m){ const a=JSON.parse(localStorage.getItem(RK) ?? '[]'); const n=[m, ...a.filter(x=>x!==m)].slice(0,3); localStorage.setItem(RK, JSON.stringify(n)); localStorage.setItem('gradeo_last_mode', m); rr(); }
+function om2(m){ if(m) pr(m); navTo(MU[m] ?? MU.m2); }
+$$('.tile[data-mode]').forEach(el=>{ el.addEventListener('click',()=>om2(el.dataset.mode)); el.addEventListener('keydown',e=>{ if(e.key==='Enter' || e.key===' '){ e.preventDefault(); om2(el.dataset.mode); }}); });
+$$('.mTile[data-mode]').forEach(el=>el.addEventListener('click',()=>om2(el.dataset.mode)));
+
+/* Copy link */
+async function copyLink(){ try{ if(navigator.clipboard && isSecureContext){ await navigator.clipboard.writeText(MU.m2);} else { const t=document.createElement('textarea'); t.value=MU.m2; t.style.cssText='position:fixed;left:-9999px'; document.body.appendChild(t); t.select(); document.execCommand('copy'); t.remove(); } toast('Link copied!'); } catch{ toast('Copy failed'); } vib([4,10,4]); }
+$('#cpb')?.addEventListener('click',copyLink); $('#mCpb')?.addEventListener('click',copyLink);
+$('#rcl')?.addEventListener('click',()=>{ localStorage.removeItem(RK); localStorage.removeItem('gradeo_last_mode'); rr(); toast('Recents cleared'); });
+$('#mRcl')?.addEventListener('click',()=>{ localStorage.removeItem(RK); localStorage.removeItem('gradeo_last_mode'); rr(); toast('Recents cleared'); });
+
+/* Offer */
+$('#offb')?.addEventListener('click',()=>navTo(SITE+'/offer')); $('#mOffb')?.addEventListener('click',()=>navTo(SITE+'/offer'));
+function goM(){ if(isMob()){ goTab(1);} else { $('#modes')?.scrollIntoView({behavior:'smooth',block:'start'});} }
+
+/* AUTH */
+let ps=false; // post-signin
+function sIn(u){ const n=u.displayName || 'Student', e=u.email||'', p=u.photoURL||''; const hsl=$('#hsl'); if(hsl) hsl.textContent='Sign out'; ['#gsb','#mGsb'].forEach(s=>{ const el=$(s); if(!el) return; el.textContent='Open calculator →'; el.onclick=()=>goM(); el.style.display=''; }); const hw=$('#mHowCard'); if(hw) hw.style.display='none'; ['#pout'].forEach(s=>{ const el=$(s); if(el) el.style.display='none';}); ['#pin','#mPin'].forEach(s=>{ const el=$(s); if(el) el.style.display='';}); ['#prec','#mPrec'].forEach(s=>{ const el=$(s); if(el) el.style.display='';}); ['#offp','#mOffp'].forEach(s=>{ const el=$(s); if(el) el.style.display='none';}); const lm=localStorage.getItem('gradeo_last_mode'); ['#olb','#mOlb'].forEach(s=>{ const el=$(s); if(el) el.style.display=lm?'':'none';}); ['#un','#mUn'].forEach(s=>{ const el=$(s); if(el) el.textContent=n;}); ['#ue','#mUe'].forEach(s=>{ const el=$(s); if(el) el.textContent=e;}); [['#avi2','#avii'],['#mAvi2','#mAvii']].forEach(([imgSel,iniSel])=>{ const img=$(imgSel), ini=$(iniSel); if(!img||!ini) return; if(p){ img.src=p; img.style.display='block'; ini.style.display='none'; } else { ini.textContent=n[0].toUpperCase(); ini.style.display=''; img.style.display='none'; } }); rr(); }
+function sOut(){ const hsl=$('#hsl'); if(hsl) hsl.textContent='Sign in'; ['#gsb','#mGsb'].forEach(s=>{ const el=$(s); if(!el) return; el.textContent='Get started →'; el.onclick=()=>{ if(window.__a?.currentUser){ goM(); return;} doSI(()=>{ ps=true;}); }; el.style.display=''; }); const hw=$('#mHowCard'); if(hw) hw.style.display=''; if(typeof window._howRestart==='function') window._howRestart(); ['#pout'].forEach(s=>{ const el=$(s); if(el) el.style.display='';}); ['#pin','#mPin'].forEach(s=>{ const el=$(s); if(el) el.style.display='none';}); ['#prec','#mPrec'].forEach(s=>{ const el=$(s); if(el) el.style.display='none';}); ['#offp','#mOffp'].forEach(s=>{ const el=$(s); if(el) el.style.display='';}); if(isMob()) goTab(0); }
+
+function doSI(after){ if(!window.__a || !window.__p){ toast('Sign-in unavailable'); return; } if(window.__a.currentUser){ if(after) after(); return; } window._siAfter = after ?? null; $('#siModal')?.classList.add('on'); const ef=$('#siEmailForm'); if(ef) ef.style.display='none'; }
+
+function _doProviderSI(provider, btnId){ const btn=$(btnId); if(btn) btn.classList.add('loading'); const bs=[$('#hsi'),$('#gsb'),$('#mGsb')].filter(Boolean); bs.forEach(b=>b.disabled=true); window.__a.signInWithPopup(provider).then(()=>{ if(btn) btn.classList.remove('loading'); bs.forEach(b=>b.disabled=false); $('#siModal')?.classList.remove('on'); vib(HV.success); if(window._siAfter){ window._siAfter(); window._siAfter=null; } else if(ps){ ps=false; setTimeout(goM,160);} }).catch(e=>{ console.error(e); if(btn) btn.classList.remove('loading'); bs.forEach(b=>b.disabled=false); const msg = e.code==='auth/popup-closed-by-user'?'Sign-in cancelled' : e.code==='auth/account-exists-with-different-credential'?'Account already exists with a different provider' : 'Sign-in failed. Try again.'; toast(msg); }); }
+
+$('#siBtnGoogle')?.addEventListener('click',()=>{ if(!window.__a || !window.__p) return; _doProviderSI(window.__p, '#siBtnGoogle'); });
+$('#siBtnGithub')?.addEventListener('click',()=>{ if(!window.__a) return; try{ const ghp=new firebase.auth.GithubAuthProvider(); ghp.addScope('read:user'); ghp.addScope('user:email'); _doProviderSI(ghp, '#siBtnGithub'); } catch(e){ toast('GitHub sign-in unavailable. Use Google or Email.'); } });
+$('#siBtnEmailToggle')?.addEventListener('click',()=>{ const ef=$('#siEmailForm'); if(!ef) return; const showing=ef.style.display!=='none'; ef.style.display=showing?'none':'flex'; if(!showing) setTimeout(()=>$('#siEmail')?.focus(),80); });
+$('#siBtnEmailSignIn')?.addEventListener('click',()=>{ const email=$('#siEmail')?.value?.trim(); const pass=$('#siPass')?.value; if(!email || !pass){ toast('Enter your email and password.'); return;} const btn=$('#siBtnEmailSignIn'); if(btn) btn.disabled=true; window.__a.signInWithEmailAndPassword(email,pass).then(()=>{ $('#siModal')?.classList.remove('on'); vib(HV.success); if(window._siAfter){ window._siAfter(); window._siAfter=null; } }).catch(e=>{ if(btn) btn.disabled=false; const msg = e.code==='auth/wrong-password'?'Incorrect password' : e.code==='auth/user-not-found'?'No account found — try Create account' : e.code==='auth/invalid-email'?'Invalid email address' : 'Sign-in failed. Check your details.'; toast(msg); }); });
+$('#siBtnEmailCreate')?.addEventListener('click',()=>{ const email=$('#siEmail')?.value?.trim(); const pass=$('#siPass')?.value; if(!email || !pass){ toast('Enter your email and password.'); return;} if(pass.length<6){ toast('Password must be 6+ characters.'); return;} const btn=$('#siBtnEmailCreate'); if(btn) btn.disabled=true; window.__a.createUserWithEmailAndPassword(email,pass).then(()=>{ $('#siModal')?.classList.remove('on'); vib(HV.success); toast('Account created! Welcome to GRADEO.'); if(window._siAfter){ window._siAfter(); window._siAfter=null; } }).catch(e=>{ if(btn) btn.disabled=false; const msg = e.code==='auth/email-already-in-use'?'Email already in use — try Sign in' : e.code==='auth/invalid-email'?'Invalid email address' : e.code==='auth/weak-password'?'Password too weak — use 6+ characters' : 'Could not create account. Try again.'; toast(msg); }); });
+$('#siBtnForgot')?.addEventListener('click',()=>{ const email=$('#siEmail')?.value?.trim(); if(!email){ toast('Enter your email first.'); $('#siEmail')?.focus(); return;} window.__a.sendPasswordResetEmail(email).then(()=>toast('Reset email sent — check your inbox.')).catch(()=>toast('Could not send reset email.')); });
+$('#siModal')?.addEventListener('click',e=>{ if(e.target===$('#siModal')) $('#siModal').classList.remove('on'); });
+
+$('#hsi')?.addEventListener('click',()=>{ if(window.__a?.currentUser){ window.__a.signOut().then(()=>{ toast('Signed out'); sOut(); }); return;} doSI(); });
+$('#mSignOutBtn')?.addEventListener('click',()=>{ if(window.__a?.currentUser) window.__a.signOut().then(()=>{ toast('Signed out'); sOut(); }); });
+$('#dskSignOut')?.addEventListener('click',()=>{ if(window.__a?.currentUser) window.__a.signOut().then(()=>{ toast('Signed out'); sOut(); }); });
+$('#gsb')?.addEventListener('click',()=>{ if(window.__a?.currentUser){ goM(); return;} doSI(()=>{ ps=true; }); });
+$('#mGsb')?.addEventListener('click',()=>{ if(window.__a?.currentUser){ goM(); return;} doSI(()=>{ ps=true; }); });
+$('#olb')?.addEventListener('click',()=>om2(localStorage.getItem('gradeo_last_mode') ?? 'm2'));
+$('#mOlb')?.addEventListener('click',()=>om2(localStorage.getItem('gradeo_last_mode') ?? 'm2'));
+$('#brd')?.addEventListener('click',e=>{ if(e.ctrlKey || e.metaKey){ window.open('calculators/index.html','_blank'); return;} if(location.hostname===new URL(SITE).hostname) window.scrollTo({top:0,behavior:'smooth'}); else navTo('calculators/index.html'); });
+
+/* HOW IT WORKS animation */
+(()=>{ if(!isMob()) return; const steps=[ 'Enter your internal marks and credits for each subject — takes about 30 seconds.', 'Set your target CGPA and your current CGPA so GRADEO knows the gap.', 'Instantly see the minimum marks you need in each final exam. Zero guesswork.' ]; const cgpaFrom=['7.4','7.8','8.1']; const cgpaTo=['7.8','8.1','8.5']; const barW=[[.72,.58,.85],[.60,.74,.68],[.82,.65,.91]]; const pcts=[['72%','58%','85%'],['60%','74%','68%'],['82%','65%','91%']]; let curStep=0, running=true; setTimeout(()=>{ $$('.mHowBarFill').forEach((b,i)=>{ b.style.transition='transform .9s cubic-bezier(.22,.68,0,1.1) '+(i*120)+'ms'; b.style.transform='scaleX('+barW[0][i]+')'; }); },900); function animateCGPA(from,to,el){ const s=performance.now(), fN=parseFloat(from), tN=parseFloat(to), dur=900; (function f(now){ const p=Math.min((now-s)/dur,1), e=1-Math.pow(1-p,3); el.textContent=(fN+(tN-fN)*e).toFixed(1); if(p<1) requestAnimationFrame(f); else el.textContent=to; })(performance.now()); }
+  function goStep(n){ curStep=((n%3)+3)%3; const desc=$('#mHowDesc'), cgpa=$('#mHowCGPA'); if(!desc || !cgpa) return; $$('.mHowStep').forEach((s,i)=>s.classList.toggle('active',i===curStep)); desc.style.opacity='0'; setTimeout(()=>{ desc.textContent=steps[curStep]; desc.style.transition='opacity .22s'; desc.style.opacity='1'; },200); animateCGPA(cgpaFrom[curStep], cgpaTo[curStep], cgpa); $$('.mHowBarFill').forEach((b,i)=>{ b.style.transition='transform .7s cubic-bezier(.22,.68,0,1.1) '+(i*80)+'ms'; b.style.transform='scaleX('+barW[curStep][i]+')'; }); $$('.mHowBarPct').forEach((el,i)=>{ el.textContent=pcts[curStep][i]; }); vib(HV.soft); }
+  let auto=setInterval(()=>{ if(running) goStep(curStep+1); },2800);
+  $$('.mHowStep').forEach((s,i)=>{ s.addEventListener('click',()=>{ clearInterval(auto); goStep(i); auto=setInterval(()=>{ if(running) goStep(curStep+1); },2800); }); });
+  document.addEventListener('visibilitychange',()=>{ running=!document.hidden; if(running){ clearInterval(auto); auto=setInterval(()=>{ if(running) goStep(curStep+1); },2800);} });
+  window._howRestart=()=>{ curStep=0; running=true; clearInterval(auto); if($('#mHowDesc')) $('#mHowDesc').textContent=steps[0]; $$('.mHowStep').forEach((s,i)=>s.classList.toggle('active',i===0)); auto=setInterval(()=>{ if(running) goStep(curStep+1); },2800); };
+})();
+
+/* File vs hosted */
+if(location.protocol==='file:'){ sOut(); ['#hsi','#gsb','#mGsb'].forEach(s=>{ const el=$(s); if(el) el.disabled=true; }); $('#gsb')?.addEventListener('click',goM); $('#mGsb')?.addEventListener('click',goM); }
+else { try{ firebase.initializeApp({apiKey:'AIzaSyDB_FK8-3ATZBpuvfL34EMp9WHTTd5sfIo',authDomain:'gradeo-in.firebaseapp.com',projectId:'gradeo-in',storageBucket:'gradeo-in.firebasestorage.app',messagingSenderId:'784963451684',appId:'1:784963451684:web:9d57beed639d488e4891b1',measurementId:'G-JSNGKKMJEH'}); const a=firebase.auth(), p=new firebase.auth.GoogleAuthProvider(); a.setPersistence(firebase.auth.Auth.Persistence.LOCAL).catch(()=>{}); window.__a=a; window.__p=p; a.onAuthStateChanged(u=>{ if(u){ sIn(u); if(ps){ ps=false; setTimeout(goM,160);} } else sOut(); }); }catch(e){ console.error(e); sOut(); } }
+/* ── 2026 HYPER-CONNECTIVITY ── */
+// Microsoft Clarity (Heatmaps) Placeholder
+(function(c,l,a,r,i,t,y){
+    c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+    t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+    y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+})(window, document, "clarity", "script", "gradeo_hype_2026");
+
+// Web Vitals Tracking
+if ('paint' in performance) {
+  const observer = new PerformanceObserver((list) => {
+    for (const entry of list.getEntries()) {
+      console.log('GRADEO Performance:', entry.name, entry.startTime);
+    }
+  });
+  observer.observe({ entryTypes: ['paint', 'largest-contentful-paint'] });
+}
+</script>
+
+<!-- ═══ PWA INSTALL BANNER ═══ -->
+<style>
+/* ── Pull-to-refresh indicator ── */
+#ptrBar{display:none;}
+#ptrHint{
+  position:fixed;top:0;left:50%;
+  transform:translate(-50%,-100%);
+  z-index:9500;
+  background:var(--o);color:#fff;
+  font-size:12px;font-weight:700;
+  padding:9px 22px;
+  border-radius:0 0 20px 20px;
+  pointer-events:none;white-space:nowrap;letter-spacing:.2px;
+  box-shadow:0 4px 20px rgba(255,106,0,.4);
+  display:none;opacity:0;
+  will-change:transform,opacity;
+  /* No CSS transition — JS handles it with rAF for 60fps */
+}
+#ptrHint.refreshing{background:var(--od);}
+
+/* ── Single bottom sheet ── */
+#pwaSheet{
+  display:none;position:fixed;bottom:0;left:0;right:0;z-index:8500;
+  background:var(--surface);border-top:1px solid var(--cb);
+  border-radius:24px 24px 0 0;
+  box-shadow:0 -8px 40px rgba(0,0,0,.18);
+  padding:0 0 env(safe-area-inset-bottom,0);
+  transform:translateY(100%);transition:transform .35s cubic-bezier(.16,1,.3,1);
+}
+#pwaSheet.open{transform:translateY(0);}
+#pwaSheet .sheet-handle{
+  width:36px;height:4px;border-radius:2px;background:var(--muted2);
+  margin:12px auto 0;
+}
+#pwaSheet .sheet-body{padding:20px 20px 24px;}
+#pwaSheet .sheet-row{display:flex;align-items:center;gap:14px;margin-bottom:18px;}
+#pwaSheet .sheet-icon{
+  width:52px;height:52px;border-radius:14px;flex-shrink:0;overflow:hidden;
+  border:1px solid var(--cb);
+}
+#pwaSheet .sheet-icon img{width:100%;height:100%;object-fit:cover;display:block;}
+#pwaSheet .sheet-name{font-size:16px;font-weight:800;color:var(--text);letter-spacing:-.3px;}
+#pwaSheet .sheet-tagline{font-size:13px;color:var(--muted);margin-top:2px;}
+
+/* Steps for iOS */
+#pwaSheet .steps{margin-bottom:20px;}
+#pwaSheet .step{
+  display:flex;align-items:flex-start;gap:12px;
+  padding:10px 0;border-bottom:1px solid var(--cb);
+}
+#pwaSheet .step:last-child{border-bottom:none;}
+#pwaSheet .step-num{
+  width:24px;height:24px;border-radius:50%;background:rgba(255,106,0,.12);
+  color:var(--o);font-size:12px;font-weight:800;display:flex;align-items:center;
+  justify-content:center;flex-shrink:0;margin-top:1px;
+}
+#pwaSheet .step-text{font-size:13px;color:var(--text);line-height:1.5;}
+#pwaSheet .step-text b{color:var(--o);}
+#pwaSheet .step-text .icon-inline{
+  display:inline-block;width:16px;height:16px;vertical-align:middle;
+  background:var(--o);border-radius:4px;margin:0 2px;
+}
+
+#pwaSheet .sheet-btn-primary{
+  width:100%;padding:14px;background:var(--o);color:#fff;border:none;
+  border-radius:14px;font-size:15px;font-weight:700;cursor:pointer;
+  font-family:inherit;transition:opacity .15s,transform .15s;
+  box-shadow:0 4px 16px rgba(255,106,0,.28);
+}
+#pwaSheet .sheet-btn-primary:active{opacity:.85;transform:scale(.98);}
+#pwaSheet .sheet-btn-secondary{
+  width:100%;padding:12px;background:transparent;color:var(--muted);
+  border:none;border-radius:14px;font-size:14px;cursor:pointer;
+  font-family:inherit;margin-top:6px;
+}
+
+/* Backdrop */
+#pwaBackdrop{
+  display:none;position:fixed;inset:0;z-index:8400;
+  background:rgba(0,0,0,.45);opacity:0;transition:opacity .3s;
+  backdrop-filter:blur(2px);
+}
+#pwaBackdrop.show{opacity:1;}
+
+/* SW update pill */
+#swUpdate{
+  display:none;position:fixed;top:14px;left:50%;transform:translate(-50%,-80px);
+  z-index:9000;background:var(--o);color:#fff;border-radius:20px;
+  padding:10px 20px;font-size:13px;font-weight:700;cursor:pointer;
+  white-space:nowrap;box-shadow:0 4px 20px rgba(255,106,0,.4);
+  transition:transform .35s cubic-bezier(.34,1.56,.64,1);
+}
+#swUpdate.show{transform:translate(-50%,0);}
+
+@keyframes pwaSlideUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
+
+/* === Minimal Loader Overlay (safe patch) === */
+#ldOv{position:fixed;inset:0;z-index:9100;display:none;place-items:center;opacity:0;transition:opacity .22s var(--sm);} 
+#ldOv.on{display:grid;opacity:1;}
+[data-theme="light"] #ldOv{background:radial-gradient(100% 60% at 50% 30%, rgba(255,92,0,.08) 0%, transparent 60%), #FFF6ED;}
+[data-theme="dark"]  #ldOv{background:radial-gradient(100% 60% at 50% 30%, rgba(255,92,0,.10) 0%, transparent 60%), #080604;}
+.ldWrap{display:flex;flex-direction:column;align-items:center;gap:10px;padding:14px 16px;border-radius:16px;background:var(--surface);border:1.5px solid var(--cb);box-shadow:0 8px 40px rgba(0,0,0,.18);} 
+.ldBrand{display:flex;align-items:center;gap:8px;}
+.ldTitle{font-family:var(--font-display, ui-sans-serif);font-weight:800;letter-spacing:-.3px;color:var(--text);font-size:13px;}
+.ldSpin{width:36px;height:36px;border-radius:50%;border:3px solid rgba(255,92,0,.20);border-top-color:var(--o);animation:ldspin .9s linear infinite;}
+.ldMsg{font-size:12px;font-weight:700;color:var(--muted);} 
+@keyframes ldspin{to{transform:rotate(360deg);}}
+@media(prefers-reduced-motion:reduce){.ldSpin{animation:none;border-top-color:rgba(255,92,0,.55);} }
+
+/* === Enhanced Loader & Intro Animations === */
+/* Loader background animated orbs */
+#ldOv::before{
+  content:""; position:absolute; inset:-20%; pointer-events:none; z-index:-1;
+  background:
+    radial-gradient(40vmax 40vmax at 20% 30%, rgba(255,92,0,.14), transparent 60%),
+    radial-gradient(32vmax 32vmax at 78% 25%, rgba(255,160,60,.10), transparent 62%),
+    radial-gradient(28vmax 28vmax at 50% 80%, rgba(255,92,0,.08), transparent 65%);
+  animation: ldBgFloat 18s ease-in-out infinite alternate;
+  filter: blur(2px);
+}
+@keyframes ldBgFloat{ to{ transform: translate3d(2%, -2%, 0) scale(1.04);} }
+
+/* Pop-in wrapper spring */
+.ldWrap{ transform: translateY(6px) scale(.92); opacity:0; animation: ldWrapIn .65s cubic-bezier(.22,1.2,.36,1) .05s forwards; }
+@keyframes ldWrapIn{ 60%{ transform:translateY(-2px) scale(1.04); opacity:1;} 100%{ transform:none; opacity:1; } }
+
+/* Brand icon pop + gentle pulse */
+#ldOv .ldBrand img{ transform: scale(.85) rotate(-6deg); filter: drop-shadow(0 6px 16px rgba(255,90,0,.25));
+  animation: ldLogoIn .6s cubic-bezier(.22,1.2,.36,1) .10s forwards, ldLogoPulse 2.8s ease-in-out .8s infinite; }
+@keyframes ldLogoIn{ 60%{ transform:scale(1.18) rotate(4deg);} 100%{ transform:scale(1) rotate(0);} }
+@keyframes ldLogoPulse{ 0%,100%{ transform: scale(1) } 50%{ transform: scale(1.04) } }
+
+@media(hover:hover){
+  #ldOv .ldWrap{ transition: transform .25s var(--sp), box-shadow .25s var(--sp); }
+  #ldOv .ldWrap:hover{ transform: translateY(-2px) scale(1.02); box-shadow:0 14px 44px rgba(0,0,0,.28); }
+}
+
+/* ---- Landing page intro glitch (first visit per session) ---- */
+/* Guard for reduced motion */
+@media (prefers-reduced-motion: reduce){
+  body.intro-glitch .lw img, body.intro-glitch .bn, body.intro-glitch h1, body.intro-glitch .sub{ animation:none!important; opacity:1!important; transform:none!important; filter:none!important; }
+}
+
+/* Glitch keyframes: smoother entry with cinematic split */
+@keyframes glitchIn{
+  0%{opacity:0; transform: translateY(12px) skewX(0deg); filter: blur(4px);}
+  20%{opacity:1; transform: translateY(0) skewX(4deg); text-shadow: -1.5px 0 #FF2200, 1.5px 0 #00FFFF; filter: none;}
+  40%{transform: translateY(-1px) skewX(-4deg); text-shadow: 1.5px 0 #FF2200, -1.5px 0 #00FFFF;}
+  70%{transform: translateY(0) skewX(0deg); text-shadow: 0 0 transparent;}
+  100%{transform:none; text-shadow: none;}
+}
+@keyframes glitchLogo{
+  0%{transform: translateY(12px) scale(.92) rotate(-2deg); filter: hue-rotate(0) opacity(0);}
+  30%{transform: translateY(-2px) scale(1.04) rotate(1deg); filter: hue-rotate(-10deg) opacity(1);}
+  65%{transform: translateY(0) scale(1) rotate(0); filter: none;}
+  100%{transform:none;}
+}
+
+/* Apply during intro - slowed down for premium feel */
+body.intro-glitch .lw img{ animation: glitchLogo 1.2s cubic-bezier(.22,1,.36,1) .1s both; }
+body.intro-glitch .bn{ animation: glitchIn 1.4s var(--sm) .15s both; }
+body.intro-glitch h1{ animation: glitchIn 1.5s var(--sm) .18s both; }
+body.intro-glitch .sub{ animation: glitchIn 1.6s var(--sm) .25s both; }
+</style>
+
+<!-- Pull-to-refresh indicator -->
+<div id="ptrBar"></div>
+<div id="ptrHint">Release to refresh</div>
+
+<!-- Single unified PWA sheet -->
+<div id="pwaBackdrop"></div>
+<div id="pwaSheet">
+  <div class="sheet-handle"></div>
+  <div class="sheet-body">
+    <div class="sheet-row">
+      <div class="sheet-icon">
+        <img src="https://res.cloudinary.com/djy3mjtsz/image/upload/v1770296454/Untitled-2_i2ezfh.png" alt="GRADEO"/>
+      </div>
+      <div>
+        <div class="sheet-name">GRADEO</div>
+        <div class="sheet-tagline">Free SGPA &amp; CGPA Planner</div>
+      </div>
+    </div>
+    <!-- Android content (shown by JS) -->
+    <div id="sheetAndroid">
+      <button class="sheet-btn-primary" id="pwaInstallBtn">Add to Home Screen</button>
+      <button class="sheet-btn-secondary" id="pwaDismissBtn">Maybe later</button>
+    </div>
+    <!-- iOS content (shown by JS) -->
+    <div id="sheetIOS" style="display:none;">
+      <div class="steps">
+        <div class="step">
+          <div class="step-num">1</div>
+          <div class="step-text">Tap the <b>Share</b> button <span style="display:inline-block;width:16px;height:16px;vertical-align:middle;margin:0 2px;background:var(--o);border-radius:4px;"></span> at the bottom of your screen</div>
+        </div>
+        <div class="step">
+          <div class="step-num">2</div>
+          <div class="step-text">Scroll down and tap <b>"Add to Home Screen"</b></div>
+        </div>
+        <div class="step">
+          <div class="step-num">3</div>
+          <div class="step-text">Tap <b>Add</b> — GRADEO will appear on your home screen!</div>
+        </div>
+      </div>
+      <button class="sheet-btn-secondary" id="iosClose">Got it</button>
     </div>
   </div>
 </div>
 
-<!-- ════════════ MOBILE SHELL ════════════ -->
-<div id="mApp">
-  <div id="mBar">
-    <div class="mBrand"><div class="mLogo"><img src="https://res.cloudinary.com/djy3mjtsz/image/upload/v1770296454/Untitled-2_i2ezfh.png" alt="Logo"/></div><div class="mBrandTxt"><div class="mBN">GRADEO</div><div class="mBT">Grade Planner</div></div></div>
-    <div class="mBarRight"><button class="mThBtn" id="mThBtn"><div class="mThIcon"><svg class="sunI" viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg><svg class="moonI" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg></div></button></div>
-  </div>
-  
-  <div id="mViewport"><div id="mTrack">
-    <!-- Panels would go here -->
-    <div class="mPanel" id="mP1">Home Panel Content...</div>
-  </div></div>
-
-  <div id="mTabs"><div id="diIsland">
-    <button class="mTab active" onclick="goTab(0)"><i data-lucide="home"></i></button>
-    <button class="mTab" onclick="goTab(1)"><i data-lucide="calculator"></i></button>
-    <button class="mTab" onclick="goTab(2)"><i data-lucide="zap"></i></button>
-    <button class="mTab" onclick="goTab(3)"><i data-lucide="help-circle"></i></button>
-  </div></div>
+<!-- SW update pill -->
+<div id="swUpdate" onclick="document.getElementById('swUpdate')._doUpdate && document.getElementById('swUpdate')._doUpdate()">
+  GRADEO updated — tap to reload
 </div>
 
-<!-- Shared Overlays -->
-<div id="cb-banner" class="cb-banner" style="display:none;">
-  <div class="cb-wrap"><div class="cb-text"><strong>Cookie Transparency</strong><span>We use cookies to analyze traffic. By using GRADEO, you agree to our policies.</span></div><div class="cb-btns"><button class="cb-btn cb-acc" onclick="accCookies()">Accept</button></div></div>
-</div>
-<div class="toast" id="toast" role="status"><span id="tm"></span><button class="tx">✕</button></div>
-<div class="mbd" id="mbd" onclick="cm()"><div class="mbox" onclick="event.stopPropagation()"><div class="mhd"><strong id="mt"></strong><button onclick="cm()">✕</button></div><div class="mb" id="mb"></div></div></div>
+<script>
+(function(){
+  if(location.protocol === 'file:') return;
 
-<!-- ══ MODULAR SCRIPTS ══ -->
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
-<script src="assets/js/app-core.js"></script>
-<script src="assets/js/app-ui.js"></script>
-<script src="assets/js/app-auth.js"></script>
-<script src="assets/js/app-navigation.js"></script>
-<script src="assets/js/app-mobile.js"></script>
-<script src="assets/js/app-pwa.js"></script>
-<script src="assets/js/app-how.js"></script>
-<script src="assets/js/app-legal.js"></script>
-<script>lucide.createIcons();</script>
-</body>
-</html>
+  const isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent) && !window.MSStream;
+  const isInStandaloneMode = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
+  const ICON = 'https://res.cloudinary.com/djy3mjtsz/image/upload/v1770296454/Untitled-2_i2ezfh.png';
+
+  /* ── Sheet helpers ── */
+  const sheet     = document.getElementById('pwaSheet');
+  const backdrop  = document.getElementById('pwaBackdrop');
+
+  function openSheet(){
+    backdrop.style.display = 'block';
+    sheet.style.display = 'block';
+    requestAnimationFrame(() => {
+      backdrop.classList.add('show');
+      sheet.classList.add('open');
+    });
+  }
+  function closeSheet(){
+    sheet.classList.remove('open');
+    backdrop.classList.remove('show');
+    setTimeout(() => {
+      sheet.style.display = 'none';
+      backdrop.style.display = 'none';
+    }, 360);
+  }
+  backdrop.addEventListener('click', closeSheet);
+
+  /* ── Service Worker ── */
+  let swReg = null;
+  if('serviceWorker' in navigator){
+    navigator.serviceWorker.register('/sw.js', { scope:'/', updateViaCache:'none' }).then(reg => {
+      swReg = reg;
+
+      /* Listen for updates */
+      reg.addEventListener('updatefound', () => {
+        const nw = reg.installing;
+        nw?.addEventListener('statechange', () => {
+          if(nw.state === 'installed' && navigator.serviceWorker.controller){
+            const upd = document.getElementById('swUpdate');
+            if(upd){
+              upd.style.display = 'block';
+              requestAnimationFrame(() => upd.classList.add('show'));
+              upd._doUpdate = () => reg.waiting?.postMessage({ type: 'SKIP_WAITING' });
+            }
+          }
+        });
+      });
+
+      /* Register periodic background sync (refresh content while app is closed) */
+      if('periodicSync' in reg){
+        navigator.permissions.query({ name:'periodic-background-sync' }).then(status => {
+          if(status.state === 'granted'){
+            reg.periodicSync.register('gradeo-refresh', { minInterval: 24 * 60 * 60 * 1000 }).catch(() => {});
+          }
+        }).catch(() => {});
+      }
+
+      /* Pre-cache the calculator page in background after 3s */
+      setTimeout(() => {
+        if(navigator.onLine){
+          fetch('/calculator/').then(r => {
+            if(r.ok) caches.open('gradeo-pages-v5').then(c => c.put('/calculator/', r)).catch(() => {});
+          }).catch(() => {});
+        }
+      }, 3000);
+
+    }).catch(e => console.warn('[GRADEO SW]', e));
+
+    navigator.serviceWorker.addEventListener('controllerchange', () => {
+      if(!window._swReloading){ window._swReloading = true; location.reload(); }
+    });
+  }
+
+  /* ── Pull-to-refresh ── */
+  if(isInStandaloneMode || isIOS){
+    const hint = document.getElementById('ptrHint');
+    const THRESHOLD = 80;
+    const MAX_PULL  = 120;
+    let startY = 0, curY = 0, pulling = false, triggered = false, rafId = null;
+
+    function updateHint(dy){
+      if(!hint) return;
+      const clamped  = Math.min(dy, MAX_PULL);
+      const progress = Math.min(dy / THRESHOLD, 1);
+
+      /* Smooth elastic movement via transform */
+      hint.style.display = 'block';
+      hint.style.transform = `translate(-50%, ${Math.min(clamped * 0.6, 60)}px)`;
+      hint.style.opacity   = String(Math.min(progress * 1.5, 1));
+
+      if(dy >= THRESHOLD){
+        if(hint.textContent !== 'Release to refresh'){
+          hint.textContent = 'Release to refresh';
+          hint.classList.add('show','refreshing');
+          if(navigator.vibrate) navigator.vibrate([8]);
+        }
+      } else {
+        hint.textContent = 'Pull down to refresh';
+        hint.classList.remove('refreshing');
+        hint.classList.add('show');
+      }
+    }
+
+    function resetHint(){
+      if(!hint) return;
+      hint.style.transition = 'transform .25s cubic-bezier(.34,1.56,.64,1), opacity .2s';
+      hint.style.transform  = 'translate(-50%, -100%)';
+      hint.style.opacity    = '0';
+      setTimeout(()=>{
+        hint.style.display    = 'none';
+        hint.style.transition = '';
+        hint.textContent      = 'Pull down to refresh';
+        hint.classList.remove('show','refreshing');
+      }, 260);
+    }
+
+    document.addEventListener('touchstart', e => {
+      if(window.scrollY === 0){
+        startY = e.touches[0].clientY;
+        curY   = startY;
+        triggered = false;
+      }
+    }, { passive: true });
+
+    document.addEventListener('touchmove', e => {
+      if(!startY) return;
+      curY = e.touches[0].clientY;
+      const dy = curY - startY;
+      if(dy > 8 && window.scrollY === 0){
+        pulling = true;
+        if(rafId) cancelAnimationFrame(rafId);
+        rafId = requestAnimationFrame(() => updateHint(dy));
+      }
+    }, { passive: true });
+
+    document.addEventListener('touchend', () => {
+      if(!pulling){ startY = 0; return; }
+      const dy = curY - startY;
+      pulling  = false;
+      startY   = 0;
+      if(rafId){ cancelAnimationFrame(rafId); rafId = null; }
+
+      if(dy >= THRESHOLD && !triggered){
+        triggered = true;
+        if(hint){
+          hint.textContent   = 'Refreshing...';
+          hint.style.opacity = '1';
+          hint.style.transform = 'translate(-50%, 8px)';
+        }
+        /* Tell SW to clear page cache then reload */
+        if(navigator.serviceWorker?.controller){
+          navigator.serviceWorker.controller.postMessage({ type: 'CLEAR_CACHE' });
+          setTimeout(() => location.reload(), 300);
+        } else {
+          setTimeout(() => location.reload(), 300);
+        }
+      } else {
+        resetHint();
+      }
+    }, { passive: true });
+
+    document.addEventListener('touchcancel', () => {
+      pulling = false; startY = 0;
+      resetHint();
+    }, { passive: true });
+  }
+  /* ── Android Install Prompt ── */
+  let deferredPrompt = null;
+  const dismissed     = parseInt(localStorage.getItem('gradeo_pwa_dismissed') || '0');
+  const daysSince     = (Date.now() - dismissed) / 86400000;
+
+  window.addEventListener('beforeinstallprompt', e => {
+    e.preventDefault();
+    deferredPrompt = e;
+    if(!isInStandaloneMode && daysSince > 0.04){
+      document.getElementById('sheetAndroid').style.display = 'block';
+      document.getElementById('sheetIOS').style.display = 'none';
+      /* Show after user has been on the page 3 seconds */
+      setTimeout(openSheet, 3000);
+    }
+  });
+
+  document.getElementById('pwaInstallBtn')?.addEventListener('click', () => {
+    if(!deferredPrompt) return;
+    closeSheet();
+    deferredPrompt.prompt();
+    deferredPrompt.userChoice.then(choice => {
+      deferredPrompt = null;
+      if(choice.outcome === 'accepted' && typeof toast === 'function'){
+        toast('GRADEO installed!');
+      }
+    });
+  });
+
+  document.getElementById('pwaDismissBtn')?.addEventListener('click', () => {
+    closeSheet();
+    localStorage.setItem('gradeo_pwa_dismissed', Date.now().toString());
+  });
+
+  window.addEventListener('appinstalled', () => {
+    closeSheet();
+    deferredPrompt = null;
+    localStorage.setItem('gradeo_pwa_installed', '1');
+    if(typeof toast === 'function') toast('GRADEO installed!');
+    if(window.gtag) gtag('event', 'pwa_install', { event_category: 'PWA' });
+  });
+
+  /* ── iOS Install Tip ── */
+  if(isIOS && !isInStandaloneMode){
+    const iosDismissed = parseInt(localStorage.getItem('gradeo_ios_tip') || '0');
+    const daysSinceIos = (Date.now() - iosDismissed) / 86400000;
+    if(daysSinceIos > 0.04){  /* ~1 hour cooldown */
+      document.getElementById('sheetAndroid').style.display = 'none';
+      document.getElementById('sheetIOS').style.display = 'block';
+      setTimeout(openSheet, 5000);
+    }
+    document.getElementById('iosClose')?.addEventListener('click', () => {
+      closeSheet();
+      localStorage.setItem('gradeo_ios_tip', Date.now().toString());
+    });
+  }
+
+  /* ── Push Notification Subscription ── */
+  const WORKER_URL = 'https://gradeo-push.gradeo-in.workers.dev';
+  const PUSH_KEY = 'gradeo_push_dismissed';
+  /* Reset prompts on new version — so users see install/notification prompts again */
+  (function(){
+    if(localStorage.getItem('gradeo_pwa_ver') !== 'v5'){
+      localStorage.removeItem('gradeo_pwa_dismissed');
+      localStorage.removeItem('gradeo_ios_tip');
+      localStorage.removeItem('gradeo_push_dismissed');
+      localStorage.setItem('gradeo_pwa_ver','v5');
+    }
+  })();
+
+  /* Reset dismissed timestamps if user cleared site data or first visit after key change */
+  (function resetIfNeeded(){
+    const VERSION = 'v4';
+    if(localStorage.getItem('gradeo_pwa_version') !== VERSION){
+      localStorage.removeItem('gradeo_pwa_dismissed');
+      localStorage.removeItem('gradeo_ios_tip');
+      localStorage.removeItem(PUSH_KEY);
+      localStorage.setItem('gradeo_pwa_version', VERSION);
+    }
+  })();
+
+  function subscribeToPush(){
+    if(!swReg) return;
+    const VAPID_PUBLIC_KEY = 'BEUA4cj1wUQYwLebF11DPZEyjV21EKsHIVNavl4g80qXmjTyFjjwcSTl4nMfuSZqXxqFCkH3agSJBZvMGlVU4UQ';
+    const appServerKey = urlBase64ToUint8Array(VAPID_PUBLIC_KEY);
+    swReg.pushManager.subscribe({ userVisibleOnly: true, applicationServerKey: appServerKey })
+      .then(sub => {
+        fetch(WORKER_URL + '/subscribe', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(sub)
+        }).then(() => {
+          if(typeof toast === 'function') toast('Notifications enabled');
+        }).catch(() => {});
+      }).catch(e => console.warn('[GRADEO Push]', e));
+  }
+
+  /* Show push prompt only ONCE — 12s after page load, only if NOT already in standalone */
+  /* and only if notifications haven't been asked before */
+  function maybeAskPush(){
+    if(!('Notification' in window) || !('PushManager' in window)) return;
+    if(Notification.permission !== 'default') return;
+    const dis = parseInt(localStorage.getItem(PUSH_KEY) || '0');
+    if((Date.now() - dis) < 1 * 86400000) return; /* 1 day cooldown */
+    /* Don't show push AND install sheet at the same time — wait for sheet to close */
+    const delay = (!isInStandaloneMode && (deferredPrompt || isIOS)) ? 10000 : 6000;
+    setTimeout(() => {
+      if(Notification.permission !== 'default') return;
+      /* Use native browser prompt directly — no custom UI popup */
+      Notification.requestPermission().then(p => {
+        localStorage.setItem(PUSH_KEY, Date.now().toString());
+        if(p === 'granted') subscribeToPush();
+      });
+    }, delay);
+  }
+  maybeAskPush();
+
+  function urlBase64ToUint8Array(base64String){
+    const padding = '='.repeat((4 - base64String.length % 4) % 4);
+    const base64 = (base64String + padding).replace(/-/g,'+').replace(/_/g,'/');
+    const raw = atob(base64);
+    return Uint8Array.from([...raw].map(c => c.charCodeAt(0)));
+  }
+
+  /* ── Background sync ── */
+  window.addEventListener('online', () => {
+    swReg?.sync?.register('gradeo-sync').catch(() => {});
+  });
+
+  /* ── Manual notify helper ── */
+  window.gradeoNotify = function(title, body, url){
+    if(Notification.permission === 'granted' && swReg){
+      swReg.showNotification(title || 'GRADEO', {
+        body: body || 'Time to plan your grades!',
+        icon: ICON, badge: ICON, data: { url: url || '/' }
+      });
+    }
+  };
+
+})();
+</script>
+
+</script>
+
+<!-- GRADEO v11 — Floating particle canvas (desktop atmosphere) -->
+<canvas id="particleCanvas" aria-hidden="true"></canvas>
+<script>
+(function(){
+  if(window.innerWidth < 768) return;
+  const canvas = document.getElementById('particleCanvas');
+  if(!canvas) return;
+  const ctx = canvas.getContext('2d');
+  let W, H, particles = [], raf;
+  function resize(){ W = canvas.width = window.innerWidth; H = canvas.height = window.innerHeight; }
+  resize();
+  window.addEventListener('resize', resize, {passive:true});
+  const isDark = () => document.documentElement.dataset.theme === 'dark';
+  function mkParticle(){
+    return {
+      x: Math.random() * W,
+      y: H + 20,
+      r: Math.random() * 2.5 + 0.5,
+      vy: -(Math.random() * 0.4 + 0.15),
+      vx: (Math.random() - 0.5) * 0.2,
+      life: 0,
+      maxLife: Math.random() * 300 + 200,
+      hue: Math.random() > 0.7 ? 30 : 20,
+    };
+  }
+  for(let i=0;i<60;i++){
+    const p = mkParticle();
+    p.y = Math.random() * H;
+    p.life = Math.random() * p.maxLife;
+    particles.push(p);
+  }
+  function draw(){
+    ctx.clearRect(0, 0, W, H);
+    const dark = isDark();
+    particles.forEach((p, i) => {
+      p.x += p.vx; p.y += p.vy; p.life++;
+      if(p.life > p.maxLife || p.y < -20){
+        particles[i] = mkParticle();
+        return;
+      }
+      const progress = p.life / p.maxLife;
+      const alpha = dark
+        ? Math.sin(progress * Math.PI) * 0.25
+        : Math.sin(progress * Math.PI) * 0.18;
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+      ctx.fillStyle = `hsla(${p.hue}, 100%, ${dark?60:50}%, ${alpha})`;
+      ctx.fill();
+    });
+    raf = requestAnimationFrame(draw);
+  }
+  draw();
+  document.addEventListener('visibilitychange', () => {
+    if(document.hidden){ cancelAnimationFrame(raf); }
+    else { draw(); }
+  });
+})();
+/* ── 2026 HYPER-CONNECTIVITY ── */
+// Microsoft Clarity (Heatmaps) Placeholder
+(function(c,l,a,r,i,t,y){
+    c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+    t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+    y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+})(window, document, "clarity", "script", "gradeo_hype_2026");
+
+// Web Vitals Tracking
+if ('paint' in performance) {
+  const observer = new PerformanceObserver((list) => {
+    for (const entry of list.getEntries()) {
+      console.log('GRADEO Performance:', entry.name, entry.startTime);
+    }
+  });
+  observer.observe({ entryTypes: ['paint', 'largest-contentful-paint'] });
+}
+</script>
+
+    <script type="module" src="assets/js/gradeo-landing.js"></script>
+</body></html>

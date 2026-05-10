@@ -7,14 +7,45 @@
   "scope": "/",
   "display": "standalone",
   "display_override": ["window-controls-overlay", "standalone", "minimal-ui", "browser"],
-  "background_color": "#0A0A0A",
+  "background_color": "#FFF6ED",
   "theme_color": "#FF6A00",
   "orientation": "portrait-primary",
   "lang": "en-IN",
   "dir": "ltr",
   "categories": ["education", "utilities", "productivity"],
   "prefer_related_applications": false,
+  "launch_handler": {
+    "client_mode": "focus-existing"
+  },
+  "handle_links": "preferred",
+  "edge_side_panel": {
+    "preferred_width": 400
+  },
   "icons": [
+    {
+      "src": "https://res.cloudinary.com/djy3mjtsz/image/upload/v1770296454/Untitled-2_i2ezfh.png",
+      "sizes": "48x48",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "https://res.cloudinary.com/djy3mjtsz/image/upload/v1770296454/Untitled-2_i2ezfh.png",
+      "sizes": "72x72",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "https://res.cloudinary.com/djy3mjtsz/image/upload/v1770296454/Untitled-2_i2ezfh.png",
+      "sizes": "96x96",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "https://res.cloudinary.com/djy3mjtsz/image/upload/v1770296454/Untitled-2_i2ezfh.png",
+      "sizes": "144x144",
+      "type": "image/png",
+      "purpose": "any"
+    },
     {
       "src": "https://res.cloudinary.com/djy3mjtsz/image/upload/v1770296454/Untitled-2_i2ezfh.png",
       "sizes": "192x192",
@@ -34,24 +65,85 @@
       "purpose": "any"
     }
   ],
+  "screenshots": [
+    {
+      "src": "https://res.cloudinary.com/djy3mjtsz/image/upload/v1770296454/Untitled-2_i2ezfh.png",
+      "sizes": "390x844",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "Gradeo — Grade Planner"
+    },
+    {
+      "src": "https://res.cloudinary.com/djy3mjtsz/image/upload/v1770296454/Untitled-2_i2ezfh.png",
+      "sizes": "1280x800",
+      "type": "image/png",
+      "form_factor": "wide",
+      "label": "Gradeo — Desktop View"
+    }
+  ],
   "shortcuts": [
     {
       "name": "SGPA Calculator",
       "short_name": "SGPA",
-      "url": "/calculators/sgpa/index.html?source=shortcut",
-      "icons": [{"src": "https://res.cloudinary.com/djy3mjtsz/image/upload/v1770296454/Untitled-2_i2ezfh.png", "sizes": "96x96"}]
+      "description": "Calculate your SGPA instantly",
+      "url": "/calculator/?mode=sgpa&source=shortcut",
+      "icons": [
+        {
+          "src": "https://res.cloudinary.com/djy3mjtsz/image/upload/v1770296454/Untitled-2_i2ezfh.png",
+          "sizes": "96x96",
+          "type": "image/png"
+        }
+      ]
     },
     {
       "name": "CGPA Planner",
       "short_name": "Planner",
-      "url": "/calculators/planner/index.html?source=shortcut",
-      "icons": [{"src": "https://res.cloudinary.com/djy3mjtsz/image/upload/v1770296454/Untitled-2_i2ezfh.png", "sizes": "96x96"}]
+      "description": "Plan your target CGPA",
+      "url": "/calculator/?mode=planner&source=shortcut",
+      "icons": [
+        {
+          "src": "https://res.cloudinary.com/djy3mjtsz/image/upload/v1770296454/Untitled-2_i2ezfh.png",
+          "sizes": "96x96",
+          "type": "image/png"
+        }
+      ]
     },
     {
       "name": "CGPA Converter",
       "short_name": "CGPA",
-      "url": "/calculators/cgpa/index.html?source=shortcut",
-      "icons": [{"src": "https://res.cloudinary.com/djy3mjtsz/image/upload/v1770296454/Untitled-2_i2ezfh.png", "sizes": "96x96"}]
+      "description": "Convert SGPA to CGPA",
+      "url": "/calculator/?mode=cgpa&source=shortcut",
+      "icons": [
+        {
+          "src": "https://res.cloudinary.com/djy3mjtsz/image/upload/v1770296454/Untitled-2_i2ezfh.png",
+          "sizes": "96x96",
+          "type": "image/png"
+        }
+      ]
+    }
+  ],
+  "share_target": {
+    "action": "/calculator/",
+    "method": "GET",
+    "params": {
+      "title": "title",
+      "text": "text",
+      "url": "url"
+    }
+  },
+  "file_handlers": [
+    {
+      "action": "/calculator/",
+      "accept": {
+        "text/plain": [".txt"],
+        "application/json": [".json"]
+      }
+    }
+  ],
+  "protocol_handlers": [
+    {
+      "protocol": "web+gradeo",
+      "url": "/calculator/?q=%s"
     }
   ]
 }
