@@ -2586,6 +2586,18 @@ if(location.protocol!=='file:'){
     window.__a = firebase.auth();
     window.__p = new firebase.auth.GoogleAuthProvider();
     window.__a.setPersistence(firebase.auth.Auth.Persistence.LOCAL).catch(()=>{});
+    
+    // Handle redirect return
+    window.__a.getRedirectResult().then(result => {
+      if(result && result.user) {
+        vib(HV.success);
+        setTimeout(()=>goM(), 160);
+      }
+    }).catch(e => {
+      console.error('Redirect Result Error:', e);
+      setTimeout(()=>toast(e.message || 'Sign-in failed. Try again.'), 500);
+    });
+
     window.__a.onAuthStateChanged(u => { 
       if(u) {
         sIn(u); 
@@ -2602,7 +2614,21 @@ function sOut(){ const hsl=$('#hsl'); if(hsl) hsl.textContent='Sign in'; ['#gsb'
 
 function doSI(after){ if(!window.__a || !window.__p){ toast('Sign-in unavailable'); return; } if(window.__a.currentUser){ if(after) after(); return; } window._siAfter = after ?? null; $('#siModal')?.classList.add('on'); const ef=$('#siEmailForm'); if(ef) ef.style.display='none'; }
 
-function _doProviderSI(provider, btnId){ const btn=$(btnId); if(btn) btn.classList.add('loading'); const bs=[$('#hsi'),$('#gsb'),$('#mGsb')].filter(Boolean); bs.forEach(b=>b.disabled=true); window.__a.signInWithPopup(provider).then(()=>{ if(btn) btn.classList.remove('loading'); bs.forEach(b=>b.disabled=false); $('#siModal')?.classList.remove('on'); vib(HV.success); if(window._siAfter){ window._siAfter(); window._siAfter=null; } else if(ps){ ps=false; setTimeout(goM,160);} }).catch(e=>{ console.error(e); if(btn) btn.classList.remove('loading'); bs.forEach(b=>b.disabled=false); const msg = e.code==='auth/popup-closed-by-user'?'Sign-in cancelled' : e.code==='auth/account-exists-with-different-credential'?'Account already exists with a different provider' : 'Sign-in failed. Try again.'; toast(msg); }); }
+function _doProviderSI(provider, btnId){ 
+  const btn=$(btnId); 
+  if(btn) btn.classList.add('loading'); 
+  const bs=[$('#hsi'),$('#gsb'),$('#mGsb')].filter(Boolean); 
+  bs.forEach(b=>b.disabled=true); 
+  
+  // Use Redirect instead of Popup to bypass strict browser popup blockers
+  window.__a.signInWithRedirect(provider).catch(e=>{ 
+    console.error('Provider SI Error:', e); 
+    if(btn) btn.classList.remove('loading'); 
+    bs.forEach(b=>b.disabled=false); 
+    const msg = e.message || 'Sign-in failed. Try again.'; 
+    toast(msg); 
+  }); 
+}
 
 $('#siBtnGoogle')?.addEventListener('click',()=>{ if(!window.__a || !window.__p) return; _doProviderSI(window.__p, '#siBtnGoogle'); });
 $('#siBtnGithub')?.addEventListener('click',()=>{ if(!window.__a) return; try{ const ghp=new firebase.auth.GithubAuthProvider(); ghp.addScope('read:user'); ghp.addScope('user:email'); _doProviderSI(ghp, '#siBtnGithub'); } catch(e){ toast('GitHub sign-in unavailable. Use Google or Email.'); } });
