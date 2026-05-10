@@ -1,7 +1,6 @@
 /* GRADEO App Layout v2.0 — Structural and inline-override styles */
 
-#dskLayout, #mApp { opacity: 0; }
-body.theme-ready #dskLayout, body.theme-ready #mApp { opacity: 1; transition: opacity 0.4s ease; }
+#dskLayout, #mApp { opacity: 1; }
 
 /* Loader */
 #ldOv { position:fixed; inset:0; z-index:9100; display:none; place-items:center; opacity:0; transition:opacity .22s; background:var(--bg); }
@@ -14,7 +13,7 @@ body.theme-ready #dskLayout, body.theme-ready #mApp { opacity: 1; transition: op
 #pwaSheet.open { transform:translateY(0); }
 
 /* Background Orbs */
-.bg1, .bg2, .bg3, .bg4 { opacity: 0; transition: opacity 0.6s ease; }
+.bg1, .bg2, .bg3, .bg4 { opacity: 1; }
 
 /* Desktop Atmosphere */
 #particleCanvas { position:fixed; inset:0; pointer-events:none; z-index:-1; opacity:0.4; }

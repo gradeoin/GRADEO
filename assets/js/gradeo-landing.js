@@ -82,9 +82,6 @@ document.addEventListener('DOMContentLoaded', () => {
     document.querySelectorAll('.reveal-on-scroll').forEach(el => observer.observe(el));
 
     // 5. App Ready
-    setTimeout(() => {
-        document.documentElement.classList.remove('loading');
-    }, 100);
 });
 
 // ── Navigation Engine ──

@@ -80,18 +80,7 @@ $('#tx')?.addEventListener('click',()=>$('#toast')?.classList.remove('on'));
 /* Exporting globals for other modules */
 window.$ = $; window.$$ = $$; window.navTo = navTo; window.toast = toast; window.vib = vib; window.HV = HV;
 
-/* Initialization — Remove loading lock after assets are ready */
+/* Initialization — No longer needs loading lock removal */
 window.addEventListener('DOMContentLoaded', () => {
-  requestAnimationFrame(()=>{
-    requestAnimationFrame(()=>{
-      document.documentElement.classList.remove('loading');
-      document.body.classList.add('theme-ready');
-      /* Fade in bg orbs smoothly */
-      document.querySelectorAll('.bg1,.bg2,.bg3,.bg4').forEach(function(b){
-        b.style.transition='opacity .6s ease';
-        b.style.opacity='1';
-      });
-      __gd_hideLoader();
-    });
-  });
+  __gd_hideLoader();
 });

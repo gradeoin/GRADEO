@@ -16,8 +16,7 @@
   if(!t) t=window.matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light';
   document.documentElement.setAttribute('data-theme',t);
   document.documentElement.style.colorScheme=t;
-  /* Mark as app-loading to suppress transitions */
-  document.documentElement.classList.add('loading');
+  /* Initialize theme immediately to prevent flicker */
 })();
 /* ── 2026 HYPER-CONNECTIVITY ── */
 // Microsoft Clarity (Heatmaps) Placeholder
@@ -2346,19 +2345,6 @@ if ('paint' in performance) {
 <script>
 /* ========= helpers ========= */
 
-// === Intro glitch: run once per session ===
-(function(){
-  try{
-    if(sessionStorage.getItem('gd_intro_done')) return;
-    document.body.classList.add('intro-glitch');
-    setTimeout(function(){
-      document.body.classList.remove('intro-glitch');
-      sessionStorage.setItem('gd_intro_done','1');
-    }, 1200);
-  }catch(e){}
-})();
-
-
 // === Minimal loader helpers (safe patch) ===
 function __gd_showLoader(msg){
   try{const ov=document.getElementById('ldOv'); if(!ov) return; const m=document.getElementById('ldMsg'); if(m&&msg) m.textContent=msg; ov.classList.add('on'); ov.setAttribute('aria-hidden','false');}catch(e){}
@@ -2409,7 +2395,7 @@ function applyTheme(t, animate){
   } else { htmlEl.setAttribute('data-theme',t); tc?.setAttribute('content',nextBg); }
   localStorage.setItem('gradeo_theme', t);
 }
-(()=>{ const s=localStorage.getItem('gradeo_theme'); if(s) applyTheme(s,false); else if(window.matchMedia('(prefers-color-scheme:dark)').matches) applyTheme('dark',false); })();
+/* Theme initialization handled in head */
 /* Remove loading lock after first paint — all transitions now work smoothly */
 /* Safe area polyfill for old Android */
 (function(){
@@ -2419,17 +2405,6 @@ function applyTheme(t, animate){
   document.head.appendChild(style);
 })();
 
-requestAnimationFrame(()=>{
-  requestAnimationFrame(()=>{
-    document.documentElement.classList.remove('loading');
-    document.body.classList.add('theme-ready');
-    /* Fade in bg orbs smoothly */
-    document.querySelectorAll('.bg1,.bg2,.bg3,.bg4').forEach(function(b){
-      b.style.transition='opacity .6s ease';
-      b.style.opacity='1';
-    });
-  });
-});
 const toggleTheme=()=>{ applyTheme(htmlEl.dataset.theme==='dark'?'light':'dark',true); vib(HV.light); };
 $('#thBtn')?.addEventListener('click',toggleTheme); $('#mThBtn')?.addEventListener('click',toggleTheme);
 window.matchMedia('(prefers-color-scheme:dark)').addEventListener('change',e=>{ if(!localStorage.getItem('gradeo_theme')) applyTheme(e.matches?'dark':'light',false); });
