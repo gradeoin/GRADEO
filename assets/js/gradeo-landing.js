@@ -1,31 +1,7 @@
 /**
  * GRADEO Landing Page Logic
- * Specialized for high-performance animations and PWA experience.
+ * Specialized for high-performance animations and UI interactions.
  */
-
-import { auth } from '../../core/firebase.js';
-import { onAuthStateChanged, GoogleAuthProvider, GithubAuthProvider, signInWithPopup, signInWithEmailAndPassword, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-import { initAuthUI, syncUserUI } from './gradeo-core.js';
-
-// ── Auth Initialization ──
-const providers = {
-    google: new GoogleAuthProvider(),
-    github: new GithubAuthProvider(),
-    signInWithPopup, signInWithEmailAndPassword, createUserWithEmailAndPassword
-};
-
-const { openAuthModal, closeAuthModal } = initAuthUI(auth, providers);
-
-// Global user state
-window._gradeoUser = null;
-
-onAuthStateChanged(auth, user => {
-    window._gradeoUser = user;
-    syncUserUI(user, window.lucide);
-    if(user) closeAuthModal();
-});
-
-// ── Interaction Logic ──
 document.addEventListener('DOMContentLoaded', () => {
     // 1. Theme Toggle
     const themeBtn = document.getElementById('theme-toggle');

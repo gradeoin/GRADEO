@@ -2343,6 +2343,24 @@ if ('paint' in performance) {
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
 
 <script>
+/* Firebase Init */
+if(location.protocol!=='file:'){
+  try {
+    firebase.initializeApp({
+      apiKey: "AIzaSyDB_FK8-3ATZBpuvfL34EMp9WHTTd5sfIo",
+      authDomain: "gradeo-in.firebaseapp.com",
+      projectId: "gradeo-in",
+      storageBucket: "gradeo-in.firebasestorage.app",
+      messagingSenderId: "784963451684",
+      appId: "1:784963451684:web:9d57beed639d488e4891b1",
+      measurementId: "G-JSNGKKMJEH"
+    });
+    window.__a = firebase.auth();
+    window.__p = new firebase.auth.GoogleAuthProvider();
+    window.__a.onAuthStateChanged(u => { if(u) sIn(u); else sOut(); });
+  } catch(e) { console.error('Firebase Init Error:', e); }
+} else { setTimeout(()=>sOut(),100); }
+
 /* ========= helpers ========= */
 
 // === Minimal loader helpers (safe patch) ===
