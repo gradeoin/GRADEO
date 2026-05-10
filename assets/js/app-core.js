@@ -3,7 +3,7 @@
 const $  = (s) => document.querySelector(s);
 const $$ = (s) => document.querySelectorAll(s);
 const SITE='https://gradeo.in';
-const MU={m1:'calculators/planner/index.html', m2:'calculators/sgpa/index.html', m3:'calculators/cgpa/index.html'};
+const MU={m1:'calculators/planner/grade-planner.html', m2:'calculators/sgpa/sgpa-calculator.html', m3:'calculators/cgpa/cgpa-calculator.html'};
 const RK='gradeo_recents';
 const isMob   = () => window.innerWidth <= 767;
 const isTouch = () => window.matchMedia('(hover:none)').matches;
