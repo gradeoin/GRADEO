@@ -1,7 +1,7 @@
 {
-  "name": "GRADEO Engineering Hub",
+  "name": "Gradeo",
   "short_name": "Gradeo",
-  "description": "Proprietary SGPA & CGPA planner for engineering students. Plan targets, calculate marks, and export verified grade cards.",
+  "description": "Free SGPA & CGPA planner for engineering students. Calculate minimum marks and plan your target CGPA.",
   "start_url": "/?source=pwa",
   "id": "/?source=pwa",
   "scope": "/",
@@ -24,41 +24,126 @@
   "icons": [
     {
       "src": "https://res.cloudinary.com/djy3mjtsz/image/upload/v1770296454/Untitled-2_i2ezfh.png",
+      "sizes": "48x48",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "https://res.cloudinary.com/djy3mjtsz/image/upload/v1770296454/Untitled-2_i2ezfh.png",
+      "sizes": "72x72",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "https://res.cloudinary.com/djy3mjtsz/image/upload/v1770296454/Untitled-2_i2ezfh.png",
+      "sizes": "96x96",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "https://res.cloudinary.com/djy3mjtsz/image/upload/v1770296454/Untitled-2_i2ezfh.png",
+      "sizes": "144x144",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "https://res.cloudinary.com/djy3mjtsz/image/upload/v1770296454/Untitled-2_i2ezfh.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "https://res.cloudinary.com/djy3mjtsz/image/upload/v1770296454/Untitled-2_i2ezfh.png",
       "sizes": "512x512",
       "type": "image/png",
-      "purpose": "any maskable"
+      "purpose": "maskable"
+    },
+    {
+      "src": "https://res.cloudinary.com/djy3mjtsz/image/upload/v1770296454/Untitled-2_i2ezfh.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "https://res.cloudinary.com/djy3mjtsz/image/upload/v1770296454/Untitled-2_i2ezfh.png",
+      "sizes": "390x844",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "Gradeo — Grade Planner"
+    },
+    {
+      "src": "https://res.cloudinary.com/djy3mjtsz/image/upload/v1770296454/Untitled-2_i2ezfh.png",
+      "sizes": "1280x800",
+      "type": "image/png",
+      "form_factor": "wide",
+      "label": "Gradeo — Desktop View"
     }
   ],
   "shortcuts": [
     {
-      "name": "Target Planner",
-      "short_name": "Planner",
-      "description": "Plan your target CGPA",
-      "url": "/calculators/planner/?source=shortcut",
-      "icons": [{"src": "https://res.cloudinary.com/djy3mjtsz/image/upload/v1770296454/Untitled-2_i2ezfh.png", "sizes": "96x96", "type": "image/png"}]
-    },
-    {
       "name": "SGPA Calculator",
       "short_name": "SGPA",
       "description": "Calculate your SGPA instantly",
-      "url": "/calculators/sgpa/?source=shortcut",
-      "icons": [{"src": "https://res.cloudinary.com/djy3mjtsz/image/upload/v1770296454/Untitled-2_i2ezfh.png", "sizes": "96x96", "type": "image/png"}]
+      "url": "/calculator/?mode=sgpa&source=shortcut",
+      "icons": [
+        {
+          "src": "https://res.cloudinary.com/djy3mjtsz/image/upload/v1770296454/Untitled-2_i2ezfh.png",
+          "sizes": "96x96",
+          "type": "image/png"
+        }
+      ]
     },
     {
-      "name": "CGPA Tracker",
+      "name": "CGPA Planner",
+      "short_name": "Planner",
+      "description": "Plan your target CGPA",
+      "url": "/calculator/?mode=planner&source=shortcut",
+      "icons": [
+        {
+          "src": "https://res.cloudinary.com/djy3mjtsz/image/upload/v1770296454/Untitled-2_i2ezfh.png",
+          "sizes": "96x96",
+          "type": "image/png"
+        }
+      ]
+    },
+    {
+      "name": "CGPA Converter",
       "short_name": "CGPA",
-      "description": "Track your semester history",
-      "url": "/calculators/cgpa/?source=shortcut",
-      "icons": [{"src": "https://res.cloudinary.com/djy3mjtsz/image/upload/v1770296454/Untitled-2_i2ezfh.png", "sizes": "96x96", "type": "image/png"}]
+      "description": "Convert SGPA to CGPA",
+      "url": "/calculator/?mode=cgpa&source=shortcut",
+      "icons": [
+        {
+          "src": "https://res.cloudinary.com/djy3mjtsz/image/upload/v1770296454/Untitled-2_i2ezfh.png",
+          "sizes": "96x96",
+          "type": "image/png"
+        }
+      ]
     }
   ],
   "share_target": {
-    "action": "/calculators/planner/",
+    "action": "/calculator/",
     "method": "GET",
     "params": {
       "title": "title",
       "text": "text",
       "url": "url"
     }
-  }
+  },
+  "file_handlers": [
+    {
+      "action": "/calculator/",
+      "accept": {
+        "text/plain": [".txt"],
+        "application/json": [".json"]
+      }
+    }
+  ],
+  "protocol_handlers": [
+    {
+      "protocol": "web+gradeo",
+      "url": "/calculator/?q=%s"
+    }
+  ]
 }

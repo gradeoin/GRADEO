@@ -16,8 +16,26 @@
   if(!t) t=window.matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light';
   document.documentElement.setAttribute('data-theme',t);
   document.documentElement.style.colorScheme=t;
+  /* Mark as app-loading to suppress transitions */
   document.documentElement.classList.add('loading');
 })();
+/* ── 2026 HYPER-CONNECTIVITY ── */
+// Microsoft Clarity (Heatmaps) Placeholder
+(function(c,l,a,r,i,t,y){
+    c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+    t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+    y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+})(window, document, "clarity", "script", "gradeo_hype_2026");
+
+// Web Vitals Tracking
+if ('paint' in performance) {
+  const observer = new PerformanceObserver((list) => {
+    for (const entry of list.getEntries()) {
+      console.log('GRADEO Performance:', entry.name, entry.startTime);
+    }
+  });
+  observer.observe({ entryTypes: ['paint', 'largest-contentful-paint'] });
+}
 </script>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=5,viewport-fit=cover,user-scalable=yes"/>
@@ -2283,44 +2301,7 @@ h2 {
       </div>
     </main>
 
-    <section class="dsk" id="modes">
-    <div class="sh">
-        <h2>Choose a calculator</h2>
-        <div class="verified-badge" style="margin-top: 8px;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 11 12 14 15 11"/></svg>Verified 2026 Launch</div>
-    </div>
-    <div class="tg" role="list">
-        <div class="tile rv hype-card" data-mode="m1" data-num="1" role="button" tabindex="0">
-            <div class="tt">
-                <div>
-                    <div class="tn">Planner</div>
-                    <div class="td">Set a target CGPA — get exact minimum marks per subject</div>
-                </div>
-                <div class="ic"><svg viewBox="0 0 24 24"><path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="2"/><line x1="9" y1="12" x2="15" y2="12"/><line x1="9" y1="16" x2="12" y2="16"/></svg></div>
-            </div>
-            <div class="tb2">⭐ Recommended</div>
-        </div>
-        <div class="tile rv hype-card" data-mode="m2" data-num="2" role="button" tabindex="0">
-            <div class="tt">
-                <div>
-                    <div class="tn">SGPA Calculator</div>
-                    <div class="td">Enter marks and credits — instant SGPA with grade points</div>
-                </div>
-                <div class="ic"><svg viewBox="0 0 24 24"><rect x="4" y="2" width="16" height="20" rx="2"/><line x1="8" y1="6" x2="16" y2="6"/><line x1="8" y1="10" x2="10" y2="10"/><line x1="14" y1="10" x2="16" y2="10"/><line x1="8" y1="14" x2="10" y2="14"/><line x1="14" y1="14" x2="16" y2="14"/></svg></div>
-            </div>
-            <div class="tb2">Most used</div>
-        </div>
-        <div class="tile rv hype-card" data-mode="m3" data-num="3" role="button" tabindex="0">
-            <div class="tt">
-                <div>
-                    <div class="tn">CGPA Converter</div>
-                    <div class="td">Add semester SGPAs — running CGPA across all semesters</div>
-                </div>
-                <div class="ic"><svg viewBox="0 0 24 24"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg></div>
-            </div>
-            <div class="tb2">Convert</div>
-        </div>
-    </div>
-</section>
+    <section class="dsk" id="modes"><div class="sh"><h2>Choose a calculator</h2><p>Pick what you need right now.</p></div><div class="tg" role="list"><div class="tile rv" data-mode="m1" data-num="1" role="button" tabindex="0"><div class="tt"><div><div class="tn">Planner</div><div class="td">Set a target CGPA — get exact minimum marks per subject</div></div><div class="ic"><svg viewBox="0 0 24 24"><path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="2"/><line x1="9" y1="12" x2="15" y2="12"/><line x1="9" y1="16" x2="12" y2="16"/></svg></div></div><div class="tb2">⭐ Recommended</div></div><div class="tile rv" data-mode="m2" data-num="2" role="button" tabindex="0"><div class="tt"><div><div class="tn">SGPA Calculator</div><div class="td">Enter marks and credits — instant SGPA with grade points</div></div><div class="ic"><svg viewBox="0 0 24 24"><rect x="4" y="2" width="16" height="20" rx="2"/><line x1="8" y1="6" x2="16" y2="6"/><line x1="8" y1="10" x2="10" y2="10"/><line x1="14" y1="10" x2="16" y2="10"/><line x1="8" y1="14" x2="10" y2="14"/><line x1="14" y1="14" x2="16" y2="14"/></svg></div></div><div class="tb2">Most used</div></div><div class="tile rv" data-mode="m3" data-num="3" role="button" tabindex="0"><div class="tt"><div><div class="tn">CGPA Converter</div><div class="td">Add semester SGPAs — running CGPA across all semesters</div></div><div class="ic"><svg viewBox="0 0 24 24"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg></div></div><div class="tb2">Convert</div></div></div></section>
 
     <section class="dsk" id="features"><div class="sh"><h2>Everything included. Free.</h2></div><div class="fg"><div class="feat rv"><div class="fi"><svg viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg></div><div><div class="ft">Instant results</div><div class="fs">Updates as you type. No submit, no reload.</div></div></div><div class="feat rv"><div class="fi"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg></div><div><div class="ft">Backwards planning</div><div class="fs">Work from your target CGPA to what you need to score.</div></div></div><div class="feat rv"><div class="fi"><svg viewBox="0 0 24 24"><path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"/></svg></div><div><div class="ft">Cloud autosave</div><div class="fs">Plans sync across every device after sign-in.</div></div></div><div class="feat rv"><div class="fi"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div><div><div class="ft">PDF grade card</div><div class="fs">Export and share a clean grade card instantly.</div></div></div><div class="feat rv"><div class="fi"><svg viewBox="0 0 24 24"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg></div><div><div class="ft">All subject types</div><div class="fs">Theory, labs, practicals, NSS, activity subjects.</div></div></div><div class="feat rv"><div class="fi"><svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div><div><div class="ft">Private &amp; free</div><div class="fs">No ads. No data selling. Your marks stay yours.</div></div></div></div></section>
 
@@ -2334,9 +2315,60 @@ h2 {
 <div class="toast" id="toast" role="status" aria-live="polite"><span id="tm"></span><button class="tx" id="tx" aria-label="Close">✕</button></div>
 <div class="mbd" id="mbd" onclick="cm()"><div class="mbox" onclick="event.stopPropagation()"><div class="mhd"><strong id="mt"></strong><button onclick="cm()">✕</button></div><div class="mb" id="mb"></div></div></div>
 
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js">/* ── 2026 HYPER-CONNECTIVITY ── */
+// Microsoft Clarity (Heatmaps) Placeholder
+(function(c,l,a,r,i,t,y){
+    c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+    t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+    y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+})(window, document, "clarity", "script", "gradeo_hype_2026");
+
+// Web Vitals Tracking
+if ('paint' in performance) {
+  const observer = new PerformanceObserver((list) => {
+    for (const entry of list.getEntries()) {
+      console.log('GRADEO Performance:', entry.name, entry.startTime);
+    }
+  });
+  observer.observe({ entryTypes: ['paint', 'largest-contentful-paint'] });
+}
+</script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js">/* ── 2026 HYPER-CONNECTIVITY ── */
+// Microsoft Clarity (Heatmaps) Placeholder
+(function(c,l,a,r,i,t,y){
+    c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+    t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+    y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+})(window, document, "clarity", "script", "gradeo_hype_2026");
+
+// Web Vitals Tracking
+if ('paint' in performance) {
+  const observer = new PerformanceObserver((list) => {
+    for (const entry of list.getEntries()) {
+      console.log('GRADEO Performance:', entry.name, entry.startTime);
+    }
+  });
+  observer.observe({ entryTypes: ['paint', 'largest-contentful-paint'] });
+}
+</script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js">/* ── 2026 HYPER-CONNECTIVITY ── */
+// Microsoft Clarity (Heatmaps) Placeholder
+(function(c,l,a,r,i,t,y){
+    c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+    t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+    y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+})(window, document, "clarity", "script", "gradeo_hype_2026");
+
+// Web Vitals Tracking
+if ('paint' in performance) {
+  const observer = new PerformanceObserver((list) => {
+    for (const entry of list.getEntries()) {
+      console.log('GRADEO Performance:', entry.name, entry.startTime);
+    }
+  });
+  observer.observe({ entryTypes: ['paint', 'largest-contentful-paint'] });
+}
+</script>
 
 <script>
 /* ========= helpers ========= */
@@ -2579,7 +2611,7 @@ $$('.tile[data-mode]').forEach(el=>{ el.addEventListener('click',()=>om2(el.data
 $$('.mTile[data-mode]').forEach(el=>el.addEventListener('click',()=>om2(el.dataset.mode)));
 
 /* Copy link */
-async function copyLink(){ try{ if(navigator.clipboard && isSecureContext){ await navigator.clipboard.writeText(SITE + '/' + MU.m2);} else { const t=document.createElement('textarea'); t.value=SITE + '/' + MU.m2; t.style.cssText='position:fixed;left:-9999px'; document.body.appendChild(t); t.select(); document.execCommand('copy'); t.remove(); } toast('Link copied!'); } catch{ toast('Copy failed'); } vib([4,10,4]); }
+async function copyLink(){ try{ if(navigator.clipboard && isSecureContext){ await navigator.clipboard.writeText(MU.m2);} else { const t=document.createElement('textarea'); t.value=MU.m2; t.style.cssText='position:fixed;left:-9999px'; document.body.appendChild(t); t.select(); document.execCommand('copy'); t.remove(); } toast('Link copied!'); } catch{ toast('Copy failed'); } vib([4,10,4]); }
 $('#cpb')?.addEventListener('click',copyLink); $('#mCpb')?.addEventListener('click',copyLink);
 $('#rcl')?.addEventListener('click',()=>{ localStorage.removeItem(RK); localStorage.removeItem('gradeo_last_mode'); rr(); toast('Recents cleared'); });
 $('#mRcl')?.addEventListener('click',()=>{ localStorage.removeItem(RK); localStorage.removeItem('gradeo_last_mode'); rr(); toast('Recents cleared'); });
@@ -3228,25 +3260,23 @@ body.intro-glitch .sub{ animation: glitchIn 1.6s var(--sm) .25s both; }
     else { draw(); }
   });
 })();
-
-/* ── GRADEO ENGINE 2.0 HYPER-INITIALIZATION ── */
+/* ── 2026 HYPER-CONNECTIVITY ── */
+// Microsoft Clarity (Heatmaps) Placeholder
 (function(c,l,a,r,i,t,y){
     c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
     t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
     y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
-})(window, document, "clarity", "script", "gradeo_global_2026");
+})(window, document, "clarity", "script", "gradeo_hype_2026");
 
+// Web Vitals Tracking
 if ('paint' in performance) {
   const observer = new PerformanceObserver((list) => {
     for (const entry of list.getEntries()) {
-      if(entry.name === 'largest-contentful-paint') {
-          console.log('%cGRADEO LCP:', 'color:#FF6A00; font-weight:bold;', entry.startTime.toFixed(2) + 'ms');
-      }
+      console.log('GRADEO Performance:', entry.name, entry.startTime);
     }
   });
-  observer.observe({ entryTypes: ['largest-contentful-paint'] });
+  observer.observe({ entryTypes: ['paint', 'largest-contentful-paint'] });
 }
-console.log("%cGRADEO %cENGINE 2.0 %cACTIVE", "color:#FF6A00; font-weight:900; font-size:24px; font-family:Syne, sans-serif;", "color:#FFF; background:#FF6A00; padding:2px 8px; border-radius:4px; font-weight:900;", "color:#16a34a; font-weight:800;");
 </script>
 
     <script type="module" src="assets/js/gradeo-landing.js"></script>
