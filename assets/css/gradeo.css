@@ -53,6 +53,7 @@ header.nav {
 
 /* ── LAYOUT ── */
 .container { max-width: 1120px; margin: 0 auto; padding: 2rem 1.5rem; }
+.wrap { max-width: 1200px; margin: 0 auto; padding: 0 1.5rem; }
 .page-title { font-size: clamp(28px, 8vw, 42px); font-weight: 950; letter-spacing: -2px; margin-bottom: 8px; }
 .page-sub { color: var(--muted); font-size: 14.5px; margin-bottom: 2.5rem; }
 

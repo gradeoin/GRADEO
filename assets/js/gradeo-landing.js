@@ -3,7 +3,7 @@
  * Specialized for high-performance animations and PWA experience.
  */
 
-import { auth } from '../core/firebase.js';
+import { auth } from '../../core/firebase.js';
 import { onAuthStateChanged, GoogleAuthProvider, GithubAuthProvider, signInWithPopup, signInWithEmailAndPassword, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 import { initAuthUI, syncUserUI } from './gradeo-core.js';
 
