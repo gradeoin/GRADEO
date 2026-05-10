@@ -2338,29 +2338,11 @@ if ('paint' in performance) {
 }
 </script>
 
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
 
 <script>
-/* Firebase Init */
-if(location.protocol!=='file:'){
-  try {
-    firebase.initializeApp({
-      apiKey: "AIzaSyDB_FK8-3ATZBpuvfL34EMp9WHTTd5sfIo",
-      authDomain: "gradeo-in.firebaseapp.com",
-      projectId: "gradeo-in",
-      storageBucket: "gradeo-in.firebasestorage.app",
-      messagingSenderId: "784963451684",
-      appId: "1:784963451684:web:9d57beed639d488e4891b1",
-      measurementId: "G-JSNGKKMJEH"
-    });
-    window.__a = firebase.auth();
-    window.__p = new firebase.auth.GoogleAuthProvider();
-    window.__a.onAuthStateChanged(u => { if(u) sIn(u); else sOut(); });
-  } catch(e) { console.error('Firebase Init Error:', e); }
-} else { setTimeout(()=>sOut(),100); }
-
 /* ========= helpers ========= */
 
 // === Minimal loader helpers (safe patch) ===
@@ -2588,6 +2570,33 @@ function goM(){ if(isMob()){ goTab(1);} else { $('#modes')?.scrollIntoView({beha
 
 /* AUTH */
 let ps=false; // post-signin
+
+/* Firebase Init */
+if(location.protocol!=='file:'){
+  try {
+    firebase.initializeApp({
+      apiKey: "AIzaSyDB_FK8-3ATZBpuvfL34EMp9WHTTd5sfIo",
+      authDomain: "gradeo-in.firebaseapp.com",
+      projectId: "gradeo-in",
+      storageBucket: "gradeo-in.firebasestorage.app",
+      messagingSenderId: "784963451684",
+      appId: "1:784963451684:web:9d57beed639d488e4891b1",
+      measurementId: "G-JSNGKKMJEH"
+    });
+    window.__a = firebase.auth();
+    window.__p = new firebase.auth.GoogleAuthProvider();
+    window.__a.setPersistence(firebase.auth.Auth.Persistence.LOCAL).catch(()=>{});
+    window.__a.onAuthStateChanged(u => { 
+      if(u) {
+        sIn(u); 
+        if(ps){ ps=false; setTimeout(()=>goM(), 160); }
+      } else {
+        sOut();
+      }
+    });
+  } catch(e) { console.error('Firebase Init Error:', e); }
+} else { setTimeout(()=>sOut(),100); }
+
 function sIn(u){ const n=u.displayName || 'Student', e=u.email||'', p=u.photoURL||''; const hsl=$('#hsl'); if(hsl) hsl.textContent='Sign out'; ['#gsb','#mGsb'].forEach(s=>{ const el=$(s); if(!el) return; el.textContent='Open calculator →'; el.onclick=()=>goM(); el.style.display=''; }); const hw=$('#mHowCard'); if(hw) hw.style.display='none'; ['#pout'].forEach(s=>{ const el=$(s); if(el) el.style.display='none';}); ['#pin','#mPin'].forEach(s=>{ const el=$(s); if(el) el.style.display='';}); ['#prec','#mPrec'].forEach(s=>{ const el=$(s); if(el) el.style.display='';}); ['#offp','#mOffp'].forEach(s=>{ const el=$(s); if(el) el.style.display='none';}); const lm=localStorage.getItem('gradeo_last_mode'); ['#olb','#mOlb'].forEach(s=>{ const el=$(s); if(el) el.style.display=lm?'':'none';}); ['#un','#mUn'].forEach(s=>{ const el=$(s); if(el) el.textContent=n;}); ['#ue','#mUe'].forEach(s=>{ const el=$(s); if(el) el.textContent=e;}); [['#avi2','#avii'],['#mAvi2','#mAvii']].forEach(([imgSel,iniSel])=>{ const img=$(imgSel), ini=$(iniSel); if(!img||!ini) return; if(p){ img.src=p; img.style.display='block'; ini.style.display='none'; } else { ini.textContent=n[0].toUpperCase(); ini.style.display=''; img.style.display='none'; } }); rr(); }
 function sOut(){ const hsl=$('#hsl'); if(hsl) hsl.textContent='Sign in'; ['#gsb','#mGsb'].forEach(s=>{ const el=$(s); if(!el) return; el.textContent='Get started →'; el.onclick=()=>{ if(window.__a?.currentUser){ goM(); return;} doSI(()=>{ ps=true;}); }; el.style.display=''; }); const hw=$('#mHowCard'); if(hw) hw.style.display=''; if(typeof window._howRestart==='function') window._howRestart(); ['#pout'].forEach(s=>{ const el=$(s); if(el) el.style.display='';}); ['#pin','#mPin'].forEach(s=>{ const el=$(s); if(el) el.style.display='none';}); ['#prec','#mPrec'].forEach(s=>{ const el=$(s); if(el) el.style.display='none';}); ['#offp','#mOffp'].forEach(s=>{ const el=$(s); if(el) el.style.display='';}); if(isMob()) goTab(0); }
 
@@ -2621,9 +2630,7 @@ $('#brd')?.addEventListener('click',e=>{ if(e.ctrlKey || e.metaKey){ window.open
   window._howRestart=()=>{ curStep=0; running=true; clearInterval(auto); if($('#mHowDesc')) $('#mHowDesc').textContent=steps[0]; $$('.mHowStep').forEach((s,i)=>s.classList.toggle('active',i===0)); auto=setInterval(()=>{ if(running) goStep(curStep+1); },2800); };
 })();
 
-/* File vs hosted */
-if(location.protocol==='file:'){ sOut(); ['#hsi','#gsb','#mGsb'].forEach(s=>{ const el=$(s); if(el) el.disabled=true; }); $('#gsb')?.addEventListener('click',goM); $('#mGsb')?.addEventListener('click',goM); }
-else { try{ firebase.initializeApp({apiKey:'AIzaSyDB_FK8-3ATZBpuvfL34EMp9WHTTd5sfIo',authDomain:'gradeo-in.firebaseapp.com',projectId:'gradeo-in',storageBucket:'gradeo-in.firebasestorage.app',messagingSenderId:'784963451684',appId:'1:784963451684:web:9d57beed639d488e4891b1',measurementId:'G-JSNGKKMJEH'}); const a=firebase.auth(), p=new firebase.auth.GoogleAuthProvider(); a.setPersistence(firebase.auth.Auth.Persistence.LOCAL).catch(()=>{}); window.__a=a; window.__p=p; a.onAuthStateChanged(u=>{ if(u){ sIn(u); if(ps){ ps=false; setTimeout(goM,160);} } else sOut(); }); }catch(e){ console.error(e); sOut(); } }
+/* File vs hosted handled via initialization logic */
 /* ── 2026 HYPER-CONNECTIVITY ── */
 // Microsoft Clarity (Heatmaps) Placeholder
 (function(c,l,a,r,i,t,y){
