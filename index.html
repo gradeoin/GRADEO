@@ -98,26 +98,6 @@ if ('paint' in performance) {
 <meta name="twitter:site" content="@gradeo_in"/>
 <meta name="twitter:creator" content="@gradeo_in"/>
 <meta name="twitter:title" content="GRADEO — Free SGPA &amp; CGPA Planner"/>
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "WebApplication",
-    "name": "GRADEO",
-    "url": "https://gradeo.in",
-    "description": "Premium SGPA & CGPA calculator for engineering students. Plan your academic future with precision.",
-    "applicationCategory": "EducationalApplication",
-    "operatingSystem": "All",
-    "offers": {
-      "@type": "Offer",
-      "price": "0",
-      "priceCurrency": "INR"
-    },
-    "author": {
-      "@type": "Organization",
-      "name": "GRADEO"
-    }
-  }
-  </script>
 <meta name="twitter:description" content="Calculate SGPA, plan your CGPA target and export grade cards. Free forever."/>
 <meta name="twitter:image" content="https://res.cloudinary.com/djy3mjtsz/image/upload/v1770296454/Untitled-2_i2ezfh.png"/>
 <meta name="twitter:image:alt" content="GRADEO grade planner screenshot"/>
@@ -2354,9 +2334,7 @@ window.addEventListener('load',()=>{ if(!localStorage.getItem('gradeo_cookies'))
 <div class="toast" id="toast" role="status" aria-live="polite"><span id="tm"></span><button class="tx" id="tx" aria-label="Close">✕</button></div>
 <div class="mbd" id="mbd" onclick="cm()"><div class="mbox" onclick="event.stopPropagation()"><div class="mhd"><strong id="mt"></strong><button onclick="cm()">✕</button></div><div class="mb" id="mb"></div></div></div>
 
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script>
-<script>
-/* ── 2026 HYPER-CONNECTIVITY ── */
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js">/* ── 2026 HYPER-CONNECTIVITY ── */
 // Microsoft Clarity (Heatmaps) Placeholder
 (function(c,l,a,r,i,t,y){
     c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
@@ -2374,8 +2352,42 @@ if ('paint' in performance) {
   observer.observe({ entryTypes: ['paint', 'largest-contentful-paint'] });
 }
 </script>
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js">/* ── 2026 HYPER-CONNECTIVITY ── */
+// Microsoft Clarity (Heatmaps) Placeholder
+(function(c,l,a,r,i,t,y){
+    c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+    t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+    y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+})(window, document, "clarity", "script", "gradeo_hype_2026");
+
+// Web Vitals Tracking
+if ('paint' in performance) {
+  const observer = new PerformanceObserver((list) => {
+    for (const entry of list.getEntries()) {
+      console.log('GRADEO Performance:', entry.name, entry.startTime);
+    }
+  });
+  observer.observe({ entryTypes: ['paint', 'largest-contentful-paint'] });
+}
+</script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js">/* ── 2026 HYPER-CONNECTIVITY ── */
+// Microsoft Clarity (Heatmaps) Placeholder
+(function(c,l,a,r,i,t,y){
+    c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+    t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+    y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+})(window, document, "clarity", "script", "gradeo_hype_2026");
+
+// Web Vitals Tracking
+if ('paint' in performance) {
+  const observer = new PerformanceObserver((list) => {
+    for (const entry of list.getEntries()) {
+      console.log('GRADEO Performance:', entry.name, entry.startTime);
+    }
+  });
+  observer.observe({ entryTypes: ['paint', 'largest-contentful-paint'] });
+}
+</script>
 
 <script>
 /* ========= helpers ========= */
@@ -2492,16 +2504,17 @@ window.addEventListener('pageshow', function(){
   const ov = $('#ptOv');
   if(ov) ov.classList.remove('lift');
 });
-function navTo(url){ 
+window.__oldNavTo = window.__oldNavTo || navTo; function navTo(url){ __gd_showLoader("Opening…"); setTimeout(function(){ window.__oldNavTo(url); }, 80);
   if(window._navigating) return;
   window._navigating = true;
-  __gd_showLoader("Opening…"); 
+  /* Safety reset after 2s in case navigation fails */
+  setTimeout(function(){ window._navigating = false; }, 2000);
   const ov = $('#ptOv');
   if(ov){
     ov.classList.add('lift');
     setTimeout(function(){ location.href=url; },380);
   } else {
-    setTimeout(function(){ location.href=url; },80);
+    location.href = url;
   }
 }
 /* Desktop cursor */
@@ -3227,6 +3240,8 @@ body.intro-glitch .sub{ animation: glitchIn 1.6s var(--sm) .25s both; }
 })();
 </script>
 
+</script>
+
 <!-- GRADEO v11 — Floating particle canvas (desktop atmosphere) -->
 <canvas id="particleCanvas" aria-hidden="true"></canvas>
 <script>
@@ -3284,6 +3299,23 @@ body.intro-glitch .sub{ animation: glitchIn 1.6s var(--sm) .25s both; }
     else { draw(); }
   });
 })();
+/* ── 2026 HYPER-CONNECTIVITY ── */
+// Microsoft Clarity (Heatmaps) Placeholder
+(function(c,l,a,r,i,t,y){
+    c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+    t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+    y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+})(window, document, "clarity", "script", "gradeo_hype_2026");
+
+// Web Vitals Tracking
+if ('paint' in performance) {
+  const observer = new PerformanceObserver((list) => {
+    for (const entry of list.getEntries()) {
+      console.log('GRADEO Performance:', entry.name, entry.startTime);
+    }
+  });
+  observer.observe({ entryTypes: ['paint', 'largest-contentful-paint'] });
+}
 </script>
 
     <script type="module" src="assets/js/gradeo-landing.js"></script>
